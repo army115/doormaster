@@ -10,10 +10,16 @@ class Buttons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.5,
+      height: 45,
       child: ElevatedButton(
+          style: TextButton.styleFrom(elevation: 10),
           child: Text(
             title,
-            style: TextStyle(fontSize: 20),
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1,
+            ),
           ),
           onPressed: press),
     );

@@ -10,6 +10,12 @@ class Text_Button extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
+        // style: TextButton.styleFrom(
+        //     shape: RoundedRectangleBorder(
+        //       borderRadius: BorderRadius.circular(0),
+        //     ),
+        //     primary: Colors.white,
+        //     backgroundColor: Colors.indigo),
         onPressed: press,
         child: Text(
           title,

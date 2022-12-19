@@ -5,12 +5,14 @@ import 'package:flutter/material.dart';
 class Text_Form extends StatelessWidget {
   TextEditingController controller;
   String title;
-  Icon icon;
+  IconData icon;
+  String error;
   Text_Form(
       {Key? key,
       required this.controller,
       required this.title,
-      required this.icon})
+      required this.icon,
+      required this.error})
       : super(key: key);
 
   @override
@@ -26,16 +28,16 @@ class Text_Form extends StatelessWidget {
           // labelText: 'Username',
           hintText: title,
           hintStyle: TextStyle(fontSize: 20),
-          errorStyle: TextStyle(fontSize: 15),
+          errorStyle: TextStyle(fontSize: 18),
           // ignore: prefer_const_constructors
-          prefixIcon: icon,
+          prefixIcon: Icon(icon, size: 30),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
         ),
         validator: (values) {
           if (values!.isEmpty) {
-            return 'Please enter your username';
+            return error;
           } else {
             return null;
           }

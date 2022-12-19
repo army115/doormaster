@@ -28,37 +28,35 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
       appBar: AppBar(
         title: Text('QR Code'),
       ),
-      // backgroundColor: Colors.black,
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                color: Colors.black,
-                height: MediaQuery.of(context).size.height * 0.4,
-                width: MediaQuery.of(context).size.width * 0.6,
-                child: QRView(
-                    key: _key,
-                    onQRViewCreated: qr,
-                    overlay: QrScannerOverlayShape(
-                        borderColor: Colors.white,
-                        borderRadius: 10,
-                        borderLength: 30,
-                        borderWidth: 10,
-                        cutOutSize: 170)),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Center(
-                child: (result != null)
-                    ? Text('${result!.code}')
-                    : Text('Scan QR Code'),
-              )
-            ],
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            flex: 5,
+            // height: MediaQuery.of(context).size.height * 0.5,
+            // width: MediaQuery.of(context).size.width * 0.8,
+            child: QRView(
+                key: _key,
+                onQRViewCreated: qr,
+                overlay: QrScannerOverlayShape(
+                    borderColor: Colors.white,
+                    borderRadius: 10,
+                    borderLength: 30,
+                    borderWidth: 10,
+                    cutOutSize: 250)),
           ),
-        ),
+          // SizedBox(
+          //   height: 10,
+          // ),
+          Expanded(
+            flex: 1,
+            child: Center(
+              child: (result != null)
+                  ? Text('${result!.code}')
+                  : Text('Scan QR Code'),
+            ),
+          )
+        ],
       ),
     );
   }

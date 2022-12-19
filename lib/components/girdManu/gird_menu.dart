@@ -20,19 +20,19 @@ class Gird_Menu extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             // Image.asset(
-            //   //สไตล์รูปภาพ
+            //   //รูปภาพ
             //   img,
             //   width: 80,
             // ),
-            Icon(icon, size: 50),
+            Icon(icon, size: 50, color: Colors.white),
             // SizedBox(height: 5),
             Text(
               title,
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-              ),
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
             ),
           ],
         ),
