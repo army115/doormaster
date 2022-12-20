@@ -2,6 +2,7 @@ import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/components/text_form/text_form.dart';
+import 'package:doormster/components/text_form/text_form_password.dart';
 import 'package:doormster/components/text_form/text_form_validator.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,8 @@ class _Register_PageState extends State<Register_Page> {
   TextEditingController passwordCon = TextEditingController();
   bool Checked = false;
   bool loading = false;
+  bool redEye = true;
+  bool redEyeCon = true;
 
   Future _register(Map<String, dynamic> values) async {
     try {
@@ -47,7 +50,8 @@ class _Register_PageState extends State<Register_Page> {
         setState(() {
           loading = false;
         });
-        snackbar(context, Colors.indigo, 'ลงทะเบียนสำเร็จ', Icons.check);
+        snackbar(context, Theme.of(context).primaryColor, 'ลงทะเบียนสำเร็จ',
+            Icons.check);
       } else {
         snackbar(context, Colors.red, 'ลงทะเบียนไม่สำเร็จ', Icons.close);
         print('Register not Success!!');
@@ -101,32 +105,67 @@ class _Register_PageState extends State<Register_Page> {
                             title: 'นามสกุล',
                             icon: Icons.person,
                             error: 'กรุณากรอกชื่อนามสกุล'),
-                        Text_Form(
+                        TextForm_validator(
                             controller: email,
                             title: 'อีเมล',
                             icon: Icons.email,
-                            error: 'กรุณากรอกอีเมล'),
-                        TextForm_validator(
+                            error: (values) {
+                              if (values.isEmpty) {
+                                return 'กรุณากรอกอีเมล';
+                                // } else if (values.isEmpty ||
+                                //     !values.contains("@")) {
+                                //   return "รูปแบบอีเมลไม่ถูกต้อง";
+                              } else {
+                                return null;
+                              }
+                            }),
+                        TextForm_Password(
                             controller: password,
                             title: 'รหัสผ่าน',
-                            icon: Icons.key,
+                            iconLaft: Icons.key,
+                            iconRight: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  redEye = !redEye;
+                                });
+                              },
+                              icon: redEye
+                                  ? Icon(
+                                      Icons.visibility_rounded,
+                                    )
+                                  : Icon(
+                                      Icons.visibility_off_rounded,
+                                    ),
+                            ),
                             error: (values) {
                               confirmPass = values;
                               if (values.isEmpty) {
                                 return 'กรุณากรอกรหัสผ่าน';
-                                // } else if (values == widget.userpass) {
-                                //   return "ซ้ำกับรหัสผ่านปัจจุบัน กรุณากรอกรหัสผ่านใหม่";
                                 // } else if (values.length < 8) {
                                 //   return "รหัสผ่านอย่างน้อย 8 ตัว";
                               } else {
                                 return null;
                               }
                             },
-                            obscure: true),
-                        TextForm_validator(
+                            redEye: redEye),
+                        TextForm_Password(
                             controller: passwordCon,
                             title: 'ยืนยันรหัสผ่าน',
-                            icon: Icons.key,
+                            iconLaft: Icons.key,
+                            iconRight: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  redEye = !redEye;
+                                });
+                              },
+                              icon: redEye
+                                  ? Icon(
+                                      Icons.visibility_rounded,
+                                    )
+                                  : Icon(
+                                      Icons.visibility_off_rounded,
+                                    ),
+                            ),
                             error: (values) {
                               if (values.isEmpty) {
                                 return 'กรุณายืนยันรหัสผ่าน';
@@ -136,7 +175,7 @@ class _Register_PageState extends State<Register_Page> {
                                 return null;
                               }
                             },
-                            obscure: true),
+                            redEye: redEye),
                         CheckboxListTileFormField(
                           title: Text(
                             'ยอมรับเงื่อนไขการใช้บริการ',

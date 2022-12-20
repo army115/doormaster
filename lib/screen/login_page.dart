@@ -5,6 +5,7 @@ import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/button/text_button.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/components/text_form/text_form.dart';
+import 'package:doormster/components/text_form/text_form_password.dart';
 import 'package:doormster/components/text_form/text_form_validator.dart';
 import 'package:doormster/models/login_model.dart';
 import 'package:doormster/screen/home_page.dart';
@@ -29,6 +30,7 @@ class _Login_PageState extends State<Login_Page> {
   TextEditingController _password = TextEditingController();
 
   bool loading = false;
+  bool redEye = true;
 
   Future doLogin() async {
     if (_formkey.currentState!.validate()) {
@@ -68,7 +70,8 @@ class _Login_PageState extends State<Login_Page> {
 
             Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (context) => Home_Page()));
-            snackbar(context, Colors.indigo, 'เข้าสู่ระบบสำเร็จ', Icons.check);
+            snackbar(context, Theme.of(context).primaryColor,
+                'เข้าสู่ระบบสำเร็จ', Icons.check);
             setState(() {
               loading = false;
             });
@@ -89,6 +92,14 @@ class _Login_PageState extends State<Login_Page> {
             Icons.warning_amber_rounded);
       }
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      _password;
+    });
   }
 
   @override
@@ -119,9 +130,12 @@ class _Login_PageState extends State<Login_Page> {
                 child: Column(
                   // mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(
-                      'assets/images/logo600.png',
-                      scale: 2.5,
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 20),
+                      child: Image.asset(
+                        'assets/images/qrlogo600.png',
+                        scale: 3,
+                      ),
                     ),
                     Text_Form(
                       controller: _email,
@@ -129,24 +143,41 @@ class _Login_PageState extends State<Login_Page> {
                       icon: Icons.account_circle_rounded,
                       error: 'กรุณากรอกชื่อผู้ใช้',
                     ),
-                    TextForm_validator(
-                        controller: _password,
-                        title: 'รหัสผ่าน',
-                        icon: Icons.key,
-                        error: (values) {
-                          if (values!.isEmpty) {
-                            return 'กรุณากรอกรหัสผ่าน';
-                          } else {
-                            return null;
-                          }
-                        },
-                        obscure: true),
+                    TextForm_Password(
+                      controller: _password,
+                      title: 'รหัสผ่าน',
+                      iconLaft: Icons.key,
+                      error: (values) {
+                        if (values!.isEmpty) {
+                          return 'กรุณากรอกรหัสผ่าน';
+                        } else {
+                          return null;
+                        }
+                      },
+                      redEye: redEye,
+                      iconRight: _password.text.length > 0
+                          ? IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  redEye = !redEye;
+                                });
+                              },
+                              icon: redEye
+                                  ? Icon(
+                                      Icons.visibility_rounded,
+                                    )
+                                  : Icon(
+                                      Icons.visibility_off_rounded,
+                                    ),
+                            )
+                          : null,
+                    ),
                     SizedBox(
                       height: 20,
                     ),
                     loading
                         ? CircularProgressIndicator(
-                            color: Colors.indigo,
+                            color: Theme.of(context).primaryColor,
                           )
                         : Buttons(
                             title: 'เข้าสู่ระบบ',
@@ -167,18 +198,3 @@ class _Login_PageState extends State<Login_Page> {
     );
   }
 }
-
-// class Login {
-//   Login();
-
-//   Future doLogin(String email, String password) async {
-//     String url = 'http://119.59.97.193:7200/login';
-//     var response = await http.post(Uri.parse(url));
-//     var body = {
-//       "email": email,
-//       "password": password,
-//     };
-
-//     return http.post(Uri.parse(url), body: body);
-//   }
-// }

@@ -1,23 +1,28 @@
 import 'package:flutter/material.dart';
 
-class TextForm_validator extends StatelessWidget {
+class TextForm_Password extends StatelessWidget {
   TextEditingController controller;
   String title;
-  IconData icon;
+  IconData iconLaft;
   var error;
-  TextForm_validator({
-    Key? key,
-    required this.controller,
-    required this.title,
-    required this.icon,
-    required this.error,
-  }) : super(key: key);
+  bool redEye;
+  var iconRight;
+  TextForm_Password(
+      {Key? key,
+      required this.controller,
+      required this.title,
+      required this.iconLaft,
+      required this.error,
+      required this.redEye,
+      required this.iconRight})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 5),
       child: TextFormField(
+          obscureText: redEye,
           style: TextStyle(fontSize: 20),
           controller: controller,
           decoration: InputDecoration(
@@ -29,9 +34,10 @@ class TextForm_validator extends StatelessWidget {
             errorStyle: TextStyle(fontSize: 18),
             // ignore: prefer_const_constructors
             prefixIcon: Icon(
-              icon,
+              iconLaft,
               size: 30,
             ),
+            suffixIcon: iconRight,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),

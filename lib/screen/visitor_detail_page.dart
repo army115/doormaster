@@ -51,23 +51,28 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
   }
 
   void _saveScreenshot() async {
-    RenderRepaintBoundary boundary = _keyScreenshot.currentContext!
-        .findRenderObject() as RenderRepaintBoundary;
+    try {
+      RenderRepaintBoundary boundary = _keyScreenshot.currentContext!
+          .findRenderObject() as RenderRepaintBoundary;
 
-    ui.Image image = await boundary.toImage();
-    ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-    if (byteData != null) {
-      Uint8List Bytes = byteData.buffer.asUint8List();
+      ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+      ByteData? byteData =
+          await image.toByteData(format: ui.ImageByteFormat.png);
+      if (byteData != null) {
+        Uint8List pngBytes = byteData.buffer.asUint8List();
 
-      // Saving the screenshot to the gallery
-      final result = await ImageGallerySaver.saveImage(
-          Uint8List.fromList(Bytes),
-          quality: 100,
-          name: 'QRCode-${DateTime.now()}.jpg');
+        final result = await ImageGallerySaver.saveImage(
+            Uint8List.fromList(pngBytes),
+            quality: 100,
+            name: 'QRCode-${DateTime.now()}.jpg');
 
-      print('show : ${result}');
-      print('saved image successfully!!!');
-      snackbar(context, Colors.indigo, 'บันทึกสำเร็จ', Icons.check);
+        print('show : ${result}');
+        print('saved image successfully!!!');
+        snackbar(context, Theme.of(context).primaryColor, 'บันทึกสำเร็จ',
+            Icons.check);
+      }
+    } catch (error) {
+      print(error);
     }
   }
 
@@ -185,7 +190,7 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
           child: Column(
             children: [
               Card(
-                color: Colors.indigo,
+                color: Theme.of(context).primaryColor,
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Column(children: [
@@ -231,7 +236,7 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
               RepaintBoundary(
                 key: _keyScreenshot,
                 child: Card(
-                  color: Colors.indigo,
+                  color: Theme.of(context).primaryColor,
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Column(

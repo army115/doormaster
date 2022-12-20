@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class TextForm_validator extends StatelessWidget {
+class TextForm_Number extends StatelessWidget {
   TextEditingController controller;
   String title;
   IconData icon;
   var error;
-  TextForm_validator({
-    Key? key,
-    required this.controller,
-    required this.title,
-    required this.icon,
-    required this.error,
-  }) : super(key: key);
+  int maxLength;
+  TextInputType type;
+  TextForm_Number(
+      {Key? key,
+      required this.controller,
+      required this.title,
+      required this.icon,
+      required this.error,
+      required this.type,
+      required this.maxLength})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +25,13 @@ class TextForm_validator extends StatelessWidget {
       child: TextFormField(
           style: TextStyle(fontSize: 20),
           controller: controller,
+          maxLength: maxLength,
+          keyboardType: type,
+          inputFormatters: <TextInputFormatter>[
+            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+          ],
           decoration: InputDecoration(
+            counter: Offstage(),
             prefixIconColor: Colors.green,
             contentPadding: EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 10.0),
             // labelText: 'Username',

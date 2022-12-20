@@ -12,10 +12,14 @@ class Buttons extends StatelessWidget {
       width: MediaQuery.of(context).size.width * 0.5,
       height: 45,
       child: ElevatedButton(
-          style: TextButton.styleFrom(elevation: 10),
+          style: TextButton.styleFrom(
+            elevation: 10,
+            primary: Colors.black,
+          ),
           child: Text(
             title,
             style: TextStyle(
+              color: Colors.white,
               fontSize: 22,
               fontWeight: FontWeight.bold,
               letterSpacing: 1,

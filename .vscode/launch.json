@@ -39,6 +39,12 @@
             "type": "dart",
             "deviceId": "gidyprcy7xob7pt8"
         },
+        {
+            "name": "LD Player",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "emulator-5554"
+        },
     ],
     "compounds": [
         {
@@ -47,6 +53,7 @@
                 "Pixel 4a API 30",
                 "Pixel API 27",
                 "note 8 pro",
+                "LD Player",
             ],
         }
     ]

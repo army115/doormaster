@@ -11,14 +11,14 @@ class Loading extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
               color: Colors.white, borderRadius: BorderRadius.circular(10)),
-          width: MediaQuery.of(context).size.width * 0.35,
-          height: MediaQuery.of(context).size.height * 0.2,
+          width: 150,
+          height: 150,
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CircularProgressIndicator(
-                  color: Colors.indigo,
+                  color: Theme.of(context).primaryColor,
                 ),
                 SizedBox(
                   height: 15,

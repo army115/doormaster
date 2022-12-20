@@ -10,12 +10,15 @@ class Gird_Menu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: press,
-      child: Card(
-        elevation: 5,
-        color: Colors.indigo,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    return Card(
+      elevation: 5,
+      color: Theme.of(context).primaryColor,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(20),
+        splashColor: Colors.black12,
+        highlightColor: Colors.transparent,
+        onTap: press,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[

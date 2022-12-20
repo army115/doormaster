@@ -6,6 +6,7 @@ import 'package:doormster/components/dropdown/dropdown.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/components/text_form/text_form.dart';
+import 'package:doormster/components/text_form/text_form_number.dart';
 import 'package:doormster/models/device_group.dart';
 import 'package:doormster/models/visitor_model.dart';
 import 'package:doormster/screen/visitor_detail_page.dart';
@@ -125,7 +126,8 @@ class _Visitor_PageState extends State<Visitor_Page> {
         setState(() {
           loading = false;
         });
-        snackbar(context, Colors.indigo, 'สร้าง QR Code สำเร็จ', Icons.check);
+        snackbar(context, Theme.of(context).primaryColor,
+            'สร้าง QR Code สำเร็จ', Icons.check);
       } else {
         snackbar(context, Colors.red, 'สร้าง QR Code ไม่สำเร็จ', Icons.close);
         print('craate Visitor Fail!!');
@@ -194,19 +196,30 @@ class _Visitor_PageState extends State<Visitor_Page> {
                                 controller: visitName,
                                 title: 'ชื่อ - สกุล',
                                 icon: Icons.person,
-                                error: 'กรุณากรอกชื่อผู้ใช้'),
+                                error: 'กรุณากรอกชื่อผู้มาติดต่อ'),
                             Text('ติดต่อพบ'),
                             Text_Form(
                                 controller: visitPeople,
                                 title: 'ชื่อ - สกุล',
                                 icon: Icons.person_outline,
-                                error: 'กรุณากรอกชื่อผู้ใช้'),
+                                error: 'กรุณากรอกชื่อผู้ที่ติดต่อพบ'),
                             Text('เบอร์ติดต่อ'),
-                            Text_Form(
-                                controller: phone,
-                                title: 'เบอร์โทร',
-                                icon: Icons.phone,
-                                error: 'กรุณากรอกชื่อผู้ใช้'),
+                            TextForm_Number(
+                              controller: phone,
+                              title: 'เบอร์โทร',
+                              icon: Icons.phone,
+                              type: TextInputType.phone,
+                              maxLength: 10,
+                              error: (values) {
+                                if (values.isEmpty) {
+                                  return 'กรุณากรอกเบอร์โทร';
+                                  // } else if (values.length < 10) {
+                                  //   return "กรุณากรอกเบอร์โทรให้ครบ 10 ตัว";
+                                } else {
+                                  return null;
+                                }
+                              },
+                            ),
                             Text('สิทธ์การเข้าถึง'),
                             DropDownSn(),
                             Text('เริ่มต้น'),
@@ -214,11 +227,20 @@ class _Visitor_PageState extends State<Visitor_Page> {
                             Text('สิ้นสุด'),
                             EndDate(),
                             Text('สิทธิ์การใช้งาน'),
-                            Text_Form(
-                                controller: useCount,
-                                title: 'จำนวนครั้ง',
-                                icon: Icons.add_circle_outline_sharp,
-                                error: 'กรุณากรอกชื่อผู้ใช้'),
+                            TextForm_Number(
+                              controller: useCount,
+                              title: 'จำนวนครั้ง',
+                              icon: Icons.add_circle_outline_sharp,
+                              type: TextInputType.number,
+                              maxLength: 2,
+                              error: (values) {
+                                if (values.isEmpty) {
+                                  return 'กรุณาเพิ่มสิทธิ์การใช้งาน';
+                                } else {
+                                  return null;
+                                }
+                              },
+                            ),
                           ],
                         ),
                       ]),
@@ -270,7 +292,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
         rightIcon: Icon(Icons.keyboard_arrow_down_rounded, size: 30),
         theme: DatePickerTheme(
           titleHeight: 50,
-          headerColor: Colors.indigo,
+          headerColor: Theme.of(context).primaryColor,
           cancelStyle: TextStyle(
               color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
           doneStyle: TextStyle(
@@ -300,7 +322,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
         rightIcon: Icon(Icons.keyboard_arrow_down_rounded, size: 30),
         theme: DatePickerTheme(
           titleHeight: 50,
-          headerColor: Colors.indigo,
+          headerColor: Theme.of(context).primaryColor,
           cancelStyle: TextStyle(
               color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
           doneStyle: TextStyle(
