@@ -232,6 +232,36 @@ class _Visitor_PageState extends State<Visitor_Page> {
     );
   }
 
+  var dropdownValue;
+  Widget DropDownSn() {
+    return Dropdown(
+        title: deviceId == null ? 'ไม่มีอุปกรณ์' : 'เลือกอุปกรณ์',
+        values: dropdownValue,
+        listItem: listDevice.map((value) {
+          return DropdownMenuItem(
+            value: value.devicegroupDevice,
+            child: Text('${value.devicegroupName}'),
+          );
+        }).toList(),
+        leftIcon: Icon(Icons.mobile_friendly),
+        rightIcon: Icon(Icons.keyboard_arrow_down_rounded, size: 30),
+        validate: (values) {
+          if (deviceId != null) {
+            if (values == null) {
+              return 'เลือกอุปกรณ์';
+            }
+            return null;
+          }
+          return 'ไม่มีอุปกรณ์';
+        },
+        onChange: (value) {
+          setState(() {
+            dropdownValue = value!;
+            print(value);
+          });
+        });
+  }
+
   Widget StertDate() {
     return Date_time(
         controller: startDate,
@@ -290,35 +320,5 @@ class _Visitor_PageState extends State<Visitor_Page> {
           print(datetime);
         },
         error: 'กรุณาเลือกวันที่');
-  }
-
-  var dropdownValue;
-  Widget DropDownSn() {
-    return Dropdown(
-        title: deviceId == null ? 'ไม่มีอุปกรณ์' : 'เลือกอุปกรณ์',
-        values: dropdownValue,
-        listItem: listDevice.map((value) {
-          return DropdownMenuItem(
-            value: value.devicegroupDevice,
-            child: Text('${value.devicegroupName}'),
-          );
-        }).toList(),
-        leftIcon: Icon(Icons.mobile_friendly),
-        rightIcon: Icon(Icons.keyboard_arrow_down_rounded, size: 30),
-        validate: (values) {
-          if (deviceId != null) {
-            if (values == null) {
-              return 'เลือกอุปกรณ์';
-            }
-            return null;
-          }
-          return 'ไม่มีอุปกรณ์';
-        },
-        onChange: (value) {
-          setState(() {
-            dropdownValue = value!;
-            print(value);
-          });
-        });
   }
 }

@@ -75,7 +75,7 @@ class _Login_PageState extends State<Login_Page> {
           } else {
             print(jsonRes.status);
             print('username หรือ password ไม่ถูกต้อง');
-            snackbar(context, Colors.red, 'username หรือ password ไม่ถูกต้อง',
+            snackbar(context, Colors.red, 'ชื่อผู้ใช้ หรือ รหัสผ่าน ไม่ถูกต้อง',
                 Icons.close);
           }
         } else {
@@ -126,7 +126,7 @@ class _Login_PageState extends State<Login_Page> {
                     Text_Form(
                       controller: _email,
                       title: 'ชื่อผู้ใช้',
-                      icon: Icons.email,
+                      icon: Icons.account_circle_rounded,
                       error: 'กรุณากรอกชื่อผู้ใช้',
                     ),
                     TextForm_validator(
