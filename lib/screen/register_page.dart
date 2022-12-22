@@ -94,21 +94,27 @@ class _Register_PageState extends State<Register_Page> {
                           title: 'ชื่อผู้ใช้',
                           icon: Icons.account_circle_rounded,
                           error: 'กรุณากรอกชื่อผู้ใช้',
+                          TypeInput: TextInputType.name,
                         ),
                         Text_Form(
-                            controller: fname,
-                            title: 'ชื่อ',
-                            icon: Icons.person,
-                            error: 'กรุณากรอกชื่อ'),
+                          controller: fname,
+                          title: 'ชื่อ',
+                          icon: Icons.person,
+                          error: 'กรุณากรอกชื่อ',
+                          TypeInput: TextInputType.name,
+                        ),
                         Text_Form(
-                            controller: lname,
-                            title: 'นามสกุล',
-                            icon: Icons.person,
-                            error: 'กรุณากรอกชื่อนามสกุล'),
+                          controller: lname,
+                          title: 'นามสกุล',
+                          icon: Icons.person,
+                          error: 'กรุณากรอกชื่อนามสกุล',
+                          TypeInput: TextInputType.name,
+                        ),
                         TextForm_validator(
                             controller: email,
                             title: 'อีเมล',
                             icon: Icons.email,
+                            TypeInput: TextInputType.emailAddress,
                             error: (values) {
                               if (values.isEmpty) {
                                 return 'กรุณากรอกอีเมล';
@@ -120,62 +126,34 @@ class _Register_PageState extends State<Register_Page> {
                               }
                             }),
                         TextForm_Password(
-                            controller: password,
-                            title: 'รหัสผ่าน',
-                            iconLaft: Icons.key,
-                            iconRight: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  redEye = !redEye;
-                                });
-                              },
-                              icon: redEye
-                                  ? Icon(
-                                      Icons.visibility_rounded,
-                                    )
-                                  : Icon(
-                                      Icons.visibility_off_rounded,
-                                    ),
-                            ),
-                            error: (values) {
-                              confirmPass = values;
-                              if (values.isEmpty) {
-                                return 'กรุณากรอกรหัสผ่าน';
-                                // } else if (values.length < 8) {
-                                //   return "รหัสผ่านอย่างน้อย 8 ตัว";
-                              } else {
-                                return null;
-                              }
-                            },
-                            redEye: redEye),
+                          controller: password,
+                          title: 'รหัสผ่าน',
+                          iconLaft: Icons.key,
+                          error: (values) {
+                            confirmPass = values;
+                            if (values.isEmpty) {
+                              return 'กรุณากรอกรหัสผ่าน';
+                              // } else if (values.length < 8) {
+                              //   return "รหัสผ่านอย่างน้อย 8 ตัว";
+                            } else {
+                              return null;
+                            }
+                          },
+                        ),
                         TextForm_Password(
-                            controller: passwordCon,
-                            title: 'ยืนยันรหัสผ่าน',
-                            iconLaft: Icons.key,
-                            iconRight: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  redEye = !redEye;
-                                });
-                              },
-                              icon: redEye
-                                  ? Icon(
-                                      Icons.visibility_rounded,
-                                    )
-                                  : Icon(
-                                      Icons.visibility_off_rounded,
-                                    ),
-                            ),
-                            error: (values) {
-                              if (values.isEmpty) {
-                                return 'กรุณายืนยันรหัสผ่าน';
-                              } else if (values != confirmPass) {
-                                return "รหัสผ่านไม่ตรงกัน";
-                              } else {
-                                return null;
-                              }
-                            },
-                            redEye: redEye),
+                          controller: passwordCon,
+                          title: 'ยืนยันรหัสผ่าน',
+                          iconLaft: Icons.key,
+                          error: (values) {
+                            if (values.isEmpty) {
+                              return 'กรุณายืนยันรหัสผ่าน';
+                            } else if (values != confirmPass) {
+                              return "รหัสผ่านไม่ตรงกัน";
+                            } else {
+                              return null;
+                            }
+                          },
+                        ),
                         CheckboxListTileFormField(
                           title: Text(
                             'ยอมรับเงื่อนไขการใช้บริการ',

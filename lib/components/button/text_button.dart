@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 class Text_Button extends StatelessWidget {
   String title;
   VoidCallback press;
-  Text_Button({Key? key, required this.title, required this.press})
+  double size;
+  Text_Button(
+      {Key? key, required this.title, required this.press, required this.size})
       : super(key: key);
 
   @override
@@ -19,7 +21,7 @@ class Text_Button extends StatelessWidget {
         onPressed: press,
         child: Text(
           title,
-          style: TextStyle(fontSize: 25),
+          style: TextStyle(fontSize: size),
         ));
   }
 }

@@ -16,22 +16,24 @@ ThemeData mytheme() {
     900: Color.fromRGBO(0, 90, 171, 1),
   };
   return ThemeData(
-      primarySwatch: MaterialColor(0xFF005AAB, color),
-      primaryColor: Color(0xFF005AAB),
-      textTheme: TextTheme(
-        bodyText2: TextStyle(
-          fontSize: 20,
-          letterSpacing: 0.5,
-        ),
+    primarySwatch: MaterialColor(0xFF005AAB, color),
+    primaryColor: Color(0xFF005AAB),
+    textTheme: TextTheme(
+      bodyText2: TextStyle(
+        fontSize: 20,
+        letterSpacing: 0.5,
       ),
-      scaffoldBackgroundColor: Colors.grey[200],
-      appBarTheme: AppBarTheme(
-          iconTheme: IconThemeData(size: 30, color: Colors.white),
-          titleTextStyle: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Prompt',
-            fontSize: 22,
-            letterSpacing: 1,
-          )),
-      fontFamily: 'Prompt');
+    ),
+    scaffoldBackgroundColor: Colors.grey[200],
+    appBarTheme: AppBarTheme(
+        centerTitle: true,
+        iconTheme: IconThemeData(size: 30, color: Colors.white),
+        titleTextStyle: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontFamily: 'Prompt',
+          fontSize: 22,
+          letterSpacing: 1,
+        )),
+    fontFamily: 'Prompt',
+  );
 }

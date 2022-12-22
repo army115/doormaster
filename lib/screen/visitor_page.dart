@@ -193,16 +193,20 @@ class _Visitor_PageState extends State<Visitor_Page> {
                           children: [
                             Text('ชื่อผู้มาติดต่อ'),
                             Text_Form(
-                                controller: visitName,
-                                title: 'ชื่อ - สกุล',
-                                icon: Icons.person,
-                                error: 'กรุณากรอกชื่อผู้มาติดต่อ'),
+                              controller: visitName,
+                              title: 'ชื่อ - สกุล',
+                              icon: Icons.person,
+                              error: 'กรุณากรอกชื่อผู้มาติดต่อ',
+                              TypeInput: TextInputType.name,
+                            ),
                             Text('ติดต่อพบ'),
                             Text_Form(
-                                controller: visitPeople,
-                                title: 'ชื่อ - สกุล',
-                                icon: Icons.person_outline,
-                                error: 'กรุณากรอกชื่อผู้ที่ติดต่อพบ'),
+                              controller: visitPeople,
+                              title: 'ชื่อ - สกุล',
+                              icon: Icons.person_outline,
+                              error: 'กรุณากรอกชื่อผู้ที่ติดต่อพบ',
+                              TypeInput: TextInputType.name,
+                            ),
                             Text('เบอร์ติดต่อ'),
                             TextForm_Number(
                               controller: phone,
@@ -223,9 +227,17 @@ class _Visitor_PageState extends State<Visitor_Page> {
                             Text('สิทธ์การเข้าถึง'),
                             DropDownSn(),
                             Text('เริ่มต้น'),
-                            StertDate(),
+                            Date_time(
+                                controller: startDate,
+                                title: 'เลือกวันที่',
+                                leftIcon: Icon(Icons.event_note_rounded),
+                                error: 'กรุณาเลือกวันที่'),
                             Text('สิ้นสุด'),
-                            EndDate(),
+                            Date_time(
+                                controller: endDate,
+                                title: 'เลือกวันที่',
+                                leftIcon: Icon(Icons.event_note_rounded),
+                                error: 'กรุณาเลือกวันที่'),
                             Text('สิทธิ์การใช้งาน'),
                             TextForm_Number(
                               controller: useCount,
@@ -257,90 +269,30 @@ class _Visitor_PageState extends State<Visitor_Page> {
   var dropdownValue;
   Widget DropDownSn() {
     return Dropdown(
-        title: deviceId == null ? 'ไม่มีอุปกรณ์' : 'เลือกอุปกรณ์',
-        values: dropdownValue,
-        listItem: listDevice.map((value) {
-          return DropdownMenuItem(
-            value: value.devicegroupDevice,
-            child: Text('${value.devicegroupName}'),
-          );
-        }).toList(),
-        leftIcon: Icon(Icons.mobile_friendly),
-        rightIcon: Icon(Icons.keyboard_arrow_down_rounded, size: 30),
-        validate: (values) {
-          if (deviceId != null) {
-            if (values == null) {
-              return 'เลือกอุปกรณ์';
-            }
-            return null;
+      title: deviceId == null ? 'ไม่มีอุปกรณ์' : 'เลือกอุปกรณ์',
+      values: dropdownValue,
+      listItem: listDevice.map((value) {
+        return DropdownMenuItem(
+          value: value.devicegroupDevice,
+          child: Text('${value.devicegroupName}'),
+        );
+      }).toList(),
+      leftIcon: Icon(Icons.mobile_friendly),
+      validate: (values) {
+        if (deviceId != null) {
+          if (values == null) {
+            return 'เลือกอุปกรณ์';
           }
-          return 'ไม่มีอุปกรณ์';
-        },
-        onChange: (value) {
-          setState(() {
-            dropdownValue = value!;
-            print(value);
-          });
+          return null;
+        }
+        return 'ไม่มีอุปกรณ์';
+      },
+      onChange: (value) {
+        setState(() {
+          dropdownValue = value;
+          print(value);
         });
-  }
-
-  Widget StertDate() {
-    return Date_time(
-        controller: startDate,
-        title: 'เลือกวันที่',
-        leftIcon: Icon(Icons.event_note_rounded),
-        rightIcon: Icon(Icons.keyboard_arrow_down_rounded, size: 30),
-        theme: DatePickerTheme(
-          titleHeight: 50,
-          headerColor: Theme.of(context).primaryColor,
-          cancelStyle: TextStyle(
-              color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
-          doneStyle: TextStyle(
-              color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
-          backgroundColor: Colors.grey.shade200,
-          itemHeight: 45,
-          itemStyle: TextStyle(
-              color: Colors.black, fontSize: 22, fontWeight: FontWeight.normal),
-          containerHeight: MediaQuery.of(context).size.height * 0.4,
-        ),
-        language: LocaleType.th,
-        onConfirm: (date) {
-          String datetime = DateFormat('y-M-d HH:mm:ss').format(date);
-          setState(() {
-            startDate.text = datetime;
-          });
-          print(datetime);
-        },
-        error: 'กรุณาเลือกวันที่');
-  }
-
-  Widget EndDate() {
-    return Date_time(
-        controller: endDate,
-        title: 'เลือกวันที่',
-        leftIcon: Icon(Icons.event_note_rounded),
-        rightIcon: Icon(Icons.keyboard_arrow_down_rounded, size: 30),
-        theme: DatePickerTheme(
-          titleHeight: 50,
-          headerColor: Theme.of(context).primaryColor,
-          cancelStyle: TextStyle(
-              color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
-          doneStyle: TextStyle(
-              color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
-          backgroundColor: Colors.grey.shade200,
-          itemHeight: 45,
-          itemStyle: TextStyle(
-              color: Colors.black, fontSize: 22, fontWeight: FontWeight.normal),
-          containerHeight: MediaQuery.of(context).size.height * 0.4,
-        ),
-        language: LocaleType.th,
-        onConfirm: (date) {
-          String datetime = DateFormat('y-M-d HH:mm:ss').format(date);
-          setState(() {
-            endDate.text = datetime;
-          });
-          print(datetime);
-        },
-        error: 'กรุณาเลือกวันที่');
+      },
+    );
   }
 }

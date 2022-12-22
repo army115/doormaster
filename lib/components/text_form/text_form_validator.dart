@@ -5,13 +5,15 @@ class TextForm_validator extends StatelessWidget {
   String title;
   IconData icon;
   var error;
-  TextForm_validator({
-    Key? key,
-    required this.controller,
-    required this.title,
-    required this.icon,
-    required this.error,
-  }) : super(key: key);
+  var TypeInput;
+  TextForm_validator(
+      {Key? key,
+      required this.controller,
+      required this.title,
+      required this.icon,
+      required this.error,
+      required this.TypeInput})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +22,7 @@ class TextForm_validator extends StatelessWidget {
       child: TextFormField(
           style: TextStyle(fontSize: 20),
           controller: controller,
+          keyboardType: TypeInput,
           decoration: InputDecoration(
             prefixIconColor: Colors.green,
             contentPadding: EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 10.0),

@@ -7,12 +7,14 @@ class Text_Form extends StatelessWidget {
   String title;
   IconData icon;
   String error;
+  var TypeInput;
   Text_Form(
       {Key? key,
       required this.controller,
       required this.title,
       required this.icon,
-      required this.error})
+      required this.error,
+      required this.TypeInput})
       : super(key: key);
 
   @override
@@ -22,6 +24,7 @@ class Text_Form extends StatelessWidget {
       child: TextFormField(
         style: TextStyle(fontSize: 20),
         controller: controller,
+        keyboardType: TypeInput,
         decoration: InputDecoration(
           prefixIconColor: Colors.green,
           contentPadding: EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 10.0),

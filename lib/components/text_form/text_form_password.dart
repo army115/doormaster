@@ -1,22 +1,30 @@
 import 'package:flutter/material.dart';
 
-class TextForm_Password extends StatelessWidget {
+class TextForm_Password extends StatefulWidget {
   TextEditingController controller;
   String title;
   IconData iconLaft;
   var error;
-  bool redEye;
-  var iconRight;
-  TextForm_Password(
-      {Key? key,
-      required this.controller,
-      required this.title,
-      required this.iconLaft,
-      required this.error,
-      required this.redEye,
-      required this.iconRight})
-      : super(key: key);
+  // bool redEye;
+  // var iconRight;
+  // var change;
+  TextForm_Password({
+    Key? key,
+    required this.controller,
+    required this.title,
+    required this.iconLaft,
+    required this.error,
+    // required this.redEye,
+    // required this.iconRight,
+    // required this.change
+  }) : super(key: key);
 
+  @override
+  State<TextForm_Password> createState() => _TextForm_PasswordState();
+}
+
+class _TextForm_PasswordState extends State<TextForm_Password> {
+  bool redEye = true;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -24,25 +32,44 @@ class TextForm_Password extends StatelessWidget {
       child: TextFormField(
           obscureText: redEye,
           style: TextStyle(fontSize: 20),
-          controller: controller,
+          controller: widget.controller,
+          keyboardType: TextInputType.visiblePassword,
           decoration: InputDecoration(
             prefixIconColor: Colors.green,
             contentPadding: EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 10.0),
             // labelText: 'Username',
-            hintText: title,
+            hintText: widget.title,
             hintStyle: TextStyle(fontSize: 20),
             errorStyle: TextStyle(fontSize: 18),
             // ignore: prefer_const_constructors
             prefixIcon: Icon(
-              iconLaft,
+              widget.iconLaft,
               size: 30,
             ),
-            suffixIcon: iconRight,
+            suffixIcon: widget.controller.text.length > 0
+                ? IconButton(
+                    onPressed: () {
+                      setState(() {
+                        redEye = !redEye;
+                      });
+                    },
+                    icon: redEye
+                        ? Icon(
+                            Icons.visibility_rounded,
+                          )
+                        : Icon(
+                            Icons.visibility_off_rounded,
+                          ),
+                  )
+                : null,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
           ),
-          validator: error),
+          onChanged: (text) {
+            setState(() {});
+          },
+          validator: widget.error),
     );
   }
 }

@@ -2,21 +2,19 @@ import 'package:flutter/material.dart';
 
 class Dropdown extends StatelessWidget {
   final title;
-  final values;
+  var values;
   final listItem;
   final leftIcon;
-  final rightIcon;
-  final onChange;
   final validate;
+  final onChange;
   Dropdown(
       {Key? key,
-      required this.title,
-      required this.values,
-      required this.listItem,
-      required this.leftIcon,
-      required this.rightIcon,
-      required this.validate,
-      required this.onChange})
+      this.title,
+      this.values,
+      this.listItem,
+      this.leftIcon,
+      this.validate,
+      this.onChange})
       : super(key: key);
 
   @override

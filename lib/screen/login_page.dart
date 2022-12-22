@@ -1,16 +1,14 @@
 // ignore_for_file: prefer_const_constructors_in_immutables
-
-import 'dart:convert';
 import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/button/text_button.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/components/text_form/text_form.dart';
 import 'package:doormster/components/text_form/text_form_password.dart';
-import 'package:doormster/components/text_form/text_form_validator.dart';
 import 'package:doormster/models/login_model.dart';
 import 'package:doormster/screen/home_page.dart';
 import 'package:doormster/screen/register_page.dart';
 import 'package:doormster/service/connect_api.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -30,7 +28,6 @@ class _Login_PageState extends State<Login_Page> {
   TextEditingController _password = TextEditingController();
 
   bool loading = false;
-  bool redEye = true;
 
   Future doLogin() async {
     if (_formkey.currentState!.validate()) {
@@ -95,29 +92,22 @@ class _Login_PageState extends State<Login_Page> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    setState(() {
-      _password;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text_Button(title: 'เข้าสู่ระบบ', press: () {}),
-          Text_Button(
-            title: 'ลงทะเบียน',
-            press: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: ((context) => Register_Page())));
-            },
-          )
-        ],
-      ),
+      // bottomNavigationBar: Row(
+      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //   children: [
+      //     Text_Button(title: 'เข้าสู่ระบบ', press: () {}, size: 25),
+      //     Text_Button(
+      //       title: 'ลงทะเบียน',
+      //       press: () {
+      //         Navigator.push(context,
+      //             MaterialPageRoute(builder: ((context) => Register_Page())));
+      //       },
+      //       size: 25,
+      //     )
+      //   ],
+      // ),
       appBar: AppBar(
         title: Text('เข้าสู่ระบบ'),
       ),
@@ -142,6 +132,7 @@ class _Login_PageState extends State<Login_Page> {
                       title: 'ชื่อผู้ใช้',
                       icon: Icons.account_circle_rounded,
                       error: 'กรุณากรอกชื่อผู้ใช้',
+                      TypeInput: TextInputType.name,
                     ),
                     TextForm_Password(
                       controller: _password,
@@ -154,23 +145,6 @@ class _Login_PageState extends State<Login_Page> {
                           return null;
                         }
                       },
-                      redEye: redEye,
-                      iconRight: _password.text.length > 0
-                          ? IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  redEye = !redEye;
-                                });
-                              },
-                              icon: redEye
-                                  ? Icon(
-                                      Icons.visibility_rounded,
-                                    )
-                                  : Icon(
-                                      Icons.visibility_off_rounded,
-                                    ),
-                            )
-                          : null,
                     ),
                     SizedBox(
                       height: 20,
@@ -186,10 +160,32 @@ class _Login_PageState extends State<Login_Page> {
                             },
                           ),
                     SizedBox(height: 20),
-                    Text(
-                      'ยังไม่ได้เป็นสมาชิก HIP QR Smart Access กรุณาลงทะเบียน',
-                      style: TextStyle(fontSize: 18),
-                    ),
+                    RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                            fontFamily: 'Prompt',
+                          ),
+                          text: 'ยังไม่ได้เป็นสมาชิก HIP QR Smart Access ',
+                          children: [
+                            TextSpan(
+                                text: 'กรุณาลงทะเบียน',
+                                style: TextStyle(
+                                  decoration: TextDecoration.underline,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: ((context) =>
+                                                Register_Page())));
+                                  })
+                          ],
+                        ))
                   ],
                 )),
           ),
