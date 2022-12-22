@@ -207,11 +207,11 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
                       thickness: 1.5,
                     ),
                     Text(
-                      'ชื่อผู้ติดต่อ : ${visitorName}',
+                      'ผู้มาติดต่อ : คุณ ${visitorName}',
                       style: TextStyle(color: Colors.white),
                     ),
                     Text(
-                      'ติดต่อพบ : ${visitorPeople}',
+                      'ติดต่อพบ : คุณ ${visitorPeople}',
                       style: TextStyle(color: Colors.white),
                     ),
                     Text(

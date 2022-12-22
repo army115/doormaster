@@ -155,6 +155,7 @@ class _Register_PageState extends State<Register_Page> {
                           },
                         ),
                         CheckboxListTileFormField(
+                          activeColor: Theme.of(context).primaryColor,
                           title: Text(
                             'ยอมรับเงื่อนไขการใช้บริการ',
                             style: TextStyle(fontSize: 20),

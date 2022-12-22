@@ -26,7 +26,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('QR Code'),
+        title: Text('เปิดประตู'),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
