@@ -290,7 +290,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
       onChange: (value) {
         setState(() {
           dropdownValue = value;
-          print(value);
+          print('DeviceNumber : ${value}');
         });
       },
     );
