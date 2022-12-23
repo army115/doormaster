@@ -22,6 +22,9 @@ void snackbar(
             color: Colors.white,
             size: 30,
           ),
+          SizedBox(
+            width: 3,
+          ),
           Expanded(
             child: Text(
               title,

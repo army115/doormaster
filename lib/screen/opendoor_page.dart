@@ -90,7 +90,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
             loading = false;
           });
           snackbar(context, Theme.of(context).primaryColor, 'เปิดประตูสำเร็จ',
-              Icons.check);
+              Icons.check_circle_outline_rounded);
         } else if (jsonRes.data!.code == 10000) {
           print('DeviceNumber : ${devSn}');
           print('Door Offline');
@@ -98,8 +98,8 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
           setState(() {
             loading = false;
           });
-          snackbar(context, Colors.orange, 'ประตูออฟไลน์อยู่',
-              Icons.warning_amber_rounded);
+          snackbar(context, Colors.red, 'ประตูออฟไลน์อยู่',
+              Icons.highlight_off_rounded);
         } else if (jsonRes.data!.code == 10400) {
           print('DeviceNumber : ${devSn}');
           print('Invalid Device');
@@ -107,11 +107,12 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
           setState(() {
             loading = false;
           });
-          snackbar(
-              context, Colors.red, 'หมายเลขอุปกรณ์ไม่ถูกต้อง', Icons.close);
+          snackbar(context, Colors.red, 'หมายเลขอุปกรณ์ไม่ถูกต้อง',
+              Icons.highlight_off_rounded);
         }
       } else {
-        snackbar(context, Colors.red, 'เปิดประตูไม่สำเร็จ', Icons.close);
+        snackbar(context, Colors.red, 'เปิดประตูไม่สำเร็จ',
+            Icons.highlight_off_rounded);
         print('OpenDoor Fail!!');
         print(response.body);
         setState(() {

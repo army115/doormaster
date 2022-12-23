@@ -68,7 +68,7 @@ class _Login_PageState extends State<Login_Page> {
             Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (context) => Home_Page()));
             snackbar(context, Theme.of(context).primaryColor,
-                'เข้าสู่ระบบสำเร็จ', Icons.check);
+                'เข้าสู่ระบบสำเร็จ', Icons.check_circle_outline_rounded);
             setState(() {
               loading = false;
             });
@@ -76,12 +76,13 @@ class _Login_PageState extends State<Login_Page> {
             print(jsonRes.status);
             print('username หรือ password ไม่ถูกต้อง');
             snackbar(context, Colors.red, 'ชื่อผู้ใช้ หรือ รหัสผ่าน ไม่ถูกต้อง',
-                Icons.close);
+                Icons.highlight_off_rounded);
           }
         } else {
           print(response.statusCode);
           print('Connection Fail');
-          snackbar(context, Colors.red, 'เชื่อมต่อไม่สำเร็จ', Icons.close);
+          snackbar(context, Colors.red, 'เชื่อมต่อไม่สำเร็จ',
+              Icons.highlight_off_rounded);
         }
       } catch (error) {
         print(error);

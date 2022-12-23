@@ -51,9 +51,10 @@ class _Register_PageState extends State<Register_Page> {
           loading = false;
         });
         snackbar(context, Theme.of(context).primaryColor, 'ลงทะเบียนสำเร็จ',
-            Icons.check);
+            Icons.check_circle_outline_rounded);
       } else {
-        snackbar(context, Colors.red, 'ลงทะเบียนไม่สำเร็จ', Icons.close);
+        snackbar(context, Colors.red, 'ลงทะเบียนไม่สำเร็จ',
+            Icons.highlight_off_rounded);
         print('Register not Success!!');
         print(response.body);
         setState(() {

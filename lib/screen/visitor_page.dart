@@ -127,9 +127,10 @@ class _Visitor_PageState extends State<Visitor_Page> {
           loading = false;
         });
         snackbar(context, Theme.of(context).primaryColor,
-            'สร้าง QR Code สำเร็จ', Icons.check);
+            'สร้าง QR Code สำเร็จ', Icons.check_circle_outline_rounded);
       } else {
-        snackbar(context, Colors.red, 'สร้าง QR Code ไม่สำเร็จ', Icons.close);
+        snackbar(context, Colors.red, 'สร้าง QR Code ไม่สำเร็จ',
+            Icons.highlight_off_rounded);
         print('craate Visitor Fail!!');
         print(response.body);
         setState(() {

@@ -69,7 +69,7 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
         print('show : ${result}');
         print('saved image successfully!!!');
         snackbar(context, Theme.of(context).primaryColor, 'บันทึกสำเร็จ',
-            Icons.check);
+            Icons.check_circle_outline_rounded);
       }
     } catch (error) {
       print(error);
