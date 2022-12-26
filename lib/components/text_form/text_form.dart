@@ -22,12 +22,13 @@ class Text_Form extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 5),
       child: TextFormField(
+        autofocus: false,
         style: TextStyle(fontSize: 20),
         controller: controller,
         keyboardType: TypeInput,
         decoration: InputDecoration(
           prefixIconColor: Colors.green,
-          contentPadding: EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 10.0),
+          contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
           // labelText: 'Username',
           hintText: title,
           hintStyle: TextStyle(fontSize: 20),

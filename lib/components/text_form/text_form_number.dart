@@ -33,7 +33,7 @@ class TextForm_Number extends StatelessWidget {
           decoration: InputDecoration(
             counter: Offstage(),
             prefixIconColor: Colors.green,
-            contentPadding: EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 10.0),
+            contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
             // labelText: 'Username',
             hintText: title,
             hintStyle: TextStyle(fontSize: 20),

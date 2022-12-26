@@ -78,6 +78,11 @@ class _Register_PageState extends State<Register_Page> {
       children: [
         Scaffold(
           appBar: AppBar(
+            leading: IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.popUntil(context, (route) => route.isFirst);
+                }),
             title: Text('ลงทะเบียน'),
           ),
           body: SafeArea(

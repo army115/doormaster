@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors_in_immutables
 import 'package:doormster/components/button/button.dart';
-import 'package:doormster/components/button/text_button.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/components/text_form/text_form.dart';
 import 'package:doormster/components/text_form/text_form_password.dart';
@@ -91,6 +90,14 @@ class _Login_PageState extends State<Login_Page> {
       }
     }
   }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _formkey.currentState?.reset();
+  // _email.clear();
+  // _password.clear();
+  // }
 
   @override
   Widget build(BuildContext context) {

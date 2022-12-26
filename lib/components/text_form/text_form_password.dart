@@ -36,7 +36,7 @@ class _TextForm_PasswordState extends State<TextForm_Password> {
           keyboardType: TextInputType.visiblePassword,
           decoration: InputDecoration(
             prefixIconColor: Colors.green,
-            contentPadding: EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 10.0),
+            contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
             // labelText: 'Username',
             hintText: widget.title,
             hintStyle: TextStyle(fontSize: 20),

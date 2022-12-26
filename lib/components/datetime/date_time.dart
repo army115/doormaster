@@ -24,8 +24,11 @@ class _Date_timeState extends State<Date_time> {
         controller: widget.controller,
         readOnly: true,
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 10.0),
-          prefixIcon: widget.leftIcon,
+          contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+          prefixIcon: Icon(
+            widget.leftIcon,
+            size: 30,
+          ),
           suffixIcon: Icon(Icons.keyboard_arrow_down_rounded, size: 30),
           hintText: widget.title,
           hintStyle: TextStyle(fontSize: 20),

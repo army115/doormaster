@@ -22,15 +22,22 @@ class Dropdown extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 5),
       child: DropdownButtonFormField(
-          style: TextStyle(fontSize: 20, color: Colors.black),
+          style: TextStyle(
+              fontSize: 20,
+              fontFamily: 'Prompt',
+              color: Colors.black,
+              height: 1),
           decoration: InputDecoration(
             hintText: title,
             hintStyle: TextStyle(fontSize: 20),
-            prefixIcon: leftIcon,
+            prefixIcon: Icon(
+              leftIcon,
+              size: 30,
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
-            contentPadding: EdgeInsets.fromLTRB(10.0, 20.0, 0.0, 10.0),
+            contentPadding: EdgeInsets.fromLTRB(10.0, 15.0, 0.0, 15.0),
             errorStyle: TextStyle(fontSize: 18),
           ),
           value: values,

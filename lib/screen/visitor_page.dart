@@ -231,13 +231,13 @@ class _Visitor_PageState extends State<Visitor_Page> {
                             Date_time(
                                 controller: startDate,
                                 title: 'เลือกวันที่',
-                                leftIcon: Icon(Icons.event_note_rounded),
+                                leftIcon: Icons.event_note_rounded,
                                 error: 'กรุณาเลือกวันที่'),
                             Text('สิ้นสุด'),
                             Date_time(
                                 controller: endDate,
                                 title: 'เลือกวันที่',
-                                leftIcon: Icon(Icons.event_note_rounded),
+                                leftIcon: Icons.event_note_rounded,
                                 error: 'กรุณาเลือกวันที่'),
                             Text('สิทธิ์การใช้งาน'),
                             TextForm_Number(
@@ -275,13 +275,12 @@ class _Visitor_PageState extends State<Visitor_Page> {
       listItem: listDevice.map((value) {
         return DropdownMenuItem(
           value: value.devicegroupDevice,
-          child: Text('${value.devicegroupName}',
-              style: TextStyle(
-                fontFamily: 'Prompt',
-              )),
+          child: Text(
+            '${value.devicegroupName}',
+          ),
         );
       }).toList(),
-      leftIcon: Icon(Icons.mobile_friendly),
+      leftIcon: Icons.mobile_friendly,
       validate: (values) {
         if (deviceId != null) {
           if (values == null) {
