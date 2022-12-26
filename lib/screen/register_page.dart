@@ -92,7 +92,9 @@ class _Register_PageState extends State<Register_Page> {
                     // mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Padding(
-                        padding: EdgeInsets.symmetric(vertical: 20),
+                        padding: EdgeInsets.symmetric(
+                          vertical: 20,
+                        ),
                         child: Image.asset(
                           'assets/images/qrlogo600.png',
                           scale: 3.5,
