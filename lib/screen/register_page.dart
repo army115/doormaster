@@ -81,117 +81,115 @@ class _Register_PageState extends State<Register_Page> {
             title: Text('ลงทะเบียน'),
           ),
           body: SafeArea(
-              child: Center(
-            child: SingleChildScrollView(
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: Form(
-                  key: _formkey,
-                  child: Column(
-                      // mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text_Form(
-                          controller: username,
-                          title: 'ชื่อผู้ใช้',
-                          icon: Icons.account_circle_rounded,
-                          error: 'กรุณากรอกชื่อผู้ใช้',
-                          TypeInput: TextInputType.name,
-                        ),
-                        Text_Form(
-                          controller: fname,
-                          title: 'ชื่อ',
-                          icon: Icons.person,
-                          error: 'กรุณากรอกชื่อ',
-                          TypeInput: TextInputType.name,
-                        ),
-                        Text_Form(
-                          controller: lname,
-                          title: 'นามสกุล',
-                          icon: Icons.person,
-                          error: 'กรุณากรอกชื่อนามสกุล',
-                          TypeInput: TextInputType.name,
-                        ),
-                        TextForm_validator(
-                            controller: email,
-                            title: 'อีเมล',
-                            icon: Icons.email,
-                            TypeInput: TextInputType.emailAddress,
-                            error: (values) {
-                              if (values.isEmpty) {
-                                return 'กรุณากรอกอีเมล';
-                                // } else if (values.isEmpty ||
-                                //     !values.contains("@")) {
-                                //   return "รูปแบบอีเมลไม่ถูกต้อง";
-                              } else {
-                                return null;
-                              }
-                            }),
-                        TextForm_Password(
-                          controller: password,
-                          title: 'รหัสผ่าน',
-                          iconLaft: Icons.key,
-                          error: (values) {
-                            confirmPass = values;
-                            if (values.isEmpty) {
-                              return 'กรุณากรอกรหัสผ่าน';
-                              // } else if (values.length < 8) {
-                              //   return "รหัสผ่านอย่างน้อย 8 ตัว";
-                            } else {
-                              return null;
-                            }
-                          },
-                        ),
-                        TextForm_Password(
-                          controller: passwordCon,
-                          title: 'ยืนยันรหัสผ่าน',
-                          iconLaft: Icons.key,
+              child: SingleChildScrollView(
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              child: Form(
+                key: _formkey,
+                child: Column(
+                    // mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text_Form(
+                        controller: username,
+                        title: 'ชื่อผู้ใช้',
+                        icon: Icons.account_circle_rounded,
+                        error: 'กรุณากรอกชื่อผู้ใช้',
+                        TypeInput: TextInputType.name,
+                      ),
+                      Text_Form(
+                        controller: fname,
+                        title: 'ชื่อ',
+                        icon: Icons.person,
+                        error: 'กรุณากรอกชื่อ',
+                        TypeInput: TextInputType.name,
+                      ),
+                      Text_Form(
+                        controller: lname,
+                        title: 'นามสกุล',
+                        icon: Icons.person,
+                        error: 'กรุณากรอกชื่อนามสกุล',
+                        TypeInput: TextInputType.name,
+                      ),
+                      TextForm_validator(
+                          controller: email,
+                          title: 'อีเมล',
+                          icon: Icons.email,
+                          TypeInput: TextInputType.emailAddress,
                           error: (values) {
                             if (values.isEmpty) {
-                              return 'กรุณายืนยันรหัสผ่าน';
-                            } else if (values != confirmPass) {
-                              return "รหัสผ่านไม่ตรงกัน";
+                              return 'กรุณากรอกอีเมล';
+                              // } else if (values.isEmpty ||
+                              //     !values.contains("@")) {
+                              //   return "รูปแบบอีเมลไม่ถูกต้อง";
                             } else {
                               return null;
                             }
-                          },
+                          }),
+                      TextForm_Password(
+                        controller: password,
+                        title: 'รหัสผ่าน',
+                        iconLaft: Icons.key,
+                        error: (values) {
+                          confirmPass = values;
+                          if (values.isEmpty) {
+                            return 'กรุณากรอกรหัสผ่าน';
+                            // } else if (values.length < 8) {
+                            //   return "รหัสผ่านอย่างน้อย 8 ตัว";
+                          } else {
+                            return null;
+                          }
+                        },
+                      ),
+                      TextForm_Password(
+                        controller: passwordCon,
+                        title: 'ยืนยันรหัสผ่าน',
+                        iconLaft: Icons.key,
+                        error: (values) {
+                          if (values.isEmpty) {
+                            return 'กรุณายืนยันรหัสผ่าน';
+                          } else if (values != confirmPass) {
+                            return "รหัสผ่านไม่ตรงกัน";
+                          } else {
+                            return null;
+                          }
+                        },
+                      ),
+                      CheckboxListTileFormField(
+                        activeColor: Theme.of(context).primaryColor,
+                        title: Text(
+                          'ยอมรับเงื่อนไขการใช้บริการ',
+                          style: TextStyle(fontSize: 20),
                         ),
-                        CheckboxListTileFormField(
-                          activeColor: Theme.of(context).primaryColor,
-                          title: Text(
-                            'ยอมรับเงื่อนไขการใช้บริการ',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          initialValue: Checked,
-                          onChanged: (value) {
-                            setState(() {
-                              Checked = value;
-                            });
-                          },
-                          validator: (values) {
-                            if (values!) {
-                              return null;
-                            } else {
-                              return 'กรุณายอมรับเงื่อนไขการใช้บริการ';
-                            }
-                          },
-                        ),
-                        Buttons(
-                          title: 'ลงทะเบียน',
-                          press: () {
-                            if (_formkey.currentState!.validate()) {
-                              Map<String, dynamic> valuse = Map();
-                              valuse['name'] = username.text;
-                              valuse['first_name'] = fname.text;
-                              valuse['last_name'] = lname.text;
-                              valuse['email'] = email.text;
-                              valuse['position'] = 0;
-                              valuse['password'] = passwordCon.text;
-                              _register(valuse);
-                            }
-                          },
-                        )
-                      ]),
-                ),
+                        initialValue: Checked,
+                        onChanged: (value) {
+                          setState(() {
+                            Checked = value;
+                          });
+                        },
+                        validator: (values) {
+                          if (values!) {
+                            return null;
+                          } else {
+                            return 'กรุณายอมรับเงื่อนไขการใช้บริการ';
+                          }
+                        },
+                      ),
+                      Buttons(
+                        title: 'ลงทะเบียน',
+                        press: () {
+                          if (_formkey.currentState!.validate()) {
+                            Map<String, dynamic> valuse = Map();
+                            valuse['name'] = username.text;
+                            valuse['first_name'] = fname.text;
+                            valuse['last_name'] = lname.text;
+                            valuse['email'] = email.text;
+                            valuse['position'] = 0;
+                            valuse['password'] = passwordCon.text;
+                            _register(valuse);
+                          }
+                        },
+                      )
+                    ]),
               ),
             ),
           )),
