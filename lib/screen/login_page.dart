@@ -117,9 +117,7 @@ class _Login_PageState extends State<Login_Page> {
           child: Form(
             key: _formkey,
             child: Container(
-                padding: EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: MediaQuery.of(context).size.height * 0.1),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 50),
                 child: Column(
                   // mainAxisAlignment: MainAxisAlignment.center,
                   children: [
