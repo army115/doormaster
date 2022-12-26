@@ -275,7 +275,10 @@ class _Visitor_PageState extends State<Visitor_Page> {
       listItem: listDevice.map((value) {
         return DropdownMenuItem(
           value: value.devicegroupDevice,
-          child: Text('${value.devicegroupName}'),
+          child: Text('${value.devicegroupName}',
+              style: TextStyle(
+                fontFamily: 'Prompt',
+              )),
         );
       }).toList(),
       leftIcon: Icon(Icons.mobile_friendly),
