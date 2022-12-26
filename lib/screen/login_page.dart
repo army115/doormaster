@@ -113,21 +113,22 @@ class _Login_PageState extends State<Login_Page> {
           title: Text('เข้าสู่ระบบ'),
         ),
         body: SafeArea(
-            child: Center(
-          child: SingleChildScrollView(
-              child: Form(
+            child: SingleChildScrollView(
+          child: Form(
             key: _formkey,
             child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: MediaQuery.of(context).size.height * 0.1),
                 child: Column(
                   // mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 20),
-                      child: Image.asset(
-                        'assets/images/qrlogo600.png',
-                        scale: 3,
-                      ),
+                    Image.asset(
+                      'assets/images/qrlogo600.png',
+                      scale: 3,
+                    ),
+                    SizedBox(
+                      height: 20,
                     ),
                     Text_Form(
                       controller: _email,
@@ -190,7 +191,7 @@ class _Login_PageState extends State<Login_Page> {
                         ))
                   ],
                 )),
-          )),
+          ),
         )));
   }
 }
