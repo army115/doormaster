@@ -5,7 +5,6 @@ import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/girdManu/gird_menu.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/screen/login_page.dart';
-import 'package:doormster/screen/test.dart';
 import 'package:doormster/screen/visitor_page.dart';
 import 'package:doormster/screen/opendoor_page.dart';
 import 'package:flutter/material.dart';
@@ -135,15 +134,6 @@ class _Home_PageState extends State<Home_Page> {
                       ),
                     ],
                   ),
-                  Buttons(
-                      title: 'test',
-                      press: () {
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (BuildContext context) =>
-                        //             FlutterBlueApp()));
-                      })
                 ]),
               ),
             )),

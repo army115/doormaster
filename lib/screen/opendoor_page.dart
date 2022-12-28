@@ -25,6 +25,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
 
   List<Lists> listDevice = [];
   bool loading = false;
+  bool light = false;
 
   Future _getDevice() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -165,78 +166,113 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
                     itemCount: listDevice.length,
                     itemBuilder: (context, index) {
                       return Card(
-                        margin: EdgeInsets.symmetric(vertical: 5),
-                        elevation: 5,
-                        child: ListTile(
-                          minVerticalPadding: 15,
-                          // leading: Text('${index + 1}'),
-                          title: Text('${listDevice[index].name}',
-                              style: TextStyle(fontSize: 20)),
-                          trailing: listDevice[index].connectionStatus == 1
-                              ? ElevatedButton(
-                                  style: TextButton.styleFrom(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 5, horizontal: 10),
-                                    elevation: 5,
-                                  ),
-                                  child: Wrap(
-                                    children: [
-                                      Icon(
-                                        Icons.meeting_room_rounded,
-                                        size: 30,
-                                      ),
-                                      SizedBox(
-                                        width: 3,
-                                      ),
-                                      Text(
-                                        'เปิดประตู',
-                                        style: TextStyle(fontSize: 18),
-                                      ),
-                                    ],
-                                  ),
-                                  onPressed: () {
+                          margin: EdgeInsets.symmetric(vertical: 5),
+                          elevation: 5,
+                          child: listDevice[index].connectionStatus == 1
+                              ? doorsONline(
+                                  '${listDevice[index].name}',
+                                  () {
                                     _openDoors(listDevice[index].devSn);
                                   },
                                 )
-                              : ElevatedButton(
-                                  style: TextButton.styleFrom(
-                                    elevation: 5,
-                                    primary: Colors.white,
-                                    backgroundColor: Colors.redAccent,
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 5, horizontal: 10),
-                                  ),
-                                  child: Wrap(
-                                    children: [
-                                      Icon(
-                                        Icons.no_meeting_room_rounded,
-                                        size: 30,
-                                      ),
-                                      SizedBox(
-                                        width: 3,
-                                      ),
-                                      Text(
-                                        'ประตูออฟไลน์',
-                                        style: TextStyle(fontSize: 18),
-                                      ),
-                                    ],
-                                  ),
-                                  onPressed: () {
-                                    snackbar(
-                                        context,
-                                        Colors.red,
-                                        'ประตูออฟไลน์อยู่',
-                                        Icons.highlight_off_rounded);
-                                  },
-                                ),
-                        ),
-                      );
+                              : doorsOOFline('${listDevice[index].name}'));
                     },
                   ),
                 ),
         ),
         loading ? Loading() : Container()
       ],
+    );
+  }
+
+  Widget doorsONline(name, press) {
+    return ListTile(
+      minVerticalPadding: 15,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(name,
+              style: TextStyle(
+                fontSize: 20,
+              )),
+          ElevatedButton(
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                elevation: 5,
+              ),
+              child: Wrap(
+                children: [
+                  Icon(
+                    Icons.meeting_room_rounded,
+                    size: 30,
+                  ),
+                  SizedBox(
+                    width: 3,
+                  ),
+                  Text(
+                    'เปิดประตู',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ],
+              ),
+              onPressed: press)
+        ],
+      ),
+      subtitle:
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Text('เปิดประตูอัตโนมัติ',
+            style: TextStyle(fontSize: 20, color: Colors.black)),
+        switchs(),
+      ]),
+    );
+  }
+
+  Widget doorsOOFline(name) {
+    return ListTile(
+      minVerticalPadding: 15,
+      title: Text(name, style: TextStyle(fontSize: 20)),
+      trailing: ElevatedButton(
+        style: TextButton.styleFrom(
+          elevation: 5,
+          primary: Colors.white,
+          backgroundColor: Colors.redAccent,
+          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+        ),
+        child: Wrap(
+          children: [
+            Icon(
+              Icons.no_meeting_room_rounded,
+              size: 30,
+            ),
+            SizedBox(
+              width: 3,
+            ),
+            Text(
+              'ประตูออฟไลน์',
+              style: TextStyle(fontSize: 18),
+            ),
+          ],
+        ),
+        onPressed: () {
+          snackbar(context, Colors.red, 'ประตูออฟไลน์อยู่',
+              Icons.highlight_off_rounded);
+        },
+      ),
+    );
+  }
+
+  Widget switchs() {
+    return Transform.scale(
+      scale: 1.5,
+      child: Switch(
+        value: light,
+        activeColor: Theme.of(context).primaryColor,
+        onChanged: (value) {
+          setState(() {
+            light = value;
+          });
+        },
+      ),
     );
   }
 }
