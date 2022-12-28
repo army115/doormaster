@@ -2,6 +2,7 @@ import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/models/device_group.dart';
+import 'package:doormster/models/doors_device.dart';
 import 'package:doormster/models/opendoors_model.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
   var companyId;
   var deviceId;
 
-  List<Device> listDevice = [];
+  List<Lists> listDevice = [];
   bool loading = false;
 
   Future _getDevice() async {
@@ -40,17 +41,17 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
       setState(() {
         loading = true;
       });
-      var url = '${Connect_api().domain}/getdevicegroupcompanyid/$deviceId';
+      var url = '${Connect_api().domain}/getdeviceuuidmobile/$deviceId';
       var response = await http.get(Uri.parse(url), headers: {
         'Connect-type': 'application/json',
         'Accept': 'application/json',
       });
 
       if (response.statusCode == 200) {
-        DeviceGroup deviceGp =
-            DeviceGroup.fromJson(convert.jsonDecode(response.body));
+        DoorsDeviece deviceDoors =
+            DoorsDeviece.fromJson(convert.jsonDecode(response.body));
         setState(() {
-          listDevice = deviceGp.device!;
+          listDevice = deviceDoors.lists!;
           loading = false;
         });
       }
@@ -164,29 +165,70 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
                     itemCount: listDevice.length,
                     itemBuilder: (context, index) {
                       return Card(
+                        margin: EdgeInsets.symmetric(vertical: 5),
+                        elevation: 5,
                         child: ListTile(
+                          minVerticalPadding: 15,
                           // leading: Text('${index + 1}'),
-                          leading: Text('${listDevice[index].devicegroupName}',
+                          title: Text('${listDevice[index].name}',
                               style: TextStyle(fontSize: 20)),
-
-                          trailing: ElevatedButton(
-                            child: Wrap(
-                              children: [
-                                Icon(Icons.door_front_door_outlined),
-                                SizedBox(
-                                  width: 3,
+                          trailing: listDevice[index].connectionStatus == 1
+                              ? ElevatedButton(
+                                  style: TextButton.styleFrom(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 5, horizontal: 10),
+                                    elevation: 5,
+                                  ),
+                                  child: Wrap(
+                                    children: [
+                                      Icon(
+                                        Icons.meeting_room_rounded,
+                                        size: 30,
+                                      ),
+                                      SizedBox(
+                                        width: 3,
+                                      ),
+                                      Text(
+                                        'เปิดประตู',
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                                    ],
+                                  ),
+                                  onPressed: () {
+                                    _openDoors(listDevice[index].devSn);
+                                  },
+                                )
+                              : ElevatedButton(
+                                  style: TextButton.styleFrom(
+                                    elevation: 5,
+                                    primary: Colors.white,
+                                    backgroundColor: Colors.redAccent,
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 5, horizontal: 10),
+                                  ),
+                                  child: Wrap(
+                                    children: [
+                                      Icon(
+                                        Icons.no_meeting_room_rounded,
+                                        size: 30,
+                                      ),
+                                      SizedBox(
+                                        width: 3,
+                                      ),
+                                      Text(
+                                        'ประตูออฟไลน์',
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                                    ],
+                                  ),
+                                  onPressed: () {
+                                    snackbar(
+                                        context,
+                                        Colors.red,
+                                        'ประตูออฟไลน์อยู่',
+                                        Icons.highlight_off_rounded);
+                                  },
                                 ),
-                                Text(
-                                  'เปิดประตู',
-                                  style: TextStyle(fontSize: 18),
-                                ),
-                              ],
-                            ),
-                            onPressed: () {
-                              _openDoors(listDevice[index].devicegroupDevice);
-                            },
-                          ),
-                          onLongPress: () {},
                         ),
                       );
                     },

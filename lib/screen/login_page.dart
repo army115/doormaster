@@ -91,14 +91,6 @@ class _Login_PageState extends State<Login_Page> {
     }
   }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _formkey.currentState?.reset();
-  // _email.clear();
-  // _password.clear();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -186,8 +178,7 @@ class _Login_PageState extends State<Login_Page> {
                                 ),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
-                                    Navigator.push(
-                                        context,
+                                    Navigator.of(context).pushReplacement(
                                         MaterialPageRoute(
                                             builder: ((context) =>
                                                 Register_Page())));

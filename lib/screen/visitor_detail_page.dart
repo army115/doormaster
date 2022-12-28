@@ -85,192 +85,182 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // bottomNavigationBar: Padding(
-      //   padding: const EdgeInsets.only(right: 10),
-      //   child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-      //     Text_Button(
-      //       title: 'แชร์ QRCode',
-      //       press: () {
-      //         ShareFilesAndScreenshotWidgets().shareScreenshot(
-      //           _keyScreenshot,
-      //           800,
-      //           "แชร์",
-      //           "QRCode-${DateTime.now()}.jpg",
-      //           "image/jpg",
-      //         );
-      //       },
-      //     )
-      //   ]),
-      // ),
-      appBar: AppBar(
-          title: Text('ลงทะเบียนผู้มาติดต่อ'),
-          leading: IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.popUntil(context, (route) => route.isFirst);
-              }),
-          actions: [
-            PopupMenuButton<int>(
-              icon: Icon(
-                Icons.share,
-                size: 30,
-              ),
-              // offset: Offset(0, 100),
-              // color: Colors.grey,
-              elevation: 10,
-              itemBuilder: (context) => [
-                // popupmenu item 1
-                PopupMenuItem(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    onTap: () {
-                      _saveScreenshot();
-                    },
-                    value: 1,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.download_rounded,
-                          color: Colors.black,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          "บันทึก",
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ],
-                    )),
-                // popupmenu item 2
-                PopupMenuItem(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    onTap: () {
-                      ShareFilesAndScreenshotWidgets().shareScreenshot(
-                        _keyScreenshot,
-                        800,
-                        "แชร์",
-                        "QRCode-${DateTime.now()}.jpg",
-                        "image/jpg",
-                      );
-                    },
-                    value: 2,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.share_outlined,
-                          color: Colors.black,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          "แชร์",
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ],
-                    )),
-              ],
-            ),
-          ]),
-      body: SafeArea(
-          child: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-          width: double.infinity,
-          // height: MediaQuery.of(context).size.height,
-          child: Column(
-            children: [
-              Card(
-                color: Theme.of(context).primaryColor,
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(children: [
-                    Row(
-                      children: [
-                        Text(
-                          'ข้อมูลผู้มาติดต่อ',
-                          style: TextStyle(fontSize: 23, color: Colors.white),
-                        ),
-                      ],
-                    ),
-                    Divider(
-                      color: Colors.white,
-                      thickness: 1.5,
-                    ),
-                    Text(
-                      'ผู้มาติดต่อ : คุณ ${visitorName}',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    Text(
-                      'ติดต่อพบ : คุณ ${visitorPeople}',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    Text(
-                      'เบอร์โทร : ${telVisitor}',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    Text(
-                      'สิทธ์การใช้งาน : ${usableCount} ครั้ง',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    Text(
-                      'เริ่มต้น : ${startDate}',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    Text(
-                      'สิ้นสุด : ${endDate}',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ]),
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.popUntil(context, (route) => route.isFirst);
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+            title: Text('ลงทะเบียนผู้มาติดต่อ'),
+            leading: IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.popUntil(context, (route) => route.isFirst);
+                }),
+            actions: [
+              PopupMenuButton<int>(
+                icon: Icon(
+                  Icons.share,
+                  size: 30,
                 ),
+                // offset: Offset(0, 100),
+                // color: Colors.grey,
+                elevation: 10,
+                itemBuilder: (context) => [
+                  // popupmenu item 1
+                  PopupMenuItem(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      onTap: () {
+                        _saveScreenshot();
+                      },
+                      value: 1,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.download_rounded,
+                            color: Colors.black,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            "บันทึก",
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      )),
+                  // popupmenu item 2
+                  PopupMenuItem(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      onTap: () {
+                        ShareFilesAndScreenshotWidgets().shareScreenshot(
+                          _keyScreenshot,
+                          800,
+                          "แชร์",
+                          "QRCode-${DateTime.now()}.jpg",
+                          "image/jpg",
+                        );
+                      },
+                      value: 2,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.share_outlined,
+                            color: Colors.black,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            "แชร์",
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      )),
+                ],
               ),
-              RepaintBoundary(
-                key: _keyScreenshot,
-                child: Card(
+            ]),
+        body: SafeArea(
+            child: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            width: double.infinity,
+            // height: MediaQuery.of(context).size.height,
+            child: Column(
+              children: [
+                Card(
                   color: Theme.of(context).primaryColor,
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
-                    child: Column(
-                      children: [
-                        Row(children: [
+                    child: Column(children: [
+                      Row(
+                        children: [
                           Text(
-                            'QR Code',
-                            style: TextStyle(color: Colors.white, fontSize: 23),
-                          )
-                        ]),
-                        Divider(color: Colors.white, thickness: 1.5),
-                        Card(
-                          elevation: 10,
-                          child: Padding(
-                            padding: const EdgeInsets.all(5),
-                            child: Image.memory(
-                              _qrcodeImage,
-                              scale: 1.3,
+                            'ข้อมูลผู้มาติดต่อ',
+                            style: TextStyle(fontSize: 23, color: Colors.white),
+                          ),
+                        ],
+                      ),
+                      Divider(
+                        color: Colors.white,
+                        thickness: 1.5,
+                      ),
+                      Text(
+                        'ผู้มาติดต่อ : คุณ ${visitorName}',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Text(
+                        'ติดต่อพบ : คุณ ${visitorPeople}',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Text(
+                        'เบอร์โทร : ${telVisitor}',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Text(
+                        'สิทธ์การใช้งาน : ${usableCount} ครั้ง',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Text(
+                        'เริ่มต้น : ${startDate}',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Text(
+                        'สิ้นสุด : ${endDate}',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ]),
+                  ),
+                ),
+                RepaintBoundary(
+                  key: _keyScreenshot,
+                  child: Card(
+                    color: Theme.of(context).primaryColor,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        children: [
+                          Row(children: [
+                            Text(
+                              'QR Code',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 23),
+                            )
+                          ]),
+                          Divider(color: Colors.white, thickness: 1.5),
+                          Card(
+                            elevation: 10,
+                            child: Padding(
+                              padding: const EdgeInsets.all(5),
+                              child: Image.memory(
+                                _qrcodeImage,
+                                scale: 1.3,
+                              ),
                             ),
                           ),
-                        ),
-                        Text(
-                          'รหัสผ่าน : ${widget.QRcodeData[1]}',
-                          style: TextStyle(color: Colors.white, fontSize: 22),
-                        ),
-                      ],
+                          Text(
+                            'รหัสผ่าน : ${widget.QRcodeData[1]}',
+                            style: TextStyle(color: Colors.white, fontSize: 22),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      )),
+        )),
+      ),
     );
   }
 }

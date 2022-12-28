@@ -50,6 +50,7 @@ dependencies:
   flutter_launcher_icons: ^0.11.0
   flutter_native_splash: ^2.1.6
   flutter_blue: ^0.8.0
+  flutter_bluetooth_serial: ^0.4.0
   flutter_phone_direct_caller: ^2.1.1
   # splash_view: ^2.0.1
   # gallery_saver: ^2.3.1
