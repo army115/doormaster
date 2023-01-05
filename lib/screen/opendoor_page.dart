@@ -25,7 +25,15 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
 
   List<Lists> listDevice = [];
   bool loading = false;
-  bool light = false;
+  bool open = false;
+
+  Future Show() async {
+    if (open == false) {
+      print('Auto Door Off');
+    } else {
+      print('Auto Door On');
+    }
+  }
 
   Future _getDevice() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -175,7 +183,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
                                     _openDoors(listDevice[index].devSn);
                                   },
                                 )
-                              : doorsOOFline('${listDevice[index].name}'));
+                              : doorsOFFline('${listDevice[index].name}'));
                     },
                   ),
                 ),
@@ -221,13 +229,17 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
       subtitle:
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Text('เปิดประตูอัตโนมัติ',
-            style: TextStyle(fontSize: 20, color: Colors.black)),
+            style: TextStyle(
+                fontSize: 20,
+                color: open == false
+                    ? Colors.grey
+                    : Theme.of(context).primaryColor)),
         switchs(),
       ]),
     );
   }
 
-  Widget doorsOOFline(name) {
+  Widget doorsOFFline(name) {
     return ListTile(
       minVerticalPadding: 15,
       title: Text(name, style: TextStyle(fontSize: 20)),
@@ -265,11 +277,12 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
     return Transform.scale(
       scale: 1.5,
       child: Switch(
-        value: light,
+        value: open,
         activeColor: Theme.of(context).primaryColor,
         onChanged: (value) {
           setState(() {
-            light = value;
+            open = value;
+            Show();
           });
         },
       ),

@@ -19,8 +19,8 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  var token;
-  MyApp({Key? key, required this.token}) : super(key: key);
+  final token;
+  MyApp({Key? key, this.token}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

@@ -28,12 +28,6 @@
             "deviceId": "emulator-5556"
         },
         {
-            "name": "Pixel API 27",
-            "request": "launch",
-            "type": "dart",
-            "deviceId": "emulator-5554"
-        },
-        {
             "name": "note 8 pro",
             "request": "launch",
             "type": "dart",
@@ -51,7 +45,6 @@
             "name": "All Devices",
             "configurations": [
                 "Pixel 4a API 30",
-                "Pixel API 27",
                 "note 8 pro",
                 "LD Player",
             ],
