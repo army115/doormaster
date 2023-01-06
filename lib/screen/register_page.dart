@@ -183,7 +183,7 @@ class _Register_PageState extends State<Register_Page> {
                           activeColor: Theme.of(context).primaryColor,
                           title: Text(
                             'ยอมรับเงื่อนไขการใช้บริการ',
-                            style: TextStyle(fontSize: 20),
+                            style: TextStyle(fontSize: 18),
                           ),
                           initialValue: Checked,
                           onChanged: (value) {

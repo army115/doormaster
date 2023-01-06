@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
 import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/girdManu/gird_menu.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
@@ -135,12 +132,12 @@ class _Home_PageState extends State<Home_Page> {
                       ),
                     ],
                   ),
-                  Buttons(
-                      title: 'test',
-                      press: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: ((context) => Test())));
-                      })
+                  // Buttons(
+                  //     title: 'test',
+                  //     press: () {
+                  //       Navigator.push(context,
+                  //           MaterialPageRoute(builder: ((context) => Test())));
+                  //     })
                 ]),
               ),
             )),
