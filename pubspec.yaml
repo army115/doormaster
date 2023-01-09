@@ -70,7 +70,7 @@ flutter_icons:
 
 flutter_native_splash:
   color: "#ffffff"
-  image: assets/images/qrlogo600.png
+  image: assets/images/qrlogo900.png
   
 
 dev_dependencies:
