@@ -25,15 +25,6 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
 
   List<Lists> listDevice = [];
   bool loading = false;
-  bool open = false;
-
-  Future Show() async {
-    if (open == false) {
-      print('Auto Door Off');
-    } else {
-      print('Auto Door On');
-    }
-  }
 
   Future _getDevice() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -139,10 +130,26 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
     }
   }
 
+  void _loadStatusAutoDoors() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var DoorAuto = prefs.getBool("autoDoor") ?? false;
+      print('autoDoor : $DoorAuto');
+      if (DoorAuto) {
+        setState(() {
+          autoDoor = true;
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _getDevice();
+    _loadStatusAutoDoors();
   }
 
   @override
@@ -231,7 +238,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
         Text('เปิดประตูอัตโนมัติ',
             style: TextStyle(
                 fontSize: 20,
-                color: open == false
+                color: autoDoor == false
                     ? Colors.grey
                     : Theme.of(context).primaryColor)),
         switchs(),
@@ -277,15 +284,19 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
     return Transform.scale(
       scale: 1.5,
       child: Switch(
-        value: open,
-        activeColor: Theme.of(context).primaryColor,
-        onChanged: (value) {
-          setState(() {
-            open = value;
-            Show();
-          });
-        },
-      ),
+          value: autoDoor,
+          activeColor: Theme.of(context).primaryColor,
+          onChanged: _AutoDoors),
     );
+  }
+
+  bool autoDoor = false;
+  void _AutoDoors(bool? value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool("autoDoor", value!);
+    setState(() {
+      autoDoor = value;
+      print('autoDoor : $autoDoor');
+    });
   }
 }

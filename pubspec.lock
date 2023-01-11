@@ -181,13 +181,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_blue:
+  flutter_blue_plus:
     dependency: "direct main"
     description:
-      name: flutter_blue
+      name: flutter_blue_plus
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.0"
+    version: "1.3.1"
   flutter_bluetooth_serial:
     dependency: "direct main"
     description:
@@ -237,6 +237,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.2"
+  flutter_scan_bluetooth:
+    dependency: "direct main"
+    description:
+      name: flutter_scan_bluetooth
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.2"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -484,7 +491,7 @@ packages:
       name: rxdart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.26.0"
+    version: "0.27.7"
   share_files_and_screenshot_widgets:
     dependency: "direct main"
     description:

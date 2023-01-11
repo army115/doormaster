@@ -132,12 +132,12 @@ class _Home_PageState extends State<Home_Page> {
                       ),
                     ],
                   ),
-                  // Buttons(
-                  //     title: 'test',
-                  //     press: () {
-                  //       Navigator.push(context,
-                  //           MaterialPageRoute(builder: ((context) => Test())));
-                  //     })
+                  Buttons(
+                      title: 'test',
+                      press: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: ((context) => Test())));
+                      })
                 ]),
               ),
             )),
