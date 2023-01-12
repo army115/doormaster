@@ -1,4 +1,4 @@
-import 'package:doormster/components/loading/loading.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_scan_bluetooth/flutter_scan_bluetooth.dart';
@@ -32,6 +32,8 @@ class _TestState extends State<Test> {
     });
   }
 
+  static const platform = MethodChannel('samples.flutter.dev/battery');
+
   // Get battery level.
   String _batteryLevel = 'Unknown battery level.';
 
@@ -46,74 +48,69 @@ class _TestState extends State<Test> {
 
     setState(() {
       _batteryLevel = batteryLevel;
+      print(_batteryLevel);
     });
   }
 
-  static const platform = MethodChannel('samples.flutter.dev/doormster');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
         title: const Text('Plugin example app'),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Expanded(
-            child: Text(_batteryLevel),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Center(
-              child: RaisedButton(
-                  child: Text('Test Java'),
-                  onPressed: () {
-                    _getBatteryLevel();
-                  }),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Text(_batteryLevel),
+            ElevatedButton(
+              onPressed: _getBatteryLevel,
+              child: const Text('Get Battery Level'),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Center(
-              child: ElevatedButton(
-                  child: Text(_scanning ? 'Stop scan' : 'Start scan'),
-                  onPressed: () async {
-                    try {
-                      if (_scanning) {
-                        await _bluetooth.stopScan();
-                        debugPrint("scanning stoped");
-                        setState(() {
-                          _data = '';
-                        });
-                      } else {
-                        await _bluetooth.startScan(pairedDevices: false);
-                        debugPrint("scanning started");
-                        setState(() {
-                          _scanning = true;
-                        });
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: ElevatedButton(
+                    child: Text(_scanning ? 'Stop scan' : 'Start scan'),
+                    onPressed: () async {
+                      try {
+                        if (_scanning) {
+                          await _bluetooth.stopScan();
+                          debugPrint("scanning stoped");
+                          setState(() {
+                            _data = '';
+                          });
+                        } else {
+                          await _bluetooth.startScan(pairedDevices: false);
+                          debugPrint("scanning started");
+                          setState(() {
+                            _scanning = true;
+                          });
+                        }
+                      } on PlatformException catch (e) {
+                        debugPrint(e.toString());
                       }
-                    } on PlatformException catch (e) {
-                      debugPrint(e.toString());
-                    }
-                  }),
+                    }),
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Center(
-              child: RaisedButton(
-                  child: Text('Check permissions'),
-                  onPressed: () async {
-                    try {
-                      await _bluetooth.requestPermissions();
-                      print('All good with perms');
-                    } on PlatformException catch (e) {
-                      debugPrint(e.toString());
-                    }
-                  }),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: RaisedButton(
+                    child: Text('Check permissions'),
+                    onPressed: () async {
+                      try {
+                        await _bluetooth.requestPermissions();
+                        print('All good with perms');
+                      } on PlatformException catch (e) {
+                        debugPrint(e.toString());
+                      }
+                    }),
+              ),
             ),
-          )
-        ],
+            Text(_data),
+          ],
+        ),
       ),
     );
   }

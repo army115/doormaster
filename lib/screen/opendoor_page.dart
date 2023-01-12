@@ -6,10 +6,12 @@ import 'package:doormster/models/doors_device.dart';
 import 'package:doormster/models/opendoors_model.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_scan_bluetooth/flutter_scan_bluetooth.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/services.dart';
 
 class Opendoor_Page extends StatefulWidget {
   Opendoor_Page({Key? key}) : super(key: key);
@@ -150,6 +152,18 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
     super.initState();
     _getDevice();
     _loadStatusAutoDoors();
+
+    _bluetooth.devices.listen((device) {
+      setState(() {
+        _data += device.name + ' (${device.address})\n';
+      });
+    });
+    // _bluetooth.scanStopped.listen((device) {
+    //   setState(() {
+    //     autoDoor = false;
+    //     _data += 'scan stopped\n';
+    //   });
+    // });
   }
 
   @override
@@ -174,24 +188,37 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
                     ],
                   ),
                 )
-              : Container(
-                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: listDevice.length,
-                    itemBuilder: (context, index) {
-                      return Card(
-                          margin: EdgeInsets.symmetric(vertical: 5),
-                          elevation: 5,
-                          child: listDevice[index].connectionStatus == 1
-                              ? doorsONline(
-                                  '${listDevice[index].name}',
-                                  () {
-                                    _openDoors(listDevice[index].devSn);
-                                  },
-                                )
-                              : doorsOFFline('${listDevice[index].name}'));
-                    },
+              : SingleChildScrollView(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                    child: Column(
+                      children: [
+                        ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: listDevice.length,
+                          itemBuilder: (context, index) {
+                            return Card(
+                                margin: EdgeInsets.symmetric(vertical: 5),
+                                elevation: 5,
+                                child: listDevice[index].connectionStatus == 1
+                                    ? doorsONline(
+                                        '${listDevice[index].name}',
+                                        () {
+                                          _openDoors(listDevice[index].devSn);
+                                        },
+                                      )
+                                    : doorsOFFline(
+                                        '${listDevice[index].name}'));
+                          },
+                        ),
+                        // ListView(
+                        //   shrinkWrap: true,
+                        //   children: [
+                        Text(_data),
+                        //   ],
+                        // ),
+                      ],
+                    ),
                   ),
                 ),
         ),
@@ -294,9 +321,30 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
   void _AutoDoors(bool? value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool("autoDoor", value!);
-    setState(() {
-      autoDoor = value;
-      print('autoDoor : $autoDoor');
-    });
+    try {
+      if (autoDoor) {
+        await _bluetooth.stopScan();
+        debugPrint("scanning stoped");
+        setState(() {
+          _data = '';
+          autoDoor = value;
+        });
+      } else {
+        await _bluetooth.startScan(pairedDevices: false);
+        debugPrint("scanning started");
+        setState(() {
+          autoDoor = value;
+        });
+      }
+    } on PlatformException catch (e) {
+      debugPrint(e.toString());
+    }
+    // setState(() {
+    //   autoDoor = value;
+    //   print('autoDoor : $autoDoor');
+    // });
   }
+
+  FlutterScanBluetooth _bluetooth = FlutterScanBluetooth();
+  String _data = '';
 }
