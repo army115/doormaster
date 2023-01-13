@@ -6,7 +6,6 @@ import 'package:doormster/screen/test.dart';
 import 'package:doormster/screen/visitor_page.dart';
 import 'package:doormster/screen/opendoor_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';

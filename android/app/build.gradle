@@ -66,4 +66,5 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation files('../app/libs/DoormasterSDKV2.3.3.jar')
 }
