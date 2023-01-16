@@ -230,12 +230,6 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
                                         '${listDevice[index].name}'));
                           },
                         ),
-                        // ListView(
-                        //   shrinkWrap: true,
-                        //   children: [
-                        Text(_data),
-                        //   ],
-                        // ),
                       ],
                     ),
                   ),
@@ -337,20 +331,21 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
   }
 
   bool autoDoor = false;
-  void _AutoDoors(bool? value) async {
+  static const platform = MethodChannel('samples.flutter.dev/autoDoor');
+  Future<void> _AutoDoors(bool? value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool("autoDoor", value!);
     try {
+      final int result = await platform.invokeMethod('openAutoDoor');
       if (autoDoor) {
         // await _bluetooth.stopScan();
-        // debugPrint("scanning stoped");
+        debugPrint("stoped");
         setState(() {
-          _data = '';
           autoDoor = value;
         });
       } else {
         // await _bluetooth.startScan(pairedDevices: false);
-        // debugPrint("scanning started");
+        debugPrint("started");
         setState(() {
           autoDoor = value;
         });
@@ -363,7 +358,4 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
     //   print('autoDoor : $autoDoor');
     // });
   }
-
-  FlutterScanBluetooth _bluetooth = FlutterScanBluetooth();
-  String _data = '';
 }
