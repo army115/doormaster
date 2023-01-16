@@ -342,15 +342,15 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
     await prefs.setBool("autoDoor", value!);
     try {
       if (autoDoor) {
-        await _bluetooth.stopScan();
-        debugPrint("scanning stoped");
+        // await _bluetooth.stopScan();
+        // debugPrint("scanning stoped");
         setState(() {
           _data = '';
           autoDoor = value;
         });
       } else {
-        await _bluetooth.startScan(pairedDevices: false);
-        debugPrint("scanning started");
+        // await _bluetooth.startScan(pairedDevices: false);
+        // debugPrint("scanning started");
         setState(() {
           autoDoor = value;
         });
