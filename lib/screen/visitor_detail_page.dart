@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'dart:typed_data';
+import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -68,11 +69,22 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
 
         print('show : ${result}');
         print('saved image successfully!!!');
-        snackbar(context, Theme.of(context).primaryColor, 'บันทึกสำเร็จ',
+        snackbar(context, Theme.of(context).primaryColor, 'บันทึกภาพสำเร็จ',
             Icons.check_circle_outline_rounded);
       }
     } catch (error) {
       print(error);
+      dialogOnebutton_Subtitle(
+        context,
+        'พบข้อผิดพลาด',
+        'บันทึกภาพไม่สำเร็จ กรุณาลองใหม่อีกครั้ง',
+        Icons.warning_amber_rounded,
+        Colors.orange,
+        'ตกลง',
+        () {
+          Navigator.of(context).pop();
+        },
+      );
     }
   }
 

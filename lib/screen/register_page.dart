@@ -1,3 +1,4 @@
+import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
@@ -66,8 +67,19 @@ class _Register_PageState extends State<Register_Page> {
       }
     } catch (error) {
       print(error);
-      snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
-          Icons.warning_amber_rounded);
+      dialogOnebutton_Subtitle(
+        context,
+        'พบข้อผิดพลาด',
+        'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+        Icons.warning_amber_rounded,
+        Colors.orange,
+        'ตกลง',
+        () {
+          Navigator.of(context).pop();
+        },
+      );
+      // snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
+      //     Icons.warning_amber_rounded);
       setState(() {
         loading = false;
       });

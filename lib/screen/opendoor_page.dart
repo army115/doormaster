@@ -1,7 +1,6 @@
-import 'package:doormster/components/button/button.dart';
+import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
-import 'package:doormster/models/device_group.dart';
 import 'package:doormster/models/doors_device.dart';
 import 'package:doormster/models/opendoors_model.dart';
 import 'package:doormster/service/connect_api.dart';
@@ -59,6 +58,17 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
       }
     } catch (error) {
       print(error);
+      dialogOnebutton_Subtitle(
+        context,
+        'พบข้อผิดพลาด',
+        'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+        Icons.warning_amber_rounded,
+        Colors.orange,
+        'ตกลง',
+        () {
+          Navigator.of(context).pop();
+        },
+      );
       setState(() {
         loading = false;
       });
@@ -124,8 +134,17 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
       }
     } catch (error) {
       print(error);
-      snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
-          Icons.warning_amber_rounded);
+      dialogOnebutton_Subtitle(
+        context,
+        'พบข้อผิดพลาด',
+        'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+        Icons.warning_amber_rounded,
+        Colors.orange,
+        'ตกลง',
+        () {
+          Navigator.of(context).pop();
+        },
+      );
       setState(() {
         loading = false;
       });
@@ -153,11 +172,11 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
     _getDevice();
     _loadStatusAutoDoors();
 
-    _bluetooth.devices.listen((device) {
-      setState(() {
-        _data += device.name + ' (${device.address})\n';
-      });
-    });
+    // _bluetooth.devices.listen((device) {
+    //   setState(() {
+    //     _data += device.name + ' (${device.address})\n';
+    //   });
+    // });
     // _bluetooth.scanStopped.listen((device) {
     //   setState(() {
     //     autoDoor = false;

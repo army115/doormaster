@@ -1,4 +1,6 @@
 // ignore_for_file: prefer_const_constructors_in_immutables
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/components/text_form/text_form.dart';
@@ -31,6 +33,9 @@ class _Login_PageState extends State<Login_Page> {
   Future doLogin() async {
     if (_formkey.currentState!.validate()) {
       try {
+        setState(() {
+          loading = true;
+        });
         // เชื่อมต่อ api
         String url = '${Connect_api().domain}/login';
         var body = {
@@ -43,9 +48,6 @@ class _Login_PageState extends State<Login_Page> {
           var jsonRes = LoginModel.fromJson(convert.jsonDecode(response.body));
           // เช็คสถานะ การเข้าสู่ระบบ
           if (jsonRes.status == 200) {
-            setState(() {
-              loading = true;
-            });
             var token = jsonRes.token;
             List<User> data = jsonRes.user!; //ตัวแปร List จาก model
 
@@ -76,17 +78,35 @@ class _Login_PageState extends State<Login_Page> {
             print('username หรือ password ไม่ถูกต้อง');
             snackbar(context, Colors.red, 'ชื่อผู้ใช้ หรือ รหัสผ่าน ไม่ถูกต้อง',
                 Icons.highlight_off_rounded);
+            setState(() {
+              loading = false;
+            });
           }
         } else {
           print(response.statusCode);
           print('Connection Fail');
-          snackbar(context, Colors.red, 'เชื่อมต่อไม่สำเร็จ',
+          snackbar(context, Colors.red, 'เข้าสู่ระบบไม่สำเร็จ',
               Icons.highlight_off_rounded);
+          setState(() {
+            loading = false;
+          });
         }
       } catch (error) {
         print(error);
-        snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
-            Icons.warning_amber_rounded);
+        dialogOnebutton_Subtitle(
+          context,
+          'พบข้อผิดพลาด',
+          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+          Icons.warning_amber_rounded,
+          Colors.orange,
+          'ตกลง',
+          () {
+            Navigator.of(context).pop();
+          },
+        );
+        setState(() {
+          loading = false;
+        });
       }
     }
   }

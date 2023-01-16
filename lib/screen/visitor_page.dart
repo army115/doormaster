@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/datetime/date_time.dart';
 import 'package:doormster/components/dropdown/dropdown.dart';
@@ -76,6 +77,17 @@ class _Visitor_PageState extends State<Visitor_Page> {
       }
     } catch (error) {
       print(error);
+      dialogOnebutton_Subtitle(
+        context,
+        'พบข้อผิดพลาด',
+        'ไม่สามารถเชื่อมต่อได้',
+        Icons.warning_amber_rounded,
+        Colors.orange,
+        'ตกลง',
+        () {
+          Navigator.popUntil(context, (route) => route.isFirst);
+        },
+      );
       setState(() {
         loading = false;
       });
@@ -139,8 +151,17 @@ class _Visitor_PageState extends State<Visitor_Page> {
       }
     } catch (error) {
       print(error);
-      snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
-          Icons.warning_amber_rounded);
+      dialogOnebutton_Subtitle(
+        context,
+        'พบข้อผิดพลาด',
+        'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+        Icons.warning_amber_rounded,
+        Colors.orange,
+        'ตกลง',
+        () {
+          Navigator.of(context).pop();
+        },
+      );
       setState(() {
         loading = false;
       });
