@@ -128,86 +128,86 @@ class _Login_PageState extends State<Login_Page> {
         //     )
         //   ],
         // ),
-        appBar: AppBar(
-          title: Text('เข้าสู่ระบบ'),
-        ),
+        // appBar: AppBar(
+        //   title: Text('เข้าสู่ระบบ'),
+        // ),
         body: SafeArea(
             child: SingleChildScrollView(
-          child: Form(
-            key: _formkey,
-            child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 50),
-                child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/images/qrlogo600.png',
-                      scale: 3,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Text_Form(
-                      controller: _email,
-                      title: 'ชื่อผู้ใช้',
-                      icon: Icons.account_circle_rounded,
-                      error: 'กรุณากรอกชื่อผู้ใช้',
-                      TypeInput: TextInputType.name,
-                    ),
-                    TextForm_Password(
-                      controller: _password,
-                      title: 'รหัสผ่าน',
-                      iconLaft: Icons.key,
-                      error: (values) {
-                        if (values!.isEmpty) {
-                          return 'กรุณากรอกรหัสผ่าน';
-                        } else {
-                          return null;
-                        }
-                      },
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    loading
-                        ? CircularProgressIndicator(
-                            color: Theme.of(context).primaryColor,
-                          )
-                        : Buttons(
-                            title: 'เข้าสู่ระบบ',
-                            press: () {
-                              doLogin();
-                            },
-                          ),
-                    SizedBox(height: 20),
-                    RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.black,
-                            fontFamily: 'Prompt',
-                          ),
-                          text: 'ยังไม่ได้เป็นสมาชิก HIP QR Smart Access ',
-                          children: [
-                            TextSpan(
-                                text: 'กรุณาลงทะเบียน',
-                                style: TextStyle(
-                                  decoration: TextDecoration.underline,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    Navigator.of(context).pushReplacement(
-                                        MaterialPageRoute(
-                                            builder: ((context) =>
-                                                Register_Page())));
-                                  })
-                          ],
-                        ))
-                  ],
-                )),
-          ),
-        )));
+      child: Form(
+        key: _formkey,
+        child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 50),
+            child: Column(
+              // mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/images/Smart Community Logo.png',
+                  scale: 3,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text_Form(
+                  controller: _email,
+                  title: 'ชื่อผู้ใช้',
+                  icon: Icons.account_circle_rounded,
+                  error: 'กรุณากรอกชื่อผู้ใช้',
+                  TypeInput: TextInputType.name,
+                ),
+                TextForm_Password(
+                  controller: _password,
+                  title: 'รหัสผ่าน',
+                  iconLaft: Icons.key,
+                  error: (values) {
+                    if (values!.isEmpty) {
+                      return 'กรุณากรอกรหัสผ่าน';
+                    } else {
+                      return null;
+                    }
+                  },
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                loading
+                    ? CircularProgressIndicator(
+                        color: Theme.of(context).primaryColor,
+                      )
+                    : Buttons(
+                        title: 'เข้าสู่ระบบ',
+                        press: () {
+                          doLogin();
+                        },
+                      ),
+                SizedBox(height: 20),
+                RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                        fontFamily: 'Prompt',
+                      ),
+                      text: 'ยังไม่ได้เป็นสมาชิก HIP Smart Community ',
+                      children: [
+                        TextSpan(
+                            text: 'กรุณาลงทะเบียน',
+                            style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: ((context) =>
+                                            Register_Page())));
+                              })
+                      ],
+                    ))
+              ],
+            )),
+      ),
+    )));
   }
 }

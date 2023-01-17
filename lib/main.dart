@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'HIP QR Smart Access',
+      title: 'HIP Smart Community',
       debugShowCheckedModeBanner: false,
       theme: mytheme(),
       home: token == null ? Login_Page() : Home_Page(),

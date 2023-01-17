@@ -5,7 +5,6 @@ import 'package:doormster/models/doors_device.dart';
 import 'package:doormster/models/opendoors_model.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_scan_bluetooth/flutter_scan_bluetooth.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'dart:async';
@@ -159,6 +158,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
       if (DoorAuto) {
         setState(() {
           autoDoor = true;
+          _openAutoDoor();
         });
       }
     } catch (e) {
@@ -171,18 +171,6 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
     super.initState();
     _getDevice();
     _loadStatusAutoDoors();
-
-    // _bluetooth.devices.listen((device) {
-    //   setState(() {
-    //     _data += device.name + ' (${device.address})\n';
-    //   });
-    // });
-    // _bluetooth.scanStopped.listen((device) {
-    //   setState(() {
-    //     autoDoor = false;
-    //     _data += 'scan stopped\n';
-    //   });
-    // });
   }
 
   @override
@@ -312,7 +300,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
             ),
           ],
         ),
-        onPressed: () {
+        onPressed: () async {
           snackbar(context, Colors.red, 'ประตูออฟไลน์อยู่',
               Icons.highlight_off_rounded);
         },
@@ -330,32 +318,24 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
     );
   }
 
+  Future _openAutoDoor() async {
+    MethodChannel platform = MethodChannel('samples.flutter.dev/autoDoor');
+    try {
+      await platform.invokeMethod('openAutoDoor', autoDoor);
+    } on PlatformException catch (e) {
+      '${e.message}';
+    }
+  }
+
   bool autoDoor = false;
-  static const platform = MethodChannel('samples.flutter.dev/autoDoor');
   Future<void> _AutoDoors(bool? value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool("autoDoor", value!);
-    try {
-      final int result = await platform.invokeMethod('openAutoDoor');
-      if (autoDoor) {
-        // await _bluetooth.stopScan();
-        debugPrint("stoped");
-        setState(() {
-          autoDoor = value;
-        });
-      } else {
-        // await _bluetooth.startScan(pairedDevices: false);
-        debugPrint("started");
-        setState(() {
-          autoDoor = value;
-        });
-      }
-    } on PlatformException catch (e) {
-      debugPrint(e.toString());
-    }
-    // setState(() {
-    //   autoDoor = value;
-    //   print('autoDoor : $autoDoor');
-    // });
+
+    setState(() {
+      autoDoor = value;
+      _openAutoDoor();
+      print('autoDoor : $autoDoor');
+    });
   }
 }

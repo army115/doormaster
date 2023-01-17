@@ -72,12 +72,13 @@ flutter_datetime_picker:
 flutter_icons:
     android: true
     ios: true
-    image_path: "assets/images/qrlogo600.png"
+    image_path: "assets/images/HIP Smart Community Icon-01.png"
     min_sdk_android: 21
 
 flutter_native_splash:
-  color: "#ffffff"
-  image: assets/images/qrlogo900.png
+  color: "#0B4D9C"
+  # color: "#ffffff"
+  image: assets/images/HIP Smart Community Icon-01.png
   
 
 dev_dependencies:
