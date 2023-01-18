@@ -35,7 +35,7 @@ class Gird_Menu extends StatelessWidget {
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 18,
-                  fontWeight: FontWeight.bold),
+                  fontWeight: FontWeight.normal),
             ),
           ],
         ),
