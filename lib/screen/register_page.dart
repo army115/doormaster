@@ -113,18 +113,18 @@ class _Register_PageState extends State<Register_Page> {
             body: SafeArea(
                 child: SingleChildScrollView(
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
                 child: Form(
                   key: _formkey,
                   child: Column(
                       // mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Image.asset(
-                          'assets/images/qrlogo600.png',
-                          scale: 3.5,
+                          'assets/images/Smart Community Logo.png',
+                          scale: 4.5,
                         ),
                         SizedBox(
-                          height: 20,
+                          height: 10,
                         ),
                         Text_Form(
                           controller: username,

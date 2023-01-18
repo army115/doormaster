@@ -18,21 +18,21 @@ class _Date_timeState extends State<Date_time> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 5),
+      padding: EdgeInsets.symmetric(vertical: 8),
       child: TextFormField(
-        style: TextStyle(fontSize: 20),
+        style: TextStyle(fontSize: 18),
         controller: widget.controller,
         readOnly: true,
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+          contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 13),
           prefixIcon: Icon(
             widget.leftIcon,
-            size: 30,
+            size: 25,
           ),
           suffixIcon: Icon(Icons.keyboard_arrow_down_rounded, size: 30),
           hintText: widget.title,
-          hintStyle: TextStyle(fontSize: 20),
-          errorStyle: TextStyle(fontSize: 18),
+          hintStyle: TextStyle(fontSize: 18),
+          errorStyle: TextStyle(fontSize: 16),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
@@ -58,21 +58,21 @@ class _Date_timeState extends State<Date_time> {
             currentTime: DateTime.now(),
             locale: LocaleType.th,
             theme: DatePickerTheme(
-              titleHeight: 50,
+              titleHeight: 45,
               headerColor: Theme.of(context).primaryColor,
               cancelStyle: TextStyle(
                   color: Colors.white,
-                  fontSize: 22,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold),
               doneStyle: TextStyle(
                   color: Colors.white,
-                  fontSize: 22,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold),
               backgroundColor: Colors.grey.shade200,
-              itemHeight: 45,
+              itemHeight: 40,
               itemStyle: TextStyle(
                   color: Colors.black,
-                  fontSize: 22,
+                  fontSize: 18,
                   fontWeight: FontWeight.normal),
               containerHeight: MediaQuery.of(context).size.height * 0.4,
             ),

@@ -20,7 +20,7 @@ class Text_Form extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 5),
+      padding: EdgeInsets.symmetric(vertical: 8),
       child: TextFormField(
         autofocus: false,
         style: TextStyle(fontSize: 18),
@@ -28,13 +28,13 @@ class Text_Form extends StatelessWidget {
         keyboardType: TypeInput,
         decoration: InputDecoration(
           prefixIconColor: Colors.green,
-          contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+          contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 13),
           // labelText: 'Username',
           hintText: title,
           hintStyle: TextStyle(fontSize: 18),
           errorStyle: TextStyle(fontSize: 16),
           // ignore: prefer_const_constructors
-          prefixIcon: Icon(icon, size: 30),
+          prefixIcon: Icon(icon, size: 25),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),

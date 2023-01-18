@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors_in_immutables
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
+import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/components/text_form/text_form.dart';
@@ -67,7 +68,7 @@ class _Login_PageState extends State<Login_Page> {
             }
 
             Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => Home_Page()));
+                MaterialPageRoute(builder: (context) => BottomBar()));
             snackbar(context, Theme.of(context).primaryColor,
                 'เข้าสู่ระบบสำเร็จ', Icons.check_circle_outline_rounded);
             setState(() {
@@ -136,13 +137,13 @@ class _Login_PageState extends State<Login_Page> {
       child: Form(
         key: _formkey,
         child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 50),
+            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
             child: Column(
               // mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
                   'assets/images/Smart Community Logo.png',
-                  scale: 3,
+                  scale: 4,
                 ),
                 SizedBox(
                   height: 20,
@@ -167,7 +168,7 @@ class _Login_PageState extends State<Login_Page> {
                   },
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 15,
                 ),
                 loading
                     ? CircularProgressIndicator(
@@ -184,7 +185,7 @@ class _Login_PageState extends State<Login_Page> {
                     textAlign: TextAlign.center,
                     text: TextSpan(
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 18,
                         color: Colors.black,
                         fontFamily: 'Prompt',
                       ),

@@ -28,7 +28,7 @@ class _TextForm_PasswordState extends State<TextForm_Password> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 5),
+      padding: EdgeInsets.symmetric(vertical: 8),
       child: TextFormField(
           obscureText: redEye,
           style: TextStyle(fontSize: 18),
@@ -36,7 +36,7 @@ class _TextForm_PasswordState extends State<TextForm_Password> {
           keyboardType: TextInputType.visiblePassword,
           decoration: InputDecoration(
             prefixIconColor: Colors.green,
-            contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+            contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 13),
             // labelText: 'Username',
             hintText: widget.title,
             hintStyle: TextStyle(fontSize: 18),
@@ -44,7 +44,7 @@ class _TextForm_PasswordState extends State<TextForm_Password> {
             // ignore: prefer_const_constructors
             prefixIcon: Icon(
               widget.iconLaft,
-              size: 30,
+              size: 25,
             ),
             suffixIcon: widget.controller.text.length > 0
                 ? IconButton(

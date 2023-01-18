@@ -240,6 +240,8 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
               )),
           ElevatedButton(
               style: TextButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
                 padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                 elevation: 5,
               ),
@@ -280,6 +282,8 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
       title: Text(name, style: TextStyle(fontSize: 20)),
       trailing: ElevatedButton(
         style: TextButton.styleFrom(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           elevation: 5,
           primary: Colors.white,
           backgroundColor: Colors.redAccent,

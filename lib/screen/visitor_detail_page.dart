@@ -6,6 +6,7 @@ import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:intl/intl.dart';
 import 'package:share_files_and_screenshot_widgets/share_files_and_screenshot_widgets.dart';
 import 'dart:convert' as convert;
 import 'dart:async';
@@ -32,6 +33,8 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
   var endDate;
   var telVisitor;
   var usableCount;
+
+  var format = DateFormat('dd/MM/y HH:mm:ss');
 
   GlobalKey _keyScreenshot = GlobalKey();
 
@@ -104,14 +107,14 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
       },
       child: Scaffold(
         appBar: AppBar(
-            title: Text('ลงทะเบียนผู้มาติดต่อ'),
+            title: Text('ผู้มาติดต่อ'),
             leading: IconButton(
                 icon: Icon(Icons.arrow_back),
                 onPressed: () {
                   Navigator.popUntil(context, (route) => route.isFirst);
                 }),
             actions: [
-              PopupMenuButton<int>(
+              PopupMenuButton(
                 icon: Icon(
                   Icons.share,
                   size: 30,
@@ -184,7 +187,7 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
         body: SafeArea(
             child: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             width: double.infinity,
             // height: MediaQuery.of(context).size.height,
             child: Column(
@@ -198,7 +201,7 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
                         children: [
                           Text(
                             'ข้อมูลผู้มาติดต่อ',
-                            style: TextStyle(fontSize: 23, color: Colors.white),
+                            style: TextStyle(fontSize: 18, color: Colors.white),
                           ),
                         ],
                       ),
@@ -223,15 +226,18 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
                         style: TextStyle(color: Colors.white),
                       ),
                       Text(
-                        'เริ่มต้น : ${startDate}',
+                        'เริ่มต้น : ${format.format(DateTime.parse('$startDate'))}',
                         style: TextStyle(color: Colors.white),
                       ),
                       Text(
-                        'สิ้นสุด : ${endDate}',
+                        'สิ้นสุด : ${format.format(DateTime.parse('$endDate'))}',
                         style: TextStyle(color: Colors.white),
                       ),
                     ]),
                   ),
+                ),
+                SizedBox(
+                  height: 5,
                 ),
                 RepaintBoundary(
                   key: _keyScreenshot,
@@ -245,7 +251,7 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
                             Text(
                               'QR Code',
                               style:
-                                  TextStyle(color: Colors.white, fontSize: 23),
+                                  TextStyle(color: Colors.white, fontSize: 18),
                             )
                           ]),
                           Divider(color: Colors.white, thickness: 1.5),
@@ -259,9 +265,12 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
                               ),
                             ),
                           ),
+                          SizedBox(
+                            height: 10,
+                          ),
                           Text(
                             'รหัสผ่าน : ${widget.QRcodeData[1]}',
-                            style: TextStyle(color: Colors.white, fontSize: 22),
+                            style: TextStyle(color: Colors.white, fontSize: 18),
                           ),
                         ],
                       ),

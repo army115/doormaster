@@ -13,6 +13,8 @@ class Buttons extends StatelessWidget {
       height: 45,
       child: ElevatedButton(
           style: TextButton.styleFrom(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             elevation: 10,
             primary: Colors.black,
           ),
@@ -20,7 +22,7 @@ class Buttons extends StatelessWidget {
             title,
             style: TextStyle(
               color: Colors.white,
-              fontSize: 22,
+              fontSize: 18,
               fontWeight: FontWeight.bold,
               letterSpacing: 1,
             ),

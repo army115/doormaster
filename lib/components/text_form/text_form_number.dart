@@ -21,7 +21,7 @@ class TextForm_Number extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 5),
+      padding: EdgeInsets.symmetric(vertical: 8),
       child: TextFormField(
           style: TextStyle(fontSize: 18),
           controller: controller,
@@ -31,9 +31,9 @@ class TextForm_Number extends StatelessWidget {
             FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
           ],
           decoration: InputDecoration(
-            counter: Offstage(),
+            counterText: "",
             prefixIconColor: Colors.green,
-            contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+            contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 13),
             // labelText: 'Username',
             hintText: title,
             hintStyle: TextStyle(fontSize: 18),
@@ -41,7 +41,7 @@ class TextForm_Number extends StatelessWidget {
             // ignore: prefer_const_constructors
             prefixIcon: Icon(
               icon,
-              size: 30,
+              size: 25,
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),

@@ -27,14 +27,14 @@ class Gird_Menu extends StatelessWidget {
             //   img,
             //   width: 80,
             // ),
-            Icon(icon, size: 50, color: Colors.white),
+            Icon(icon, size: 40, color: Colors.white),
             // SizedBox(height: 5),
             Text(
               title,
               textAlign: TextAlign.center,
               style: TextStyle(
                   color: Colors.white,
-                  fontSize: 20,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold),
             ),
           ],

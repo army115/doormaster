@@ -206,7 +206,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
               child: Form(
                 key: _kye,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

@@ -20,10 +20,20 @@ ThemeData mytheme() {
     primaryColor: Color(0xFF0B4D9C),
     textTheme: TextTheme(
       bodyText2: TextStyle(
-        fontSize: 16,
+        fontSize: 18,
         letterSpacing: 0.5,
       ),
     ),
+    drawerTheme: DrawerThemeData(
+      backgroundColor: Color(0xFF0B4D9C),
+    ),
+    bottomAppBarTheme: BottomAppBarTheme(color: Color(0xFF0B4D9C)),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        selectedIconTheme: IconThemeData(size: 35),
+        unselectedIconTheme: IconThemeData(size: 30),
+        selectedLabelStyle:
+            TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        unselectedLabelStyle: TextStyle(fontSize: 18)),
     scaffoldBackgroundColor: Colors.grey[200],
     appBarTheme: AppBarTheme(
         centerTitle: true,
@@ -31,7 +41,7 @@ ThemeData mytheme() {
         titleTextStyle: TextStyle(
           fontWeight: FontWeight.bold,
           fontFamily: 'Prompt',
-          fontSize: 16,
+          fontSize: 18,
           letterSpacing: 1,
         )),
     fontFamily: 'Prompt',

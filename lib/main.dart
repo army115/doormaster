@@ -1,3 +1,4 @@
+import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/screen/home_page.dart';
 import 'package:doormster/screen/login_page.dart';
 import 'package:doormster/theme.dart';
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
       title: 'HIP Smart Community',
       debugShowCheckedModeBanner: false,
       theme: mytheme(),
-      home: token == null ? Login_Page() : Home_Page(),
+      home: token == null ? Login_Page() : BottomBar(),
     );
   }
 }

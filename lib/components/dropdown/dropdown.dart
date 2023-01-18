@@ -20,26 +20,26 @@ class Dropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 5),
+      padding: EdgeInsets.symmetric(vertical: 8),
       child: DropdownButtonFormField(
-          hint: Text(title),
+          // hint: Text(title),
           style: TextStyle(
-              fontSize: 20,
-              fontFamily: 'Prompt',
-              color: Colors.black,
-              height: 1),
+            fontSize: 18,
+            fontFamily: 'Prompt',
+            color: Colors.black,
+          ),
           decoration: InputDecoration(
             hintText: title,
-            hintStyle: TextStyle(fontSize: 20),
+            hintStyle: TextStyle(fontSize: 18),
             prefixIcon: Icon(
               leftIcon,
-              size: 30,
+              size: 25,
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
-            contentPadding: EdgeInsets.fromLTRB(10.0, 15.0, 0.0, 15.0),
-            errorStyle: TextStyle(fontSize: 18),
+            contentPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 13),
+            errorStyle: TextStyle(fontSize: 16),
           ),
           value: values,
           icon: Icon(Icons.keyboard_arrow_down_rounded, size: 30),

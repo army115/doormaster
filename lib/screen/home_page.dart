@@ -1,7 +1,10 @@
+import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/button/button.dart';
+import 'package:doormster/components/drawer/drawer.dart';
 import 'package:doormster/components/girdManu/gird_menu.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/screen/login_page.dart';
+import 'package:doormster/screen/scan_qrcode_page.dart';
 import 'package:doormster/screen/test.dart';
 import 'package:doormster/screen/visitor_page.dart';
 import 'package:doormster/screen/opendoor_page.dart';
@@ -22,15 +25,6 @@ class Home_Page extends StatefulWidget {
 }
 
 class _Home_PageState extends State<Home_Page> {
-  Future _Logout() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.clear();
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (BuildContext context) => Login_Page()),
-        (Route<dynamic> route) => false);
-    print('logout success');
-  }
-
   void checkInternet(page) async {
     var result = await Connectivity().checkConnectivity();
     if (result == ConnectivityResult.mobile ||
@@ -67,13 +61,14 @@ class _Home_PageState extends State<Home_Page> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('หน้าแรก'), actions: [
-        IconButton(
+      appBar: AppBar(
+        title: Text('HIP Smart Community'),
+        leading: IconButton(
+            icon: Icon(Icons.menu),
             onPressed: () {
-              _Logout();
-            },
-            icon: Icon(Icons.power_settings_new_rounded))
-      ]),
+              Scaffold.of(context).openDrawer();
+            }),
+      ),
       body: mobileRole == 0
           ? Center(
               child: Column(
@@ -90,7 +85,7 @@ class _Home_PageState extends State<Home_Page> {
           : SafeArea(
               child: SingleChildScrollView(
               child: Container(
-                padding: EdgeInsets.all(20),
+                padding: EdgeInsets.all(30),
                 child: Column(children: [
                   GridView.count(
                     // scrollDirection: Axis.vertical,
@@ -109,35 +104,35 @@ class _Home_PageState extends State<Home_Page> {
                         },
                       ),
                       Gird_Menu(
+                        title: 'สแกน',
+                        icon: Icons.qr_code_scanner_rounded,
+                        press: () {
+                          checkInternet(Scanner());
+                        },
+                      ),
+                      Gird_Menu(
                         title: 'เปิดประตู',
-                        icon: Icons.login_rounded,
+                        icon: Icons.meeting_room_rounded,
                         press: () {
                           checkInternet(Opendoor_Page());
                         },
                       ),
                       Gird_Menu(
-                          title: 'Call Guard',
+                          title: 'Emergency Call',
                           icon: Icons.phone_forwarded_rounded,
                           press: () async {
                             await FlutterPhoneDirectCaller.callNumber(
                                 '0123456789');
                           }),
-                      Gird_Menu(
-                        title: 'Call Reception/นิติบุคคล',
-                        icon: Icons.contact_phone_rounded,
-                        press: () {
-                          launch('tel:0123456789');
-                        },
-                      ),
                     ],
                   ),
-                  SizedBox(height: 20),
-                  Buttons(
-                      title: 'test',
-                      press: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: ((context) => Test())));
-                      })
+                  // SizedBox(height: 20),
+                  // Buttons(
+                  //     title: 'test',
+                  //     press: () {
+                  //       Navigator.push(context,
+                  //           MaterialPageRoute(builder: ((context) => Test())));
+                  //     })
                 ]),
               ),
             )),
