@@ -60,7 +60,7 @@ public class MainActivity extends FlutterActivity {
                                 String appEkey = (String) arguments.get("appEkey");
 
                                 openAutodoor(value, devSn);
-                                // result.success(arguments);
+                                result.success(arguments);
 
                             } else {
                                 result.notImplemented();
@@ -76,73 +76,59 @@ public class MainActivity extends FlutterActivity {
         device.devMac = "34:b4:72:f9:b5:76";
         device.devType = 1;
         device.eKey = "66ca8bc357538b796a66227cb16c8c6e000000000000000000000011111111111000";
-        //device.endDate = dev.getEndDate();
-        //device.openType = dev.getOpenType();
-        //device.privilege = dev.getPrivilege();
-        //device.startDate = dev.getStartDate();
-        //device.useCount = dev.getUseCount();
-        //device.verified = dev.getVerified();
-        device.cardno = "123";//卡号从服务器获取，此卡号为测试卡号
+        // device.endDate = "2025-01-01 00:00:00";
+        // device.openType = 1;
+        // device.privilege = 4;
+        // device.startDate = "2023-01-01 00:00:00";
+        // device.useCount = 0;
+        // device.verified = 3;
+        // device.cardno = "123";//卡号从服务器获取，此卡号为测试卡号
         return device;
     }
 
     public void openAutodoor(boolean value, String DevSn) {
-        Intent autoService = new Intent(MainActivity.this, AutoOpenService.class);
-        getApplicationContext().startService(autoService);
+         Intent autoService = new Intent(MainActivity.this, AutoOpenService.class);
+
 
         if (value) {
-            getApplicationContext().startService(autoService);
+             getApplicationContext().startService(autoService);
 
-            //Toast.makeText(getApplicationContext(), devSn1, Toast.LENGTH_SHORT).show();
+            ScanCallBackSort scancallBack = new ScanCallBackSort() {
 
-            Map<String, DeviceBean> devDomMap1 = new HashMap<String, DeviceBean>();
+                @Override
+                public void onScanResultAtOnce(String devSn, int rssi) {
+                    // TODO Auto-generated method stub
 
-            for (DeviceBean devBean : devList) {
-                devDomMap1.put(devBean.getDevSn(), devBean);
-            }
-            DeviceBean devDom1 = devDomMap1.get(DevSn);
+                }
 
-            pressed = true;
-            LibDevModel libDev1 = getLibDev2(devDom1);
+                @Override
+                public void onScanResult(ArrayList<Map<String, Integer>> devSnRssiList) {
 
-            int ret1 = LibDevModel.openDoor(MainActivity.this, libDev1, callback); //Open door
+                    Toast.makeText(getApplicationContext(), DevSn, Toast.LENGTH_SHORT).show();
+                    Map<String, DeviceBean> devDomMap1 = new HashMap<String, DeviceBean>();
 
-//            Map<String, DeviceBean> devDomMap = new HashMap<String, DeviceBean>();
-//            for (DeviceBean devBean : devList) {
-//                devDomMap.put(DevSn, devBean);
-//            }
-//
-//            int limit = -75; // 限制信号值
-//
-////            if (devDomMap.containsKey(DevSn) && devRssiDict.get(devSn) >= limit) {
-//                DeviceBean devDom = devDomMap.get(DevSn);
-//                pressed = true;
-//                LibDevModel libDev = MyAdapter.getLibDev(devDom);
-//                int ret = LibDevModel.openDoor(MainActivity.this, libDev, callback); // Open
-//                // door
-//                if (ret != 0) {
-//                    pressed = false;
-//                    if (ret == -107) {
-//                        Log.d("MainActivity", "Operationing...");
-//                    } else {
-//                        Toast.makeText(getApplicationContext(), "RET：" + ret,
-//                                Toast.LENGTH_SHORT).show();
-//                    }
-//                    return;
-//                }
-//            }
+                    for (DeviceBean devBean : devList) {
+                        devDomMap1.put(DevSn, devBean);
+                    }
+                    DeviceBean devDom1 = devDomMap1.get(DevSn);
 
-//            ScanCallBackSort scancallBack = new ScanCallBackSort() {
-//
-//                @Override
-//                public void onScanResultAtOnce(String devSn, int rssi) {
-//                    // TODO Auto-generated method stub
-//
-//                }
-//
-//                @Override
-//                public void onScanResult(ArrayList<Map<String, Integer>> devSnRssiList) {
-//                    // TODO Auto-generated method stub
+                    pressed = true;
+                    LibDevModel libDev1 = getLibDev2(devDom1);
+
+                    int ret1 = LibDevModel.openDoor(MainActivity.this, libDev1, callback); //Open door
+                    Toast.makeText(getApplicationContext(), "ได้", Toast.LENGTH_SHORT).show();
+                    if (ret1 != 0) {
+                        pressed = false;
+                        if (ret1 == -107) {
+                            Log.d("MainActivity", "Operationing...");
+                        } else {
+                            Toast.makeText(getApplicationContext(), "RET：" + ret1,
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                        return;
+                    }
+
+                    // TODO Auto-generated method stub
 //                    if (devList == null || devList.size() == 0) {
 //                        Toast.makeText(getApplicationContext(), "No permitted device or haven't login",
 //                                Toast.LENGTH_SHORT).show();
@@ -182,10 +168,10 @@ public class MainActivity extends FlutterActivity {
 //                        }
 //
 //                    }
-//                }
-//            };
+                }
+            };
 //             AutoOpenService.startBackgroudMode(MainActivity.this, scancallBack);
-//            AutoOpenService.startBackgroundModeWithBrightScreen(MainActivity.this, scancallBack);
+            AutoOpenService.startBackgroundModeWithBrightScreen(MainActivity.this, scancallBack);
         } else {
             getApplicationContext().stopService(autoService);
         }

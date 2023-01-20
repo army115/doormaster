@@ -129,6 +129,22 @@ public class MyAdapter extends BaseAdapter {
 		return convertView;
 	}
 
+    public static LibDevModel getLibDev2(DeviceBean dev) {
+        LibDevModel device = new LibDevModel();
+        device.devSn = "4287064839";
+        device.devMac = "34:b4:72:f9:b5:76";
+        device.devType = 1;
+        device.eKey = "66ca8bc357538b796a66227cb16c8c6e000000000000000000000011111111111000";
+        device.endDate = dev.getEndDate();
+        device.openType = dev.getOpenType();
+        device.privilege = dev.getPrivilege();
+        device.startDate = dev.getStartDate();
+        device.useCount = dev.getUseCount();
+        device.verified = dev.getVerified();
+        device.cardno = "123";//卡号从服务器获取，此卡号为测试卡号
+        return device;
+    }
+
 
 	public static LibDevModel getLibDev(DeviceBean dev) {
 		LibDevModel device = new LibDevModel();
