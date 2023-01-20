@@ -158,7 +158,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
       if (DoorAuto) {
         setState(() {
           autoDoor = true;
-          _openAutoDoor();
+          _CallJavaSDK();
         });
       }
     } catch (e) {
@@ -170,7 +170,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
   void initState() {
     super.initState();
     _getDevice();
-    _loadStatusAutoDoors();
+    // _loadStatusAutoDoors();
   }
 
   @override
@@ -208,12 +208,10 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
                                 margin: EdgeInsets.symmetric(vertical: 5),
                                 elevation: 5,
                                 child: listDevice[index].connectionStatus == 1
-                                    ? doorsONline(
-                                        '${listDevice[index].name}',
+                                    ? doorsONline('${listDevice[index].name}',
                                         () {
-                                          _openDoors(listDevice[index].devSn);
-                                        },
-                                      )
+                                        _openDoors(listDevice[index].devSn);
+                                      }, listDevice[index].devSn)
                                     : doorsOFFline(
                                         '${listDevice[index].name}'));
                           },
@@ -228,7 +226,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
     );
   }
 
-  Widget doorsONline(name, press) {
+  Widget doorsONline(name, press, devSn) {
     return ListTile(
       minVerticalPadding: 15,
       title: Row(
@@ -271,7 +269,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
                 color: autoDoor == false
                     ? Colors.grey
                     : Theme.of(context).primaryColor)),
-        switchs(),
+        switchs(devSn),
       ]),
     );
   }
@@ -312,34 +310,46 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
     );
   }
 
-  Widget switchs() {
+  Widget switchs(devSn) {
     return Transform.scale(
       scale: 1.5,
       child: Switch(
-          value: autoDoor,
-          activeColor: Theme.of(context).primaryColor,
-          onChanged: _AutoDoors),
+        value: autoDoor,
+        activeColor: Theme.of(context).primaryColor,
+        onChanged: (bool value) {
+          _ShareValue(value);
+          return DevSn = devSn;
+        },
+      ),
     );
   }
 
-  Future _openAutoDoor() async {
-    MethodChannel platform = MethodChannel('samples.flutter.dev/autoDoor');
-    try {
-      await platform.invokeMethod('openAutoDoor', autoDoor);
-    } on PlatformException catch (e) {
-      '${e.message}';
-    }
-  }
-
   bool autoDoor = false;
-  Future<void> _AutoDoors(bool? value) async {
+  Future _ShareValue(value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool("autoDoor", value!);
 
     setState(() {
       autoDoor = value;
-      _openAutoDoor();
+      _CallJavaSDK();
       print('autoDoor : $autoDoor');
+      print('DevSn : $DevSn');
     });
+  }
+
+  String DevSn = '';
+  Future _CallJavaSDK() async {
+    MethodChannel platform = MethodChannel('samples.flutter.dev/autoDoor');
+    try {
+      await platform.invokeMethod('openAutoDoor', {
+        "value": autoDoor,
+        "devSn": DevSn,
+        "devMac": "34:b4:72:f9:b5:76",
+        "appEkey":
+            "66ca8bc357538b796a66227cb16c8c6e000000000000000000000011111111111000"
+      });
+    } on PlatformException catch (e) {
+      '${e.message}';
+    }
   }
 }

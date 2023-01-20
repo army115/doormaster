@@ -130,7 +130,6 @@ public class MyAdapter extends BaseAdapter {
 	}
 
 
-
 	public static LibDevModel getLibDev(DeviceBean dev) {
 		LibDevModel device = new LibDevModel();
 		device.devSn = dev.getDevSn();
