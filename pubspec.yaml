@@ -81,8 +81,9 @@ flutter_icons:
 
 flutter_native_splash:
   color: "#0B4D9C"
-  # color: "#ffffff"
   image: assets/images/HIP Smart Community Icon-03.png
+  branding: assets/images/banner.png
+
   
 
 dev_dependencies:

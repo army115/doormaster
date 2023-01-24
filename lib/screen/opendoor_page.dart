@@ -26,6 +26,18 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
   List<Lists> listDevice = [];
   bool loading = false;
 
+  Future _deviceId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    token = prefs.getString('token');
+    companyId = prefs.getInt('companyId');
+    deviceId = prefs.getString('deviceId');
+
+    print('token: ${token}');
+    print('companyId: ${companyId}');
+    print('deviceId: ${deviceId}');
+  }
+
   Future _getDevice() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -57,17 +69,20 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
       }
     } catch (error) {
       print(error);
-      dialogOnebutton_Subtitle(
-        context,
-        'พบข้อผิดพลาด',
-        'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-        Icons.warning_amber_rounded,
-        Colors.orange,
-        'ตกลง',
-        () {
-          Navigator.of(context).pop();
-        },
-      );
+      if (deviceId == null) {
+      } else {
+        dialogOnebutton_Subtitle(
+          context,
+          'พบข้อผิดพลาด',
+          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+          Icons.warning_amber_rounded,
+          Colors.orange,
+          'ตกลง',
+          () {
+            Navigator.popUntil(context, (route) => route.isFirst);
+          },
+        );
+      }
       setState(() {
         loading = false;
       });
@@ -169,7 +184,10 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
   @override
   void initState() {
     super.initState();
+    // _deviceId();
+    // if (deviceId != null) {
     _getDevice();
+    // } else {}
     // _loadStatusAutoDoors();
   }
 
@@ -187,10 +205,15 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'ไม่มีประตูที่คุณใช้ได้',
+                        'ไม่มีประตูที่คุณใช้ได้\nโปรดติดต่อผู้ดูแล',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.bold),
+                            fontSize: 22, fontWeight: FontWeight.normal),
+                      ),
+                      Image.asset(
+                        'assets/images/Smart Community Logo.png',
+                        scale: 4.5,
+                        // opacity: AlwaysStoppedAnimation(0.7),
                       ),
                     ],
                   ),
@@ -341,13 +364,14 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
   Future _CallJavaSDK() async {
     MethodChannel platform = MethodChannel('samples.flutter.dev/autoDoor');
     try {
-      await platform.invokeMethod('openAutoDoor', {
+      final result = await platform.invokeMethod('openAutoDoor', {
         "value": autoDoor,
         "devSn": DevSn,
         "devMac": "34:b4:72:f9:b5:76",
         "appEkey":
             "66ca8bc357538b796a66227cb16c8c6e000000000000000000000011111111111000"
       });
+      print("ส่งค่า $result");
     } on PlatformException catch (e) {
       '${e.message}';
     }

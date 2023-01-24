@@ -77,7 +77,13 @@ class _Home_PageState extends State<Home_Page> {
                   Text(
                     'โปรดติดต่อผู้ดูแล\nเพื่ออนุมัติสิทธิ์การใช้งาน',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                    style:
+                        TextStyle(fontSize: 22, fontWeight: FontWeight.normal),
+                  ),
+                  Image.asset(
+                    'assets/images/Smart Community Logo.png',
+                    scale: 4.5,
+                    // opacity: AlwaysStoppedAnimation(0.7),
                   ),
                 ],
               ),

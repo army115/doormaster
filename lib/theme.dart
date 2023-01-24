@@ -29,8 +29,8 @@ ThemeData mytheme() {
     ),
     bottomAppBarTheme: BottomAppBarTheme(color: Color(0xFF0B4D9C)),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        selectedIconTheme: IconThemeData(size: 35),
-        unselectedIconTheme: IconThemeData(size: 30),
+        selectedIconTheme: IconThemeData(size: 30),
+        unselectedIconTheme: IconThemeData(size: 25),
         selectedLabelStyle:
             TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         unselectedLabelStyle: TextStyle(fontSize: 18)),

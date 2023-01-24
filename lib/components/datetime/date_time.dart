@@ -73,7 +73,8 @@ class _Date_timeState extends State<Date_time> {
               itemStyle: TextStyle(
                   color: Colors.black,
                   fontSize: 18,
-                  fontWeight: FontWeight.normal),
+                  fontWeight: FontWeight.normal,
+                  fontFamily: 'Prompt'),
               containerHeight: MediaQuery.of(context).size.height * 0.4,
             ),
           );

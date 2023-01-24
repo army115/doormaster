@@ -6,6 +6,7 @@ import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -39,9 +40,9 @@ public class MainActivity extends FlutterActivity {
     private static ArrayList<DeviceBean> devList = new ArrayList<DeviceBean>();
     // private static Map<String, DeviceBean> tempDevDict = new HashMap<String,
     // DeviceBean>();
-//    private MyAdapter adapter = null;
-//    private static LibDevModel curClickDevice = null;
-//    private ListView mList = null;
+    // private MyAdapter adapter = null;
+    // private static LibDevModel curClickDevice = null;
+    // private ListView mList = null;
 
     @Override
     public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
@@ -69,7 +70,7 @@ public class MainActivity extends FlutterActivity {
 
                 );
     }
-
+    
     public static LibDevModel getLibDev2(DeviceBean dev) {
         LibDevModel device = new LibDevModel();
         device.devSn = "4287064839";
@@ -87,11 +88,22 @@ public class MainActivity extends FlutterActivity {
     }
 
     public void openAutodoor(boolean value, String DevSn) {
-         Intent autoService = new Intent(MainActivity.this, AutoOpenService.class);
-
+        Intent autoService = new Intent(MainActivity.this, AutoOpenService.class);
 
         if (value) {
-             getApplicationContext().startService(autoService);
+            getApplicationContext().startService(autoService);
+            Toast.makeText(getApplicationContext(), DevSn, Toast.LENGTH_SHORT).show();
+            Map<String, DeviceBean> devDomMap1 = new HashMap<String, DeviceBean>();
+
+            for (DeviceBean devBean : devList) {
+                devDomMap1.put(DevSn, devBean);
+            }
+            DeviceBean devDom1 = devDomMap1.get(DevSn);
+
+            pressed = true;
+            LibDevModel libDev1 = getLibDev2(devDom1);
+
+            int ret1 = LibDevModel.openDoor(MainActivity.this, libDev1, callback);
 
             ScanCallBackSort scancallBack = new ScanCallBackSort() {
 
@@ -104,100 +116,104 @@ public class MainActivity extends FlutterActivity {
                 @Override
                 public void onScanResult(ArrayList<Map<String, Integer>> devSnRssiList) {
 
-                    Toast.makeText(getApplicationContext(), DevSn, Toast.LENGTH_SHORT).show();
-                    Map<String, DeviceBean> devDomMap1 = new HashMap<String, DeviceBean>();
-
-                    for (DeviceBean devBean : devList) {
-                        devDomMap1.put(DevSn, devBean);
-                    }
-                    DeviceBean devDom1 = devDomMap1.get(DevSn);
-
-                    pressed = true;
-                    LibDevModel libDev1 = getLibDev2(devDom1);
-
-                    int ret1 = LibDevModel.openDoor(MainActivity.this, libDev1, callback); //Open door
-                    Toast.makeText(getApplicationContext(), "ได้", Toast.LENGTH_SHORT).show();
-                    if (ret1 != 0) {
-                        pressed = false;
-                        if (ret1 == -107) {
-                            Log.d("MainActivity", "Operationing...");
-                        } else {
-                            Toast.makeText(getApplicationContext(), "RET：" + ret1,
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                        return;
-                    }
+//                    Toast.makeText(getApplicationContext(), DevSn, Toast.LENGTH_SHORT).show();
+//                    Map<String, DeviceBean> devDomMap1 = new HashMap<String, DeviceBean>();
+//
+//                    for (DeviceBean devBean : devList) {
+//                        devDomMap1.put(DevSn, devBean);
+//                    }
+//                    DeviceBean devDom1 = devDomMap1.get(DevSn);
+//
+//                    pressed = true;
+//                    LibDevModel libDev1 = getLibDev2(devDom1);
+//
+//                    int ret1 = LibDevModel.openDoor(MainActivity.this, libDev1, callback); // Open door
+//                    Toast.makeText(getApplicationContext(), "ได้", Toast.LENGTH_SHORT).show();
+//                    if (ret1 != 0) {
+//                        pressed = false;
+//                        if (ret1 == -107) {
+//                            Log.d("MainActivity", "Operationing...");
+//                        } else {
+//                            Toast.makeText(getApplicationContext(), "RET：" + ret1,
+//                                    Toast.LENGTH_SHORT).show();
+//                        }
+//                        return;
+//                    }
 
                     // TODO Auto-generated method stub
-//                    if (devList == null || devList.size() == 0) {
-//                        Toast.makeText(getApplicationContext(), "No permitted device or haven't login",
-//                                Toast.LENGTH_SHORT).show();
-//                        return;
-//                    }
-//
-//                    if (devSnRssiList == null || devSnRssiList.size() == 0) {
-//                        Toast.makeText(getApplicationContext(), "No scan device", Toast.LENGTH_SHORT).show();
-//                        return;
-//                    }
-//                    Map<String, DeviceBean> devDomMap = new HashMap<String, DeviceBean>();
-//                    for (DeviceBean devBean : devList) {
-//                        devDomMap.put(devBean.getDevSn(), devBean);
-//                    }
-//
-//                    int limit = -75; // 限制信号值
-//
-//                    for (Map<String, Integer> devRssiDict : devSnRssiList) {
-//                        for (String devSn : devRssiDict.keySet()) {
-//                            if (devDomMap.containsKey(devSn) && devRssiDict.get(devSn) >= limit) {
-//                                DeviceBean devDom = devDomMap.get(devSn);
-//                                pressed = true;
-//                                LibDevModel libDev = MyAdapter.getLibDev(devDom);
-//                                int ret = LibDevModel.openDoor(MainActivity.this, libDev, callback); // Open
-//                                // door
-//                                if (ret != 0) {
-//                                    pressed = false;
-//                                    if (ret == -107) {
-//                                        Log.d("MainActivity", "Operationing...");
-//                                    } else {
-//                                        Toast.makeText(getApplicationContext(), "RET：" + ret,
-//                                                Toast.LENGTH_SHORT).show();
-//                                    }
-//                                    return;
-//                                }
-//                            }
-//                        }
-//
-//                    }
+                    // if (devList == null || devList.size() == 0) {
+                    // Toast.makeText(getApplicationContext(), "No permitted device or haven't
+                    // login",
+                    // Toast.LENGTH_SHORT).show();
+                    // return;
+                    // }
+                    //
+                    // if (devSnRssiList == null || devSnRssiList.size() == 0) {
+                    // Toast.makeText(getApplicationContext(), "No scan device",
+                    // Toast.LENGTH_SHORT).show();
+                    // return;
+                    // }
+                    // Map<String, DeviceBean> devDomMap = new HashMap<String, DeviceBean>();
+                    // for (DeviceBean devBean : devList) {
+                    // devDomMap.put(devBean.getDevSn(), devBean);
+                    // }
+                    //
+                    // int limit = -75; // 限制信号值
+                    //
+                    // for (Map<String, Integer> devRssiDict : devSnRssiList) {
+                    // for (String devSn : devRssiDict.keySet()) {
+                    // if (devDomMap.containsKey(devSn) && devRssiDict.get(devSn) >= limit) {
+                    // DeviceBean devDom = devDomMap.get(devSn);
+                    // pressed = true;
+                    // LibDevModel libDev = MyAdapter.getLibDev(devDom);
+                    // int ret = LibDevModel.openDoor(MainActivity.this, libDev, callback); // Open
+                    // // door
+                    // if (ret != 0) {
+                    // pressed = false;
+                    // if (ret == -107) {
+                    // Log.d("MainActivity", "Operationing...");
+                    // } else {
+                    // Toast.makeText(getApplicationContext(), "RET：" + ret,
+                    // Toast.LENGTH_SHORT).show();
+                    // }
+                    // return;
+                    // }
+                    // }
+                    // }
+                    //
+                    // }
                 }
             };
-//             AutoOpenService.startBackgroudMode(MainActivity.this, scancallBack);
+            // AutoOpenService.startBackgroudMode(MainActivity.this, scancallBack);
             AutoOpenService.startBackgroundModeWithBrightScreen(MainActivity.this, scancallBack);
         } else {
             getApplicationContext().stopService(autoService);
         }
 
-//        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() // 处理设备交互
-//        {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view,
-//                    int position, long id) {
-//                if (pressed) {
-//                    Toast.makeText(MainActivity.this, "Operationing...",
-//                            Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//                LibDevModel device = adapter.getDev(position);
-//                curClickDevice = device;
-//                pressed = true;
-//                int ret = LibDevModel.openDoor(MainActivity.this, device, callback); // ViewList click, open the door
-//                if (ret == 0) {
-//                    return;
-//                } else {
-//                    pressed = false;
-//                    Toast.makeText(getApplicationContext(), "RET：" + ret, Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
+        // mList.setOnItemClickListener(new AdapterView.OnItemClickListener() // 处理设备交互
+        // {
+        // @Override
+        // public void onItemClick(AdapterView<?> parent, View view,
+        // int position, long id) {
+        // if (pressed) {
+        // Toast.makeText(MainActivity.this, "Operationing...",
+        // Toast.LENGTH_SHORT).show();
+        // return;
+        // }
+        // LibDevModel device = adapter.getDev(position);
+        // curClickDevice = device;
+        // pressed = true;
+        // int ret = LibDevModel.openDoor(MainActivity.this, device, callback); //
+        // ViewList click, open the door
+        // if (ret == 0) {
+        // return;
+        // } else {
+        // pressed = false;
+        // Toast.makeText(getApplicationContext(), "RET：" + ret,
+        // Toast.LENGTH_SHORT).show();
+        // }
+        // }
+        // });
 
     }
 

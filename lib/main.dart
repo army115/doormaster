@@ -4,9 +4,11 @@ import 'package:doormster/screen/login_page.dart';
 import 'package:doormster/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
+  await init(null);
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
   final token = prefs.getString('token');
@@ -17,6 +19,11 @@ void main() async {
     // token: null,
     token: token,
   ));
+}
+
+Future init(BuildContext? context) async {
+  await Future.delayed(const Duration(seconds: 1));
+  FlutterNativeSplash.remove();
 }
 
 class MyApp extends StatelessWidget {
