@@ -26,7 +26,7 @@ class Login_Page extends StatefulWidget {
 
 class _Login_PageState extends State<Login_Page> {
   final _formkey = GlobalKey<FormState>();
-  TextEditingController _email = TextEditingController();
+  TextEditingController _username = TextEditingController();
   TextEditingController _password = TextEditingController();
 
   bool loading = false;
@@ -40,8 +40,8 @@ class _Login_PageState extends State<Login_Page> {
         // เชื่อมต่อ api
         String url = '${Connect_api().domain}/login';
         var body = {
-          "email": _email.text,
-          "password": _password.text,
+          "user_name": _username.text,
+          "user_password": _password.text,
         };
         var response = await http.post(Uri.parse(url), body: body);
         // เช็คการเชื่อมต่อ api
@@ -49,19 +49,25 @@ class _Login_PageState extends State<Login_Page> {
           var jsonRes = LoginModel.fromJson(convert.jsonDecode(response.body));
           // เช็คสถานะ การเข้าสู่ระบบ
           if (jsonRes.status == 200) {
-            var token = jsonRes.token;
+            var token = jsonRes.accessToken;
             List<User> data = jsonRes.user!; //ตัวแปร List จาก model
 
-            print('userId: ${data.single.userId}');
+            print('userId: ${data.single.sId}');
             print('token: ${token}');
             print('login success');
 
             // ส่งค่าตัวแปร
             SharedPreferences prefs = await SharedPreferences.getInstance();
             await prefs.setString('token', token!);
-            await prefs.setInt('userId', data.single.userId!);
-            await prefs.setInt('companyId', data.single.companyId!);
-            await prefs.setInt('role', data.single.mobile!);
+            await prefs.setString('userId', data.single.sId!);
+            await prefs.setString('companyId', data.single.companyId!);
+            print(data.single.mobile);
+
+            if (data.single.mobile != null) {
+              await prefs.setInt('role', data.single.mobile!);
+            } else {
+              await prefs.setInt('role', 0);
+            }
 
             if (data.single.devicegroupUuid != null) {
               await prefs.setString('deviceId', data.single.devicegroupUuid!);
@@ -75,7 +81,7 @@ class _Login_PageState extends State<Login_Page> {
               loading = false;
             });
           } else {
-            print(jsonRes.status);
+            print(jsonRes.data);
             print('username หรือ password ไม่ถูกต้อง');
             snackbar(context, Colors.red, 'ชื่อผู้ใช้ หรือ รหัสผ่าน ไม่ถูกต้อง',
                 Icons.highlight_off_rounded);
@@ -149,7 +155,7 @@ class _Login_PageState extends State<Login_Page> {
                   height: 20,
                 ),
                 Text_Form(
-                  controller: _email,
+                  controller: _username,
                   title: 'ชื่อผู้ใช้',
                   icon: Icons.account_circle_rounded,
                   error: 'กรุณากรอกชื่อผู้ใช้',

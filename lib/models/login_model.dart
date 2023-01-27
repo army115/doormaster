@@ -1,13 +1,25 @@
 class LoginModel {
   int? status;
-  String? token;
+  int? data;
+  String? name;
+  String? email;
+  String? accessToken;
   List<User>? user;
 
-  LoginModel({this.status, this.token, this.user});
+  LoginModel(
+      {this.status,
+      this.data,
+      this.name,
+      this.email,
+      this.accessToken,
+      this.user});
 
   LoginModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
-    token = json['token'];
+    data = json['data'];
+    name = json['name'];
+    email = json['email'];
+    accessToken = json['accessToken'];
     if (json['user'] != null) {
       user = <User>[];
       json['user'].forEach((v) {
@@ -19,7 +31,10 @@ class LoginModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['status'] = this.status;
-    data['token'] = this.token;
+    data['data'] = this.data;
+    data['name'] = this.name;
+    data['email'] = this.email;
+    data['accessToken'] = this.accessToken;
     if (this.user != null) {
       data['user'] = this.user!.map((v) => v.toJson()).toList();
     }
@@ -28,78 +43,70 @@ class LoginModel {
 }
 
 class User {
-  int? userId;
-  String? username;
+  String? sId;
+  String? userName;
   String? firstName;
-  String? devicegroupUuid;
-  String? lastName;
-  String? password;
-  String? email;
-  int? department;
-  int? position;
-  int? companyId;
-  int? role;
+  String? surName;
+  String? role;
+  String? createdBy;
+  String? createdAt;
+  String? companyId;
+  String? userPassword;
+  int? restPassword;
+  String? oldPassword;
+  int? inactive;
   int? mobile;
-  int? qrcode;
-  int? keycard;
-  int? bluetooth;
-  int? pin;
+  String? devicegroupUuid;
 
   User(
-      {this.userId,
-      this.username,
+      {this.sId,
+      this.userName,
       this.firstName,
-      this.devicegroupUuid,
-      this.lastName,
-      this.password,
-      this.email,
-      this.department,
-      this.position,
-      this.companyId,
+      this.surName,
       this.role,
+      this.createdBy,
+      this.createdAt,
+      this.companyId,
+      this.userPassword,
+      this.restPassword,
+      this.oldPassword,
+      this.inactive,
       this.mobile,
-      this.qrcode,
-      this.keycard,
-      this.bluetooth,
-      this.pin});
+      this.devicegroupUuid});
 
   User.fromJson(Map<String, dynamic> json) {
-    userId = json['user_id'];
-    username = json['username'];
+    sId = json['_id'];
+    userName = json['user_name'];
     firstName = json['first_name'];
-    devicegroupUuid = json['devicegroup_uuid'];
-    lastName = json['last_name'];
-    password = json['password'];
-    email = json['email'];
-    department = json['department'];
-    position = json['position'];
-    companyId = json['company_id'];
+    surName = json['sur_name'];
     role = json['role'];
+    createdBy = json['created_by'];
+    createdAt = json['created_at'];
+    companyId = json['company_id'];
+    userPassword = json['user_password'];
+    restPassword = json['rest_password'];
+    oldPassword = json['old_password'];
+    inactive = json['inactive'];
     mobile = json['mobile'];
-    qrcode = json['qrcode'];
-    keycard = json['keycard'];
-    bluetooth = json['bluetooth'];
-    pin = json['pin'];
+    devicegroupUuid = json['devicegroup_uuid'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['user_id'] = this.userId;
-    data['username'] = this.username;
+    data['_id'] = this.sId;
+    data['user_name'] = this.userName;
     data['first_name'] = this.firstName;
-    data['devicegroup_uuid'] = this.devicegroupUuid;
-    data['last_name'] = this.lastName;
-    data['password'] = this.password;
-    data['email'] = this.email;
-    data['department'] = this.department;
-    data['position'] = this.position;
-    data['company_id'] = this.companyId;
+    data['sur_name'] = this.surName;
     data['role'] = this.role;
+    data['created_by'] = this.createdBy;
+    data['created_at'] = this.createdAt;
+    data['company_id'] = this.companyId;
+    data['user_password'] = this.userPassword;
+    data['rest_password'] = this.restPassword;
+    data['old_password'] = this.oldPassword;
+    data['inactive'] = this.inactive;
     data['mobile'] = this.mobile;
-    data['qrcode'] = this.qrcode;
-    data['keycard'] = this.keycard;
-    data['bluetooth'] = this.bluetooth;
-    data['pin'] = this.pin;
+    data['devicegroup_uuid'] = this.devicegroupUuid;
     return data;
   }
 }

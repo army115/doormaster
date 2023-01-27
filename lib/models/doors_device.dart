@@ -27,17 +27,21 @@ class Lists {
   String? name;
   String? deviceModelName;
   int? deviceModelValue;
-  int? screenType;
+  bool? screenType;
   int? communityId;
+  String? communityUuid;
   int? positionType;
   int? positionId;
   String? positionUuid;
   String? positionFullName;
+  String? devMac;
+  String? appEkey;
+  String? miniEkey;
   int? connectionStatus;
   int? isSupportNetwork;
   int? category;
-  String? ipAddress;
-  int? accDoorNo;
+  int? isSupportSipVideo;
+  String? devAccSupperPassword;
 
   Lists(
       {this.id,
@@ -47,15 +51,19 @@ class Lists {
       this.deviceModelValue,
       this.screenType,
       this.communityId,
+      this.communityUuid,
       this.positionType,
       this.positionId,
       this.positionUuid,
       this.positionFullName,
+      this.devMac,
+      this.appEkey,
+      this.miniEkey,
       this.connectionStatus,
       this.isSupportNetwork,
       this.category,
-      this.ipAddress,
-      this.accDoorNo});
+      this.isSupportSipVideo,
+      this.devAccSupperPassword});
 
   Lists.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -63,17 +71,21 @@ class Lists {
     name = json['name'];
     deviceModelName = json['deviceModelName'];
     deviceModelValue = json['deviceModelValue'];
-    screenType = json['screenType'];
+    screenType = json['screenType'] == 0 ? false : true;
     communityId = json['communityId'];
+    communityUuid = json['communityUuid'];
     positionType = json['positionType'];
     positionId = json['positionId'];
     positionUuid = json['positionUuid'];
     positionFullName = json['positionFullName'];
+    devMac = json['devMac'];
+    appEkey = json['appEkey'];
+    miniEkey = json['miniEkey'];
     connectionStatus = json['connectionStatus'];
     isSupportNetwork = json['isSupportNetwork'];
     category = json['category'];
-    ipAddress = json['ipAddress'];
-    accDoorNo = json['accDoorNo'];
+    isSupportSipVideo = json['isSupportSipVideo'];
+    devAccSupperPassword = json['devAccSupperPassword'];
   }
 
   Map<String, dynamic> toJson() {
@@ -85,15 +97,19 @@ class Lists {
     data['deviceModelValue'] = this.deviceModelValue;
     data['screenType'] = this.screenType;
     data['communityId'] = this.communityId;
+    data['communityUuid'] = this.communityUuid;
     data['positionType'] = this.positionType;
     data['positionId'] = this.positionId;
     data['positionUuid'] = this.positionUuid;
     data['positionFullName'] = this.positionFullName;
+    data['devMac'] = this.devMac;
+    data['appEkey'] = this.appEkey;
+    data['miniEkey'] = this.miniEkey;
     data['connectionStatus'] = this.connectionStatus;
     data['isSupportNetwork'] = this.isSupportNetwork;
     data['category'] = this.category;
-    data['ipAddress'] = this.ipAddress;
-    data['accDoorNo'] = this.accDoorNo;
+    data['isSupportSipVideo'] = this.isSupportSipVideo;
+    data['devAccSupperPassword'] = this.devAccSupperPassword;
     return data;
   }
 }

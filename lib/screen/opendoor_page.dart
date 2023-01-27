@@ -26,23 +26,11 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
   List<Lists> listDevice = [];
   bool loading = false;
 
-  Future _deviceId() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    token = prefs.getString('token');
-    companyId = prefs.getInt('companyId');
-    deviceId = prefs.getString('deviceId');
-
-    print('token: ${token}');
-    print('companyId: ${companyId}');
-    print('deviceId: ${deviceId}');
-  }
-
   Future _getDevice() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     token = prefs.getString('token');
-    companyId = prefs.getInt('companyId');
+    companyId = prefs.getString('companyId');
     deviceId = prefs.getString('deviceId');
 
     print('token: ${token}');
@@ -165,29 +153,10 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
     }
   }
 
-  void _loadStatusAutoDoors() async {
-    try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      var DoorAuto = prefs.getBool("autoDoor") ?? false;
-      print('autoDoor : $DoorAuto');
-      if (DoorAuto) {
-        setState(() {
-          autoDoor = true;
-          _CallJavaSDK();
-        });
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-    // _deviceId();
-    // if (deviceId != null) {
     _getDevice();
-    // } else {}
     // _loadStatusAutoDoors();
   }
 
@@ -218,30 +187,29 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
                     ],
                   ),
                 )
-              : SingleChildScrollView(
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-                    child: Column(
-                      children: [
-                        ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: listDevice.length,
-                          itemBuilder: (context, index) {
-                            return Card(
-                                margin: EdgeInsets.symmetric(vertical: 5),
-                                elevation: 5,
-                                child: listDevice[index].connectionStatus == 1
-                                    ? doorsONline('${listDevice[index].name}',
-                                        () {
-                                        _openDoors(listDevice[index].devSn);
-                                      }, listDevice[index].devSn)
-                                    : doorsOFFline(
-                                        '${listDevice[index].name}'));
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
+              : ListView.builder(
+                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                  shrinkWrap: true,
+                  itemCount: listDevice.length,
+                  itemBuilder: (context, index) {
+                    return Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        margin: EdgeInsets.symmetric(vertical: 5),
+                        elevation: 5,
+                        child: listDevice[index].connectionStatus == 1
+                            ? DoorOnline(
+                                name: listDevice[index].name!,
+                                press: () {
+                                  _openDoors(listDevice[index].devSn);
+                                },
+                                devSn: listDevice[index].devSn!,
+                                devMac: listDevice[index].devMac!,
+                                appKey: listDevice[index].appEkey!,
+                                valueDoor: listDevice[index].screenType!,
+                              )
+                            : doorsOFFline('${listDevice[index].name}'));
+                  },
                 ),
         ),
         loading ? Loading() : Container()
@@ -249,57 +217,9 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
     );
   }
 
-  Widget doorsONline(name, press, devSn) {
-    return ListTile(
-      minVerticalPadding: 15,
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(name,
-              style: TextStyle(
-                fontSize: 20,
-              )),
-          ElevatedButton(
-              style: TextButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
-                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                elevation: 5,
-              ),
-              child: Wrap(
-                children: [
-                  Icon(
-                    Icons.meeting_room_rounded,
-                    size: 30,
-                  ),
-                  SizedBox(
-                    width: 3,
-                  ),
-                  Text(
-                    'เปิดประตู',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ],
-              ),
-              onPressed: press)
-        ],
-      ),
-      subtitle:
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Text('เปิดประตูอัตโนมัติ',
-            style: TextStyle(
-                fontSize: 20,
-                color: autoDoor == false
-                    ? Colors.grey
-                    : Theme.of(context).primaryColor)),
-        switchs(devSn),
-      ]),
-    );
-  }
-
   Widget doorsOFFline(name) {
     return ListTile(
-      minVerticalPadding: 15,
+      contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       title: Text(name, style: TextStyle(fontSize: 20)),
       trailing: ElevatedButton(
         style: TextButton.styleFrom(
@@ -332,48 +252,135 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
       ),
     );
   }
+}
 
-  Widget switchs(devSn) {
-    return Transform.scale(
-      scale: 1.5,
-      child: Switch(
-        value: autoDoor,
-        activeColor: Theme.of(context).primaryColor,
-        onChanged: (bool value) {
-          _ShareValue(value);
-          return DevSn = devSn;
-        },
-      ),
-    );
+class DoorOnline extends StatefulWidget {
+  String name;
+  final press;
+  String devSn;
+  String devMac;
+  String appKey;
+  bool valueDoor;
+  DoorOnline(
+      {Key? key,
+      required this.name,
+      required this.press,
+      required this.devSn,
+      required this.valueDoor,
+      required this.devMac,
+      required this.appKey});
+
+  @override
+  State<DoorOnline> createState() => _DoorOnlineState();
+}
+
+class _DoorOnlineState extends State<DoorOnline> {
+  void _loadStatusAutoDoors() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var DoorAuto = prefs.getBool("autoDoor") ?? false;
+      print('autoDoor : $DoorAuto');
+      if (DoorAuto) {
+        setState(() {
+          widget.valueDoor = true;
+          // _CallJavaSDK(widget.valueDoor);
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
-  bool autoDoor = false;
-  Future _ShareValue(value) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool("autoDoor", value!);
-
-    setState(() {
-      autoDoor = value;
-      _CallJavaSDK();
-      print('autoDoor : $autoDoor');
-      print('DevSn : $DevSn');
-    });
-  }
-
-  String DevSn = '';
-  Future _CallJavaSDK() async {
+  Future _CallJavaSDK(value) async {
     MethodChannel platform = MethodChannel('samples.flutter.dev/autoDoor');
     try {
       final result = await platform.invokeMethod('openAutoDoor', {
-        "value": autoDoor,
-        "devSn": DevSn,
-        "devMac": "34:b4:72:f9:b5:76",
-        "appEkey":
-            "66ca8bc357538b796a66227cb16c8c6e000000000000000000000011111111111000"
+        "value": value,
+        "devSn": widget.devSn,
+        "devMac": widget.devMac,
+        "appEkey": widget.appKey
       });
       print("ส่งค่า $result");
     } on PlatformException catch (e) {
       '${e.message}';
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadStatusAutoDoors();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ListTile(
+          contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+          title: Text(widget.name,
+              style: TextStyle(
+                fontSize: 20,
+              )),
+          trailing: ElevatedButton(
+              style: TextButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                elevation: 5,
+              ),
+              child: Wrap(
+                children: [
+                  Icon(
+                    Icons.meeting_room_rounded,
+                    size: 30,
+                  ),
+                  Text(
+                    'เปิดประตู',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ],
+              ),
+              onPressed: widget.press),
+        ),
+        ListTile(
+          contentPadding: EdgeInsets.symmetric(horizontal: 10),
+          title: Row(
+            children: [
+              widget.valueDoor
+                  ? Icon(Icons.meeting_room_rounded,
+                      size: 30, color: Theme.of(context).primaryColor)
+                  : Icon(
+                      Icons.door_front_door,
+                      size: 30,
+                      color: Colors.grey,
+                    ),
+              Text('เปิดประตูอัตโนมัติ',
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: widget.valueDoor == false
+                          ? Colors.grey
+                          : Theme.of(context).primaryColor)),
+            ],
+          ),
+          trailing: Transform.scale(
+            scale: 1.5,
+            child: Switch(
+              value: widget.valueDoor,
+              activeColor: Theme.of(context).primaryColor,
+              onChanged: (bool value) async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                await prefs.setBool("autoDoor", value);
+                _CallJavaSDK(value);
+                setState(() {
+                  widget.valueDoor = value;
+                  print("autoDoor : $value");
+                });
+              },
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

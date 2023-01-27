@@ -5,7 +5,6 @@ import 'package:doormster/components/girdManu/gird_menu.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/screen/login_page.dart';
 import 'package:doormster/screen/scan_qrcode_page.dart';
-import 'package:doormster/screen/test.dart';
 import 'package:doormster/screen/visitor_page.dart';
 import 'package:doormster/screen/opendoor_page.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +44,7 @@ class _Home_PageState extends State<Home_Page> {
       loading = true;
     });
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    mobileRole = await prefs.getInt('role');
+    mobileRole = await prefs.getInt('role') ?? "";
     print('mobileRole: ${mobileRole}');
     setState(() {
       loading = false;

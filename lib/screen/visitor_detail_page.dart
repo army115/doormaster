@@ -193,6 +193,8 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
             child: Column(
               children: [
                 Card(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
                   color: Theme.of(context).primaryColor,
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
@@ -242,6 +244,8 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
                 RepaintBoundary(
                   key: _keyScreenshot,
                   child: Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
                     color: Theme.of(context).primaryColor,
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),

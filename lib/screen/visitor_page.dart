@@ -9,6 +9,7 @@ import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/components/text_form/text_form.dart';
 import 'package:doormster/components/text_form/text_form_number.dart';
 import 'package:doormster/models/device_group.dart';
+import 'package:doormster/models/doors_device.dart';
 import 'package:doormster/models/visitor_model.dart';
 import 'package:doormster/screen/visitor_detail_page.dart';
 import 'package:doormster/service/connect_api.dart';
@@ -48,8 +49,8 @@ class _Visitor_PageState extends State<Visitor_Page> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     token = prefs.getString('token');
-    userId = prefs.getInt('userId');
-    companyId = prefs.getInt('companyId');
+    userId = prefs.getString('userId');
+    companyId = prefs.getString('companyId');
     deviceId = prefs.getString('deviceId');
 
     print('token: ${token}');
