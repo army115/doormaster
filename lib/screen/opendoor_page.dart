@@ -10,6 +10,7 @@ import 'dart:convert' as convert;
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 
 class Opendoor_Page extends StatefulWidget {
   Opendoor_Page({Key? key}) : super(key: key);
@@ -291,6 +292,31 @@ class _DoorOnlineState extends State<DoorOnline> {
     }
   }
 
+  Future<void> checkLocationStatus(value) async {
+    LocationPermission permission = await Geolocator.checkPermission();
+
+    try {
+      // if (permission == LocationPermission.always) {
+      //   await Geolocator.requestPermission();
+      // }
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+
+      setState(() {
+        widget.valueDoor = value;
+        print("autoDoor : $value");
+      });
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setBool("autoDoor", value);
+      _CallJavaSDK(value);
+
+      print(position);
+    } catch (error) {
+      print(error);
+    }
+  }
+
   Future _CallJavaSDK(value) async {
     MethodChannel platform = MethodChannel('samples.flutter.dev/autoDoor');
     try {
@@ -309,7 +335,7 @@ class _DoorOnlineState extends State<DoorOnline> {
   @override
   void initState() {
     super.initState();
-    _loadStatusAutoDoors();
+    // _loadStatusAutoDoors();
   }
 
   @override
@@ -369,13 +395,7 @@ class _DoorOnlineState extends State<DoorOnline> {
               value: widget.valueDoor,
               activeColor: Theme.of(context).primaryColor,
               onChanged: (bool value) async {
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                await prefs.setBool("autoDoor", value);
-                _CallJavaSDK(value);
-                setState(() {
-                  widget.valueDoor = value;
-                  print("autoDoor : $value");
-                });
+                checkLocationStatus(value);
               },
             ),
           ),

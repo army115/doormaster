@@ -37,7 +37,7 @@ class _Register_PageState extends State<Register_Page> {
       setState(() {
         loading = true;
       });
-      var url = '${Connect_api().domain}/register';
+      var url = '${Connect_api().domain}/registermobile';
       var response = await http.post(Uri.parse(url),
           headers: {
             'Content-Type': 'application/json',
@@ -216,12 +216,12 @@ class _Register_PageState extends State<Register_Page> {
                           press: () {
                             if (_formkey.currentState!.validate()) {
                               Map<String, dynamic> valuse = Map();
-                              valuse['name'] = username.text;
+                              valuse['user_name'] = username.text;
                               valuse['first_name'] = fname.text;
-                              valuse['last_name'] = lname.text;
+                              valuse['sur_name'] = lname.text;
                               valuse['email'] = email.text;
-                              valuse['position'] = 0;
-                              valuse['password'] = passwordCon.text;
+                              valuse['role'] = 0;
+                              valuse['user_password'] = passwordCon.text;
                               _register(valuse);
                             }
                           },
