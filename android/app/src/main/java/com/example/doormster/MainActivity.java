@@ -70,14 +70,12 @@ public class MainActivity extends FlutterActivity {
                 @Override
                 public void onScanResultAtOnce(String devSn, int rssi) {
                     // TODO Auto-generated method stub
-
                 }
 
                 @Override
                 public void onScanResult(ArrayList<Map<String, Integer>> devSnRssiList) {
                     pressed = true;
                     LibDevModel.openDoor(MainActivity.this, getLib, callback); // Open
-
                 }
             };
             // AutoOpenService.startBackgroudMode(MainActivity.this, scancallBack);
