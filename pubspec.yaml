@@ -55,6 +55,9 @@ dependencies:
   flutter_phone_direct_caller: ^2.1.1
   location: ^4.4.0
   permission_handler: ^10.2.0
+  image_picker: ^0.8.6+1
+  fluttertoast: ^8.1.2
+  toast: ^0.3.0
   # splash_view: ^2.0.1
   # gallery_saver: ^2.3.1
   # hexcolor: ^2.0.5
@@ -62,7 +65,6 @@ dependencies:
   # loading_gifs: ^0.3.0
   # screenshot: ^1.2.3
   # share_plus: ^4.5.2
-  # image_picker: ^0.8.4+1
 
 my_package:
     path: android/app/libs/DoormasterSDKV2.3.3.jar

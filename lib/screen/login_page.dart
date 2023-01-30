@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors_in_immutables
+// ignore_for_file: prefer_const_constructors_in_immutables, avoid_single_cascade_in_expression_statements
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
@@ -61,13 +61,7 @@ class _Login_PageState extends State<Login_Page> {
             await prefs.setString('token', token!);
             await prefs.setString('userId', data.single.sId!);
             await prefs.setString('companyId', data.single.companyId!);
-            print(data.single.mobile);
-
-            if (data.single.mobile != null) {
-              await prefs.setInt('role', data.single.mobile!);
-            } else {
-              await prefs.setInt('role', 0);
-            }
+            await prefs.setInt('role', data.single.mobile!);
 
             if (data.single.devicegroupUuid != null) {
               await prefs.setString('deviceId', data.single.devicegroupUuid!);
@@ -107,8 +101,10 @@ class _Login_PageState extends State<Login_Page> {
           Icons.warning_amber_rounded,
           Colors.orange,
           'ตกลง',
-          () {
+          () async {
             Navigator.of(context).pop();
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            prefs.clear();
           },
         );
         setState(() {

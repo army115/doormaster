@@ -1,3 +1,4 @@
+import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/girdManu/gird_menu.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/screen/scan_qrcode_page.dart';
@@ -52,7 +53,18 @@ class _Home_PageState extends State<Home_Page> {
     if (status.isGranted) {
       checkInternet(Opendoor_Page());
     } else {
-      // handle denied permission
+      dialogOnebutton_Subtitle(
+        context,
+        'อนุญาตการเข้าถึง',
+        'จำเป็นต้องอนุญาตการเข้าถึงตำแหน่งของคุณ',
+        Icons.warning_amber_rounded,
+        Colors.orange,
+        'ตกลง',
+        () {
+          openAppSettings();
+          Navigator.of(context).pop();
+        },
+      );
     }
   }
 

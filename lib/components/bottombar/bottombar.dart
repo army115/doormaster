@@ -8,18 +8,20 @@ import 'package:doormster/screen/profile_page.dart';
 import 'package:doormster/screen/scan_qrcode_page.dart';
 import 'package:doormster/screen/visitor_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class BottomBar extends StatefulWidget {
-  BottomBar({Key? key});
+  final page;
+  BottomBar({Key? key, this.page});
 
   @override
   State<BottomBar> createState() => _BottomBarState();
 }
 
 class _BottomBarState extends State<BottomBar> {
-  int _selectedIndex = 0;
-
   final _pageOptions = [Home_Page(), Massages_Page(), Profile_Page()];
+  late int _selectedIndex;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -28,27 +30,59 @@ class _BottomBarState extends State<BottomBar> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.page == null ? 0 : widget.page;
+  }
+
+  DateTime backPressedTime = DateTime.now();
+
+  Future<bool> _onBackButtonDoubleClicked() async {
+    //difference in time
+    final difference = DateTime.now().difference(backPressedTime);
+    backPressedTime = DateTime.now();
+    if (difference >= const Duration(seconds: 2)) {
+      Fluttertoast.showToast(
+          msg: "กรุณากดอีกครั้งเพื่อออก",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Theme.of(context).primaryColor,
+          // textColor: Colors.white,
+          fontSize: 16.0);
+
+      return false;
+    } else {
+      SystemNavigator.pop(animated: true);
+      return true;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: MyDrawer(),
-      body: _pageOptions[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_rounded),
-            label: 'โฮม',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.message_rounded),
-            label: 'ข้อความ',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.school),
-            label: 'ฉัน',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
+    return WillPopScope(
+      onWillPop: () => _onBackButtonDoubleClicked(),
+      child: Scaffold(
+        drawer: MyDrawer(),
+        body: _pageOptions[_selectedIndex],
+        bottomNavigationBar: BottomNavigationBar(
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home_rounded),
+              label: 'โฮม',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.message_rounded),
+              label: 'ข้อความ',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.school),
+              label: 'ฉัน',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
+        ),
       ),
     );
   }

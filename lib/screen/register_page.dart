@@ -1,10 +1,12 @@
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/button/button.dart';
+import 'package:doormster/components/dropdown/dropdown.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/components/text_form/text_form.dart';
 import 'package:doormster/components/text_form/text_form_password.dart';
 import 'package:doormster/components/text_form/text_form_validator.dart';
+import 'package:doormster/models/regis_response.dart';
 import 'package:doormster/screen/login_page.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
@@ -44,10 +46,11 @@ class _Register_PageState extends State<Register_Page> {
             'Accept': 'application/json',
           },
           body: convert.jsonEncode(values));
-
-      if (response.statusCode == 200) {
+      var jsonRes = RegisResponse.fromJson(convert.jsonDecode(response.body));
+      if (jsonRes.status == 200) {
         print('Register Success');
         print(values);
+        print(jsonRes.status);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (BuildContext context) => Login_Page()),
             (Route<dynamic> route) => false);
@@ -57,8 +60,17 @@ class _Register_PageState extends State<Register_Page> {
         snackbar(context, Theme.of(context).primaryColor, 'ลงทะเบียนสำเร็จ',
             Icons.check_circle_outline_rounded);
       } else {
-        snackbar(context, Colors.red, 'ลงทะเบียนไม่สำเร็จ',
-            Icons.highlight_off_rounded);
+        dialogOnebutton_Subtitle(
+          context,
+          'ลงทะเบียนไม่สำเร็จ',
+          '${jsonRes.result}',
+          Icons.highlight_off_rounded,
+          Colors.red,
+          'ตกลง',
+          () {
+            Navigator.of(context).pop();
+          },
+        );
         print('Register not Success!!');
         print(response.body);
         setState(() {
@@ -136,7 +148,7 @@ class _Register_PageState extends State<Register_Page> {
                         Text_Form(
                           controller: fname,
                           title: 'ชื่อ',
-                          icon: Icons.person,
+                          icon: Icons.person_outline_rounded,
                           error: 'กรุณากรอกชื่อ',
                           TypeInput: TextInputType.name,
                         ),
@@ -162,6 +174,7 @@ class _Register_PageState extends State<Register_Page> {
                                 return null;
                               }
                             }),
+                        DropDownSn(),
                         TextForm_Password(
                           controller: password,
                           title: 'รหัสผ่าน',
@@ -220,7 +233,9 @@ class _Register_PageState extends State<Register_Page> {
                               valuse['first_name'] = fname.text;
                               valuse['sur_name'] = lname.text;
                               valuse['email'] = email.text;
-                              valuse['role'] = 0;
+                              valuse['role'] = "0";
+                              valuse['created_by'] = "0";
+                              valuse['company_id'] = "63cf4fd1e73c26a4ff1b0371";
                               valuse['user_password'] = passwordCon.text;
                               _register(valuse);
                             }
@@ -258,6 +273,39 @@ class _Register_PageState extends State<Register_Page> {
             ),
           ),
           validator: error),
+    );
+  }
+
+  var dropdownValue;
+  Widget DropDownSn() {
+    return Dropdown(
+      title: 'เลือกบริษัท',
+      // deviceId == null ? 'ไม่มีอุปกรณ์' : 'เลือกอุปกรณ์',
+      values: dropdownValue,
+      listItem: ['HIP1', 'HIP2'].map((value) {
+        return DropdownMenuItem(
+          value: value,
+          child: Text(
+            '${value}',
+          ),
+        );
+      }).toList(),
+      leftIcon: Icons.home_work_rounded,
+      validate: (values) {
+        // if (deviceId != null) {
+        if (values == null) {
+          return 'กรุณาเลือกบริษัท';
+        }
+        return null;
+        // }
+        // return 'ไม่มีอุปกรณ์';
+      },
+      onChange: (value) {
+        setState(() {
+          dropdownValue = value;
+          print('company : ${value}');
+        });
+      },
     );
   }
 }

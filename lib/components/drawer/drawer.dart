@@ -1,5 +1,7 @@
 import 'package:doormster/components/alertDialog/alert_dialog_twobutton_subtext.dart';
+import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/screen/login_page.dart';
+import 'package:doormster/screen/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -41,7 +43,14 @@ class _MyDrawerState extends State<MyDrawer> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => BottomBar(
+                                          page: 2,
+                                        )));
+                          },
                           child: CircleAvatar(
                             radius: 33,
                             backgroundColor: Colors.white,
@@ -75,7 +84,12 @@ class _MyDrawerState extends State<MyDrawer> {
                       children: [
                         ListTile(
                           onTap: () {
-                            Navigator.pop(context);
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => BottomBar(
+                                          page: 2,
+                                        )));
                           },
                           leading: Icon(
                             Icons.person,

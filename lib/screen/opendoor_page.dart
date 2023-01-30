@@ -326,7 +326,9 @@ class _DoorOnlineState extends State<DoorOnline> {
         "devMac": widget.devMac,
         "appEkey": widget.appKey
       });
-      print("ส่งค่า $result");
+      if (value == true) {
+        print("ส่งค่า $result");
+      }
     } on PlatformException catch (e) {
       '${e.message}';
     }
@@ -335,7 +337,7 @@ class _DoorOnlineState extends State<DoorOnline> {
   @override
   void initState() {
     super.initState();
-    // _loadStatusAutoDoors();
+    _loadStatusAutoDoors();
   }
 
   @override
