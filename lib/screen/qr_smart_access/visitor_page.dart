@@ -11,7 +11,7 @@ import 'package:doormster/components/text_form/text_form_number.dart';
 import 'package:doormster/models/device_group.dart';
 import 'package:doormster/models/doors_device.dart';
 import 'package:doormster/models/visitor_model.dart';
-import 'package:doormster/screen/visitor_detail_page.dart';
+import 'package:doormster/screen/qr_smart_access/visitor_detail_page.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';

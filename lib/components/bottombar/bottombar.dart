@@ -3,10 +3,7 @@
 import 'package:doormster/components/drawer/drawer.dart';
 import 'package:doormster/screen/home_page.dart';
 import 'package:doormster/screen/messages_page.dart';
-import 'package:doormster/screen/opendoor_page.dart';
 import 'package:doormster/screen/profile_page.dart';
-import 'package:doormster/screen/scan_qrcode_page.dart';
-import 'package:doormster/screen/visitor_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -21,18 +18,12 @@ class BottomBar extends StatefulWidget {
 
 class _BottomBarState extends State<BottomBar> {
   final _pageOptions = [Home_Page(), Massages_Page(), Profile_Page()];
-  late int _selectedIndex;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  int _selectedIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    _selectedIndex = widget.page == null ? 0 : widget.page;
+    _selectedIndex = widget.page == null ? _selectedIndex : widget.page;
   }
 
   DateTime backPressedTime = DateTime.now();
@@ -69,7 +60,7 @@ class _BottomBarState extends State<BottomBar> {
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.home_rounded),
-              label: 'โฮม',
+              label: 'หน้าหลัก',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.message_rounded),
@@ -81,7 +72,10 @@ class _BottomBarState extends State<BottomBar> {
             ),
           ],
           currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
+          onTap: (value) {
+            // Respond to item press.
+            setState(() => _selectedIndex = value);
+          },
         ),
       ),
     );

@@ -32,8 +32,8 @@ ThemeData mytheme() {
         selectedIconTheme: IconThemeData(size: 30),
         unselectedIconTheme: IconThemeData(size: 25),
         selectedLabelStyle:
-            TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        unselectedLabelStyle: TextStyle(fontSize: 18)),
+            TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        unselectedLabelStyle: TextStyle(fontSize: 14)),
     scaffoldBackgroundColor: Colors.grey[200],
     appBarTheme: AppBarTheme(
         centerTitle: true,

@@ -6,6 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:doormster/screen/managemant_service/managemant_service_page.dart';
+import 'package:doormster/screen/parcel_service/parcel_service_page.dart';
+import 'package:doormster/screen/qr_smart_access/qr_smart_home_page.dart';
+import 'package:doormster/screen/security_guard/security_guard_page.dart';
+import 'package:doormster/screen/visitor_service/visitor_service_page.dart';
 
 void main() async {
   await init(null);
@@ -35,7 +40,18 @@ class MyApp extends StatelessWidget {
       title: 'HIP Smart Community',
       debugShowCheckedModeBanner: false,
       theme: mytheme(),
-      home: token == null ? Login_Page() : BottomBar(),
+      initialRoute: token == null ? '/login' : '/bottom',
+      routes: {
+        '/login': (context) => Login_Page(),
+        '/bottom': (context) => BottomBar(),
+        '/home': (context) => Home_Page(),
+        '/qrsmart': (context) => QRSmart_HomePage(),
+        '/parcel': (context) => Parcel_service(),
+        '/managemant': (context) => Managemant_Service(),
+        '/security': (context) => Security_Guard(),
+        '/visitor': (context) => Visitor_Service(),
+      },
+      // home: token == null ? Login_Page() : BottomBar(),
     );
   }
 }
