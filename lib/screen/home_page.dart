@@ -123,12 +123,11 @@ class _Home_PageState extends State<Home_Page> {
                             child: Image.network(
                                 'https://media.istockphoto.com/id/1186036259/vector/tv-news-studio-breaking-news-background-with-anchorman-or-presenter-television-program.jpg?s=612x612&w=0&k=20&c=Ai47mIuGqfWAILiL-SJCKBUjVEgE3Bk9itlszQ3GCz8='));
                       },
-                      // ),
                       itemCount: 1,
                       scale: 1.0,
                       pagination: SwiperPagination(
                           builder: DotSwiperPaginationBuilder(
-                              activeColor: Colors.black)),
+                              activeColor: Colors.white)),
                     ),
                   ),
 

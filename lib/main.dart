@@ -1,6 +1,7 @@
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/screen/home_page.dart';
 import 'package:doormster/screen/login_page.dart';
+import 'package:doormster/test/screens/main_screen.dart';
 import 'package:doormster/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
       initialRoute: token == null ? '/login' : '/bottom',
       routes: {
         '/login': (context) => Login_Page(),
-        '/bottom': (context) => BottomBar(),
+        '/bottom': (context) => MainScreen(),
         '/home': (context) => Home_Page(),
         '/qrsmart': (context) => QRSmart_HomePage(),
         '/parcel': (context) => Parcel_service(),

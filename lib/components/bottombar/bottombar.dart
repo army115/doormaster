@@ -4,6 +4,7 @@ import 'package:doormster/components/drawer/drawer.dart';
 import 'package:doormster/screen/home_page.dart';
 import 'package:doormster/screen/messages_page.dart';
 import 'package:doormster/screen/profile_page.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -49,13 +50,57 @@ class _BottomBarState extends State<BottomBar> {
     }
   }
 
+  getPage(int page) {
+    switch (page) {
+      case 0:
+        return Home_Page();
+      case 1:
+        return Massages_Page();
+      case 2:
+        return Profile_Page();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () => _onBackButtonDoubleClicked(),
+      // child: CupertinoTabScaffold(
+      //   tabBar: CupertinoTabBar(
+      //     items: [
+      //       BottomNavigationBarItem(
+      //         icon: Icon(Icons.home_rounded),
+      //         label: 'หน้าหลัก',
+      //       ),
+      //       BottomNavigationBarItem(
+      //         icon: Icon(Icons.message_rounded),
+      //         label: 'ข้อความ',
+      //       ),
+      //       BottomNavigationBarItem(
+      //         icon: Icon(Icons.school),
+      //         label: 'โปรไฟล์',
+      //       ),
+      //     ],
+      //     onTap: (index) {
+      //       setState(() {
+      //         _selectedIndex = index;
+      //       });
+      //     },
+      //   ),
+      //   tabBuilder: (context, index) {
+      //     return Scaffold(
+      //       body: _pageOptions[_selectedIndex],
+      //     );
+      //     CupertinoTabView(
+      //       builder: (context) {
+      //         return _pageOptions[_selectedIndex];
+      //       },
+      //     );
+      //   },
+      // ),
       child: Scaffold(
         drawer: MyDrawer(),
-        body: _pageOptions[_selectedIndex],
+        body: getPage(_selectedIndex),
         bottomNavigationBar: BottomNavigationBar(
           items: [
             BottomNavigationBarItem(
@@ -68,7 +113,7 @@ class _BottomBarState extends State<BottomBar> {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.school),
-              label: 'ฉัน',
+              label: 'โปรไฟล์',
             ),
           ],
           currentIndex: _selectedIndex,

@@ -1,7 +1,6 @@
 // ignore_for_file: unrelated_type_equality_checks
 
 import 'dart:io';
-
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/drawer/drawer.dart';
 import 'package:doormster/components/text_form/text_form.dart';
@@ -44,7 +43,7 @@ class _Profile_PageState extends State<Profile_Page> {
         'Connect-type': 'application/json',
         'Accept': 'application/json',
       });
-      print(response.statusCode);
+
       if (response.statusCode == 200) {
         GetProfile getInfo =
             GetProfile.fromJson(convert.jsonDecode(response.body));
