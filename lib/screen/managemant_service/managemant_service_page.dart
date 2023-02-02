@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class Managemant_Service extends StatefulWidget {
   const Managemant_Service({Key? key});
+  static const String route = '/managemant';
 
   @override
   State<Managemant_Service> createState() => _Managemant_ServiceState();

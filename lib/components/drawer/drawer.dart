@@ -44,12 +44,17 @@ class _MyDrawerState extends State<MyDrawer> {
                       children: [
                         InkWell(
                           onTap: () {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
+                            Navigator.of(context, rootNavigator: true)
+                                .push(MaterialPageRoute(
                                     builder: (context) => BottomBar(
                                           page: 2,
                                         )));
+                            // Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) => BottomBar(
+                            //               page: 2,
+                            //             )));
                           },
                           child: CircleAvatar(
                             radius: 33,
@@ -84,12 +89,17 @@ class _MyDrawerState extends State<MyDrawer> {
                       children: [
                         ListTile(
                           onTap: () {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
+                            Navigator.of(context, rootNavigator: true)
+                                .push(MaterialPageRoute(
                                     builder: (context) => BottomBar(
                                           page: 2,
                                         )));
+                            // Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) => BottomBar(
+                            //               page: 2,
+                            //             )));
                           },
                           leading: Icon(
                             Icons.person,

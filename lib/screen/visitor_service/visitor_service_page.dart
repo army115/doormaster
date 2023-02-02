@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class Visitor_Service extends StatefulWidget {
   const Visitor_Service({Key? key});
+  static const String route = '/visitor';
 
   @override
   State<Visitor_Service> createState() => _Visitor_ServiceState();

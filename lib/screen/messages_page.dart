@@ -1,14 +1,14 @@
 import 'package:doormster/components/drawer/drawer.dart';
 import 'package:flutter/material.dart';
 
-class Massages_Page extends StatefulWidget {
-  const Massages_Page({Key? key});
+class Messages_Page extends StatefulWidget {
+  const Messages_Page({Key? key});
 
   @override
-  State<Massages_Page> createState() => _Massages_PageState();
+  State<Messages_Page> createState() => _Messages_PageState();
 }
 
-class _Massages_PageState extends State<Massages_Page> {
+class _Messages_PageState extends State<Messages_Page> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

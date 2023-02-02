@@ -1,13 +1,24 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
+import 'dart:async';
+
 import 'package:doormster/components/drawer/drawer.dart';
+import 'package:doormster/components/menu/home_menu.dart';
+import 'package:doormster/components/menu/message_menu.dart';
+import 'package:doormster/components/menu/profile_menu.dart';
 import 'package:doormster/screen/home_page.dart';
 import 'package:doormster/screen/messages_page.dart';
 import 'package:doormster/screen/profile_page.dart';
+import 'package:doormster/screen/test.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
+final NavbarNotifier _navbarNotifier = NavbarNotifier();
+GlobalKey<NavigatorState> homeKey = GlobalKey<NavigatorState>();
+GlobalKey<NavigatorState> productsKey = GlobalKey<NavigatorState>();
+GlobalKey<NavigatorState> profileKey = GlobalKey<NavigatorState>();
 
 class BottomBar extends StatefulWidget {
   final page;
@@ -18,46 +29,45 @@ class BottomBar extends StatefulWidget {
 }
 
 class _BottomBarState extends State<BottomBar> {
-  final _pageOptions = [Home_Page(), Massages_Page(), Profile_Page()];
+  final buildBody = [
+    Home_Menu(),
+    Message_Menu(),
+    Profile_Menu(),
+  ];
   int _selectedIndex = 0;
-
+  final NavbarNotifier _navbarNotifier = NavbarNotifier();
   @override
   void initState() {
     super.initState();
     _selectedIndex = widget.page == null ? _selectedIndex : widget.page;
+    print(_selectedIndex);
   }
 
-  DateTime backPressedTime = DateTime.now();
+  DateTime oldTime = DateTime.now();
+  DateTime newTime = DateTime.now();
 
   Future<bool> _onBackButtonDoubleClicked() async {
-    //difference in time
-    final difference = DateTime.now().difference(backPressedTime);
-    backPressedTime = DateTime.now();
-    if (difference >= const Duration(seconds: 2)) {
-      Fluttertoast.showToast(
-          msg: "กรุณากดอีกครั้งเพื่อออก",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Theme.of(context).primaryColor,
-          // textColor: Colors.white,
-          fontSize: 16.0);
-
-      return false;
+    final bool isExitingApp = await _navbarNotifier.onBackButtonPressed();
+    if (isExitingApp) {
+      newTime = DateTime.now();
+      int difference = newTime.difference(oldTime).inMilliseconds;
+      oldTime = newTime;
+      if (difference < 1000) {
+        // hideSnackBar();
+        return isExitingApp;
+      } else {
+        Fluttertoast.showToast(
+            msg: "กรุณากดอีกครั้งเพื่อออก",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Theme.of(context).primaryColor,
+            // textColor: Colors.white,
+            fontSize: 16.0);
+        return false;
+      }
     } else {
-      SystemNavigator.pop(animated: true);
-      return true;
-    }
-  }
-
-  getPage(int page) {
-    switch (page) {
-      case 0:
-        return Home_Page();
-      case 1:
-        return Massages_Page();
-      case 2:
-        return Profile_Page();
+      return isExitingApp;
     }
   }
 
@@ -88,19 +98,31 @@ class _BottomBarState extends State<BottomBar> {
       //     },
       //   ),
       //   tabBuilder: (context, index) {
-      //     return Scaffold(
-      //       body: _pageOptions[_selectedIndex],
+      //     // return Scaffold(
+      //     //   body: _pageOptions[_selectedIndex],
+      //     // );
+      //     return DefaultTextStyle(
+      //       style: TextStyle(
+      //         fontFamily: '.SF UI Text',
+      //         fontSize: 17.0,
+      //         color: CupertinoColors.black,
+      //       ),
+      //       child: CupertinoTabView(
+      //         builder: (BuildContext context) {
+      //           return _pageOptions[index];
+      //         },
+      //       ),
       //     );
-      //     CupertinoTabView(
-      //       builder: (context) {
-      //         return _pageOptions[_selectedIndex];
-      //       },
-      //     );
+      //     // return CupertinoTabView(
+      //     //   builder: (context) {
+      //     //     return _pageOptions[_selectedIndex];
+      //     //   },
+      //     // );
       //   },
       // ),
       child: Scaffold(
         drawer: MyDrawer(),
-        body: getPage(_selectedIndex),
+        body: buildBody[_selectedIndex],
         bottomNavigationBar: BottomNavigationBar(
           items: [
             BottomNavigationBarItem(
@@ -118,11 +140,74 @@ class _BottomBarState extends State<BottomBar> {
           ],
           currentIndex: _selectedIndex,
           onTap: (value) {
-            // Respond to item press.
+            if (_navbarNotifier.index == value) {
+              _navbarNotifier.popAllRoutes(value);
+            }
             setState(() => _selectedIndex = value);
           },
         ),
       ),
     );
+  }
+}
+
+class NavbarNotifier extends ChangeNotifier {
+  int _index = 0;
+  int get index => _index;
+
+  FutureOr<bool> onBackButtonPressed() async {
+    bool exitingApp = true;
+    switch (_navbarNotifier.index) {
+      case 0:
+        if (homeKey.currentState != null && homeKey.currentState!.canPop()) {
+          homeKey.currentState!.pop();
+          exitingApp = false;
+        }
+        break;
+      case 1:
+        if (productsKey.currentState != null &&
+            productsKey.currentState!.canPop()) {
+          productsKey.currentState!.pop();
+          exitingApp = false;
+        }
+        break;
+      case 2:
+        if (profileKey.currentState != null &&
+            profileKey.currentState!.canPop()) {
+          profileKey.currentState!.pop();
+          exitingApp = false;
+        }
+        break;
+      default:
+        return false;
+    }
+    if (exitingApp) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  // pops all routes except first, if there are more than 1 route in each navigator stack
+  void popAllRoutes(int index) {
+    switch (index) {
+      case 0:
+        // if (homeKey.currentState!.canPop()) {
+        homeKey.currentState?.popUntil((route) => route.isFirst);
+        // }
+        return;
+      case 1:
+        // if (productsKey.currentState!.canPop()) {
+        productsKey.currentState!.popUntil((route) => route.isFirst);
+        // }
+        return;
+      case 2:
+        // if (profileKey.currentState!.canPop()) {
+        profileKey.currentState!.popUntil((route) => route.isFirst);
+        // }
+        return;
+      default:
+        break;
+    }
   }
 }

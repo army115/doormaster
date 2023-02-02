@@ -14,9 +14,10 @@ import 'package:permission_handler/permission_handler.dart';
 // import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
 class QRSmart_HomePage extends StatefulWidget {
-  QRSmart_HomePage({
+  const QRSmart_HomePage({
     Key? key,
   }) : super(key: key);
+  static const String route = '/qrsmart';
 
   @override
   State<QRSmart_HomePage> createState() => _QRSmart_HomePageState();
@@ -27,7 +28,9 @@ class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
     var result = await Connectivity().checkConnectivity();
     if (result == ConnectivityResult.mobile ||
         result == ConnectivityResult.wifi) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => page));
+      Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
+        builder: (context) => page,
+      ));
     } else {
       snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
           Icons.warning_amber_rounded);
@@ -80,9 +83,13 @@ class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: MyDrawer(),
-      // bottomNavigationBar: BottomBar(),
       appBar: AppBar(
         title: Text('HIP Smart Community'),
+        leading: IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            }),
       ),
       body: mobileRole == 0
           ? Center(

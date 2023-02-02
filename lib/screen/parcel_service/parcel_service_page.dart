@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class Parcel_service extends StatefulWidget {
   const Parcel_service({Key? key});
+  static const String route = '/parcel';
 
   @override
   State<Parcel_service> createState() => _Parcel_serviceState();

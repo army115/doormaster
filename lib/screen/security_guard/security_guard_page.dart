@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class Security_Guard extends StatefulWidget {
   const Security_Guard({Key? key});
+  static const String route = '/security';
 
   @override
   State<Security_Guard> createState() => _Security_GuardState();

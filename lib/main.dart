@@ -41,10 +41,8 @@ class MyApp extends StatelessWidget {
       title: 'HIP Smart Community',
       debugShowCheckedModeBanner: false,
       theme: mytheme(),
-      initialRoute: token == null ? '/login' : '/bottom',
+      home: token == null ? Login_Page() : BottomBar(),
       routes: {
-        '/login': (context) => Login_Page(),
-        '/bottom': (context) => MainScreen(),
         '/home': (context) => Home_Page(),
         '/qrsmart': (context) => QRSmart_HomePage(),
         '/parcel': (context) => Parcel_service(),
@@ -52,7 +50,6 @@ class MyApp extends StatelessWidget {
         '/security': (context) => Security_Guard(),
         '/visitor': (context) => Visitor_Service(),
       },
-      // home: token == null ? Login_Page() : BottomBar(),
     );
   }
 }
