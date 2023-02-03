@@ -22,7 +22,7 @@ class Buttons extends StatelessWidget {
             title,
             style: TextStyle(
               color: Colors.white,
-              fontSize: 18,
+              fontSize: 16,
               fontWeight: FontWeight.normal,
               letterSpacing: 1,
             ),

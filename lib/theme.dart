@@ -20,7 +20,7 @@ ThemeData mytheme() {
     primaryColor: Color(0xFF0B4D9C),
     textTheme: TextTheme(
       bodyText2: TextStyle(
-        fontSize: 18,
+        fontSize: 17,
         letterSpacing: 0.5,
       ),
     ),
@@ -41,7 +41,7 @@ ThemeData mytheme() {
         titleTextStyle: TextStyle(
           fontWeight: FontWeight.bold,
           fontFamily: 'Prompt',
-          fontSize: 18,
+          fontSize: 17,
           letterSpacing: 1,
         )),
     fontFamily: 'Prompt',

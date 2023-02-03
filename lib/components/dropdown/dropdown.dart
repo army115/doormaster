@@ -30,7 +30,7 @@ class Dropdown extends StatelessWidget {
               height: 1.2),
           decoration: InputDecoration(
             hintText: title,
-            hintStyle: TextStyle(fontSize: 18),
+            hintStyle: TextStyle(fontSize: 16),
             prefixIcon: Icon(
               leftIcon,
               size: 25,
@@ -39,7 +39,7 @@ class Dropdown extends StatelessWidget {
               borderRadius: BorderRadius.circular(10.0),
             ),
             contentPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 13),
-            errorStyle: TextStyle(fontSize: 16),
+            errorStyle: TextStyle(fontSize: 15),
           ),
           value: values,
           icon: Icon(Icons.keyboard_arrow_down_rounded, size: 30),

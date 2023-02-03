@@ -56,7 +56,6 @@ dependencies:
   location: ^4.4.0
   permission_handler: ^10.2.0
   image_picker: ^0.8.6+1
-  fluttertoast: ^8.1.2
   card_swiper: ^2.0.4
   # splash_view: ^2.0.1
   # gallery_saver: ^2.3.1

@@ -58,13 +58,13 @@ class _NavBarHandlerState extends State<NavBarHandler>
       CurvedAnimation(parent: _controller, curve: Curves.fastOutSlowIn),
     );
 
-    _bottomList = List.generate(
-        _buildBody.length,
-        (index) => BottomNavigationBarItem(
-              icon: Icon(menuItemlist[index].iconData),
-              label: menuItemlist[index].text,
-            )).toList();
-    _controller.forward();
+    // _bottomList = List.generate(
+    //     _buildBody.length,
+    //     (index) => BottomNavigationBarItem(
+    //           icon: Icon(menuItemlist[index].iconData),
+    //           label: menuItemlist[index].text,
+    //         )).toList();
+    // _controller.forward();
   }
 
   void showSnackBar() {
@@ -79,15 +79,15 @@ class _NavBarHandlerState extends State<NavBarHandler>
     );
   }
 
-  void hideSnackBar() {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-  }
+  // void hideSnackBar() {
+  //   ScaffoldMessenger.of(context).hideCurrentSnackBar();
+  // }
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _controller.dispose();
+  //   super.dispose();
+  // }
 
   DateTime oldTime = DateTime.now();
   DateTime newTime = DateTime.now();
@@ -101,7 +101,7 @@ class _NavBarHandlerState extends State<NavBarHandler>
           int difference = newTime.difference(oldTime).inMilliseconds;
           oldTime = newTime;
           if (difference < 1000) {
-            hideSnackBar();
+            // hideSnackBar();
             return isExitingApp;
           } else {
             showSnackBar();
@@ -137,8 +137,8 @@ class _NavBarHandlerState extends State<NavBarHandler>
                             _navbarNotifier.popAllRoutes(x);
                           } else {
                             _navbarNotifier.index = x;
-                            _controller.reset();
-                            _controller.forward();
+                            // _controller.reset();
+                            // _controller.forward();
                           }
                         },
                         menuItems: menuItemlist),

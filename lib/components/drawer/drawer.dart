@@ -2,6 +2,7 @@ import 'package:doormster/components/alertDialog/alert_dialog_twobutton_subtext.
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/screen/login_page.dart';
 import 'package:doormster/screen/profile_page.dart';
+import 'package:doormster/screen/reset_password_page.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -44,17 +45,12 @@ class _MyDrawerState extends State<MyDrawer> {
                       children: [
                         InkWell(
                           onTap: () {
-                            Navigator.of(context, rootNavigator: true)
-                                .push(MaterialPageRoute(
-                                    builder: (context) => BottomBar(
-                                          page: 2,
-                                        )));
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => BottomBar(
-                            //               page: 2,
-                            //             )));
+                            Navigator.of(
+                              context,
+                            ).push(MaterialPageRoute(
+                                builder: (context) => BottomBar(
+                                      page: 2,
+                                    )));
                           },
                           child: CircleAvatar(
                             radius: 33,
@@ -74,6 +70,7 @@ class _MyDrawerState extends State<MyDrawer> {
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
+                              letterSpacing: 0.5,
                               color: Colors.white),
                         ),
                       ],
@@ -89,17 +86,12 @@ class _MyDrawerState extends State<MyDrawer> {
                       children: [
                         ListTile(
                           onTap: () {
-                            Navigator.of(context, rootNavigator: true)
-                                .push(MaterialPageRoute(
-                                    builder: (context) => BottomBar(
-                                          page: 2,
-                                        )));
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => BottomBar(
-                            //               page: 2,
-                            //             )));
+                            Navigator.of(
+                              context,
+                            ).push(MaterialPageRoute(
+                                builder: (context) => BottomBar(
+                                      page: 2,
+                                    )));
                           },
                           leading: Icon(
                             Icons.person,
@@ -110,14 +102,15 @@ class _MyDrawerState extends State<MyDrawer> {
                             'ข้อมูลส่วนตัว',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 18,
+                                fontSize: 16,
+                                letterSpacing: 0.5,
                                 color: Colors.white),
                           ),
                           // tileColor: Colors.cyan,
                         ),
                         ListTile(
                           onTap: () {
-                            Navigator.pop(context);
+                            Navigator.of(context).popAndPushNamed('/password');
                           },
                           leading: Icon(
                             Icons.key_sharp,
@@ -128,7 +121,8 @@ class _MyDrawerState extends State<MyDrawer> {
                             'เปลี่ยนรหัสผ่าน',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 18,
+                                fontSize: 16,
+                                letterSpacing: 0.5,
                                 color: Colors.white),
                           ),
                           // tileColor: Colors.cyan,
@@ -170,7 +164,8 @@ class _MyDrawerState extends State<MyDrawer> {
               title: Text('ออกจากระบบ',
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                      fontSize: 16,
+                      letterSpacing: 0.5,
                       color: Colors.white)),
               // tileColor: Colors.cyan,
             )

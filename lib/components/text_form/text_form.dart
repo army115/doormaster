@@ -23,7 +23,7 @@ class Text_Form extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 8),
       child: TextFormField(
         autofocus: false,
-        style: TextStyle(fontSize: 18),
+        style: TextStyle(fontSize: 16),
         controller: controller,
         keyboardType: TypeInput,
         decoration: InputDecoration(
@@ -31,8 +31,8 @@ class Text_Form extends StatelessWidget {
           contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 13),
           // labelText: 'Username',
           hintText: title,
-          hintStyle: TextStyle(fontSize: 18),
-          errorStyle: TextStyle(fontSize: 16),
+          hintStyle: TextStyle(fontSize: 16),
+          errorStyle: TextStyle(fontSize: 15),
           // ignore: prefer_const_constructors
           prefixIcon: Icon(icon, size: 25),
           border: OutlineInputBorder(

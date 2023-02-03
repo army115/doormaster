@@ -1,21 +1,27 @@
-import 'package:doormster/components/bottombar/bottombar.dart';
-import 'package:doormster/screen/profile_page.dart';
+// ignore_for_file: use_key_in_widget_constructors
+
+import 'package:doormster/screen/messages_page.dart';
 import 'package:flutter/material.dart';
+import 'package:doormster/components/bottombar/bottombar.dart';
 
-class Profile_Menu extends StatelessWidget {
-  Profile_Menu({
-    Key? key,
-  }) : super(key: key);
+class Message_Menu extends StatefulWidget {
+  final navigatorKey;
+  const Message_Menu({Key? key, this.navigatorKey});
 
+  @override
+  State<Message_Menu> createState() => _Message_MenuState();
+}
+
+class _Message_MenuState extends State<Message_Menu> {
   @override
   Widget build(BuildContext context) {
     return Navigator(
-      key: profileKey,
+      key: widget.navigatorKey,
       onGenerateRoute: (routeSettings) {
         WidgetBuilder builder;
         switch (routeSettings.name) {
           case '/':
-            builder = (BuildContext context) => Profile_Page();
+            builder = (BuildContext context) => Messages_Page();
             break;
           // case '/qrsmart':
           //   builder = (BuildContext context) => QRSmart_HomePage();

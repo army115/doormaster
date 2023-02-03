@@ -1,6 +1,7 @@
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/screen/home_page.dart';
 import 'package:doormster/screen/login_page.dart';
+import 'package:doormster/screen/reset_password_page.dart';
 import 'package:doormster/test/screens/main_screen.dart';
 import 'package:doormster/theme.dart';
 import 'package:flutter/material.dart';
@@ -49,6 +50,7 @@ class MyApp extends StatelessWidget {
         '/managemant': (context) => Managemant_Service(),
         '/security': (context) => Security_Guard(),
         '/visitor': (context) => Visitor_Service(),
+        '/password': (context) => Password_Page(),
       },
     );
   }

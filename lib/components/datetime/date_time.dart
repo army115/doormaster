@@ -20,7 +20,7 @@ class _Date_timeState extends State<Date_time> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 8),
       child: TextFormField(
-        style: TextStyle(fontSize: 18),
+        style: TextStyle(fontSize: 16),
         controller: widget.controller,
         readOnly: true,
         decoration: InputDecoration(
@@ -31,8 +31,8 @@ class _Date_timeState extends State<Date_time> {
           ),
           suffixIcon: Icon(Icons.keyboard_arrow_down_rounded, size: 30),
           hintText: widget.title,
-          hintStyle: TextStyle(fontSize: 18),
-          errorStyle: TextStyle(fontSize: 16),
+          hintStyle: TextStyle(fontSize: 16),
+          errorStyle: TextStyle(fontSize: 15),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
@@ -62,17 +62,17 @@ class _Date_timeState extends State<Date_time> {
               headerColor: Theme.of(context).primaryColor,
               cancelStyle: TextStyle(
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: 17,
                   fontWeight: FontWeight.bold),
               doneStyle: TextStyle(
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: 17,
                   fontWeight: FontWeight.bold),
               backgroundColor: Colors.grey.shade200,
               itemHeight: 40,
               itemStyle: TextStyle(
                   color: Colors.black,
-                  fontSize: 18,
+                  fontSize: 17,
                   fontWeight: FontWeight.normal,
                   fontFamily: 'Prompt'),
               containerHeight: MediaQuery.of(context).size.height * 0.4,

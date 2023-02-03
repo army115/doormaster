@@ -23,7 +23,7 @@ class Text_Form_NoBorder extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 8),
       child: TextFormField(
         autofocus: false,
-        style: TextStyle(fontSize: 18),
+        style: TextStyle(fontSize: 16),
         controller: controller,
         keyboardType: TypeInput,
         decoration: InputDecoration(
@@ -31,8 +31,8 @@ class Text_Form_NoBorder extends StatelessWidget {
           contentPadding: EdgeInsets.fromLTRB(0, 0, 10, 10),
           labelText: title,
           hintText: "กรอกข้อมูล",
-          hintStyle: TextStyle(fontSize: 18),
-          errorStyle: TextStyle(fontSize: 16),
+          hintStyle: TextStyle(fontSize: 16),
+          errorStyle: TextStyle(fontSize: 15),
           // ignore: prefer_const_constructors
           icon: Icon(icon, size: 25),
         ),

@@ -6,6 +6,7 @@ import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/components/text_form/text_form.dart';
 import 'package:doormster/components/text_form/text_form_password.dart';
 import 'package:doormster/components/text_form/text_form_validator.dart';
+import 'package:doormster/models/get_company.dart';
 import 'package:doormster/models/regis_response.dart';
 import 'package:doormster/screen/login_page.dart';
 import 'package:doormster/service/connect_api.dart';
@@ -29,10 +30,50 @@ class _Register_PageState extends State<Register_Page> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController passwordCon = TextEditingController();
+
   bool Checked = false;
   bool loading = false;
   bool redEye = true;
   bool redEyeCon = true;
+  List<Data> listCompany = [];
+
+  Future _getCompany() async {
+    try {
+      setState(() {
+        loading = true;
+      });
+      var url = '${Connect_api().domain}/getcompanyactive';
+      var response = await http.get(Uri.parse(url), headers: {
+        'Connect-type': 'application/json',
+        'Accept': 'application/json',
+      });
+
+      if (response.statusCode == 200) {
+        getCompany company =
+            getCompany.fromJson(convert.jsonDecode(response.body));
+        setState(() {
+          listCompany = company.data!;
+          loading = false;
+        });
+      }
+    } catch (error) {
+      print(error);
+      dialogOnebutton_Subtitle(
+        context,
+        'พบข้อผิดพลาด',
+        'ไม่สามารถเชื่อมต่อได้',
+        Icons.warning_amber_rounded,
+        Colors.orange,
+        'ตกลง',
+        () {
+          Navigator.popUntil(context, (route) => route.isFirst);
+        },
+      );
+      setState(() {
+        loading = false;
+      });
+    }
+  }
 
   Future _register(Map<String, dynamic> values) async {
     try {
@@ -96,6 +137,12 @@ class _Register_PageState extends State<Register_Page> {
         loading = false;
       });
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getCompany();
   }
 
   @override
@@ -174,7 +221,7 @@ class _Register_PageState extends State<Register_Page> {
                                 return null;
                               }
                             }),
-                        DropDownSn(),
+                        DropDownCompany(),
                         TextForm_Password(
                           controller: password,
                           title: 'รหัสผ่าน',
@@ -235,7 +282,7 @@ class _Register_PageState extends State<Register_Page> {
                               valuse['email'] = email.text;
                               valuse['role'] = "0";
                               valuse['created_by'] = "0";
-                              valuse['company_id'] = "63cf4fd1e73c26a4ff1b0371";
+                              valuse['company_id'] = dropdownValue;
                               valuse['user_password'] = passwordCon.text;
                               _register(valuse);
                             }
@@ -277,16 +324,18 @@ class _Register_PageState extends State<Register_Page> {
   }
 
   var dropdownValue;
-  Widget DropDownSn() {
+  Widget DropDownCompany() {
     return Dropdown(
       title: 'เลือกบริษัท',
       // deviceId == null ? 'ไม่มีอุปกรณ์' : 'เลือกอุปกรณ์',
       values: dropdownValue,
-      listItem: ['HIP1', 'HIP2'].map((value) {
+      listItem: listCompany.map((value) {
         return DropdownMenuItem(
-          value: value,
+          value: value.sId,
           child: Text(
-            '${value}',
+            value.companyName == ""
+                ? 'บริษัทไม่ทราบชื่อ'
+                : '${value.companyName}',
           ),
         );
       }).toList(),

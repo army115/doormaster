@@ -12,6 +12,7 @@ import 'package:doormster/screen/register_page.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -114,103 +115,119 @@ class _Login_PageState extends State<Login_Page> {
     }
   }
 
+  DateTime PressTime = DateTime.now();
+
+  Future<bool> _onBackButtonDoubleClicked() async {
+    int difference = DateTime.now().difference(PressTime).inMilliseconds;
+    PressTime = DateTime.now();
+    if (difference < 1500) {
+      SystemNavigator.pop(animated: true);
+      return true;
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Theme.of(context).primaryColor,
+          content: Text(
+            "กดอีกครั้งเพื่อออก",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16, fontFamily: 'Kanit'),
+          ),
+          width: MediaQuery.of(context).size.width * 0.45,
+          padding: EdgeInsets.symmetric(vertical: 10),
+          duration: const Duration(milliseconds: 1500),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25),
+          ),
+        ),
+      );
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        // bottomNavigationBar: Row(
-        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //   children: [
-        //     Text_Button(title: 'เข้าสู่ระบบ', press: () {}, size: 25),
-        //     Text_Button(
-        //       title: 'ลงทะเบียน',
-        //       press: () {
-        //         Navigator.push(context,
-        //             MaterialPageRoute(builder: ((context) => Register_Page())));
-        //       },
-        //       size: 25,
-        //     )
-        //   ],
-        // ),
-        // appBar: AppBar(
-        //   title: Text('เข้าสู่ระบบ'),
-        // ),
-        body: SafeArea(
-            child: SingleChildScrollView(
-      child: Form(
-        key: _formkey,
-        child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
-            child: Column(
-              // mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  'assets/images/Smart Community Logo.png',
-                  scale: 4,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Text_Form(
-                  controller: _username,
-                  title: 'ชื่อผู้ใช้',
-                  icon: Icons.account_circle_rounded,
-                  error: 'กรุณากรอกชื่อผู้ใช้',
-                  TypeInput: TextInputType.name,
-                ),
-                TextForm_Password(
-                  controller: _password,
-                  title: 'รหัสผ่าน',
-                  iconLaft: Icons.key,
-                  error: (values) {
-                    if (values!.isEmpty) {
-                      return 'กรุณากรอกรหัสผ่าน';
-                    } else {
-                      return null;
-                    }
-                  },
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                loading
-                    ? CircularProgressIndicator(
-                        color: Theme.of(context).primaryColor,
-                      )
-                    : Buttons(
-                        title: 'เข้าสู่ระบบ',
-                        press: () {
-                          doLogin();
-                        },
-                      ),
-                SizedBox(height: 20),
-                RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.black,
-                        fontFamily: 'Prompt',
-                      ),
-                      text: 'ยังไม่ได้เป็นสมาชิก HIP Smart Community ',
-                      children: [
-                        TextSpan(
-                            text: 'กรุณาลงทะเบียน',
-                            style: TextStyle(
-                              decoration: TextDecoration.underline,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                        builder: ((context) =>
-                                            Register_Page())));
-                              })
-                      ],
-                    ))
-              ],
-            )),
-      ),
-    )));
+    return WillPopScope(
+      onWillPop: _onBackButtonDoubleClicked,
+      child: Scaffold(
+          body: SafeArea(
+              child: SingleChildScrollView(
+        child: Form(
+          key: _formkey,
+          child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+              child: Column(
+                // mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/images/Smart Community Logo.png',
+                    scale: 4,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text_Form(
+                    controller: _username,
+                    title: 'ชื่อผู้ใช้',
+                    icon: Icons.account_circle_rounded,
+                    error: 'กรุณากรอกชื่อผู้ใช้',
+                    TypeInput: TextInputType.name,
+                  ),
+                  TextForm_Password(
+                    controller: _password,
+                    title: 'รหัสผ่าน',
+                    iconLaft: Icons.key,
+                    error: (values) {
+                      if (values!.isEmpty) {
+                        return 'กรุณากรอกรหัสผ่าน';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  loading
+                      ? CircularProgressIndicator(
+                          color: Theme.of(context).primaryColor,
+                        )
+                      : Buttons(
+                          title: 'เข้าสู่ระบบ',
+                          press: () {
+                            doLogin();
+                          },
+                        ),
+                  SizedBox(height: 20),
+                  RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black,
+                          fontFamily: 'Prompt',
+                        ),
+                        text: 'ยังไม่ได้เป็นสมาชิก HIP Smart Community ',
+                        children: [
+                          TextSpan(
+                              text: 'กรุณาลงทะเบียน',
+                              style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                          builder: ((context) =>
+                                              Register_Page())));
+                                })
+                        ],
+                      ))
+                ],
+              )),
+        ),
+      ))),
+    );
   }
 }
