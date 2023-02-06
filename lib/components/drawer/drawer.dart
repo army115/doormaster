@@ -1,4 +1,5 @@
 import 'package:doormster/components/alertDialog/alert_dialog_twobutton_subtext.dart';
+import 'package:doormster/components/bottomSheet/bottom_sheet.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/screen/login_page.dart';
 import 'package:doormster/screen/profile_page.dart';
@@ -7,7 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyDrawer extends StatefulWidget {
-  MyDrawer({Key? key});
+  final scaffoldKey;
+  MyDrawer({Key? key, this.scaffoldKey});
 
   @override
   State<MyDrawer> createState() => _MyDrawerState();
@@ -43,33 +45,59 @@ class _MyDrawerState extends State<MyDrawer> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.of(
-                              context,
-                            ).push(MaterialPageRoute(
-                                builder: (context) => BottomBar(
-                                      page: 2,
-                                    )));
-                          },
-                          child: CircleAvatar(
-                            radius: 33,
-                            backgroundColor: Colors.white,
-                            child: CircleAvatar(
-                                radius: 30,
-                                backgroundColor: Colors.grey[100],
-                                backgroundImage: AssetImage(
-                                    'assets/images/HIP Smart Community Icon-03.png')),
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            InkWell(
+                              borderRadius: BorderRadius.circular(30),
+                              onTap: () {
+                                // widget.scaffoldKey.currentState.setState(() {
+                                //   // Update the bottom navigation bar's index to 2.
+                                // });
+                                // Navigator.of(
+                                //   context,
+                                // ).pop();
+                                // Navigator.of(
+                                //   context,
+                                // ).push(MaterialPageRoute(
+                                //   builder: (context) => BottomBar(
+                                //       // page: 2,
+                                //       ),
+                                //   maintainState: true,
+                                // ));
+                              },
+                              child: CircleAvatar(
+                                radius: 33,
+                                backgroundColor: Colors.white,
+                                child: CircleAvatar(
+                                    radius: 30,
+                                    backgroundColor: Colors.grey[100],
+                                    backgroundImage: const AssetImage(
+                                        'assets/images/HIP Smart Community Icon-03.png')),
+                              ),
+                            ),
+                            IconButton(
+                                constraints: BoxConstraints(),
+                                splashRadius: 20,
+                                padding: EdgeInsets.zero,
+                                iconSize: 30,
+                                color: Colors.white,
+                                icon: const Icon(
+                                  Icons.more_vert_rounded,
+                                ),
+                                onPressed: () {
+                                  bottomsheet(context);
+                                }),
+                          ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
-                        Text(
+                        const Text(
                           'HIP Smart Community',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 18,
+                              fontSize: 17,
                               letterSpacing: 0.5,
                               color: Colors.white),
                         ),
@@ -86,12 +114,12 @@ class _MyDrawerState extends State<MyDrawer> {
                       children: [
                         ListTile(
                           onTap: () {
-                            Navigator.of(
-                              context,
-                            ).push(MaterialPageRoute(
-                                builder: (context) => BottomBar(
-                                      page: 2,
-                                    )));
+                            // Navigator.of(
+                            //   context,
+                            // ).pushReplacement(MaterialPageRoute(
+                            //     builder: (context) => BottomBar(
+                            //           page: 2,
+                            //         )));
                           },
                           leading: Icon(
                             Icons.person,

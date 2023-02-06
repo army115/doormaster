@@ -2,19 +2,15 @@
 
 import 'package:card_swiper/card_swiper.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
-import 'package:doormster/components/girdManu/gird_menu.dart';
 import 'package:doormster/components/girdManu/menu_home.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
-import 'package:doormster/models/menu_model.dart';
-import 'package:doormster/screen/qr_smart_access/opendoor_page.dart';
-import 'package:doormster/screen/qr_smart_access/scan_qrcode_page.dart';
-import 'package:doormster/screen/qr_smart_access/visitor_page.dart';
+import 'package:doormster/models/get_menu.dart';
+import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:permission_handler/permission_handler.dart';
-// import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
 
 class Home_Page extends StatefulWidget {
   Home_Page({
@@ -26,6 +22,59 @@ class Home_Page extends StatefulWidget {
 }
 
 class _Home_PageState extends State<Home_Page> {
+  var mobileRole;
+  var companyId;
+  List<Data> listMenu = [];
+  bool loading = false;
+
+  Future _getMenu() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    mobileRole = prefs.getInt('role') ?? "";
+    companyId = prefs.getString('companyId');
+
+    print('mobileRole: ${mobileRole}');
+    print('companyId: ${companyId}');
+
+    try {
+      setState(() {
+        loading = true;
+      });
+
+      var url = '${Connect_api().domain}/get/menumobile/$companyId';
+      var response = await http.get(Uri.parse(url), headers: {
+        'Connect-type': 'application/json',
+        'Accept': 'application/json',
+      });
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        getMenu menuHome = getMenu.fromJson(convert.jsonDecode(response.body));
+        setState(() {
+          listMenu = menuHome.data!;
+          loading = false;
+        });
+      }
+    } catch (error) {
+      print(error);
+      if (companyId == null) {
+      } else {
+        dialogOnebutton_Subtitle(
+          context,
+          'พบข้อผิดพลาด',
+          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+          Icons.warning_amber_rounded,
+          Colors.orange,
+          'ตกลง',
+          () {
+            Navigator.popUntil(context, (route) => route.isFirst);
+          },
+        );
+      }
+      setState(() {
+        loading = false;
+      });
+    }
+  }
+
   void checkInternet(page) async {
     var result = await Connectivity().checkConnectivity();
     if (result == ConnectivityResult.mobile ||
@@ -38,45 +87,10 @@ class _Home_PageState extends State<Home_Page> {
     }
   }
 
-  bool loading = false;
-
-  var mobileRole;
-  Future _getRole() async {
-    setState(() {
-      loading = true;
-    });
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    mobileRole = await prefs.getInt('role') ?? "";
-    print('mobileRole: ${mobileRole}');
-    setState(() {
-      loading = false;
-    });
-  }
-
-  Future<void> requestLocationPermission() async {
-    final status = await Permission.location.request();
-    if (status.isGranted) {
-      checkInternet(Opendoor_Page());
-    } else {
-      dialogOnebutton_Subtitle(
-        context,
-        'อนุญาตการเข้าถึง',
-        'จำเป็นต้องอนุญาตการเข้าถึงตำแหน่งของคุณ',
-        Icons.warning_amber_rounded,
-        Colors.orange,
-        'ตกลง',
-        () {
-          openAppSettings();
-          Navigator.of(context).pop();
-        },
-      );
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-    _getRole();
+    _getMenu();
   }
 
   @override
@@ -145,45 +159,14 @@ class _Home_PageState extends State<Home_Page> {
                           crossAxisSpacing: 0,
                           mainAxisSpacing: 20,
                         ),
-                        itemCount: Menu.length,
+                        itemCount: listMenu.length,
                         itemBuilder: (context, index) {
                           return Menu_Home(
-                            title: '${Menu[index].name}',
-                            icon: IconData(Menu[index].icons,
-                                fontFamily: 'MaterialIcons'),
-                            press: Menu[index].page,
+                            title: '${listMenu[index].name}',
+                            icon: int.parse('${listMenu[index].icon}'),
+                            press: listMenu[index].page,
                           );
                         },
-                        // children: [
-                        //   Gird_Menu(
-                        //     title: 'ผู้มาติดต่อ',
-                        //     icon: Icons.person,
-                        //     press: () {
-                        //       checkInternet(Visitor_Page());
-                        //     },
-                        //   ),
-                        //   Gird_Menu(
-                        //     title: 'สแกน',
-                        //     icon: Icons.qr_code_scanner_rounded,
-                        //     press: () {
-                        //       checkInternet(Scanner());
-                        //     },
-                        //   ),
-                        //   Gird_Menu(
-                        //     title: 'เปิดประตู',
-                        //     icon: Icons.meeting_room_rounded,
-                        //     press: () {
-                        //       requestLocationPermission();
-                        //     },
-                        //   ),
-                        //   Gird_Menu(
-                        //       title: 'Emergency Call',
-                        //       icon: Icons.phone_forwarded_rounded,
-                        //       press: () async {
-                        //         await FlutterPhoneDirectCaller.callNumber(
-                        //             '0123456789');
-                        //       }),
-                        // ],
                       ),
                     ),
                   ),

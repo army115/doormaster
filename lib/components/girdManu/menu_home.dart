@@ -33,7 +33,7 @@ class Menu_Home extends StatelessWidget {
                   //   img,
                   //   width: 80,
                   // ),
-                  Icon(icon,
+                  Icon(IconData(icon, fontFamily: 'MaterialIcons'),
                       semanticLabel: title, size: 45, color: Colors.white),
                 ],
               ),

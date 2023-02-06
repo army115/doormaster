@@ -38,7 +38,7 @@ class _Profile_PageState extends State<Profile_Page> {
       setState(() {
         loading = true;
       });
-      var url = '${Connect_api().domain}/getUser/$userId';
+      var url = '${Connect_api().domain}/get/profile/$userId';
       var response = await http.get(Uri.parse(url), headers: {
         'Connect-type': 'application/json',
         'Accept': 'application/json',

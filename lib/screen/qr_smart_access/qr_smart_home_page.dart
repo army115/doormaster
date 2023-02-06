@@ -55,21 +55,21 @@ class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
 
   Future<void> requestLocationPermission() async {
     final status = await Permission.location.request();
-    if (status.isGranted) {
-      checkInternet(Opendoor_Page());
-    } else {
+    if (status.isDenied) {
       dialogOnebutton_Subtitle(
         context,
         'อนุญาตการเข้าถึง',
-        'จำเป็นต้องอนุญาตการเข้าถึงตำแหน่งของคุณ',
+        'จำเป็นต้องเข้าถึงตำแหน่งของคุณ',
         Icons.warning_amber_rounded,
         Colors.orange,
         'ตกลง',
         () {
           openAppSettings();
-          Navigator.of(context).pop();
+          Navigator.of(context, rootNavigator: true).pop();
         },
       );
+    } else {
+      checkInternet(Opendoor_Page());
     }
   }
 

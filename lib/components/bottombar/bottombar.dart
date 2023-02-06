@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 final NavbarNotifier _navbarNotifier = NavbarNotifier();
+final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 GlobalKey<NavigatorState> homeKey = GlobalKey<NavigatorState>();
 GlobalKey<NavigatorState> messageKey = GlobalKey<NavigatorState>();
 GlobalKey<NavigatorState> profileKey = GlobalKey<NavigatorState>();
@@ -38,45 +39,46 @@ class _BottomBarState extends State<BottomBar> {
   DateTime PressTime = DateTime.now();
 
   Future<bool> _onBackButtonDoubleClicked() async {
-    final bool isExitingApp =
-        await _navbarNotifier.onBackButtonPressed(_selectedIndex);
-    if (isExitingApp) {
-      if (_selectedIndex != 0) {
-        setState(() {
-          _selectedIndex = 0;
-        });
-        return false;
-      } else {
-        int difference = DateTime.now().difference(PressTime).inMilliseconds;
-        PressTime = DateTime.now();
+    if (_scaffoldKey.currentState!.isDrawerOpen) {
+      Navigator.of(context).pop();
+    } else {
+      final bool isExitingApp =
+          await _navbarNotifier.onBackButtonPressed(_selectedIndex);
 
-        if (difference < 1500) {
-          SystemNavigator.pop(animated: true);
-          return isExitingApp;
+      if (isExitingApp) {
+        if (_selectedIndex != 0) {
+          setState(() {
+            _selectedIndex = 0;
+          });
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: Theme.of(context).primaryColor,
-              content: Text(
-                "กดอีกครั้งเพื่อออก",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16, fontFamily: 'Kanit'),
+          int difference = DateTime.now().difference(PressTime).inMilliseconds;
+          PressTime = DateTime.now();
+
+          if (difference < 1500) {
+            SystemNavigator.pop(animated: true);
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: Theme.of(context).primaryColor,
+                content: Text(
+                  "กดอีกครั้งเพื่อออก",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16, fontFamily: 'Kanit'),
+                ),
+                width: MediaQuery.of(context).size.width * 0.45,
+                padding: EdgeInsets.symmetric(vertical: 10),
+                duration: const Duration(milliseconds: 1500),
+                behavior: SnackBarBehavior.floating,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25),
+                ),
               ),
-              width: MediaQuery.of(context).size.width * 0.45,
-              padding: EdgeInsets.symmetric(vertical: 10),
-              duration: const Duration(milliseconds: 1500),
-              behavior: SnackBarBehavior.floating,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25),
-              ),
-            ),
-          );
-          return false;
+            );
+          }
         }
       }
-    } else {
-      return isExitingApp;
     }
+    return false;
   }
 
   @override
@@ -84,7 +86,8 @@ class _BottomBarState extends State<BottomBar> {
     return WillPopScope(
       onWillPop: () => _onBackButtonDoubleClicked(),
       child: Scaffold(
-        drawer: MyDrawer(),
+        key: _scaffoldKey,
+        drawer: MyDrawer(scaffoldKey: profileKey),
         body: IndexedStack(
           index: _selectedIndex,
           children: buildBody,
