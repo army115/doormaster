@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:doormster/screen/home_page.dart';
+import 'package:doormster/screen/main_screen/home_page.dart';
 import 'package:doormster/screen/parcel_service/parcel_service_page.dart';
 import 'package:doormster/screen/managemant_service/managemant_service_page.dart';
 import 'package:doormster/screen/qr_smart_access/qr_smart_home_page.dart';

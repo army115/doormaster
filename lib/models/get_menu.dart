@@ -1,15 +1,15 @@
 class getMenu {
   int? status;
-  List<Data>? data;
+  List<DataMenu>? data;
 
   getMenu({this.status, this.data});
 
   getMenu.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     if (json['data'] != null) {
-      data = <Data>[];
+      data = <DataMenu>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(new DataMenu.fromJson(v));
       });
     }
   }
@@ -24,7 +24,7 @@ class getMenu {
   }
 }
 
-class Data {
+class DataMenu {
   String? sId;
   String? icon;
   String? name;
@@ -32,7 +32,7 @@ class Data {
   String? companyId;
   String? modulename;
 
-  Data(
+  DataMenu(
       {this.sId,
       this.icon,
       this.name,
@@ -40,7 +40,7 @@ class Data {
       this.companyId,
       this.modulename});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  DataMenu.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     icon = json['icon'];
     name = json['name'];

@@ -2,8 +2,10 @@
 
 import 'package:card_swiper/card_swiper.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
+import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/girdManu/menu_home.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
+import 'package:doormster/models/get_ads_company.dart';
 import 'package:doormster/models/get_menu.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +26,8 @@ class Home_Page extends StatefulWidget {
 class _Home_PageState extends State<Home_Page> {
   var mobileRole;
   var companyId;
-  List<Data> listMenu = [];
+  List<DataMenu> listMenu = [];
+  List<Data> listads = [];
   bool loading = false;
 
   Future _getMenu() async {
@@ -45,11 +48,54 @@ class _Home_PageState extends State<Home_Page> {
         'Connect-type': 'application/json',
         'Accept': 'application/json',
       });
-      print(response.statusCode);
+
       if (response.statusCode == 200) {
         getMenu menuHome = getMenu.fromJson(convert.jsonDecode(response.body));
+
         setState(() {
           listMenu = menuHome.data!;
+          loading = false;
+        });
+      }
+    } catch (error) {
+      print(error);
+      if (companyId == null) {
+      } else {
+        dialogOnebutton_Subtitle(
+          context,
+          'พบข้อผิดพลาด',
+          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+          Icons.warning_amber_rounded,
+          Colors.orange,
+          'ตกลง',
+          () {
+            Navigator.popUntil(context, (route) => route.isFirst);
+          },
+        );
+      }
+      setState(() {
+        loading = false;
+      });
+    }
+  }
+
+  Future _getAds() async {
+    try {
+      setState(() {
+        loading = true;
+      });
+
+      var url = '${Connect_api().domain}/get/ads/$companyId';
+      var response = await http.get(Uri.parse(url), headers: {
+        'Connect-type': 'application/json',
+        'Accept': 'application/json',
+      });
+
+      if (response.statusCode == 200) {
+        getAdsCompany asdcompany =
+            getAdsCompany.fromJson(convert.jsonDecode(response.body));
+        setState(() {
+          listads = asdcompany.data!;
           loading = false;
         });
       }
@@ -91,6 +137,7 @@ class _Home_PageState extends State<Home_Page> {
   void initState() {
     super.initState();
     _getMenu();
+    _getAds();
   }
 
   @override
@@ -132,16 +179,18 @@ class _Home_PageState extends State<Home_Page> {
                       autoplay: true,
                       loop: true,
                       // fade: 0.0,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Container(
-                            child: Image.network(
-                                'https://media.istockphoto.com/id/1186036259/vector/tv-news-studio-breaking-news-background-with-anchorman-or-presenter-television-program.jpg?s=612x612&w=0&k=20&c=Ai47mIuGqfWAILiL-SJCKBUjVEgE3Bk9itlszQ3GCz8='));
-                      },
-                      itemCount: 1,
                       scale: 1.0,
                       pagination: SwiperPagination(
                           builder: DotSwiperPaginationBuilder(
                               activeColor: Colors.white)),
+                      itemCount: listads.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                            child: Image.memory(
+                          convert.base64Decode(
+                              '${listads[index].adsversitingPic}'),
+                        ));
+                      },
                     ),
                   ),
 
@@ -171,12 +220,13 @@ class _Home_PageState extends State<Home_Page> {
                     ),
                   ),
                   // SizedBox(height: 20),
-                  // Buttons(
-                  //     title: 'test',
-                  //     press: () {
-                  //       Navigator.push(context,
-                  //           MaterialPageRoute(builder: ((context) => Test())));
-                  //     })
+                  Buttons(
+                      title: 'test',
+                      press: () {
+                        setState(() {
+                          _getMenu();
+                        });
+                      })
                 ],
               ),
             ),

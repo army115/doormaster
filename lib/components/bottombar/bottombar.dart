@@ -8,8 +8,9 @@ import 'package:doormster/routes/menu/profile_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-final NavbarNotifier _navbarNotifier = NavbarNotifier();
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+final GlobalKey<RefreshIndicatorState> _refreshKey =
+    GlobalKey<RefreshIndicatorState>();
 GlobalKey<NavigatorState> homeKey = GlobalKey<NavigatorState>();
 GlobalKey<NavigatorState> messageKey = GlobalKey<NavigatorState>();
 GlobalKey<NavigatorState> profileKey = GlobalKey<NavigatorState>();
@@ -42,8 +43,7 @@ class _BottomBarState extends State<BottomBar> {
     if (_scaffoldKey.currentState!.isDrawerOpen) {
       Navigator.of(context).pop();
     } else {
-      final bool isExitingApp =
-          await _navbarNotifier.onBackButtonPressed(_selectedIndex);
+      final bool isExitingApp = await onBackButtonPressed(_selectedIndex);
 
       if (isExitingApp) {
         if (_selectedIndex != 0) {
@@ -87,12 +87,26 @@ class _BottomBarState extends State<BottomBar> {
       onWillPop: () => _onBackButtonDoubleClicked(),
       child: Scaffold(
         key: _scaffoldKey,
-        drawer: MyDrawer(scaffoldKey: profileKey),
-        body: IndexedStack(
-          index: _selectedIndex,
-          children: buildBody,
+        drawer: MyDrawer(pressProfile: () {
+          setState(() {
+            _selectedIndex = 2;
+          });
+          Navigator.of(context).pop();
+        }),
+        body: RefreshIndicator(
+          key: _refreshKey,
+          onRefresh: () async {
+            // Replace this delay with the code to be executed during refresh
+            // and return a Future when code finishs execution.
+            return Future<void>.delayed(const Duration(seconds: 3));
+          },
+          child: IndexedStack(
+            index: _selectedIndex,
+            children: buildBody,
+          ),
         ),
-        // buildBody[ _selectedIndex], //จะไม่ค้างอยู่หน้าปัจจุบัน เวลากดปุ่มเมนูกลับมา
+        // buildBody[
+        //     _selectedIndex], //จะไม่ค้างอยู่หน้าปัจจุบัน เวลากดปุ่มเมนูกลับมา
         bottomNavigationBar: BottomNavigationBar(
           items: [
             BottomNavigationBarItem(
@@ -110,10 +124,10 @@ class _BottomBarState extends State<BottomBar> {
           ],
           currentIndex: _selectedIndex,
           onTap: (value) {
-            if (_navbarNotifier._index == value) {
-              _navbarNotifier.popAllRoutes(value);
+            if (_index == value) {
+              popAllRoutes(value);
             } else {
-              _navbarNotifier._index = value;
+              _index = value;
             }
             setState(() => _selectedIndex = value);
           },
@@ -121,9 +135,7 @@ class _BottomBarState extends State<BottomBar> {
       ),
     );
   }
-}
 
-class NavbarNotifier extends ChangeNotifier {
   int _index = 0;
 
   FutureOr<bool> onBackButtonPressed(int index) async {
@@ -162,8 +174,15 @@ class NavbarNotifier extends ChangeNotifier {
   void popAllRoutes(int index) {
     switch (index) {
       case 0:
-        if (homeKey.currentState!.canPop() && homeKey.currentState != null) {
-          homeKey.currentState?.popUntil((route) => route.isFirst);
+        if (homeKey.currentState != null) {
+          if (homeKey.currentState!.canPop() && homeKey.currentState != null) {
+            homeKey.currentState?.popUntil((route) => route.isFirst);
+          }
+        } else {
+          setState(() {
+            _refreshKey.currentState?.show();
+            // homeKey.currentState;
+          });
         }
         return;
       case 1:
@@ -171,6 +190,8 @@ class NavbarNotifier extends ChangeNotifier {
           if (messageKey.currentState!.canPop()) {
             messageKey.currentState!.popUntil((route) => route.isFirst);
           }
+        } else {
+          setState(() {});
         }
         return;
       case 2:
@@ -178,6 +199,8 @@ class NavbarNotifier extends ChangeNotifier {
           if (profileKey.currentState!.canPop()) {
             profileKey.currentState!.popUntil((route) => route.isFirst);
           }
+        } else {
+          setState(() {});
         }
         return;
       default:

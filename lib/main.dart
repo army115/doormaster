@@ -1,7 +1,7 @@
 import 'package:doormster/components/bottombar/bottombar.dart';
-import 'package:doormster/screen/home_page.dart';
-import 'package:doormster/screen/login_page.dart';
-import 'package:doormster/screen/reset_password_page.dart';
+import 'package:doormster/screen/main_screen/home_page.dart';
+import 'package:doormster/screen/main_screen/login_page.dart';
+import 'package:doormster/screen/main_screen/reset_password_page.dart';
 import 'package:doormster/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -41,8 +41,10 @@ class MyApp extends StatelessWidget {
       title: 'HIP Smart Community',
       debugShowCheckedModeBanner: false,
       theme: mytheme(),
-      home: token == null ? Login_Page() : BottomBar(),
+      // home: token == null ? Login_Page() : BottomBar(),
+      initialRoute: token == null ? '/login' : '/bottom',
       routes: {
+        '/login': (context) => Login_Page(),
         '/home': (context) => Home_Page(),
         '/bottom': (context) => BottomBar(),
         '/qrsmart': (context) => QRSmart_HomePage(),

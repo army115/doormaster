@@ -7,8 +7,8 @@ import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/components/text_form/text_form.dart';
 import 'package:doormster/components/text_form/text_form_password.dart';
 import 'package:doormster/models/login_model.dart';
-import 'package:doormster/screen/home_page.dart';
-import 'package:doormster/screen/register_page.dart';
+import 'package:doormster/screen/main_screen/home_page.dart';
+import 'package:doormster/screen/main_screen/register_page.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -60,9 +60,16 @@ class _Login_PageState extends State<Login_Page> {
             // ส่งค่าตัวแปร
             SharedPreferences prefs = await SharedPreferences.getInstance();
             await prefs.setString('token', token!);
-            await prefs.setString('userId', data.single.sId!);
-            await prefs.setString('companyId', data.single.companyId!);
-            await prefs.setInt('role', data.single.mobile!);
+
+            if (prefs.getString('userId') == null &&
+                prefs.getString('companyId') == null &&
+                prefs.getInt('role') == null &&
+                prefs.getString('uuId') == null) {
+              await prefs.setString('userId', data.single.sId!);
+              await prefs.setString('companyId', data.single.companyId!);
+              await prefs.setInt('role', data.single.mobile!);
+              await prefs.setString('uuId', data.single.userUuid!);
+            }
 
             if (data.single.devicegroupUuid != null) {
               await prefs.setString('deviceId', data.single.devicegroupUuid!);

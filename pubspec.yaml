@@ -83,6 +83,15 @@ flutter_native_splash:
   color: "#0B4D9C"
   image: assets/images/HIP Smart Community Icon-03.png
   branding: assets/images/banner.png
+  color_dark: "#0B4D9C"
+  image_dark: assets/images/HIP Smart Community Icon-03.png
+  branding_dark: assets/images/banner.png
+
+  android_12:
+    image: assets/images/HIP Smart Community Icon-03.png
+    icon_background_color: "#0B4D9C"
+    image_dark: assets/images/HIP Smart Community Icon-03.png
+    icon_background_color_dark: "#0B4D9C"
 
   
 

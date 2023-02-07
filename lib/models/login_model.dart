@@ -57,6 +57,13 @@ class User {
   int? inactive;
   int? mobile;
   String? devicegroupUuid;
+  String? department;
+  bool? permission;
+  bool? permission2;
+  bool? permission3;
+  bool? permission4;
+  String? email;
+  String? userUuid;
 
   User(
       {this.sId,
@@ -72,7 +79,14 @@ class User {
       this.oldPassword,
       this.inactive,
       this.mobile,
-      this.devicegroupUuid});
+      this.devicegroupUuid,
+      this.department,
+      this.permission,
+      this.permission2,
+      this.permission3,
+      this.permission4,
+      this.email,
+      this.userUuid});
 
   User.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -89,6 +103,13 @@ class User {
     inactive = json['inactive'];
     mobile = json['mobile'];
     devicegroupUuid = json['devicegroup_uuid'];
+    department = json['department'];
+    permission = json['permission'];
+    permission2 = json['permission2'];
+    permission3 = json['permission3'];
+    permission4 = json['permission4'];
+    email = json['email'];
+    userUuid = json['user_uuid'];
   }
 
   Map<String, dynamic> toJson() {
@@ -107,6 +128,13 @@ class User {
     data['inactive'] = this.inactive;
     data['mobile'] = this.mobile;
     data['devicegroup_uuid'] = this.devicegroupUuid;
+    data['department'] = this.department;
+    data['permission'] = this.permission;
+    data['permission2'] = this.permission2;
+    data['permission3'] = this.permission3;
+    data['permission4'] = this.permission4;
+    data['email'] = this.email;
+    data['user_uuid'] = this.userUuid;
     return data;
   }
 }

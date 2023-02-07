@@ -1,5 +1,5 @@
 import 'package:doormster/components/bottombar/bottombar.dart';
-import 'package:doormster/screen/profile_page.dart';
+import 'package:doormster/screen/main_screen/profile_page.dart';
 import 'package:flutter/material.dart';
 
 class Profile_Menu extends StatefulWidget {

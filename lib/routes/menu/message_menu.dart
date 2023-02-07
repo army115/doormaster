@@ -1,6 +1,6 @@
 // ignore_for_file: use_key_in_widget_constructors
 
-import 'package:doormster/screen/messages_page.dart';
+import 'package:doormster/screen/main_screen/messages_page.dart';
 import 'package:flutter/material.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
 

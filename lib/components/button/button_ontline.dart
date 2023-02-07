@@ -11,15 +11,12 @@ class Buttons_Outline extends StatelessWidget {
     return Container(
       width: MediaQuery.of(context).size.width * 0.5,
       height: 45,
-      child: OutlinedButton(
-          style: TextButton.styleFrom(
-            backgroundColor: Theme.of(context).primaryColor,
-            side: BorderSide(width: 1, color: Colors.white),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            elevation: 10,
-            primary: Colors.black,
-          ),
+      child: OutlineButton(
+          highlightedBorderColor: Colors.white,
+          borderSide: BorderSide(width: 1, color: Colors.white),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          color: Colors.transparent,
           child: Text(
             title,
             style: TextStyle(
