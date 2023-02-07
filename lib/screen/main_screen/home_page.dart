@@ -1,5 +1,4 @@
 // ignore_for_file: prefer_const_constructors
-
 import 'package:card_swiper/card_swiper.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/button/button.dart';
@@ -80,6 +79,10 @@ class _Home_PageState extends State<Home_Page> {
   }
 
   Future _getAds() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    companyId = prefs.getString('companyId');
+
+    print('companyId: ${companyId}');
     try {
       setState(() {
         loading = true;
@@ -178,18 +181,17 @@ class _Home_PageState extends State<Home_Page> {
                     child: Swiper(
                       autoplay: true,
                       loop: true,
-                      // fade: 0.0,
                       scale: 1.0,
                       pagination: SwiperPagination(
                           builder: DotSwiperPaginationBuilder(
                               activeColor: Colors.white)),
                       itemCount: listads.length,
                       itemBuilder: (context, index) {
-                        return Container(
-                            child: Image.memory(
-                          convert.base64Decode(
-                              '${listads[index].adsversitingPic}'),
-                        ));
+                        var _Images = convert.base64Decode(
+                            ('${listads[index].adsversitingPic}')
+                                .split(',')
+                                .last);
+                        return Container(child: Image.memory(_Images));
                       },
                     ),
                   ),
