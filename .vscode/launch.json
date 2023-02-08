@@ -4,6 +4,7 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+        
         {
             "name": "doormaster",
             "request": "launch",
@@ -39,6 +40,18 @@
             "type": "dart",
             "deviceId": "emulator-5554"
         },
+        {
+            "name": "pixel3",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "emulator-5556"
+        },
+        {
+            "name": "pixel4",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "emulator-5558"
+        },
     ],
     "compounds": [
         {
@@ -47,6 +60,8 @@
                 "Pixel 4a API 30",
                 "note 8 pro",
                 "LD Player",
+                "pixel3",
+                "pixel4",
             ],
         }
     ]
