@@ -93,22 +93,18 @@ class _BottomBarState extends State<BottomBar> {
           });
           Navigator.of(context).pop();
         }),
-        body:
-            // RefreshIndicator(
-            //   key: _refreshKey,
-            //   onRefresh: () async {
-            //     // Replace this delay with the code to be executed during refresh
-            //     // and return a Future when code finishs execution.
-            //     return Future<void>.delayed(const Duration(seconds: 3));
-            //   },
-            //   child:
-            // IndexedStack(
-            //   index: _selectedIndex,
-            //   children: buildBody,
-            // ),
-            buildBody[
-                _selectedIndex], //จะไม่ค้างอยู่หน้าปัจจุบัน เวลากดปุ่มเมนูกลับมา
-        // ),
+        body: RefreshIndicator(
+          key: _refreshKey,
+          onRefresh: () async {
+            return Future<void>.delayed(const Duration(seconds: 3));
+          },
+          child: IndexedStack(
+            index: _selectedIndex,
+            children: buildBody,
+          ),
+          // buildBody[
+          //     _selectedIndex], //จะไม่ค้างอยู่หน้าปัจจุบัน เวลากดปุ่มเมนูกลับมา
+        ),
         bottomNavigationBar: BottomNavigationBar(
           items: [
             BottomNavigationBarItem(

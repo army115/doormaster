@@ -35,7 +35,7 @@ class _Register_PageState extends State<Register_Page> {
   bool loading = false;
   bool redEye = true;
   bool redEyeCon = true;
-  List<Data> listCompany = [];
+  List<DataCom> listCompany = [];
 
   Future _getCompany() async {
     try {

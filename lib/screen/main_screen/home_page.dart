@@ -3,6 +3,7 @@ import 'package:card_swiper/card_swiper.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/girdManu/menu_home.dart';
+import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/models/get_ads_company.dart';
 import 'package:doormster/models/get_menu.dart';
@@ -12,6 +13,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
+
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class Home_Page extends StatefulWidget {
   Home_Page({
@@ -28,6 +32,13 @@ class _Home_PageState extends State<Home_Page> {
   List<DataMenu> listMenu = [];
   List<Data> listads = [];
   bool loading = false;
+
+  List<String> _images = [
+    'https://resize.indiatvnews.com/en/resize/newbucket/715_-/2020/09/breakingnews-live-blog-1568185450-1595123397-1600221127.jpg',
+    'https://s.abcnews.com/images/US/abc_news_default_2000x2000_update_16x9_992.jpg',
+    'https://www.vuelio.com/uk/wp-content/uploads/2019/02/Breaking-News.jpg',
+    'https://imgeng.jagran.com/images/2022/aug/breaking-news-21660790286781.jpg',
+  ];
 
   Future _getMenu() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -145,93 +156,127 @@ class _Home_PageState extends State<Home_Page> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('HIP Smart Community'),
-        leading: IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            }),
-      ),
-      body: mobileRole == 0
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'โปรดติดต่อผู้ดูแล\nเพื่ออนุมัติสิทธิ์การใช้งาน',
-                    textAlign: TextAlign.center,
-                    style:
-                        TextStyle(fontSize: 22, fontWeight: FontWeight.normal),
-                  ),
-                  Image.asset(
-                    'assets/images/Smart Community Logo.png',
-                    scale: 4.5,
-                    // opacity: AlwaysStoppedAnimation(0.7),
-                  ),
-                ],
-              ),
-            )
-          : SafeArea(
-              child: Column(
-                children: [
-                  Container(
-                    height: MediaQuery.of(context).size.width * 0.6,
-                    child: Swiper(
-                      autoplay: true,
-                      loop: true,
-                      scale: 1.0,
-                      pagination: SwiperPagination(
-                          builder: DotSwiperPaginationBuilder(
-                              activeColor: Colors.white)),
-                      itemCount: listads.length,
-                      itemBuilder: (context, index) {
-                        var _Images = convert.base64Decode(
-                            ('${listads[index].adsversitingPic}')
-                                .split(',')
-                                .last);
-                        return Container(child: Image.memory(_Images));
-                      },
-                    ),
-                  ),
-
-                  Expanded(
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                      child: GridView.builder(
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        primary: false,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          // childAspectRatio: 1,
-                          crossAxisCount: 4,
-                          crossAxisSpacing: 0,
-                          mainAxisSpacing: 20,
-                        ),
-                        itemCount: listMenu.length,
-                        itemBuilder: (context, index) {
-                          return Menu_Home(
-                            title: '${listMenu[index].name}',
-                            icon: int.parse('${listMenu[index].icon}'),
-                            press: listMenu[index].page,
-                          );
-                        },
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: AppBar(
+            title: Text('HIP Smart Community'),
+            leading: IconButton(
+                icon: Icon(Icons.menu),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                }),
+          ),
+          body: mobileRole == 0
+              ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'โปรดติดต่อผู้ดูแล\nเพื่ออนุมัติสิทธิ์การใช้งาน',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 22, fontWeight: FontWeight.normal),
                       ),
-                    ),
+                      Image.asset(
+                        'assets/images/Smart Community Logo.png',
+                        scale: 4.5,
+                        // opacity: AlwaysStoppedAnimation(0.7),
+                      ),
+                    ],
                   ),
-                  // SizedBox(height: 20),
-                  Buttons(
-                      title: 'test',
-                      press: () {
-                        setState(() {
-                          _getMenu();
-                        });
-                      })
-                ],
-              ),
-            ),
+                )
+              : SafeArea(
+                  child: Column(
+                    children: [
+                      Container(
+                        height: MediaQuery.of(context).size.height * 0.26,
+                        width: double.infinity,
+                        child: listads.length > 0
+                            ? Swiper(
+                                autoplay: true,
+                                loop: true,
+                                scale: 1.0,
+                                pagination: SwiperPagination(
+                                    builder: DotSwiperPaginationBuilder(
+                                        color: Colors.grey,
+                                        activeColor: Colors.white)),
+                                itemCount: listads.length,
+                                itemBuilder: (context, index) {
+                                  var _Images = convert.base64Decode(
+                                      ('${listads[index].adsversitingPic}')
+                                          .split(',')
+                                          .last);
+                                  return InkWell(
+                                      // onTap: () {
+                                      //   launchUrlString(
+                                      //       'https://hipglobal.co.th/');
+                                      // },
+                                      // child: Container(
+                                      //     child:
+                                      //         Image.network('${_images[index]}')),
+                                      child: Image.memory(
+                                    _Images,
+                                    fit: BoxFit.fitHeight,
+                                  ));
+                                },
+                              )
+                            : Swiper(
+                                autoplay: true,
+                                loop: true,
+                                scale: 1.0,
+                                pagination: SwiperPagination(
+                                    builder: DotSwiperPaginationBuilder(
+                                        color: Colors.grey,
+                                        activeColor: Colors.white)),
+                                itemCount: 1,
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                      child:
+                                          Image.asset('assets/images/ads.png'));
+                                },
+                              ),
+                      ),
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 15),
+                          child: GridView.builder(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            primary: false,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              // childAspectRatio: 1,
+                              crossAxisCount: 4,
+                              crossAxisSpacing: 0,
+                              mainAxisSpacing: 20,
+                            ),
+                            itemCount: listMenu.length,
+                            itemBuilder: (context, index) {
+                              return Menu_Home(
+                                title: '${listMenu[index].name}',
+                                icon: '${listMenu[index].icon}',
+                                press: listMenu[index].page,
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      // SizedBox(height: 20),
+                      // Buttons(
+                      //     title: 'test',
+                      //     press: () {
+                      //       setState(() {
+                      //         _getMenu();
+                      //       });
+                      //     })
+                    ],
+                  ),
+                ),
+        ),
+        loading ? Loading() : Container()
+      ],
     );
   }
 }

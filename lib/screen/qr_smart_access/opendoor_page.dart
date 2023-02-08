@@ -102,6 +102,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
           print('DeviceNumber : ${devSn}');
           print('OpenDoor Success');
           print('Status : ${jsonRes.data!.code}');
+          _CallJavaSDK(false);
           setState(() {
             loading = false;
           });
@@ -154,6 +155,24 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
     }
   }
 
+  Future _CallJavaSDK(value) async {
+    MethodChannel platform = MethodChannel('samples.flutter.dev/autoDoor');
+    try {
+      final result = await platform.invokeMethod('openAutoDoor', {
+        "value": value,
+        // "devSn": widget.devSn,
+        // "devMac": widget.devMac,
+        // "appEkey": widget.appKey
+      });
+      print("$value");
+      if (value == true) {
+        print("ส่งค่า $result");
+      }
+    } on PlatformException catch (e) {
+      '${e.message}';
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -163,58 +182,71 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Scaffold(
-          appBar: AppBar(
-            title: Text('เปิดประตู'),
-          ),
-          body: deviceId == null
-              ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'ไม่มีประตูที่คุณใช้ได้\nโปรดติดต่อผู้ดูแล',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.normal),
-                      ),
-                      Image.asset(
-                        'assets/images/Smart Community Logo.png',
-                        scale: 4.5,
-                        // opacity: AlwaysStoppedAnimation(0.7),
-                      ),
-                    ],
+    return WillPopScope(
+      onWillPop: () async {
+        _CallJavaSDK(false);
+        Navigator.pop(context);
+        return false;
+      },
+      child: Stack(
+        children: [
+          Scaffold(
+            appBar: AppBar(
+              title: Text('เปิดประตู'),
+              leading: IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () {
+                    _CallJavaSDK(false);
+                    Navigator.pop(context);
+                  }),
+            ),
+            body: deviceId == null
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'ไม่มีประตูที่คุณใช้ได้\nโปรดติดต่อผู้ดูแล',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 22, fontWeight: FontWeight.normal),
+                        ),
+                        Image.asset(
+                          'assets/images/Smart Community Logo.png',
+                          scale: 4.5,
+                          // opacity: AlwaysStoppedAnimation(0.7),
+                        ),
+                      ],
+                    ),
+                  )
+                : ListView.builder(
+                    padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                    shrinkWrap: true,
+                    itemCount: listDevice.length,
+                    itemBuilder: (context, index) {
+                      return Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          margin: EdgeInsets.symmetric(vertical: 5),
+                          elevation: 5,
+                          child: listDevice[index].connectionStatus == 1
+                              ? DoorOnline(
+                                  name: listDevice[index].name!,
+                                  press: () {
+                                    _openDoors(listDevice[index].devSn);
+                                  },
+                                  devSn: listDevice[index].devSn!,
+                                  devMac: listDevice[index].devMac!,
+                                  appKey: listDevice[index].appEkey!,
+                                  valueDoor: listDevice[index].screenType!,
+                                )
+                              : doorsOFFline('${listDevice[index].name}'));
+                    },
                   ),
-                )
-              : ListView.builder(
-                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-                  shrinkWrap: true,
-                  itemCount: listDevice.length,
-                  itemBuilder: (context, index) {
-                    return Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        margin: EdgeInsets.symmetric(vertical: 5),
-                        elevation: 5,
-                        child: listDevice[index].connectionStatus == 1
-                            ? DoorOnline(
-                                name: listDevice[index].name!,
-                                press: () {
-                                  _openDoors(listDevice[index].devSn);
-                                },
-                                devSn: listDevice[index].devSn!,
-                                devMac: listDevice[index].devMac!,
-                                appKey: listDevice[index].appEkey!,
-                                valueDoor: listDevice[index].screenType!,
-                              )
-                            : doorsOFFline('${listDevice[index].name}'));
-                  },
-                ),
-        ),
-        loading ? Loading() : Container()
-      ],
+          ),
+          loading ? Loading() : Container()
+        ],
+      ),
     );
   }
 
@@ -337,7 +369,7 @@ class _DoorOnlineState extends State<DoorOnline> {
   @override
   void initState() {
     super.initState();
-    _loadStatusAutoDoors();
+    // _loadStatusAutoDoors();
   }
 
   @override

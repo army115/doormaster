@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
+import 'package:restart_app/restart_app.dart';
 
 class MyDrawer extends StatefulWidget {
   final pressProfile;
@@ -106,14 +107,15 @@ class _MyDrawerState extends State<MyDrawer> {
         if (data.single.devicegroupUuid != null) {
           await prefs.setString('deviceId', data.single.devicegroupUuid!);
         }
-        print('Select Success');
-        print(response.body);
-        Navigator.popUntil(context, ModalRoute.withName('/bottom'));
         setState(() {
           loading = false;
         });
+        print('Select Success');
+        print(response.body);
+        // Navigator.popUntil(context, ModalRoute.withName('/bottom'));
         // snackbar(context, Theme.of(context).primaryColor, 'เลือกสำเร็จ',
         //     Icons.check_circle_outline_rounded);
+        await Restart.restartApp();
       } else {
         dialogOnebutton_Subtitle(
           context,
@@ -319,7 +321,7 @@ class _MyDrawerState extends State<MyDrawer> {
       backgroundColor: Theme.of(context).primaryColor,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10), topRight: Radius.circular(10))),
+              topLeft: Radius.circular(25), topRight: Radius.circular(25))),
       context: context,
       builder: (context) {
         return DraggableScrollableSheet(
@@ -328,86 +330,70 @@ class _MyDrawerState extends State<MyDrawer> {
             minChildSize: 0.3,
             maxChildSize: 0.5,
             builder: (context, scrollController) => Scaffold(
+                  appBar: AppBar(
+                    backgroundColor: Colors.transparent,
+                    toolbarHeight: 40,
+                    automaticallyImplyLeading: false,
+                    centerTitle: false,
+                    title: Text('สลับโครงการ'),
+                    elevation: 0,
+                  ),
                   backgroundColor: Colors.transparent,
                   bottomNavigationBar: Padding(
                     padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
                     child: Buttons_Outline(
                         title: 'เพิ่มโครงการใหม่',
                         press: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Add_Company(),
-                              ));
+                          Navigator.pop(context);
+                          Navigator.of(context)
+                              .pushReplacement(MaterialPageRoute(
+                            builder: (context) => Add_Company(),
+                          ));
                         }),
                   ),
-                  body: SingleChildScrollView(
-                    controller: scrollController,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            topRight: Radius.circular(10)),
-                      ),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'สลับโครงการ',
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            ),
-                            ListView.builder(
-                              controller: scrollController,
-                              shrinkWrap: true,
-                              itemCount: multiCompany.length,
-                              itemBuilder: (context, index) => InkWell(
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 10),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Icon(
-                                        Icons.home_work_sharp,
-                                        size: 20,
-                                        color: Colors.white,
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                            '${multiCompany[index].companyName}',
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.white)),
-                                      ),
-                                      companyId == multiCompany[index].companyId
-                                          ? Icon(
-                                              Icons.check_circle_rounded,
-                                              size: 20,
-                                              color: Colors.white,
-                                            )
-                                          : Container()
-                                    ],
-                                  ),
-                                ),
-                                onTap: () {
-                                  _selectCompany(
-                                      context,
-                                      multiCompany[index].sId,
-                                      multiCompany[index].companyId);
-                                  // Navigator.of(context).pop();
-                                },
+                  body: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: ListView.builder(
+                      controller: scrollController,
+                      shrinkWrap: true,
+                      itemCount: multiCompany.length,
+                      itemBuilder: (context, index) => InkWell(
+                        child: Container(
+                          // color: Colors.amber,
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Icon(
+                                Icons.home_work_sharp,
+                                size: 20,
+                                color: Colors.white,
                               ),
-                            ),
-                          ]),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                child: Text(
+                                    '${multiCompany[index].companyName}',
+                                    style: TextStyle(
+                                        fontSize: 16, color: Colors.white)),
+                              ),
+                              companyId == multiCompany[index].companyId
+                                  ? Icon(
+                                      Icons.check_circle_rounded,
+                                      size: 20,
+                                      color: Colors.white,
+                                    )
+                                  : Container()
+                            ],
+                          ),
+                        ),
+                        onTap: () {
+                          _selectCompany(context, multiCompany[index].sId,
+                              multiCompany[index].companyId);
+                          // Navigator.of(context).pop();
+                        },
+                      ),
                     ),
                   ),
                 ));

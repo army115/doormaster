@@ -1,15 +1,15 @@
 class getCompany {
   int? status;
-  List<Data>? data;
+  List<DataCom>? data;
 
   getCompany({this.status, this.data});
 
   getCompany.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     if (json['data'] != null) {
-      data = <Data>[];
+      data = <DataCom>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(new DataCom.fromJson(v));
       });
     }
   }
@@ -24,7 +24,7 @@ class getCompany {
   }
 }
 
-class Data {
+class DataCom {
   String? sId;
   String? companyName;
   String? companyPic;
@@ -37,7 +37,7 @@ class Data {
   String? companyUuid;
   bool? isTest;
 
-  Data(
+  DataCom(
       {this.sId,
       this.companyName,
       this.companyPic,
@@ -50,7 +50,7 @@ class Data {
       this.companyUuid,
       this.isTest});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  DataCom.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     companyName = json['company_name'];
     companyPic = json['company_pic'];

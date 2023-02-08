@@ -27,13 +27,8 @@ class Menu_Home extends StatelessWidget {
               padding: const EdgeInsets.all(5),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  // Image.asset(
-                  //   //รูปภาพ
-                  //   img,
-                  //   width: 80,
-                  // ),
-                  Icon(IconData(icon, fontFamily: 'MaterialIcons'),
+                children: [
+                  Icon(IconData(int.parse(icon), fontFamily: 'MaterialIcons'),
                       semanticLabel: title, size: 45, color: Colors.white),
                 ],
               ),
