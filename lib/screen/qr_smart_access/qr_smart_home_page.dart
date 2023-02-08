@@ -56,6 +56,7 @@ class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
   Future<void> requestLocationPermission() async {
     final status = await Permission.location.request();
     await Permission.bluetoothScan.request();
+    await Permission.bluetoothConnect.request();
     if (status.isDenied) {
       dialogOnebutton_Subtitle(
         context,
