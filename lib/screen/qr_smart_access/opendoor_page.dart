@@ -328,9 +328,9 @@ class _DoorOnlineState extends State<DoorOnline> {
     LocationPermission permission = await Geolocator.checkPermission();
 
     try {
-      // if (permission == LocationPermission.always) {
+      // if (permission == LocationPermission.denied) {
       //   await Geolocator.requestPermission();
-      // }
+      // } else {
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
 
@@ -342,8 +342,7 @@ class _DoorOnlineState extends State<DoorOnline> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setBool("autoDoor", value);
       _CallJavaSDK(value);
-
-      print(position);
+      // }
     } catch (error) {
       print(error);
     }

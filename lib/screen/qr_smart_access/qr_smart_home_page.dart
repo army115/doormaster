@@ -55,13 +55,15 @@ class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
 
   Future<void> requestLocationPermission() async {
     final status = await Permission.location.request();
-    await Permission.bluetoothScan.request();
-    await Permission.bluetoothConnect.request();
-    if (status.isDenied) {
+    final status2 = await Permission.bluetoothScan.request();
+    final status3 = await Permission.bluetoothConnect.request();
+    if (status.isGranted && status2.isGranted && status3.isGranted) {
+      checkInternet(Opendoor_Page());
+    } else {
       dialogOnebutton_Subtitle(
         context,
         'อนุญาตการเข้าถึง',
-        'จำเป็นต้องเข้าถึงตำแหน่งของคุณ',
+        'จำเป็นต้องการเข้าถึงอุปกรณ์ของคุณ',
         Icons.warning_amber_rounded,
         Colors.orange,
         'ตกลง',
@@ -70,8 +72,6 @@ class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
           Navigator.of(context, rootNavigator: true).pop();
         },
       );
-    } else {
-      checkInternet(Opendoor_Page());
     }
   }
 

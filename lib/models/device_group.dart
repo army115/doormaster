@@ -1,66 +1,50 @@
 class DeviceGroup {
-  int? count;
-  List<Device>? device;
+  int? status;
+  List<DataDrvices>? data;
 
-  DeviceGroup({this.count, this.device});
+  DeviceGroup({this.status, this.data});
 
   DeviceGroup.fromJson(Map<String, dynamic> json) {
-    count = json['count'];
-    if (json['device'] != null) {
-      device = <Device>[];
-      json['device'].forEach((v) {
-        device!.add(new Device.fromJson(v));
+    status = json['status'];
+    if (json['data'] != null) {
+      data = <DataDrvices>[];
+      json['data'].forEach((v) {
+        data!.add(new DataDrvices.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['count'] = this.count;
-    if (this.device != null) {
-      data['device'] = this.device!.map((v) => v.toJson()).toList();
+    data['status'] = this.status;
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
-class Device {
+class DataDrvices {
   String? sId;
-  String? devicegroupUuid;
+  String? deviceDevSn;
+  String? deviceName;
   String? companyId;
-  String? devicegroupDevice;
-  String? devicegroupName;
-  String? createdBy;
-  String? createdAt;
 
-  Device(
-      {this.sId,
-      this.devicegroupUuid,
-      this.companyId,
-      this.devicegroupDevice,
-      this.devicegroupName,
-      this.createdBy,
-      this.createdAt});
+  DataDrvices({this.sId, this.deviceDevSn, this.deviceName, this.companyId});
 
-  Device.fromJson(Map<String, dynamic> json) {
+  DataDrvices.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
-    devicegroupUuid = json['devicegroup_uuid'];
+    deviceDevSn = json['device_devSn'];
+    deviceName = json['device_name'];
     companyId = json['company_id'];
-    devicegroupDevice = json['devicegroup_device'];
-    devicegroupName = json['devicegroup_name'];
-    createdBy = json['created_by'];
-    createdAt = json['created_at'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['_id'] = this.sId;
-    data['devicegroup_uuid'] = this.devicegroupUuid;
+    data['device_devSn'] = this.deviceDevSn;
+    data['device_name'] = this.deviceName;
     data['company_id'] = this.companyId;
-    data['devicegroup_device'] = this.devicegroupDevice;
-    data['devicegroup_name'] = this.devicegroupName;
-    data['created_by'] = this.createdBy;
-    data['created_at'] = this.createdAt;
     return data;
   }
 }

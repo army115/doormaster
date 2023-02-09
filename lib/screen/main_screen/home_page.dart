@@ -217,7 +217,7 @@ class _Home_PageState extends State<Home_Page> {
                                       //         Image.network('${_images[index]}')),
                                       child: Image.memory(
                                     _Images,
-                                    fit: BoxFit.fitHeight,
+                                    fit: BoxFit.cover,
                                   ));
                                 },
                               )
@@ -233,7 +233,7 @@ class _Home_PageState extends State<Home_Page> {
                                 itemBuilder: (context, index) {
                                   return Container(
                                       child:
-                                          Image.asset('assets/images/ads.png'));
+                                          Image.asset('assets/images/ads.png',fit: BoxFit.cover,));
                                 },
                               ),
                       ),

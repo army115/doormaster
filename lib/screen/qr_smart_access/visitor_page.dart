@@ -42,7 +42,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
   var companyId;
   var deviceId;
 
-  List<Device> listDevice = [];
+  List<DataDrvices> listDevice = [];
   bool loading = false;
 
   Future _getDevice() async {
@@ -62,7 +62,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
       setState(() {
         loading = true;
       });
-      var url = '${Connect_api().domain}/getdevicegroupcompanyid/$deviceId';
+      var url = '${Connect_api().domain}/getdevicegroup_uuid/$deviceId';
       var response = await http.get(Uri.parse(url), headers: {
         'Connect-type': 'application/json',
         'Accept': 'application/json',
@@ -72,7 +72,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
         DeviceGroup deviceGp =
             DeviceGroup.fromJson(convert.jsonDecode(response.body));
         setState(() {
-          listDevice = deviceGp.device!;
+          listDevice = deviceGp.data!;
           loading = false;
         });
       }
@@ -296,9 +296,9 @@ class _Visitor_PageState extends State<Visitor_Page> {
       values: dropdownValue,
       listItem: listDevice.map((value) {
         return DropdownMenuItem(
-          value: value.devicegroupDevice,
+          value: value.deviceDevSn,
           child: Text(
-            '${value.devicegroupName}',
+            '${value.deviceName}',
           ),
         );
       }).toList(),
