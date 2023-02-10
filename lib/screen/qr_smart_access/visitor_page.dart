@@ -78,17 +78,10 @@ class _Visitor_PageState extends State<Visitor_Page> {
       }
     } catch (error) {
       print(error);
-      dialogOnebutton_Subtitle(
-        context,
-        'พบข้อผิดพลาด',
-        'ไม่สามารถเชื่อมต่อได้',
-        Icons.warning_amber_rounded,
-        Colors.orange,
-        'ตกลง',
-        () {
-          Navigator.popUntil(context, (route) => route.isFirst);
-        },
-      );
+      dialogOnebutton_Subtitle(context, 'พบข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อได้',
+          Icons.warning_amber_rounded, Colors.orange, 'ตกลง', () {
+        Navigator.popUntil(context, (route) => route.isFirst);
+      }, false);
       setState(() {
         loading = false;
       });
@@ -153,16 +146,14 @@ class _Visitor_PageState extends State<Visitor_Page> {
     } catch (error) {
       print(error);
       dialogOnebutton_Subtitle(
-        context,
-        'พบข้อผิดพลาด',
-        'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-        Icons.warning_amber_rounded,
-        Colors.orange,
-        'ตกลง',
-        () {
-          Navigator.of(context).pop();
-        },
-      );
+          context,
+          'พบข้อผิดพลาด',
+          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+          Icons.warning_amber_rounded,
+          Colors.orange,
+          'ตกลง', () {
+        Navigator.of(context).pop();
+      }, false);
       setState(() {
         loading = false;
       });

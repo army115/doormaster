@@ -95,18 +95,16 @@ class _Login_PageState extends State<Login_Page> {
       } catch (error) {
         print(error);
         dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง',
-          () async {
-            Navigator.of(context).pop();
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            prefs.clear();
-          },
-        );
+            context,
+            'พบข้อผิดพลาด',
+            'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+            Icons.warning_amber_rounded,
+            Colors.orange,
+            'ตกลง', () async {
+          Navigator.of(context).pop();
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.clear();
+        }, false);
         setState(() {
           loading = false;
         });

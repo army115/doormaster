@@ -1,4 +1,6 @@
+import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
+import 'package:doormster/components/loading/not_connected.dart';
 import 'package:doormster/screen/main_screen/home_page.dart';
 import 'package:doormster/screen/main_screen/login_page.dart';
 import 'package:doormster/screen/main_screen/reset_password_page.dart';
@@ -12,23 +14,39 @@ import 'package:doormster/screen/parcel_service/parcel_service_page.dart';
 import 'package:doormster/screen/qr_smart_access/qr_smart_home_page.dart';
 import 'package:doormster/screen/security_guard/security_guard_page.dart';
 import 'package:doormster/screen/visitor_service/visitor_service_page.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 void main() async {
   await init(null);
   WidgetsFlutterBinding.ensureInitialized();
-  final prefs = await SharedPreferences.getInstance();
-  final token = prefs.getString('token');
-  print(token == null ? 'login : false' : 'login : true');
+  final result = await Connectivity().checkConnectivity();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-  runApp(MyApp(
-    // token: null,
-    token: token,
-  ));
+  if (result == ConnectivityResult.none) {
+    Future Checkinternet(BuildContext context) async {
+      dialogOnebutton_Subtitle(
+          context,
+          'ไม่สามารถเชื่อมต่อได้',
+          'กรุณาตรวจสอบการเชื่อมต่อของคุณ',
+          Icons.warning_amber_rounded,
+          Colors.orange,
+          'ตกลง', () {
+        SystemNavigator.pop(animated: true);
+      }, false);
+    }
+  } else {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    print(token == null ? 'login : false' : 'login : true');
+    runApp(MyApp(
+      // token: null,
+      token: token,
+    ));
+  }
 }
 
 Future init(BuildContext? context) async {
-  await Future.delayed(Duration(milliseconds: 100));
+  await Future.delayed(Duration(seconds: 1));
   FlutterNativeSplash.remove();
 }
 
@@ -57,3 +75,56 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+// class MyApp extends StatefulWidget {
+//   final token;
+//   const MyApp({Key? key, this.token});
+
+//   @override
+//   State<MyApp> createState() => _MyAppState();
+// }
+
+// class _MyAppState extends State<MyApp> {
+//   _checkInternetConnection() async {
+//     final result = await Connectivity().checkConnectivity();
+
+//     if (result == ConnectivityResult.mobile ||
+//         result == ConnectivityResult.wifi) {
+//     } else {
+//       setState(() {
+//         dialogOnebutton_Subtitle(
+//             context,
+//             'ไม่สามารถเชื่อมต่อได้',
+//             'กรุณาตรวจสอบการเชื่อมต่อของคุณ',
+//             Icons.warning_amber_rounded,
+//             Colors.orange,
+//             'ตกลง', () {
+//           SystemNavigator.pop(animated: true);
+//         }, false);
+//       });
+//     }
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     _checkInternetConnection();
+//     return MaterialApp(
+//       title: 'HIP Smart Community',
+//       debugShowCheckedModeBanner: false,
+//       theme: mytheme(),
+//       // home: token == null ? Login_Page() : BottomBar(),
+//       initialRoute: widget.token == null ? '/login' : '/bottom',
+//       routes: {
+//         '/login': (context) => Login_Page(),
+//         '/home': (context) => Home_Page(),
+//         '/bottom': (context) => BottomBar(),
+//         '/qrsmart': (context) => QRSmart_HomePage(),
+//         '/parcel': (context) => Parcel_service(),
+//         '/managemant': (context) => Managemant_Service(),
+//         '/security': (context) => Security_Guard(),
+//         '/visitor': (context) => Visitor_Service(),
+//         '/password': (context) => Password_Page(),
+//       },
+//     );
+//   }
+// }

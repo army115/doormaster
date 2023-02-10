@@ -58,17 +58,12 @@ class _Register_PageState extends State<Register_Page> {
       }
     } catch (error) {
       print(error);
-      dialogOnebutton_Subtitle(
-        context,
-        'พบข้อผิดพลาด',
-        'ไม่สามารถเชื่อมต่อได้',
-        Icons.warning_amber_rounded,
-        Colors.orange,
-        'ตกลง',
-        () {
-          Navigator.popUntil(context, (route) => route.isFirst);
-        },
-      );
+      dialogOnebutton_Subtitle(context, 'พบข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อได้',
+          Icons.warning_amber_rounded, Colors.orange, 'ตกลง', () {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (BuildContext context) => Login_Page()),
+            (Route<dynamic> route) => false);
+      }, false);
       setState(() {
         loading = false;
       });
@@ -102,16 +97,14 @@ class _Register_PageState extends State<Register_Page> {
             Icons.check_circle_outline_rounded);
       } else {
         dialogOnebutton_Subtitle(
-          context,
-          'ลงทะเบียนไม่สำเร็จ',
-          '${jsonRes.result}',
-          Icons.highlight_off_rounded,
-          Colors.red,
-          'ตกลง',
-          () {
-            Navigator.of(context).pop();
-          },
-        );
+            context,
+            'ลงทะเบียนไม่สำเร็จ',
+            '${jsonRes.result}',
+            Icons.highlight_off_rounded,
+            Colors.red,
+            'ตกลง', () {
+          Navigator.of(context).pop();
+        }, false);
         print('Register not Success!!');
         print(response.body);
         setState(() {
@@ -121,16 +114,14 @@ class _Register_PageState extends State<Register_Page> {
     } catch (error) {
       print(error);
       dialogOnebutton_Subtitle(
-        context,
-        'พบข้อผิดพลาด',
-        'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-        Icons.warning_amber_rounded,
-        Colors.orange,
-        'ตกลง',
-        () {
-          Navigator.of(context).pop();
-        },
-      );
+          context,
+          'พบข้อผิดพลาด',
+          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+          Icons.warning_amber_rounded,
+          Colors.orange,
+          'ตกลง', () {
+        Navigator.of(context).pop();
+      }, false);
       // snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
       //     Icons.warning_amber_rounded);
       setState(() {

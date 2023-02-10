@@ -10,8 +10,10 @@ void dialogTwobutton_Subtitle(
   press1,
   button2,
   press2,
+  click,
 ) {
   showDialog(
+      barrierDismissible: click,
       context: context,
       builder: (_) => AlertDialog(
             titlePadding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),

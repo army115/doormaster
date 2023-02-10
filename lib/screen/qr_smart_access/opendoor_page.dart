@@ -4,6 +4,7 @@ import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/models/doors_device.dart';
 import 'package:doormster/models/opendoors_model.dart';
 import 'package:doormster/service/connect_api.dart';
+import 'package:doormster/service/connect_native.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
@@ -61,16 +62,14 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
       if (deviceId == null) {
       } else {
         dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง',
-          () {
-            Navigator.popUntil(context, (route) => route.isFirst);
-          },
-        );
+            context,
+            'พบข้อผิดพลาด',
+            'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+            Icons.warning_amber_rounded,
+            Colors.orange,
+            'ตกลง', () {
+          Navigator.popUntil(context, (route) => route.isFirst);
+        }, false);
       }
       setState(() {
         loading = false;
@@ -102,7 +101,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
           print('DeviceNumber : ${devSn}');
           print('OpenDoor Success');
           print('Status : ${jsonRes.data!.code}');
-          _CallJavaSDK(false);
+          CallNativeJava(false, null, null, null);
           setState(() {
             loading = false;
           });
@@ -139,37 +138,17 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
     } catch (error) {
       print(error);
       dialogOnebutton_Subtitle(
-        context,
-        'พบข้อผิดพลาด',
-        'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-        Icons.warning_amber_rounded,
-        Colors.orange,
-        'ตกลง',
-        () {
-          Navigator.of(context).pop();
-        },
-      );
+          context,
+          'พบข้อผิดพลาด',
+          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+          Icons.warning_amber_rounded,
+          Colors.orange,
+          'ตกลง', () {
+        Navigator.of(context).pop();
+      }, false);
       setState(() {
         loading = false;
       });
-    }
-  }
-
-  Future _CallJavaSDK(value) async {
-    MethodChannel platform = MethodChannel('samples.flutter.dev/autoDoor');
-    try {
-      final result = await platform.invokeMethod('openAutoDoor', {
-        "value": value,
-        // "devSn": widget.devSn,
-        // "devMac": widget.devMac,
-        // "appEkey": widget.appKey
-      });
-      print("$value");
-      if (value == true) {
-        print("ส่งค่า $result");
-      }
-    } on PlatformException catch (e) {
-      '${e.message}';
     }
   }
 
@@ -184,7 +163,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        _CallJavaSDK(false);
+        CallNativeJava(false, null, null, null);
         Navigator.pop(context);
         return false;
       },
@@ -196,7 +175,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
               leading: IconButton(
                   icon: Icon(Icons.arrow_back),
                   onPressed: () {
-                    _CallJavaSDK(false);
+                    CallNativeJava(false, null, null, null);
                     Navigator.pop(context);
                   }),
             ),
@@ -326,42 +305,22 @@ class _DoorOnlineState extends State<DoorOnline> {
 
   Future<void> checkLocationStatus(value) async {
     LocationPermission permission = await Geolocator.checkPermission();
-
     try {
-      // if (permission == LocationPermission.denied) {
-      //   await Geolocator.requestPermission();
-      // } else {
-      Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-
+      if (value == true) {
+        Position position = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high);
+      }
+      await CallNativeJava(value, widget.devSn, widget.devMac, widget.appKey);
       setState(() {
         widget.valueDoor = value;
         print("autoDoor : $value");
       });
 
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setBool("autoDoor", value);
-      _CallJavaSDK(value);
-      // }
+      // SharedPreferences prefs = await SharedPreferences.getInstance();
+      // await prefs.setBool("autoDoor", value);
+
     } catch (error) {
       print(error);
-    }
-  }
-
-  Future _CallJavaSDK(value) async {
-    MethodChannel platform = MethodChannel('samples.flutter.dev/autoDoor');
-    try {
-      final result = await platform.invokeMethod('openAutoDoor', {
-        "value": value,
-        "devSn": widget.devSn,
-        "devMac": widget.devMac,
-        "appEkey": widget.appKey
-      });
-      if (value == true) {
-        print("ส่งค่า $result");
-      }
-    } on PlatformException catch (e) {
-      '${e.message}';
     }
   }
 
@@ -376,7 +335,7 @@ class _DoorOnlineState extends State<DoorOnline> {
     return Column(
       children: [
         ListTile(
-          contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+          contentPadding: EdgeInsets.fromLTRB(10, 5, 10, 0),
           title: Text(widget.name,
               style: TextStyle(
                 fontSize: 20,

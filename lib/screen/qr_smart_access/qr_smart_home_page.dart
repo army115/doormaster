@@ -26,15 +26,14 @@ class QRSmart_HomePage extends StatefulWidget {
 class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
   void checkInternet(page) async {
     var result = await Connectivity().checkConnectivity();
-    if (result == ConnectivityResult.mobile ||
-        result == ConnectivityResult.wifi) {
-      Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
-        builder: (context) => page,
-      ));
-    } else {
+    if (result == ConnectivityResult.none) {
       snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
           Icons.warning_amber_rounded);
       print('not connected');
+    } else {
+      Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
+        builder: (context) => page,
+      ));
     }
   }
 
@@ -61,17 +60,15 @@ class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
       checkInternet(Opendoor_Page());
     } else {
       dialogOnebutton_Subtitle(
-        context,
-        'อนุญาตการเข้าถึง',
-        'จำเป็นต้องการเข้าถึงอุปกรณ์ของคุณ',
-        Icons.warning_amber_rounded,
-        Colors.orange,
-        'ตกลง',
-        () {
-          openAppSettings();
-          Navigator.of(context, rootNavigator: true).pop();
-        },
-      );
+          context,
+          'อนุญาตการเข้าถึง',
+          'จำเป็นต้องการเข้าถึงอุปกรณ์ของคุณ',
+          Icons.warning_amber_rounded,
+          Colors.orange,
+          'ตกลง', () {
+        openAppSettings();
+        Navigator.of(context, rootNavigator: true).pop();
+      }, true);
     }
   }
 

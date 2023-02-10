@@ -78,16 +78,14 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
     } catch (error) {
       print(error);
       dialogOnebutton_Subtitle(
-        context,
-        'พบข้อผิดพลาด',
-        'บันทึกภาพไม่สำเร็จ กรุณาลองใหม่อีกครั้ง',
-        Icons.warning_amber_rounded,
-        Colors.orange,
-        'ตกลง',
-        () {
-          Navigator.of(context).pop();
-        },
-      );
+          context,
+          'พบข้อผิดพลาด',
+          'บันทึกภาพไม่สำเร็จ กรุณาลองใหม่อีกครั้ง',
+          Icons.warning_amber_rounded,
+          Colors.orange,
+          'ตกลง', () {
+        Navigator.of(context).pop();
+      }, false);
     }
   }
 

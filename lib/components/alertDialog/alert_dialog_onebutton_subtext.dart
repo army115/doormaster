@@ -8,8 +8,10 @@ void dialogOnebutton_Subtitle(
   coloricon,
   button,
   press,
+  click,
 ) {
   showDialog(
+      barrierDismissible: click,
       context: context,
       builder: (_) => AlertDialog(
             titlePadding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),

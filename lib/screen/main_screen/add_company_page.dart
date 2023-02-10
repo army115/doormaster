@@ -54,21 +54,17 @@ class _Add_CompanyState extends State<Add_Company> {
         setState(() {
           listCompany = company.data!;
           loading = false;
+          _getMultiCompany();
         });
       }
     } catch (error) {
       print(error);
-      dialogOnebutton_Subtitle(
-        context,
-        'พบข้อผิดพลาด',
-        'ไม่สามารถเชื่อมต่อได้',
-        Icons.warning_amber_rounded,
-        Colors.orange,
-        'ตกลง',
-        () {
-          Navigator.popUntil(context, (route) => route.isFirst);
-        },
-      );
+      dialogOnebutton_Subtitle(context, 'พบข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อได้',
+          Icons.warning_amber_rounded, Colors.orange, 'ตกลง', () {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (BuildContext context) => BottomBar()),
+            (Route<dynamic> route) => false);
+      }, false);
       setState(() {
         loading = false;
       });
@@ -100,17 +96,10 @@ class _Add_CompanyState extends State<Add_Company> {
       }
     } catch (error) {
       print(error);
-      dialogOnebutton_Subtitle(
-        context,
-        'พบข้อผิดพลาด',
-        'ไม่สามารถเชื่อมต่อได้',
-        Icons.warning_amber_rounded,
-        Colors.orange,
-        'ตกลง',
-        () {
-          Navigator.popUntil(context, (route) => route.isFirst);
-        },
-      );
+      dialogOnebutton_Subtitle(context, 'พบข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อได้',
+          Icons.warning_amber_rounded, Colors.orange, 'ตกลง', () {
+        Navigator.popUntil(context, (route) => route.isFirst);
+      }, false);
       setState(() {
         loading = false;
       });
@@ -141,17 +130,10 @@ class _Add_CompanyState extends State<Add_Company> {
         snackbar(context, Theme.of(context).primaryColor, 'เพิ่มสำเร็จ',
             Icons.check_circle_outline_rounded);
       } else {
-        dialogOnebutton_Subtitle(
-          context,
-          'เพิ่มไม่สำเร็จ',
-          '${jsonRes.status}',
-          Icons.highlight_off_rounded,
-          Colors.red,
-          'ตกลง',
-          () {
-            Navigator.of(context).pop();
-          },
-        );
+        dialogOnebutton_Subtitle(context, 'เพิ่มไม่สำเร็จ', '${jsonRes.status}',
+            Icons.highlight_off_rounded, Colors.red, 'ตกลง', () {
+          Navigator.of(context).pop();
+        }, false);
         print('add not Success!!');
         print(response.body);
         setState(() {
@@ -161,16 +143,14 @@ class _Add_CompanyState extends State<Add_Company> {
     } catch (error) {
       print(error);
       dialogOnebutton_Subtitle(
-        context,
-        'พบข้อผิดพลาด',
-        'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-        Icons.warning_amber_rounded,
-        Colors.orange,
-        'ตกลง',
-        () {
-          Navigator.of(context).pop();
-        },
-      );
+          context,
+          'พบข้อผิดพลาด',
+          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+          Icons.warning_amber_rounded,
+          Colors.orange,
+          'ตกลง', () {
+        Navigator.of(context).pop();
+      }, false);
       // snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
       //     Icons.warning_amber_rounded);
       setState(() {
@@ -209,7 +189,7 @@ class _Add_CompanyState extends State<Add_Company> {
         if (data.single.devicegroupUuid != null) {
           await prefs.setString('deviceId', data.single.devicegroupUuid!);
         }
-        print('Select Success');
+        print('loginMulti Success');
         print(response.body);
 
         Navigator.of(context).pushAndRemoveUntil(
@@ -221,18 +201,11 @@ class _Add_CompanyState extends State<Add_Company> {
         // snackbar(context, Theme.of(context).primaryColor, 'เลือกสำเร็จ',
         //     Icons.check_circle_outline_rounded);
       } else {
-        dialogOnebutton_Subtitle(
-          context,
-          'เลือกไม่สำเร็จ',
-          '${jsonRes.data}',
-          Icons.highlight_off_rounded,
-          Colors.red,
-          'ตกลง',
-          () {
-            Navigator.of(context).pop();
-          },
-        );
-        print('Select fail!!');
+        dialogOnebutton_Subtitle(context, 'เพิ่มไม่สำเร็จ', '${jsonRes.data}',
+            Icons.highlight_off_rounded, Colors.red, 'ตกลง', () {
+          Navigator.of(context).pop();
+        }, false);
+        print('loginMulti fail!!');
         print(response.body);
         setState(() {
           loading = false;
@@ -241,16 +214,14 @@ class _Add_CompanyState extends State<Add_Company> {
     } catch (error) {
       print(error);
       dialogOnebutton_Subtitle(
-        context,
-        'พบข้อผิดพลาด',
-        'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-        Icons.warning_amber_rounded,
-        Colors.orange,
-        'ตกลง',
-        () {
-          Navigator.of(context).pop();
-        },
-      );
+          context,
+          'พบข้อผิดพลาด',
+          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+          Icons.warning_amber_rounded,
+          Colors.orange,
+          'ตกลง', () {
+        Navigator.of(context).pop();
+      }, false);
       setState(() {
         loading = false;
       });
@@ -261,7 +232,6 @@ class _Add_CompanyState extends State<Add_Company> {
   void initState() {
     super.initState();
     _getCompany();
-    _getMultiCompany();
   }
 
   @override
@@ -358,16 +328,14 @@ class _Add_CompanyState extends State<Add_Company> {
                   .map((item) => item.companyId)
                   .contains(dropdownValue)) {
                 dialogOnebutton_Subtitle(
-                  context,
-                  'ไม่สามารถเพิ่มได้',
-                  'คุณมีบริษัทนี้อยู่แล้ว',
-                  Icons.warning_amber_rounded,
-                  Colors.orange,
-                  'ตกลง',
-                  () {
-                    Navigator.of(context).pop();
-                  },
-                );
+                    context,
+                    'ไม่สามารถเพิ่มได้',
+                    'คุณมีบริษัทนี้อยู่แล้ว',
+                    Icons.warning_amber_rounded,
+                    Colors.orange,
+                    'ตกลง', () {
+                  Navigator.of(context).pop();
+                }, false);
               } else {
                 Map<String, dynamic> valuse = Map();
                 valuse['id'] = userId;

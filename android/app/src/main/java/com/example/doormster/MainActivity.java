@@ -95,18 +95,18 @@ public class MainActivity extends FlutterActivity {
                     pressed = false; // 二次点击处理（避免重复点击）
                     // mHandler.sendEmptyMessage(OPEN_AGAIN);
                     if (result == 0x00) {
-                        System.out.print("Success");
-                        Toast.makeText(MainActivity.this, "Success",
+                        System.out.print("เปิดสำเร็จ");
+                        Toast.makeText(MainActivity.this, "เปิดสำเร็จ",
                                 Toast.LENGTH_SHORT).show();
                     } else {
                         if (result == 48) {
-                            System.out.print("Result Error Timer Out");
-                            Toast.makeText(getApplicationContext(), "Result Error Timer Out",
+                            System.out.print("ไม่พบอุปกรณ์");
+                            Toast.makeText(getApplicationContext(), "ไม่พบอุปกรณ์",
                                     Toast.LENGTH_SHORT)
                                     .show();
                         } else {
-                            System.out.print("Failure:" + result);
-                            Toast.makeText(MainActivity.this, "Failure:" + result,
+                            System.out.print("ผิดพลาด:" + result);
+                            Toast.makeText(MainActivity.this, "ผิดพลาด:" + result,
                                     Toast.LENGTH_SHORT).show();
                         }
                     }

@@ -1,5 +1,4 @@
 // ignore_for_file: prefer_const_constructors_in_immutables, avoid_single_cascade_in_expression_statements
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/button/button.dart';
@@ -7,7 +6,6 @@ import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/components/text_form/text_form.dart';
 import 'package:doormster/components/text_form/text_form_password.dart';
 import 'package:doormster/models/login_model.dart';
-import 'package:doormster/screen/main_screen/home_page.dart';
 import 'package:doormster/screen/main_screen/register_page.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/gestures.dart';
@@ -103,18 +101,16 @@ class _Login_PageState extends State<Login_Page> {
       } catch (error) {
         print(error);
         dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง',
-          () async {
-            Navigator.of(context).pop();
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            prefs.clear();
-          },
-        );
+            context,
+            'พบข้อผิดพลาด',
+            'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+            Icons.warning_amber_rounded,
+            Colors.orange,
+            'ตกลง', () async {
+          Navigator.of(context).pop();
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.clear();
+        }, false);
         setState(() {
           loading = false;
         });

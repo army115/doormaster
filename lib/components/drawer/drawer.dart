@@ -60,17 +60,10 @@ class _MyDrawerState extends State<MyDrawer> {
       }
     } catch (error) {
       print(error);
-      dialogOnebutton_Subtitle(
-        context,
-        'พบข้อผิดพลาด',
-        'ไม่สามารถเชื่อมต่อได้',
-        Icons.warning_amber_rounded,
-        Colors.orange,
-        'ตกลง',
-        () {
-          Navigator.popUntil(context, (route) => route.isFirst);
-        },
-      );
+      dialogOnebutton_Subtitle(context, 'พบข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อได้',
+          Icons.warning_amber_rounded, Colors.orange, 'ตกลง', () {
+        Navigator.popUntil(context, (route) => route.isFirst);
+      }, false);
       setState(() {
         loading = false;
       });
@@ -115,19 +108,12 @@ class _MyDrawerState extends State<MyDrawer> {
         // Navigator.popUntil(context, ModalRoute.withName('/bottom'));
         // snackbar(context, Theme.of(context).primaryColor, 'เลือกสำเร็จ',
         //     Icons.check_circle_outline_rounded);
-        await Restart.restartApp();
+        // await Restart.restartApp();
       } else {
-        dialogOnebutton_Subtitle(
-          context,
-          'เลือกไม่สำเร็จ',
-          '${jsonRes.data}',
-          Icons.highlight_off_rounded,
-          Colors.red,
-          'ตกลง',
-          () {
-            Navigator.of(context).pop();
-          },
-        );
+        dialogOnebutton_Subtitle(context, 'เลือกไม่สำเร็จ', '${jsonRes.data}',
+            Icons.highlight_off_rounded, Colors.red, 'ตกลง', () {
+          Navigator.of(context).pop();
+        }, false);
         print('Select fail!!');
         print(response.body);
         setState(() {
@@ -137,16 +123,14 @@ class _MyDrawerState extends State<MyDrawer> {
     } catch (error) {
       print(error);
       dialogOnebutton_Subtitle(
-        context,
-        'พบข้อผิดพลาด',
-        'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-        Icons.warning_amber_rounded,
-        Colors.orange,
-        'ตกลง',
-        () {
-          Navigator.of(context).pop();
-        },
-      );
+          context,
+          'พบข้อผิดพลาด',
+          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+          Icons.warning_amber_rounded,
+          Colors.orange,
+          'ตกลง', () {
+        Navigator.of(context).pop();
+      }, false);
       setState(() {
         loading = false;
       });
@@ -281,20 +265,20 @@ class _MyDrawerState extends State<MyDrawer> {
             ListTile(
               onTap: () {
                 dialogTwobutton_Subtitle(
-                  context,
-                  'ออกจากระบบ',
-                  'คุณต้องการออกจากระบบ\nใช่ หรือ ไม่',
-                  Icons.warning_amber_rounded,
-                  Colors.orange,
-                  'ใช่',
-                  () {
-                    _Logout();
-                  },
-                  'ไม่ใช่',
-                  () {
-                    Navigator.pop(context);
-                  },
-                );
+                    context,
+                    'ออกจากระบบ',
+                    'คุณต้องการออกจากระบบ\nใช่ หรือ ไม่',
+                    Icons.warning_amber_rounded,
+                    Colors.orange,
+                    'ใช่',
+                    () {
+                      _Logout();
+                    },
+                    'ไม่ใช่',
+                    () {
+                      Navigator.pop(context);
+                    },
+                    false);
               },
               leading: Icon(
                 Icons.logout,
@@ -389,9 +373,13 @@ class _MyDrawerState extends State<MyDrawer> {
                           ),
                         ),
                         onTap: () {
-                          _selectCompany(context, multiCompany[index].sId,
-                              multiCompany[index].companyId);
-                          // Navigator.of(context).pop();
+                          if (companyId == multiCompany[index].companyId) {
+                            Navigator.of(context)
+                                .popUntil(ModalRoute.withName('/bottom'));
+                          } else {
+                            _selectCompany(context, multiCompany[index].sId,
+                                multiCompany[index].companyId);
+                          }
                         },
                       ),
                     ),

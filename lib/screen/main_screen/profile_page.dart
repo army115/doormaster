@@ -8,6 +8,7 @@ import 'package:doormster/components/text_form/text_form_noborder.dart';
 import 'package:doormster/models/profile_model.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'dart:convert' as convert;
@@ -56,16 +57,14 @@ class _Profile_PageState extends State<Profile_Page> {
     } catch (error) {
       print(error);
       dialogOnebutton_Subtitle(
-        context,
-        'พบข้อผิดพลาด',
-        'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-        Icons.warning_amber_rounded,
-        Colors.orange,
-        'ตกลง',
-        () {
-          Navigator.popUntil(context, (route) => route.isFirst);
-        },
-      );
+          context,
+          'พบข้อผิดพลาด',
+          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+          Icons.warning_amber_rounded,
+          Colors.orange,
+          'ตกลง', () {
+        SystemNavigator.pop(animated: true);
+      }, false);
       setState(() {
         loading = false;
       });

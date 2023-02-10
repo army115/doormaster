@@ -9,6 +9,7 @@ import 'package:doormster/models/get_ads_company.dart';
 import 'package:doormster/models/get_menu.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:http/http.dart' as http;
@@ -61,7 +62,7 @@ class _Home_PageState extends State<Home_Page> {
 
       if (response.statusCode == 200) {
         getMenu menuHome = getMenu.fromJson(convert.jsonDecode(response.body));
-
+        _getAds();
         setState(() {
           listMenu = menuHome.data!;
           loading = false;
@@ -72,16 +73,14 @@ class _Home_PageState extends State<Home_Page> {
       if (companyId == null) {
       } else {
         dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง',
-          () {
-            Navigator.popUntil(context, (route) => route.isFirst);
-          },
-        );
+            context,
+            'พบข้อผิดพลาด',
+            'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+            Icons.warning_amber_rounded,
+            Colors.orange,
+            'ตกลง', () {
+          SystemNavigator.pop(animated: true);
+        }, false);
       }
       setState(() {
         loading = false;
@@ -118,16 +117,14 @@ class _Home_PageState extends State<Home_Page> {
       if (companyId == null) {
       } else {
         dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง',
-          () {
-            Navigator.popUntil(context, (route) => route.isFirst);
-          },
-        );
+            context,
+            'พบข้อผิดพลาด',
+            'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+            Icons.warning_amber_rounded,
+            Colors.orange,
+            'ตกลง', () {
+          Navigator.pop(context);
+        }, false);
       }
       setState(() {
         loading = false;
@@ -151,7 +148,6 @@ class _Home_PageState extends State<Home_Page> {
   void initState() {
     super.initState();
     _getMenu();
-    _getAds();
   }
 
   @override
@@ -225,15 +221,13 @@ class _Home_PageState extends State<Home_Page> {
                                 autoplay: true,
                                 loop: true,
                                 scale: 1.0,
-                                pagination: SwiperPagination(
-                                    builder: DotSwiperPaginationBuilder(
-                                        color: Colors.grey,
-                                        activeColor: Colors.white)),
                                 itemCount: 1,
                                 itemBuilder: (context, index) {
                                   return Container(
-                                      child:
-                                          Image.asset('assets/images/ads.png',fit: BoxFit.cover,));
+                                      child: Image.asset(
+                                    'assets/images/ads.png',
+                                    fit: BoxFit.cover,
+                                  ));
                                 },
                               ),
                       ),
