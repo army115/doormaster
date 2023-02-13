@@ -14,7 +14,8 @@ import 'package:restart_app/restart_app.dart';
 
 class MyDrawer extends StatefulWidget {
   final pressProfile;
-  MyDrawer({Key? key, this.pressProfile});
+  final refreshHome;
+  MyDrawer({Key? key, this.pressProfile, this.refreshHome});
 
   @override
   State<MyDrawer> createState() => _MyDrawerState();
@@ -60,10 +61,10 @@ class _MyDrawerState extends State<MyDrawer> {
       }
     } catch (error) {
       print(error);
-      dialogOnebutton_Subtitle(context, 'พบข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อได้',
-          Icons.warning_amber_rounded, Colors.orange, 'ตกลง', () {
-        Navigator.popUntil(context, (route) => route.isFirst);
-      }, false);
+      // dialogOnebutton_Subtitle(context, 'พบข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อได้',
+      //     Icons.warning_amber_rounded, Colors.orange, 'ตกลง', () {
+      //   Navigator.popUntil(context, (route) => route.isFirst);
+      // }, false);
       setState(() {
         loading = false;
       });
@@ -100,12 +101,14 @@ class _MyDrawerState extends State<MyDrawer> {
         if (data.single.devicegroupUuid != null) {
           await prefs.setString('deviceId', data.single.devicegroupUuid!);
         }
-        setState(() {
-          loading = false;
-        });
         print('Select Success');
         print(response.body);
-        // Navigator.popUntil(context, ModalRoute.withName('/bottom'));
+        Navigator.of(context).popUntil(ModalRoute.withName('/bottom'));
+        setState(() {
+          widget.pressProfile;
+          loading = false;
+        });
+
         // snackbar(context, Theme.of(context).primaryColor, 'เลือกสำเร็จ',
         //     Icons.check_circle_outline_rounded);
         // await Restart.restartApp();
@@ -310,8 +313,8 @@ class _MyDrawerState extends State<MyDrawer> {
       builder: (context) {
         return DraggableScrollableSheet(
             expand: false,
-            initialChildSize: 0.3,
-            minChildSize: 0.3,
+            initialChildSize: multiCompany.length == 0 ? 0.2 : 0.3,
+            minChildSize: multiCompany.length == 0 ? 0.2 : 0.3,
             maxChildSize: 0.5,
             builder: (context, scrollController) => Scaffold(
                   appBar: AppBar(
@@ -337,52 +340,63 @@ class _MyDrawerState extends State<MyDrawer> {
                   ),
                   body: Container(
                     padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: ListView.builder(
-                      controller: scrollController,
-                      shrinkWrap: true,
-                      itemCount: multiCompany.length,
-                      itemBuilder: (context, index) => InkWell(
-                        child: Container(
-                          // color: Colors.amber,
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Icon(
-                                Icons.home_work_sharp,
-                                size: 20,
-                                color: Colors.white,
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Expanded(
-                                child: Text(
-                                    '${multiCompany[index].companyName}',
-                                    style: TextStyle(
-                                        fontSize: 16, color: Colors.white)),
-                              ),
-                              companyId == multiCompany[index].companyId
-                                  ? Icon(
-                                      Icons.check_circle_rounded,
+                    child: multiCompany.length == 0
+                        ? Center(
+                            child: Text('โปรดตรวจสอบการเชื่อมต่อ',
+                                style: TextStyle(color: Colors.white)),
+                          )
+                        : ListView.builder(
+                            controller: scrollController,
+                            shrinkWrap: true,
+                            itemCount: multiCompany.length,
+                            itemBuilder: (context, index) => InkWell(
+                              child: Container(
+                                // color: Colors.amber,
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Icon(
+                                      Icons.home_work_sharp,
                                       size: 20,
                                       color: Colors.white,
-                                    )
-                                  : Container()
-                            ],
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                          '${multiCompany[index].companyName}',
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.white)),
+                                    ),
+                                    companyId == multiCompany[index].companyId
+                                        ? Icon(
+                                            Icons.check_circle_rounded,
+                                            size: 20,
+                                            color: Colors.white,
+                                          )
+                                        : Container()
+                                  ],
+                                ),
+                              ),
+                              onTap: () {
+                                if (companyId ==
+                                    multiCompany[index].companyId) {
+                                  Navigator.of(context)
+                                      .popUntil(ModalRoute.withName('/bottom'));
+                                } else {
+                                  _selectCompany(
+                                      context,
+                                      multiCompany[index].sId,
+                                      multiCompany[index].companyId);
+                                }
+                              },
+                            ),
                           ),
-                        ),
-                        onTap: () {
-                          if (companyId == multiCompany[index].companyId) {
-                            Navigator.of(context)
-                                .popUntil(ModalRoute.withName('/bottom'));
-                          } else {
-                            _selectCompany(context, multiCompany[index].sId,
-                                multiCompany[index].companyId);
-                          }
-                        },
-                      ),
-                    ),
                   ),
                 ));
       },

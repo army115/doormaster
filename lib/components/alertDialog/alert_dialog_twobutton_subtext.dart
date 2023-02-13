@@ -13,6 +13,7 @@ void dialogTwobutton_Subtitle(
   click,
 ) {
   showDialog(
+      useRootNavigator: false,
       barrierDismissible: click,
       context: context,
       builder: (_) => AlertDialog(

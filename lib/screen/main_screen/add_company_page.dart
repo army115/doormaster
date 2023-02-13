@@ -59,8 +59,13 @@ class _Add_CompanyState extends State<Add_Company> {
       }
     } catch (error) {
       print(error);
-      dialogOnebutton_Subtitle(context, 'พบข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อได้',
-          Icons.warning_amber_rounded, Colors.orange, 'ตกลง', () {
+      dialogOnebutton_Subtitle(
+          context,
+          'พบข้อผิดพลาด',
+          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+          Icons.warning_amber_rounded,
+          Colors.orange,
+          'ตกลง', () {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (BuildContext context) => BottomBar()),
             (Route<dynamic> route) => false);
@@ -96,8 +101,13 @@ class _Add_CompanyState extends State<Add_Company> {
       }
     } catch (error) {
       print(error);
-      dialogOnebutton_Subtitle(context, 'พบข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อได้',
-          Icons.warning_amber_rounded, Colors.orange, 'ตกลง', () {
+      dialogOnebutton_Subtitle(
+          context,
+          'พบข้อผิดพลาด',
+          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+          Icons.warning_amber_rounded,
+          Colors.orange,
+          'ตกลง', () {
         Navigator.popUntil(context, (route) => route.isFirst);
       }, false);
       setState(() {

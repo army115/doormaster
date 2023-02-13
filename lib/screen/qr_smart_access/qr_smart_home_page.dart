@@ -26,6 +26,7 @@ class QRSmart_HomePage extends StatefulWidget {
 class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
   void checkInternet(page) async {
     var result = await Connectivity().checkConnectivity();
+    print(result);
     if (result == ConnectivityResult.none) {
       snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
           Icons.warning_amber_rounded);

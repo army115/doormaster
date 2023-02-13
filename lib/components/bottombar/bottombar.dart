@@ -89,22 +89,24 @@ class _BottomBarState extends State<BottomBar> {
         key: _scaffoldKey,
         drawer: MyDrawer(pressProfile: () {
           setState(() {
+            profileKey.currentState?.popAndPushNamed('/');
             _selectedIndex = 2;
           });
           Navigator.of(context).pop();
+        }, refreshHome: () {
+          setState(() {
+            homeKey.currentState?.popAndPushNamed('/');
+            _selectedIndex = 0;
+          });
+          Navigator.of(context).pop();
         }),
-        body: RefreshIndicator(
-          key: _refreshKey,
-          onRefresh: () async {
-            return Future<void>.delayed(const Duration(seconds: 3));
-          },
-          child: IndexedStack(
-            index: _selectedIndex,
-            children: buildBody,
-          ),
-          // buildBody[
-          //     _selectedIndex], //จะไม่ค้างอยู่หน้าปัจจุบัน เวลากดปุ่มเมนูกลับมา
+        body: IndexedStack(
+          index: _selectedIndex,
+          children: buildBody,
         ),
+        // buildBody[
+        //     _selectedIndex], //จะไม่ค้างอยู่หน้าปัจจุบัน เวลากดปุ่มเมนูกลับมา
+
         bottomNavigationBar: BottomNavigationBar(
           items: [
             BottomNavigationBarItem(
@@ -176,10 +178,10 @@ class _BottomBarState extends State<BottomBar> {
           if (homeKey.currentState!.canPop() && homeKey.currentState != null) {
             homeKey.currentState?.popUntil((route) => route.isFirst);
           }
-        } else {
+        }
+        if (_selectedIndex == 0) {
           setState(() {
-            _refreshKey.currentState?.show();
-            // homeKey.currentState;
+            homeKey.currentState?.popAndPushNamed('/');
           });
         }
         return;
@@ -188,8 +190,11 @@ class _BottomBarState extends State<BottomBar> {
           if (messageKey.currentState!.canPop()) {
             messageKey.currentState!.popUntil((route) => route.isFirst);
           }
-        } else {
-          setState(() {});
+        }
+        if (_selectedIndex == 1) {
+          setState(() {
+            messageKey.currentState;
+          });
         }
         return;
       case 2:
@@ -197,8 +202,11 @@ class _BottomBarState extends State<BottomBar> {
           if (profileKey.currentState!.canPop()) {
             profileKey.currentState!.popUntil((route) => route.isFirst);
           }
-        } else {
-          setState(() {});
+        }
+        if (_selectedIndex == 2) {
+          setState(() {
+            profileKey.currentState?.popAndPushNamed('/');
+          });
         }
         return;
       default:

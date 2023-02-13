@@ -1,11 +1,14 @@
 // ignore_for_file: unrelated_type_equality_checks
 
 import 'dart:io';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/drawer/drawer.dart';
+import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/text_form/text_form.dart';
 import 'package:doormster/components/text_form/text_form_noborder.dart';
 import 'package:doormster/models/profile_model.dart';
+import 'package:doormster/service/check_connected.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -29,12 +32,13 @@ class _Profile_PageState extends State<Profile_Page> {
 
   bool loading = false;
   List<Data> profileInfo = [];
+  var check;
 
   Future _getInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var userId = prefs.getString('userId');
     print('userId: ${userId}');
-
+    check = await Connectivity().checkConnectivity();
     try {
       setState(() {
         loading = true;
@@ -55,6 +59,7 @@ class _Profile_PageState extends State<Profile_Page> {
         });
       }
     } catch (error) {
+      await Future.delayed(Duration(milliseconds: 500));
       print(error);
       dialogOnebutton_Subtitle(
           context,
@@ -63,7 +68,10 @@ class _Profile_PageState extends State<Profile_Page> {
           Icons.warning_amber_rounded,
           Colors.orange,
           'ตกลง', () {
-        SystemNavigator.pop(animated: true);
+        setState(() {
+          Navigator.pop(context);
+          _getInfo();
+        });
       }, false);
       setState(() {
         loading = false;
@@ -100,99 +108,104 @@ class _Profile_PageState extends State<Profile_Page> {
 
   @override
   void initState() {
-    super.initState();
     _getInfo();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: MyDrawer(),
-      appBar: AppBar(
-        title: Text('ข้อมูลส่วนตัว'),
-        leading: IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            }),
-      ),
-      body: SafeArea(
-        child: Center(
-          child: Container(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 25),
-            child: Column(children: [
-              Stack(
-                children: [
-                  CircleAvatar(
-                    radius: 73,
-                    backgroundColor: Colors.white,
-                    child: CircleAvatar(
-                        radius: 70,
-                        backgroundColor: Colors.grey[100],
-                        child: image != null
-                            ? Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: FileImage(File(image!.path))),
-                                ),
-                              )
-                            : Container(),
-                        backgroundImage: AssetImage(
-                            'assets/images/HIP Smart Community Icon-03.png')),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: CircleAvatar(
+    return Stack(
+      children: [
+        Scaffold(
+          drawer: MyDrawer(),
+          appBar: AppBar(
+            title: Text('ข้อมูลส่วนตัว'),
+            leading: IconButton(
+                icon: Icon(Icons.menu),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                }),
+          ),
+          body: SafeArea(
+            child: Center(
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 25),
+                child: Column(children: [
+                  Stack(
+                    children: [
+                      CircleAvatar(
+                        radius: 73,
                         backgroundColor: Colors.white,
-                        radius: 21,
                         child: CircleAvatar(
-                            radius: 18,
-                            backgroundColor: Theme.of(context).primaryColor,
-                            child: IconButton(
-                              splashRadius: 20,
-                              onPressed: () {
-                                openImages(ImageSource.gallery);
-                              },
-                              icon: Icon(
-                                Icons.edit,
-                                color: Colors.white,
-                                size: 20,
-                              ),
-                            ))),
-                  )
-                ],
+                            radius: 70,
+                            backgroundColor: Colors.grey[100],
+                            child: image != null
+                                ? Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: FileImage(File(image!.path))),
+                                    ),
+                                  )
+                                : Container(),
+                            backgroundImage: AssetImage(
+                                'assets/images/HIP Smart Community Icon-03.png')),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: CircleAvatar(
+                            backgroundColor: Colors.white,
+                            radius: 21,
+                            child: CircleAvatar(
+                                radius: 18,
+                                backgroundColor: Theme.of(context).primaryColor,
+                                child: IconButton(
+                                  splashRadius: 20,
+                                  onPressed: () {
+                                    openImages(ImageSource.gallery);
+                                  },
+                                  icon: Icon(
+                                    Icons.edit,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                ))),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text_Form_NoBorder(
+                    controller: fname,
+                    title: 'ชื่อ',
+                    icon: Icons.person,
+                    error: 'กรุณากรอกชื่อ',
+                    TypeInput: TextInputType.name,
+                  ),
+                  Text_Form_NoBorder(
+                    controller: lname,
+                    title: 'นามสกุล',
+                    icon: Icons.person_outline_rounded,
+                    error: 'กรุณากรอกชื่อ',
+                    TypeInput: TextInputType.name,
+                  ),
+                  Text_Form_NoBorder(
+                    controller: email,
+                    title: 'อีเมล',
+                    icon: Icons.email_rounded,
+                    error: 'กรุณากรอกชื่อ',
+                    TypeInput: TextInputType.emailAddress,
+                  ),
+                ]),
               ),
-              SizedBox(
-                height: 20,
-              ),
-              Text_Form_NoBorder(
-                controller: fname,
-                title: 'ชื่อ',
-                icon: Icons.person,
-                error: 'กรุณากรอกชื่อ',
-                TypeInput: TextInputType.name,
-              ),
-              Text_Form_NoBorder(
-                controller: lname,
-                title: 'นามสกุล',
-                icon: Icons.person_outline_rounded,
-                error: 'กรุณากรอกชื่อ',
-                TypeInput: TextInputType.name,
-              ),
-              Text_Form_NoBorder(
-                controller: email,
-                title: 'อีเมล',
-                icon: Icons.email_rounded,
-                error: 'กรุณากรอกชื่อ',
-                TypeInput: TextInputType.emailAddress,
-              ),
-            ]),
+            ),
           ),
         ),
-      ),
+        loading ? Loading() : Container()
+      ],
     );
   }
 }

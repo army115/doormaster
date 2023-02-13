@@ -11,6 +11,7 @@ void dialogOnebutton_Subtitle(
   click,
 ) {
   showDialog(
+      useRootNavigator: false,
       barrierDismissible: click,
       context: context,
       builder: (_) => AlertDialog(

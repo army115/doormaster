@@ -22,27 +22,27 @@ void main() async {
   final result = await Connectivity().checkConnectivity();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-  if (result == ConnectivityResult.none) {
-    Future Checkinternet(BuildContext context) async {
-      dialogOnebutton_Subtitle(
-          context,
-          'ไม่สามารถเชื่อมต่อได้',
-          'กรุณาตรวจสอบการเชื่อมต่อของคุณ',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง', () {
-        SystemNavigator.pop(animated: true);
-      }, false);
-    }
-  } else {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('token');
-    print(token == null ? 'login : false' : 'login : true');
-    runApp(MyApp(
-      // token: null,
-      token: token,
-    ));
-  }
+  // if (result == ConnectivityResult.none) {
+  //   Future Checkinternet(BuildContext context) async {
+  //     dialogOnebutton_Subtitle(
+  //         context,
+  //         'ไม่สามารถเชื่อมต่อได้',
+  //         'กรุณาตรวจสอบการเชื่อมต่อของคุณ',
+  //         Icons.warning_amber_rounded,
+  //         Colors.orange,
+  //         'ตกลง', () {
+  //       SystemNavigator.pop(animated: true);
+  //     }, false);
+  //   }
+  // } else {
+  final prefs = await SharedPreferences.getInstance();
+  final token = prefs.getString('token');
+  print(token == null ? 'login : false' : 'login : true');
+  runApp(MyApp(
+    // token: null,
+    token: token,
+  ));
+  // }
 }
 
 Future init(BuildContext? context) async {

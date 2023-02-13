@@ -72,6 +72,7 @@ class _Home_PageState extends State<Home_Page> {
       print(error);
       if (companyId == null) {
       } else {
+        await Future.delayed(Duration(milliseconds: 500));
         dialogOnebutton_Subtitle(
             context,
             'พบข้อผิดพลาด',
@@ -79,7 +80,10 @@ class _Home_PageState extends State<Home_Page> {
             Icons.warning_amber_rounded,
             Colors.orange,
             'ตกลง', () {
-          SystemNavigator.pop(animated: true);
+          Navigator.pop(context);
+          setState(() {
+            _getMenu();
+          });
         }, false);
       }
       setState(() {
@@ -152,125 +156,128 @@ class _Home_PageState extends State<Home_Page> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Scaffold(
-          appBar: AppBar(
-            title: Text('HIP Smart Community'),
-            leading: IconButton(
-                icon: Icon(Icons.menu),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                }),
-          ),
-          body: mobileRole == 0
-              ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'โปรดติดต่อผู้ดูแล\nเพื่ออนุมัติสิทธิ์การใช้งาน',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.normal),
-                      ),
-                      Image.asset(
-                        'assets/images/Smart Community Logo.png',
-                        scale: 4.5,
-                        // opacity: AlwaysStoppedAnimation(0.7),
-                      ),
-                    ],
-                  ),
-                )
-              : SafeArea(
-                  child: Column(
-                    children: [
-                      Container(
-                        height: MediaQuery.of(context).size.height * 0.26,
-                        width: double.infinity,
-                        child: listads.length > 0
-                            ? Swiper(
-                                autoplay: true,
-                                loop: true,
-                                scale: 1.0,
-                                pagination: SwiperPagination(
-                                    builder: DotSwiperPaginationBuilder(
-                                        color: Colors.grey,
-                                        activeColor: Colors.white)),
-                                itemCount: listads.length,
-                                itemBuilder: (context, index) {
-                                  var _Images = convert.base64Decode(
-                                      ('${listads[index].adsversitingPic}')
-                                          .split(',')
-                                          .last);
-                                  return InkWell(
-                                      // onTap: () {
-                                      //   launchUrlString(
-                                      //       'https://hipglobal.co.th/');
-                                      // },
-                                      // child: Container(
-                                      //     child:
-                                      //         Image.network('${_images[index]}')),
-                                      child: Image.memory(
-                                    _Images,
-                                    fit: BoxFit.cover,
-                                  ));
-                                },
-                              )
-                            : Swiper(
-                                autoplay: true,
-                                loop: true,
-                                scale: 1.0,
-                                itemCount: 1,
-                                itemBuilder: (context, index) {
-                                  return Container(
-                                      child: Image.asset(
-                                    'assets/images/ads.png',
-                                    fit: BoxFit.cover,
-                                  ));
-                                },
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Stack(
+        children: [
+          Scaffold(
+            appBar: AppBar(
+              title: Text('HIP Smart Community'),
+              leading: IconButton(
+                  icon: Icon(Icons.menu),
+                  onPressed: () {
+                    Scaffold.of(context).openDrawer();
+                  }),
+            ),
+            body: mobileRole == 0
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'โปรดติดต่อผู้ดูแล\nเพื่ออนุมัติสิทธิ์การใช้งาน',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 22, fontWeight: FontWeight.normal),
+                        ),
+                        Image.asset(
+                          'assets/images/Smart Community Logo.png',
+                          scale: 4.5,
+                          // opacity: AlwaysStoppedAnimation(0.7),
+                        ),
+                      ],
+                    ),
+                  )
+                : SafeArea(
+                    child: Column(
+                      children: [
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.26,
+                          width: double.infinity,
+                          child: listads.length > 0
+                              ? Swiper(
+                                  autoplay: true,
+                                  loop: true,
+                                  scale: 1.0,
+                                  pagination: SwiperPagination(
+                                      builder: DotSwiperPaginationBuilder(
+                                          color: Colors.grey,
+                                          activeColor: Colors.white)),
+                                  itemCount: listads.length,
+                                  itemBuilder: (context, index) {
+                                    var _Images = convert.base64Decode(
+                                        ('${listads[index].adsversitingPic}')
+                                            .split(',')
+                                            .last);
+                                    return InkWell(
+                                        // onTap: () {
+                                        //   launchUrlString(
+                                        //       'https://hipglobal.co.th/');
+                                        // },
+                                        // child: Container(
+                                        //     child:
+                                        //         Image.network('${_images[index]}')),
+                                        child: Image.memory(
+                                      _Images,
+                                      fit: BoxFit.cover,
+                                    ));
+                                  },
+                                )
+                              : Swiper(
+                                  autoplay: true,
+                                  loop: true,
+                                  scale: 1.0,
+                                  itemCount: 1,
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                        child: Image.asset(
+                                      'assets/images/ads.png',
+                                      fit: BoxFit.cover,
+                                    ));
+                                  },
+                                ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 15),
+                            child: GridView.builder(
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              primary: false,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                // childAspectRatio: 1,
+                                crossAxisCount: 4,
+                                crossAxisSpacing: 0,
+                                mainAxisSpacing: 20,
                               ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 15),
-                          child: GridView.builder(
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            primary: false,
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              // childAspectRatio: 1,
-                              crossAxisCount: 4,
-                              crossAxisSpacing: 0,
-                              mainAxisSpacing: 20,
+                              itemCount: listMenu.length,
+                              itemBuilder: (context, index) {
+                                return Menu_Home(
+                                  title: '${listMenu[index].name}',
+                                  icon: '${listMenu[index].icon}',
+                                  press: listMenu[index].page,
+                                );
+                              },
                             ),
-                            itemCount: listMenu.length,
-                            itemBuilder: (context, index) {
-                              return Menu_Home(
-                                title: '${listMenu[index].name}',
-                                icon: '${listMenu[index].icon}',
-                                press: listMenu[index].page,
-                              );
-                            },
                           ),
                         ),
-                      ),
-                      // SizedBox(height: 20),
-                      // Buttons(
-                      //     title: 'test',
-                      //     press: () {
-                      //       setState(() {
-                      //         _getMenu();
-                      //       });
-                      //     })
-                    ],
+                        // SizedBox(height: 20),
+                        // Buttons(
+                        //     title: 'test',
+                        //     press: () {
+                        //       setState(() {
+                        //         _getMenu();
+                        //       });
+                        //     })
+                      ],
+                    ),
                   ),
-                ),
-        ),
-        loading ? Loading() : Container()
-      ],
+          ),
+          loading ? Loading() : Container()
+        ],
+      ),
     );
   }
 }

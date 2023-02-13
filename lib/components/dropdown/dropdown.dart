@@ -24,7 +24,7 @@ class Dropdown extends StatelessWidget {
       child: DropdownButtonFormField(
           hint: Text(title),
           style: TextStyle(
-              fontSize: 18,
+              fontSize: 16,
               fontFamily: 'Prompt',
               color: Colors.black,
               height: 1.2),

@@ -10,6 +10,7 @@ void dialogOnebutton(
   click,
 ) {
   showDialog(
+      useRootNavigator: false,
       barrierDismissible: click,
       context: context,
       builder: (_) => AlertDialog(
