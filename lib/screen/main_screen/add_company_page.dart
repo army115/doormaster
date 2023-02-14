@@ -66,9 +66,8 @@ class _Add_CompanyState extends State<Add_Company> {
           Icons.warning_amber_rounded,
           Colors.orange,
           'ตกลง', () {
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (BuildContext context) => BottomBar()),
-            (Route<dynamic> route) => false);
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            '/bottom', (Route<dynamic> route) => false);
       }, false);
       setState(() {
         loading = false;
@@ -202,9 +201,8 @@ class _Add_CompanyState extends State<Add_Company> {
         print('loginMulti Success');
         print(response.body);
 
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (BuildContext context) => BottomBar()),
-            (Route<dynamic> route) => false);
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            '/bottom', (Route<dynamic> route) => false);
         setState(() {
           loading = false;
         });
@@ -248,9 +246,8 @@ class _Add_CompanyState extends State<Add_Company> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (BuildContext context) => BottomBar()),
-            (Route<dynamic> route) => false);
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            '/bottom', (Route<dynamic> route) => false);
         return false;
       },
       child: Scaffold(
@@ -319,10 +316,8 @@ class _Add_CompanyState extends State<Add_Company> {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           onPressed: () {
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(
-                    builder: (BuildContext context) => BottomBar()),
-                (Route<dynamic> route) => false);
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                '/bottom', (Route<dynamic> route) => false);
           },
           child: Text("ยกเลิก",
               style: TextStyle(

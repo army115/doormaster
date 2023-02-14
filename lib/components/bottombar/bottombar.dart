@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'package:doormster/components/drawer/drawer.dart';
+import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/routes/menu/home_menu.dart';
 import 'package:doormster/routes/menu/message_menu.dart';
 import 'package:doormster/routes/menu/profile_menu.dart';
@@ -14,6 +15,9 @@ final GlobalKey<RefreshIndicatorState> _refreshKey =
 GlobalKey<NavigatorState> homeKey = GlobalKey<NavigatorState>();
 GlobalKey<NavigatorState> messageKey = GlobalKey<NavigatorState>();
 GlobalKey<NavigatorState> profileKey = GlobalKey<NavigatorState>();
+final NavbarNotifier _navbarNotifier = NavbarNotifier();
+int _selectedIndex = 0;
+bool loading = false;
 
 class BottomBar extends StatefulWidget {
   final page;
@@ -29,7 +33,7 @@ class _BottomBarState extends State<BottomBar> {
     Message_Menu(navigatorKey: messageKey),
     Profile_Menu(navigatorKey: profileKey),
   ];
-  int _selectedIndex = 0;
+
   @override
   void initState() {
     super.initState();
@@ -43,11 +47,13 @@ class _BottomBarState extends State<BottomBar> {
     if (_scaffoldKey.currentState!.isDrawerOpen) {
       Navigator.of(context).pop();
     } else {
-      final bool isExitingApp = await onBackButtonPressed(_selectedIndex);
+      final bool isExitingApp =
+          await _navbarNotifier.onBackButtonPressed(_selectedIndex);
 
       if (isExitingApp) {
         if (_selectedIndex != 0) {
           setState(() {
+            // homeKey.currentState?.popAndPushNamed('/');
             _selectedIndex = 0;
           });
         } else {
@@ -85,57 +91,60 @@ class _BottomBarState extends State<BottomBar> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () => _onBackButtonDoubleClicked(),
-      child: Scaffold(
-        key: _scaffoldKey,
-        drawer: MyDrawer(pressProfile: () {
-          setState(() {
-            profileKey.currentState?.popAndPushNamed('/');
-            _selectedIndex = 2;
-          });
-          Navigator.of(context).pop();
-        }, refreshHome: () {
-          setState(() {
-            homeKey.currentState?.popAndPushNamed('/');
-            _selectedIndex = 0;
-          });
-          Navigator.of(context).pop();
-        }),
-        body: IndexedStack(
-          index: _selectedIndex,
-          children: buildBody,
-        ),
-        // buildBody[
-        //     _selectedIndex], //จะไม่ค้างอยู่หน้าปัจจุบัน เวลากดปุ่มเมนูกลับมา
+      child: Stack(
+        children: [
+          Scaffold(
+            key: _scaffoldKey,
+            drawer: MyDrawer(
+              pressProfile: () {
+                setState(() {
+                  profileKey.currentState?.popAndPushNamed('/');
+                  _selectedIndex = 2;
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+            body: IndexedStack(
+              index: _selectedIndex,
+              children: buildBody,
+            ),
+            // buildBody[
+            //     _selectedIndex], //จะไม่ค้างอยู่หน้าปัจจุบัน เวลากดปุ่มเมนูกลับมา
 
-        bottomNavigationBar: BottomNavigationBar(
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home_rounded),
-              label: 'หน้าหลัก',
+            bottomNavigationBar: BottomNavigationBar(
+              items: [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home_rounded),
+                  label: 'หน้าหลัก',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.message_rounded),
+                  label: 'ข้อความ',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.school),
+                  label: 'โปรไฟล์',
+                ),
+              ],
+              currentIndex: _selectedIndex,
+              onTap: (value) {
+                if (_navbarNotifier._index == value) {
+                  _navbarNotifier.popAllRoutes(value);
+                } else {
+                  _navbarNotifier._index = value;
+                }
+                setState(() => _selectedIndex = value);
+              },
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.message_rounded),
-              label: 'ข้อความ',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.school),
-              label: 'โปรไฟล์',
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          onTap: (value) {
-            if (_index == value) {
-              popAllRoutes(value);
-            } else {
-              _index = value;
-            }
-            setState(() => _selectedIndex = value);
-          },
-        ),
+          ),
+          loading ? Loading() : Container()
+        ],
       ),
     );
   }
+}
 
+class NavbarNotifier extends ChangeNotifier {
   int _index = 0;
 
   FutureOr<bool> onBackButtonPressed(int index) async {
@@ -171,42 +180,30 @@ class _BottomBarState extends State<BottomBar> {
     }
   }
 
-  void popAllRoutes(int index) {
+  void popAllRoutes(int index) async {
     switch (index) {
       case 0:
-        if (homeKey.currentState != null) {
-          if (homeKey.currentState!.canPop() && homeKey.currentState != null) {
-            homeKey.currentState?.popUntil((route) => route.isFirst);
-          }
-        }
-        if (_selectedIndex == 0) {
-          setState(() {
-            homeKey.currentState?.popAndPushNamed('/');
-          });
+        if (homeKey.currentState != null && homeKey.currentState!.canPop()) {
+          homeKey.currentState?.popUntil((route) => route.isFirst);
+        } else if (_selectedIndex == 0) {
+          homeKey.currentState?.popAndPushNamed('/');
         }
         return;
       case 1:
-        if (messageKey.currentState != null) {
-          if (messageKey.currentState!.canPop()) {
-            messageKey.currentState!.popUntil((route) => route.isFirst);
-          }
+        if (messageKey.currentState != null &&
+            messageKey.currentState!.canPop()) {
+          messageKey.currentState!.popUntil((route) => route.isFirst);
         }
         if (_selectedIndex == 1) {
-          setState(() {
-            messageKey.currentState;
-          });
+          messageKey.currentState;
         }
         return;
       case 2:
-        if (profileKey.currentState != null) {
-          if (profileKey.currentState!.canPop()) {
-            profileKey.currentState!.popUntil((route) => route.isFirst);
-          }
-        }
-        if (_selectedIndex == 2) {
-          setState(() {
-            profileKey.currentState?.popAndPushNamed('/');
-          });
+        if (profileKey.currentState != null &&
+            profileKey.currentState!.canPop()) {
+          profileKey.currentState!.popUntil((route) => route.isFirst);
+        } else if (_selectedIndex == 2) {
+          profileKey.currentState?.popAndPushNamed('/');
         }
         return;
       default:

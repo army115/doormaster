@@ -35,6 +35,12 @@
             "deviceId": "gidyprcy7xob7pt8"
         },
         {
+            "name": "redmi 9t",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "a3971b4c1220"
+        },
+        {
             "name": "LD Player",
             "request": "launch",
             "type": "dart",
@@ -59,6 +65,7 @@
             "configurations": [
                 "Pixel 4a API 30",
                 "note 8 pro",
+                "redmi 9t",
                 "LD Player",
                 "pixel3",
                 "pixel4",

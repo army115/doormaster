@@ -1,7 +1,6 @@
 import 'dart:async';
-
 import 'package:doormster/components/bottombar/bottombar.dart';
-import 'package:doormster/screen/login_page.dart';
+import 'package:doormster/screen/main_screen/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

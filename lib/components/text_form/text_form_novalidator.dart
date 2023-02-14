@@ -2,18 +2,18 @@
 
 import 'package:flutter/material.dart';
 
-class Text_Form extends StatelessWidget {
+class Text_Form_NoValidator extends StatelessWidget {
   TextEditingController controller;
   String title;
   IconData icon;
-  String error;
+  // String error;
   var TypeInput;
-  Text_Form(
+  Text_Form_NoValidator(
       {Key? key,
       required this.controller,
       required this.title,
       required this.icon,
-      required this.error,
+      // required this.error,
       required this.TypeInput})
       : super(key: key);
 
@@ -27,24 +27,20 @@ class Text_Form extends StatelessWidget {
         controller: controller,
         keyboardType: TypeInput,
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 13),
-          // labelText: 'Username',
-          hintText: title,
+          contentPadding: EdgeInsets.fromLTRB(0, 0, 10, 10),
+          labelText: title,
+          hintText: "กรอกข้อมูล",
           hintStyle: TextStyle(fontSize: 16),
           errorStyle: TextStyle(fontSize: 15),
-          // ignore: prefer_const_constructors
           prefixIcon: Icon(icon, size: 25),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
         ),
-        validator: (values) {
-          if (values!.isEmpty) {
-            return error;
-          } else {
-            return null;
-          }
-        },
+        // validator: (values) {
+        //   if (values!.isEmpty) {
+        //     return error;
+        //   } else {
+        //     return null;
+        //   }
+        // },
       ),
     );
   }

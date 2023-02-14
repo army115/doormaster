@@ -29,13 +29,18 @@ class Gird_Menu extends StatelessWidget {
             // ),
             Icon(icon, size: 40, color: Colors.white),
             // SizedBox(height: 5),
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.normal),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Text(
+                title,
+                textAlign: TextAlign.center,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.normal),
+              ),
             ),
           ],
         ),

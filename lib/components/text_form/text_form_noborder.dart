@@ -27,7 +27,6 @@ class Text_Form_NoBorder extends StatelessWidget {
         controller: controller,
         keyboardType: TypeInput,
         decoration: InputDecoration(
-          prefixIconColor: Colors.green,
           contentPadding: EdgeInsets.fromLTRB(0, 0, 10, 10),
           labelText: title,
           hintText: "กรอกข้อมูล",

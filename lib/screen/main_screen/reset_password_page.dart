@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -55,8 +56,8 @@ class _Password_PageState extends State<Password_Page> {
                 (values) {
                   if (values!.isEmpty) {
                     return 'กรอกรหัสผ่านปัจจุบัน';
-                  } else if (values != widget.userpass) {
-                    return "รหัสผ่านปัจจุบันไม่ถูกต้อง";
+                    // } else if (values != widget.userpass) {
+                    //   return "รหัสผ่านปัจจุบันไม่ถูกต้อง";
                   } else {
                     return null;
                   }
@@ -175,6 +176,8 @@ class _Password_PageState extends State<Password_Page> {
             if (_formkey.currentState!.validate()) {
               Map<String, dynamic> valuse = Map();
               valuse['user_password'] = _conpass.text;
+              homeKey.currentState?.popAndPushNamed('/');
+              Navigator.pop(context);
             }
           },
           color: Theme.of(context).primaryColor,

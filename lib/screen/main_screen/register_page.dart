@@ -1,5 +1,6 @@
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/button/button.dart';
+import 'package:doormster/components/checkBox/checkbox_formfield.dart';
 import 'package:doormster/components/dropdown/dropdown.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
@@ -242,26 +243,31 @@ class _Register_PageState extends State<Register_Page> {
                             }
                           },
                         ),
-                        CheckboxListTileFormField(
-                          activeColor: Theme.of(context).primaryColor,
-                          title: Text(
-                            'ยอมรับเงื่อนไขการใช้บริการ',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          initialValue: Checked,
-                          onChanged: (value) {
-                            setState(() {
-                              Checked = value;
-                            });
-                          },
-                          validator: (values) {
-                            if (values!) {
-                              return null;
-                            } else {
-                              return 'กรุณายอมรับเงื่อนไขการใช้บริการ';
-                            }
-                          },
+                        CheckBox_FormField(
+                          title: 'ยอมรับเงื่อนไขการใช้บริการ',
+                          value: Checked,
+                          validator: 'กรุณายอมรับเงื่อนไขการใช้บริการ',
                         ),
+                        // CheckboxListTileFormField(
+                        //   activeColor: Theme.of(context).primaryColor,
+                        //   title: Text(
+                        //     'ยอมรับเงื่อนไขการใช้บริการ',
+                        //     style: TextStyle(fontSize: 16),
+                        //   ),
+                        //   initialValue: Checked,
+                        //   onChanged: (value) {
+                        //     setState(() {
+                        //       Checked = value;
+                        //     });
+                        //   },
+                        //   validator: (values) {
+                        //     if (values!) {
+                        //       return null;
+                        //     } else {
+                        //       return 'กรุณายอมรับเงื่อนไขการใช้บริการ';
+                        //     }
+                        //   },
+                        // ),
                         Buttons(
                           title: 'ลงทะเบียน',
                           press: () {

@@ -1,6 +1,5 @@
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
-import 'package:doormster/components/loading/not_connected.dart';
 import 'package:doormster/screen/main_screen/home_page.dart';
 import 'package:doormster/screen/main_screen/login_page.dart';
 import 'package:doormster/screen/main_screen/reset_password_page.dart';

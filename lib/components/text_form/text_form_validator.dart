@@ -24,7 +24,6 @@ class TextForm_validator extends StatelessWidget {
           controller: controller,
           keyboardType: TypeInput,
           decoration: InputDecoration(
-            prefixIconColor: Colors.green,
             contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 13),
             // labelText: 'Username',
             hintText: title,

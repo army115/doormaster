@@ -1,5 +1,6 @@
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_twobutton_subtext.dart';
+import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/button/button_ontline.dart';
 import 'package:doormster/models/get_multi_company.dart';
 import 'package:doormster/models/login_model.dart';
@@ -10,12 +11,10 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
-import 'package:restart_app/restart_app.dart';
 
 class MyDrawer extends StatefulWidget {
   final pressProfile;
-  final refreshHome;
-  MyDrawer({Key? key, this.pressProfile, this.refreshHome});
+  MyDrawer({Key? key, this.pressProfile});
 
   @override
   State<MyDrawer> createState() => _MyDrawerState();
@@ -86,10 +85,6 @@ class _MyDrawerState extends State<MyDrawer> {
         var token = jsonRes.accessToken;
         List<User> data = jsonRes.user!; //ตัวแปร List จาก model
 
-        print('userId: ${data.single.sId}');
-        print('token: ${token}');
-        print('login success');
-
         // ส่งค่าตัวแปร
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('token', token!);
@@ -101,17 +96,20 @@ class _MyDrawerState extends State<MyDrawer> {
         if (data.single.devicegroupUuid != null) {
           await prefs.setString('deviceId', data.single.devicegroupUuid!);
         }
+
+        print('userId: ${data.single.sId}');
         print('Select Success');
         print(response.body);
+
         Navigator.of(context).popUntil(ModalRoute.withName('/bottom'));
+
         setState(() {
-          widget.pressProfile;
+          homeKey.currentState?.popAndPushNamed('/');
           loading = false;
         });
 
         // snackbar(context, Theme.of(context).primaryColor, 'เลือกสำเร็จ',
         //     Icons.check_circle_outline_rounded);
-        // await Restart.restartApp();
       } else {
         dialogOnebutton_Subtitle(context, 'เลือกไม่สำเร็จ', '${jsonRes.data}',
             Icons.highlight_off_rounded, Colors.red, 'ตกลง', () {

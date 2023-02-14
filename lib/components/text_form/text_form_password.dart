@@ -35,7 +35,6 @@ class _TextForm_PasswordState extends State<TextForm_Password> {
           controller: widget.controller,
           keyboardType: TextInputType.visiblePassword,
           decoration: InputDecoration(
-            prefixIconColor: Colors.green,
             contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 13),
             // labelText: 'Username',
             hintText: widget.title,

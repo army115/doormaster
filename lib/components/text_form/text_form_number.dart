@@ -32,7 +32,6 @@ class TextForm_Number extends StatelessWidget {
           ],
           decoration: InputDecoration(
             counterText: "",
-            prefixIconColor: Colors.green,
             contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 13),
             // labelText: 'Username',
             hintText: title,

@@ -33,6 +33,7 @@ class _Home_PageState extends State<Home_Page> {
   List<DataMenu> listMenu = [];
   List<Data> listads = [];
   bool loading = false;
+  var checkNet;
 
   List<String> _images = [
     'https://resize.indiatvnews.com/en/resize/newbucket/715_-/2020/09/breakingnews-live-blog-1568185450-1595123397-1600221127.jpg',
@@ -61,10 +62,11 @@ class _Home_PageState extends State<Home_Page> {
       });
 
       if (response.statusCode == 200) {
+        await Future.delayed(Duration(milliseconds: 500));
         getMenu menuHome = getMenu.fromJson(convert.jsonDecode(response.body));
-        _getAds();
         setState(() {
           listMenu = menuHome.data!;
+          _getAds();
           loading = false;
         });
       }
@@ -136,21 +138,14 @@ class _Home_PageState extends State<Home_Page> {
     }
   }
 
-  void checkInternet(page) async {
-    var result = await Connectivity().checkConnectivity();
-    if (result == ConnectivityResult.mobile ||
-        result == ConnectivityResult.wifi) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => page));
-    } else {
-      snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
-          Icons.warning_amber_rounded);
-      print('not connected');
-    }
+  void checkInternet() async {
+    checkNet = await Connectivity().checkConnectivity();
   }
 
   @override
   void initState() {
     super.initState();
+    checkInternet();
     _getMenu();
   }
 
@@ -229,11 +224,15 @@ class _Home_PageState extends State<Home_Page> {
                                   scale: 1.0,
                                   itemCount: 1,
                                   itemBuilder: (context, index) {
-                                    return Container(
-                                        child: Image.asset(
-                                      'assets/images/ads.png',
-                                      fit: BoxFit.cover,
-                                    ));
+                                    return checkNet ==
+                                                ConnectivityResult.none ||
+                                            loading == true
+                                        ? Container()
+                                        : Container(
+                                            child: Image.asset(
+                                            'assets/images/ads.png',
+                                            fit: BoxFit.cover,
+                                          ));
                                   },
                                 ),
                         ),
