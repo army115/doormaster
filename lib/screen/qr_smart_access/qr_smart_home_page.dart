@@ -68,8 +68,10 @@ class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
           Colors.orange,
           'ตกลง', () {
         openAppSettings();
-        Navigator.of(context, rootNavigator: true).pop();
-      }, true);
+        Navigator.of(
+          context,
+        ).pop();
+      }, false);
     }
   }
 

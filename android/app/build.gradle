@@ -57,7 +57,7 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.hip.community"
-        minSdkVersion 22
+        minSdkVersion 21
         targetSdkVersion 33
         versionCode 3
         versionName '1.0.2'

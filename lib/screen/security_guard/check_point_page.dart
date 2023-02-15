@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/checkBox/checkbox_formfield.dart';
@@ -57,17 +58,22 @@ class _Check_PointState extends State<Check_Point> {
   TextEditingController detail = TextEditingController();
 
   final ImagePicker imgpicker = ImagePicker();
+  List<XFile>? imagefiles;
   XFile? image;
 
   openImages(ImageSource TypeImage) async {
     try {
-      // var pickedfiles = await imgpicker.pickMultiImage();
-      final XFile? photo = await imgpicker.pickImage(source: TypeImage);
+      var pickedfiles = await imgpicker.pickMultiImage();
+      // final XFile? photo = await imgpicker.pickImage(source: TypeImage);
       //you can use ImageCourse.camera for Camera capture
-      if (photo != null) {
-        // imagefiles = pickedfiles;
+      if (pickedfiles != null) {
+        if (imagefiles != null) {
+          imagefiles?.addAll(pickedfiles);
+        } else {
+          imagefiles = pickedfiles;
+        }
         setState(() {
-          image = photo;
+          // image = photo;
         });
       } else {
         print("No image is selected.");
@@ -106,6 +112,7 @@ class _Check_PointState extends State<Check_Point> {
                   Text('รายการตรวจ'),
                   ListView.builder(
                       shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
                       itemCount: checkBox.length,
                       itemBuilder: ((context, index) => CheckBox_FormField(
                             title: '${checkBox[index].title}',
@@ -113,58 +120,102 @@ class _Check_PointState extends State<Check_Point> {
                             validator: 'กรุณาเลือกรายการ',
                           ))),
                   Text('รูปภาพประกอบ'),
-                  Row(
-                    children: [
-                      Card(
-                        child: InkWell(
-                            onTap: () {
-                              openImages(ImageSource.gallery);
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(5),
-                              child: Container(
-                                height: MediaQuery.of(context).size.width * 0.4,
-                                width: MediaQuery.of(context).size.width * 0.4,
-                                child: Icon(
-                                  Icons.camera_alt_rounded,
-                                  size: 40,
-                                ),
-                              ),
-                            )),
-                      ),
-                      Container(
-                        height: MediaQuery.of(context).size.width * 0.5,
-                        padding: EdgeInsets.symmetric(vertical: 10),
-                        child: GridView.builder(
-                            shrinkWrap: true,
-                            primary: true,
-                            scrollDirection: Axis.horizontal,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              // childAspectRatio: 1,
-                              crossAxisCount: 1,
-                              crossAxisSpacing: 0,
-                              mainAxisSpacing: 10,
-                            ),
-                            // itemCount: 1,
-                            itemBuilder: (context, index) {
-                              return image != null
-                                  ? Card(
-                                      child: Padding(
-                                      padding: const EdgeInsets.all(5),
+                  // Card(
+                  //   child: InkWell(
+                  //       onTap: () {
+                  //         openImages(ImageSource.gallery);
+                  //       },
+                  //       child: Container(
+                  //         width: 150,
+                  //         height: 150,
+                  //         child: Icon(
+                  //           Icons.camera_alt_rounded,
+                  //           size: 40,
+                  //         ),
+                  //       )),
+                  // ),
+                  Container(
+                    height: 150,
+                    child: ListView(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        // itemCount: imagefiles?.length,
+                        // itemBuilder: (context, index) =>
+
+                        children: [
+                          imagefiles != null
+                              ? Container(
+                                  height: 150,
+                                  child: ListView.builder(
+                                      shrinkWrap: true,
+                                      reverse: true,
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: imagefiles!.length,
+                                      itemBuilder: ((context, index) => Card(
+                                              child: Padding(
+                                            padding: const EdgeInsets.all(0),
+                                            child: Stack(
+                                              children: [
+                                                Container(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.4,
+                                                  decoration: BoxDecoration(
+                                                    image: DecorationImage(
+                                                        fit: BoxFit.cover,
+                                                        image: FileImage(File(
+                                                            imagefiles![index]
+                                                                .path))),
+                                                  ),
+                                                ),
+                                                Positioned(
+                                                  top: 3,
+                                                  right: 3,
+                                                  child: CircleAvatar(
+                                                    radius: 10,
+                                                    backgroundColor:
+                                                        Colors.white70,
+                                                    child: IconButton(
+                                                      padding: EdgeInsets.zero,
+                                                      constraints:
+                                                          BoxConstraints(),
+                                                      splashRadius: 10,
+                                                      icon: Icon(Icons.close),
+                                                      onPressed: () {
+                                                        setState(() {
+                                                          imagefiles?.remove(
+                                                              imagefiles![
+                                                                  index]);
+                                                        });
+                                                      },
+                                                      iconSize: 18,
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          )))),
+                                )
+                              : Container(),
+                          imagefiles?.length == 4
+                              ? Container()
+                              : Card(
+                                  child: InkWell(
+                                      onTap: () {
+                                        openImages(ImageSource.camera);
+                                      },
                                       child: Container(
-                                        decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                              fit: BoxFit.cover,
-                                              image:
-                                                  FileImage(File(image!.path))),
+                                        width: 150,
+                                        height: 150,
+                                        child: Icon(
+                                          Icons.camera_alt_rounded,
+                                          size: 40,
                                         ),
-                                      ),
-                                    ))
-                                  : Container();
-                            }),
-                      ),
-                    ],
+                                      )),
+                                ),
+                        ]),
                   ),
                   Text('บันทึกเหตุการณ์'),
                   DropDownType(),

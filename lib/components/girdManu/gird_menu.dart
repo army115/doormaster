@@ -30,7 +30,7 @@ class Gird_Menu extends StatelessWidget {
             Icon(icon, size: 40, color: Colors.white),
             // SizedBox(height: 5),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Text(
                 title,
                 textAlign: TextAlign.center,
