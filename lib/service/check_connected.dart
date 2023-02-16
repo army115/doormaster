@@ -3,20 +3,16 @@ import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:flutter/material.dart';
 
-void checkInternet(context, True, click) async {
-  var check = await Connectivity().checkConnectivity();
-  if (check != ConnectivityResult.none) {
-    True;
-  } else {
-    dialogOnebutton_Subtitle(
-        context,
-        'พบข้อผิดพลาด',
-        'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-        Icons.warning_amber_rounded,
-        Colors.orange,
-        'ตกลง', () {
-      click;
-    }, false);
+void checkInternet(context, page) async {
+  var result = await Connectivity().checkConnectivity();
+  print(result);
+  if (result == ConnectivityResult.none) {
+    snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
+        Icons.warning_amber_rounded);
     print('not connected');
+  } else {
+    Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
+      builder: (context) => page,
+    ));
   }
 }

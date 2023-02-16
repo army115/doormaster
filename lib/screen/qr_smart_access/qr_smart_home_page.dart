@@ -6,6 +6,7 @@ import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/screen/qr_smart_access/opendoor_page.dart';
 import 'package:doormster/screen/qr_smart_access/scan_qrcode_page.dart';
 import 'package:doormster/screen/qr_smart_access/visitor_page.dart';
+import 'package:doormster/service/check_connected.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,20 +25,6 @@ class QRSmart_HomePage extends StatefulWidget {
 }
 
 class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
-  void checkInternet(page) async {
-    var result = await Connectivity().checkConnectivity();
-    print(result);
-    if (result == ConnectivityResult.none) {
-      snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
-          Icons.warning_amber_rounded);
-      print('not connected');
-    } else {
-      Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
-        builder: (context) => page,
-      ));
-    }
-  }
-
   bool loading = false;
 
   var mobileRole;
@@ -58,7 +45,7 @@ class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
     final status2 = await Permission.bluetoothScan.request();
     final status3 = await Permission.bluetoothConnect.request();
     if (status.isGranted && status2.isGranted && status3.isGranted) {
-      checkInternet(Opendoor_Page());
+      checkInternet(context, Opendoor_Page());
     } else {
       dialogOnebutton_Subtitle(
           context,
@@ -129,14 +116,14 @@ class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
                         title: 'ผู้มาติดต่อ',
                         icon: Icons.person,
                         press: () {
-                          checkInternet(Visitor_Page());
+                          checkInternet(context, Visitor_Page());
                         },
                       ),
                       Gird_Menu(
                         title: 'สแกน',
                         icon: Icons.qr_code_scanner_rounded,
                         press: () {
-                          checkInternet(Scanner());
+                          checkInternet(context, Scanner());
                         },
                       ),
                       Gird_Menu(

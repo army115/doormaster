@@ -279,7 +279,7 @@ class _MyDrawerState extends State<MyDrawer> {
                     () {
                       Navigator.pop(context);
                     },
-                    false);
+                    true);
               },
               leading: Icon(
                 Icons.logout,

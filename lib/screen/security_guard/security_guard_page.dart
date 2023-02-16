@@ -4,6 +4,7 @@ import 'package:doormster/components/drawer/drawer.dart';
 import 'package:doormster/components/girdManu/gird_menu.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/screen/security_guard/check_point_page.dart';
+import 'package:doormster/service/check_connected.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,20 +17,6 @@ class Security_Guard extends StatefulWidget {
 }
 
 class _Security_GuardState extends State<Security_Guard> {
-  void checkInternet(page) async {
-    var result = await Connectivity().checkConnectivity();
-    print(result);
-    if (result == ConnectivityResult.none) {
-      snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
-          Icons.warning_amber_rounded);
-      print('not connected');
-    } else {
-      Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
-        builder: (context) => page,
-      ));
-    }
-  }
-
   bool loading = false;
 
   var mobileRole;
@@ -80,10 +67,7 @@ class _Security_GuardState extends State<Security_Guard> {
                   title: 'บันทึกเหตุการณ์',
                   icon: Icons.assignment_outlined,
                   press: () {
-                    Navigator.of(context, rootNavigator: true)
-                        .push(MaterialPageRoute(
-                      builder: (context) => Check_Point(),
-                    ));
+                    checkInternet(context, Check_Point());
                   },
                 ),
                 Gird_Menu(

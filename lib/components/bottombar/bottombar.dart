@@ -9,9 +9,7 @@ import 'package:doormster/routes/menu/profile_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-final GlobalKey<RefreshIndicatorState> _refreshKey =
-    GlobalKey<RefreshIndicatorState>();
+GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 GlobalKey<NavigatorState> homeKey = GlobalKey<NavigatorState>();
 GlobalKey<NavigatorState> messageKey = GlobalKey<NavigatorState>();
 GlobalKey<NavigatorState> profileKey = GlobalKey<NavigatorState>();
@@ -53,7 +51,6 @@ class _BottomBarState extends State<BottomBar> {
       if (isExitingApp) {
         if (_selectedIndex != 0) {
           setState(() {
-            // homeKey.currentState?.popAndPushNamed('/');
             _selectedIndex = 0;
           });
         } else {
@@ -65,7 +62,7 @@ class _BottomBarState extends State<BottomBar> {
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                backgroundColor: Theme.of(context).primaryColor,
+                backgroundColor: Colors.black87,
                 content: Text(
                   "กดอีกครั้งเพื่อออก",
                   textAlign: TextAlign.center,
