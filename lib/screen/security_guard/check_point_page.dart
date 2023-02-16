@@ -58,22 +58,15 @@ class _Check_PointState extends State<Check_Point> {
   TextEditingController detail = TextEditingController();
 
   final ImagePicker imgpicker = ImagePicker();
-  List<XFile>? imagefiles;
-  XFile? image;
+  List<XFile>? listImage = [];
 
-  openImages(ImageSource TypeImage) async {
+  selectedImages(ImageSource TypeImage) async {
     try {
-      var pickedfiles = await imgpicker.pickMultiImage();
-      // final XFile? photo = await imgpicker.pickImage(source: TypeImage);
-      //you can use ImageCourse.camera for Camera capture
-      if (pickedfiles != null) {
-        if (imagefiles != null) {
-          imagefiles?.addAll(pickedfiles);
-        } else {
-          imagefiles = pickedfiles;
-        }
+      // var pickedfiles = await imgpicker.pickMultiImage();
+      final XFile? pickedImages = await imgpicker.pickImage(source: TypeImage);
+      if (pickedImages != null) {
         setState(() {
-          // image = photo;
+          listImage?.add(pickedImages);
         });
       } else {
         print("No image is selected.");
@@ -139,18 +132,18 @@ class _Check_PointState extends State<Check_Point> {
                     child: ListView(
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
-                        // itemCount: imagefiles?.length,
+                        // itemCount: listImage?.length,
                         // itemBuilder: (context, index) =>
 
                         children: [
-                          imagefiles != null
+                          listImage != null
                               ? Container(
                                   height: 150,
                                   child: ListView.builder(
                                       shrinkWrap: true,
                                       reverse: true,
                                       scrollDirection: Axis.horizontal,
-                                      itemCount: imagefiles!.length,
+                                      itemCount: listImage!.length,
                                       itemBuilder: ((context, index) => Card(
                                               child: Padding(
                                             padding: const EdgeInsets.all(0),
@@ -165,7 +158,7 @@ class _Check_PointState extends State<Check_Point> {
                                                     image: DecorationImage(
                                                         fit: BoxFit.cover,
                                                         image: FileImage(File(
-                                                            imagefiles![index]
+                                                            listImage![index]
                                                                 .path))),
                                                   ),
                                                 ),
@@ -174,8 +167,7 @@ class _Check_PointState extends State<Check_Point> {
                                                   right: 3,
                                                   child: CircleAvatar(
                                                     radius: 10,
-                                                    backgroundColor:
-                                                        Colors.white70,
+                                                    backgroundColor: Colors.red,
                                                     child: IconButton(
                                                       padding: EdgeInsets.zero,
                                                       constraints:
@@ -184,13 +176,13 @@ class _Check_PointState extends State<Check_Point> {
                                                       icon: Icon(Icons.close),
                                                       onPressed: () {
                                                         setState(() {
-                                                          imagefiles?.remove(
-                                                              imagefiles![
+                                                          listImage?.remove(
+                                                              listImage![
                                                                   index]);
                                                         });
                                                       },
                                                       iconSize: 18,
-                                                      color: Colors.black,
+                                                      color: Colors.white,
                                                     ),
                                                   ),
                                                 )
@@ -199,12 +191,12 @@ class _Check_PointState extends State<Check_Point> {
                                           )))),
                                 )
                               : Container(),
-                          imagefiles?.length == 4
+                          listImage?.length == 4
                               ? Container()
                               : Card(
                                   child: InkWell(
                                       onTap: () {
-                                        openImages(ImageSource.camera);
+                                        selectedImages(ImageSource.camera);
                                       },
                                       child: Container(
                                         width: 150,
