@@ -70,7 +70,7 @@ class _Home_PageState extends State<Home_Page> {
       });
 
       if (response.statusCode == 200) {
-        await Future.delayed(Duration(milliseconds: 500));
+        await Future.delayed(Duration(milliseconds: 400));
         getMenu menuHome = getMenu.fromJson(convert.jsonDecode(response.body));
         setState(() {
           listMenu = menuHome.data!;
@@ -266,14 +266,14 @@ class _Home_PageState extends State<Home_Page> {
                         ),
                       ),
                       // SizedBox(height: 20),
-                      Buttons(
-                          title: 'test',
-                          press: () {
-                            dialogOnebutton(context, 'test', Icons.warning,
-                                Colors.amber, 'back', () {
-                              Navigator.pop(context);
-                            }, false);
-                          })
+                      // Buttons(
+                      //     title: 'test',
+                      //     press: () {
+                      //       dialogOnebutton(context, 'test', Icons.warning,
+                      //           Colors.amber, 'back', () {
+                      //         Navigator.pop(context);
+                      //       }, false);
+                      //     })
                     ],
                   ),
                 ),

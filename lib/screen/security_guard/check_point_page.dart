@@ -196,7 +196,7 @@ class _Check_PointState extends State<Check_Point> {
                               : Card(
                                   child: InkWell(
                                       onTap: () {
-                                        selectedImages(ImageSource.camera);
+                                        selectedImages(ImageSource.gallery);
                                       },
                                       child: Container(
                                         width: 150,

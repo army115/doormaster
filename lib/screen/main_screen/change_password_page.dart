@@ -1,6 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
+import 'package:doormster/components/snackbar/snackbar.dart';
+import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -22,10 +25,77 @@ class _Password_PageState extends State<Password_Page> {
   final _conpass = TextEditingController();
 
   var confirmPass;
+  var token;
+  var username;
+  bool loading = false;
 
   bool redEyeold = true;
   bool redEyenew = true;
   bool redEyecon = true;
+
+  Future<void> _getUsername() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    token = prefs.getString('token');
+    username = prefs.getString('username');
+    print(username);
+  }
+
+  Future<void> _changePassword(Map<String, dynamic> values) async {
+    try {
+      setState(() {
+        loading = true;
+      });
+      String url = '${Connect_api().domain}/changpassword';
+      var jsonRes = await http.post(Uri.parse(url),
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+          body: convert.jsonEncode(values));
+      var _response = jsonRes.body.split(',').first.split(':').last;
+      print(_response);
+      if (_response != '400') {
+        print('Change Success!');
+        Navigator.pop(context);
+        snackbar(context, Theme.of(context).primaryColor,
+            'เปลี่ยนรหัสผ่านสำเร็จ', Icons.check_circle_outline_rounded);
+      } else {
+        print('Change Fail!!');
+        dialogOnebutton_Subtitle(
+            context,
+            'พบข้อผิดพลาด',
+            'รหัสผ่านปัจจุบันไม่ถูกต้อง',
+            Icons.highlight_off_rounded,
+            Colors.red,
+            'ตกลง', () {
+          Navigator.of(context).pop();
+        }, false);
+      }
+    } catch (error) {
+      print(error);
+      dialogOnebutton_Subtitle(
+          context,
+          'พบข้อผิดพลาด',
+          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+          Icons.warning_amber_rounded,
+          Colors.orange,
+          'ตกลง', () {
+        Navigator.of(context).pop();
+      }, false);
+      // snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
+      //     Icons.warning_amber_rounded);
+      setState(() {
+        loading = false;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getUsername();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +126,6 @@ class _Password_PageState extends State<Password_Page> {
                 (values) {
                   if (values!.isEmpty) {
                     return 'กรอกรหัสผ่านปัจจุบัน';
-                    // } else if (values != widget.userpass) {
-                    //   return "รหัสผ่านปัจจุบันไม่ถูกต้อง";
                   } else {
                     return null;
                   }
@@ -175,9 +243,10 @@ class _Password_PageState extends State<Password_Page> {
           onPressed: () {
             if (_formkey.currentState!.validate()) {
               Map<String, dynamic> valuse = Map();
-              valuse['user_password'] = _conpass.text;
-              homeKey.currentState?.popAndPushNamed('/');
-              Navigator.pop(context);
+              valuse['user_name'] = username;
+              valuse['old_password'] = _oldpass.text;
+              valuse['new_password'] = _conpass.text;
+              _changePassword(valuse);
             }
           },
           color: Theme.of(context).primaryColor,

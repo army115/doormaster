@@ -67,7 +67,7 @@ class _Security_GuardState extends State<Security_Guard> {
                   title: 'บันทึกเหตุการณ์',
                   icon: Icons.assignment_outlined,
                   press: () {
-                    checkInternet(context, Check_Point());
+                    // checkInternet(context, Check_Point());
                   },
                 ),
                 Gird_Menu(

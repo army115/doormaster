@@ -58,6 +58,7 @@ class _Login_PageState extends State<Login_Page> {
             // ส่งค่าตัวแปร
             SharedPreferences prefs = await SharedPreferences.getInstance();
             await prefs.setString('token', token!);
+            await prefs.setString('username', data.single.userName!);
 
             if (prefs.getString('userId') == null &&
                 prefs.getString('companyId') == null &&

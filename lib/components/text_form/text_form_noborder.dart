@@ -23,6 +23,7 @@ class Text_Form_NoBorder extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 8),
       child: TextFormField(
         autofocus: false,
+        readOnly: true,
         style: TextStyle(fontSize: 16),
         controller: controller,
         keyboardType: TypeInput,

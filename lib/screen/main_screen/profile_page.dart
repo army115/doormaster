@@ -50,7 +50,7 @@ class _Profile_PageState extends State<Profile_Page> {
       });
 
       if (response.statusCode == 200) {
-        await Future.delayed(Duration(milliseconds: 500));
+        await Future.delayed(Duration(milliseconds: 400));
         GetProfile getInfo =
             GetProfile.fromJson(convert.jsonDecode(response.body));
         setState(() {
@@ -153,27 +153,27 @@ class _Profile_PageState extends State<Profile_Page> {
                             backgroundImage: AssetImage(
                                 'assets/images/HIP Smart Community Icon-03.png')),
                       ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: CircleAvatar(
-                            backgroundColor: Colors.white,
-                            radius: 21,
-                            child: CircleAvatar(
-                                radius: 18,
-                                backgroundColor: Theme.of(context).primaryColor,
-                                child: IconButton(
-                                  splashRadius: 20,
-                                  onPressed: () {
-                                    openImages(ImageSource.gallery);
-                                  },
-                                  icon: Icon(
-                                    Icons.edit,
-                                    color: Colors.white,
-                                    size: 20,
-                                  ),
-                                ))),
-                      )
+                      // Positioned(
+                      //   bottom: 0,
+                      //   right: 0,
+                      //   child: CircleAvatar(
+                      //       backgroundColor: Colors.white,
+                      //       radius: 21,
+                      //       child: CircleAvatar(
+                      //           radius: 18,
+                      //           backgroundColor: Theme.of(context).primaryColor,
+                      //           child: IconButton(
+                      //             splashRadius: 20,
+                      //             onPressed: () {
+                      //               openImages(ImageSource.gallery);
+                      //             },
+                      //             icon: Icon(
+                      //               Icons.edit,
+                      //               color: Colors.white,
+                      //               size: 20,
+                      //             ),
+                      //           ))),
+                      // )
                     ],
                   ),
                   SizedBox(
