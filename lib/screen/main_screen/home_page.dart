@@ -56,12 +56,13 @@ class _Home_PageState extends State<Home_Page> {
       });
 
       var url = '${Connect_api().domain}/get/menumobile/$companyId';
-      var response = await Dio().get(url
-          // options: Options(headers: {
-          //   'Connect-type': 'application/json',
-          //   'Accept': 'application/json',
-          // }),
-          );
+      var response = await Dio().get(
+        url,
+        options: Options(headers: {
+          'Connect-type': 'application/json',
+          'Accept': 'application/json',
+        }),
+      );
 
       if (response.statusCode == 200) {
         await Future.delayed(Duration(milliseconds: 400));
@@ -107,10 +108,10 @@ class _Home_PageState extends State<Home_Page> {
       var url = '${Connect_api().domain}/get/ads/$companyId';
       var response = await Dio().get(
         url,
-        // headers: {
-        //   'Connect-type': 'application/json',
-        //   'Accept': 'application/json',
-        // }
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        }),
       );
 
       if (response.statusCode == 200) {
