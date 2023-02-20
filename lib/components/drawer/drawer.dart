@@ -80,10 +80,15 @@ class _MyDrawerState extends State<MyDrawer> {
         loading = true;
       });
       var url = '${Connect_api().domain}/loginmulticompany';
-      var response = await Dio().post(url, data: {
-        "_id": uId,
-        "company_id": comId,
-      });
+      var response = await Dio().post(url,
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          }),
+          data: {
+            "_id": uId,
+            "company_id": comId,
+          });
       var jsonRes = LoginModel.fromJson(response.data);
       if (jsonRes.status == 200) {
         var token = jsonRes.accessToken;
