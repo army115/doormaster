@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/datetime/date_time.dart';
@@ -9,16 +10,13 @@ import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/components/text_form/text_form.dart';
 import 'package:doormster/components/text_form/text_form_number.dart';
 import 'package:doormster/models/device_group.dart';
-import 'package:doormster/models/doors_device.dart';
 import 'package:doormster/models/visitor_model.dart';
 import 'package:doormster/screen/qr_smart_access/visitor_detail_page.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:intl/intl.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert' as convert;
-import 'dart:async';
+// import 'package:http/http.dart' as http;
+// import 'dart:convert' as convert;
+// import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Visitor_Page extends StatefulWidget {
@@ -63,14 +61,16 @@ class _Visitor_PageState extends State<Visitor_Page> {
         loading = true;
       });
       var url = '${Connect_api().domain}/getdevicegroup_uuid/$deviceId';
-      var response = await http.get(Uri.parse(url), headers: {
-        'Connect-type': 'application/json',
-        'Accept': 'application/json',
-      });
+      var response = await Dio().get(
+        url,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        }),
+      );
 
       if (response.statusCode == 200) {
-        DeviceGroup deviceGp =
-            DeviceGroup.fromJson(convert.jsonDecode(response.body));
+        DeviceGroup deviceGp = DeviceGroup.fromJson(response.data);
         setState(() {
           listDevice = deviceGp.data!;
           loading = false;
@@ -94,18 +94,17 @@ class _Visitor_PageState extends State<Visitor_Page> {
         loading = true;
       });
       var url = '${Connect_api().domain}/createVisitor/$companyId';
-      var response = await http.post(Uri.parse(url),
-          headers: {
+      var response = await Dio().post(url,
+          options: Options(headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-          },
-          body: convert.jsonEncode(values));
+          }),
+          data: values);
 
       if (response.statusCode == 200) {
         var visitorData;
         var QRcodeData;
-        VisitorModel visitormodel =
-            VisitorModel.fromJson(convert.jsonDecode(response.body));
+        VisitorModel visitormodel = VisitorModel.fromJson(response.data);
         visitorData = [
           visitormodel.visitorName,
           visitormodel.visitorPeople,
@@ -138,7 +137,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
         snackbar(context, Colors.red, 'สร้าง QR Code ไม่สำเร็จ',
             Icons.highlight_off_rounded);
         print('craate Visitor Fail!!');
-        print(response.body);
+        print(response.data);
         setState(() {
           loading = false;
         });

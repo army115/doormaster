@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/checkBox/checkbox_formfield.dart';
@@ -12,9 +13,8 @@ import 'package:doormster/models/regis_response.dart';
 import 'package:doormster/screen/main_screen/login_page.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
-import 'package:checkbox_formfield/checkbox_formfield.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert' as convert;
+// import 'package:http/http.dart' as http;
+// import 'dart:convert' as convert;
 
 class Register_Page extends StatefulWidget {
   Register_Page({Key? key}) : super(key: key);
@@ -44,14 +44,16 @@ class _Register_PageState extends State<Register_Page> {
         loading = true;
       });
       var url = '${Connect_api().domain}/getcompanyactive';
-      var response = await http.get(Uri.parse(url), headers: {
-        'Connect-type': 'application/json',
-        'Accept': 'application/json',
-      });
+      var response = await Dio().get(
+        url,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        }),
+      );
 
       if (response.statusCode == 200) {
-        getCompany company =
-            getCompany.fromJson(convert.jsonDecode(response.body));
+        getCompany company = getCompany.fromJson(response.data);
         setState(() {
           listCompany = company.data!;
           loading = false;
@@ -77,13 +79,13 @@ class _Register_PageState extends State<Register_Page> {
         loading = true;
       });
       var url = '${Connect_api().domain}/registermobile';
-      var response = await http.post(Uri.parse(url),
-          headers: {
+      var response = await Dio().post(url,
+          options: Options(headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-          },
-          body: convert.jsonEncode(values));
-      var jsonRes = RegisResponse.fromJson(convert.jsonDecode(response.body));
+          }),
+          data: values);
+      var jsonRes = RegisResponse.fromJson(response.data);
       if (jsonRes.status == 200) {
         print('Register Success');
         print(values);
@@ -107,7 +109,7 @@ class _Register_PageState extends State<Register_Page> {
           Navigator.of(context).pop();
         }, false);
         print('Register not Success!!');
-        print(response.body);
+        print(response.data);
         setState(() {
           loading = false;
         });
@@ -206,9 +208,9 @@ class _Register_PageState extends State<Register_Page> {
                             error: (values) {
                               if (values.isEmpty) {
                                 return 'กรุณากรอกอีเมล';
-                                // } else if (values.isEmpty ||
-                                //     !values.contains("@")) {
-                                //   return "รูปแบบอีเมลไม่ถูกต้อง";
+                              } else if (values.isEmpty ||
+                                  !values.contains("@")) {
+                                return "รูปแบบอีเมลไม่ถูกต้อง";
                               } else {
                                 return null;
                               }

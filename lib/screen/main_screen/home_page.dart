@@ -1,24 +1,16 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:card_swiper/card_swiper.dart';
-import 'package:doormster/components/alertDialog/alert_dialog_onebutton.dart';
+import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
-import 'package:doormster/components/bottombar/bottombar.dart';
-import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/girdManu/menu_home.dart';
 import 'package:doormster/components/loading/loading.dart';
-import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/models/get_ads_company.dart';
 import 'package:doormster/models/get_menu.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
-
-import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class Home_Page extends StatefulWidget {
   Home_Page({
@@ -64,14 +56,16 @@ class _Home_PageState extends State<Home_Page> {
       });
 
       var url = '${Connect_api().domain}/get/menumobile/$companyId';
-      var response = await http.get(Uri.parse(url), headers: {
-        'Connect-type': 'application/json',
-        'Accept': 'application/json',
-      });
+      var response = await Dio().get(url
+          // options: Options(headers: {
+          //   'Connect-type': 'application/json',
+          //   'Accept': 'application/json',
+          // }),
+          );
 
       if (response.statusCode == 200) {
         await Future.delayed(Duration(milliseconds: 400));
-        getMenu menuHome = getMenu.fromJson(convert.jsonDecode(response.body));
+        getMenu menuHome = getMenu.fromJson(response.data);
         setState(() {
           listMenu = menuHome.data!;
           _getAds();
@@ -80,22 +74,20 @@ class _Home_PageState extends State<Home_Page> {
       }
     } catch (error) {
       print(error);
-      if (companyId == null) {
-      } else {
-        await Future.delayed(Duration(milliseconds: 500));
-        dialogOnebutton_Subtitle(
-            context,
-            'พบข้อผิดพลาด',
-            'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-            Icons.warning_amber_rounded,
-            Colors.orange,
-            'ตกลง', () {
-          Navigator.pop(context);
-          setState(() {
-            _getMenu();
-          });
-        }, false);
-      }
+      await Future.delayed(Duration(milliseconds: 500));
+      dialogOnebutton_Subtitle(
+          context,
+          'พบข้อผิดพลาด',
+          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+          Icons.warning_amber_rounded,
+          Colors.orange,
+          'ตกลง', () {
+        Navigator.pop(context);
+        setState(() {
+          _getMenu();
+        });
+      }, false);
+
       setState(() {
         loading = false;
       });
@@ -113,14 +105,16 @@ class _Home_PageState extends State<Home_Page> {
       });
 
       var url = '${Connect_api().domain}/get/ads/$companyId';
-      var response = await http.get(Uri.parse(url), headers: {
-        'Connect-type': 'application/json',
-        'Accept': 'application/json',
-      });
+      var response = await Dio().get(
+        url,
+        // headers: {
+        //   'Connect-type': 'application/json',
+        //   'Accept': 'application/json',
+        // }
+      );
 
       if (response.statusCode == 200) {
-        getAdsCompany asdcompany =
-            getAdsCompany.fromJson(convert.jsonDecode(response.body));
+        getAdsCompany asdcompany = getAdsCompany.fromJson(response.data);
         setState(() {
           listads = asdcompany.data!;
           loading = false;

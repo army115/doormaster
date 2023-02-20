@@ -9,8 +9,8 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:intl/intl.dart';
 import 'package:share_files_and_screenshot_widgets/share_files_and_screenshot_widgets.dart';
 import 'dart:convert' as convert;
-import 'dart:async';
 import 'dart:ui' as ui;
+// import 'dart:async';
 
 class Visitor_Detail extends StatefulWidget {
   var visitordData;

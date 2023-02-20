@@ -1,8 +1,5 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/drawer/drawer.dart';
 import 'package:doormster/components/girdManu/gird_menu.dart';
-import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/screen/security_guard/check_point_page.dart';
 import 'package:doormster/service/check_connected.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +64,7 @@ class _Security_GuardState extends State<Security_Guard> {
                   title: 'บันทึกเหตุการณ์',
                   icon: Icons.assignment_outlined,
                   press: () {
-                    // checkInternet(context, Check_Point());
+                    checkInternet(context, Check_Point());
                   },
                 ),
                 Gird_Menu(

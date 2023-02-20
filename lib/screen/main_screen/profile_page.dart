@@ -2,22 +2,20 @@
 
 import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/drawer/drawer.dart';
 import 'package:doormster/components/loading/loading.dart';
-import 'package:doormster/components/text_form/text_form.dart';
 import 'package:doormster/components/text_form/text_form_noborder.dart';
 import 'package:doormster/models/profile_model.dart';
-import 'package:doormster/service/check_connected.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'dart:convert' as convert;
-import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// import 'package:http/http.dart' as http;
+// import 'dart:convert' as convert;
+// import 'dart:async';
 class Profile_Page extends StatefulWidget {
   const Profile_Page({Key? key});
 
@@ -44,15 +42,17 @@ class _Profile_PageState extends State<Profile_Page> {
         loading = true;
       });
       var url = '${Connect_api().domain}/get/profile/$userId';
-      var response = await http.get(Uri.parse(url), headers: {
-        'Connect-type': 'application/json',
-        'Accept': 'application/json',
-      });
+      var response = await Dio().get(
+        url,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        }),
+      );
 
       if (response.statusCode == 200) {
         await Future.delayed(Duration(milliseconds: 400));
-        GetProfile getInfo =
-            GetProfile.fromJson(convert.jsonDecode(response.body));
+        GetProfile getInfo = GetProfile.fromJson(response.data);
         setState(() {
           profileInfo = getInfo.data!;
           Controller();
@@ -153,27 +153,27 @@ class _Profile_PageState extends State<Profile_Page> {
                             backgroundImage: AssetImage(
                                 'assets/images/HIP Smart Community Icon-03.png')),
                       ),
-                      // Positioned(
-                      //   bottom: 0,
-                      //   right: 0,
-                      //   child: CircleAvatar(
-                      //       backgroundColor: Colors.white,
-                      //       radius: 21,
-                      //       child: CircleAvatar(
-                      //           radius: 18,
-                      //           backgroundColor: Theme.of(context).primaryColor,
-                      //           child: IconButton(
-                      //             splashRadius: 20,
-                      //             onPressed: () {
-                      //               openImages(ImageSource.gallery);
-                      //             },
-                      //             icon: Icon(
-                      //               Icons.edit,
-                      //               color: Colors.white,
-                      //               size: 20,
-                      //             ),
-                      //           ))),
-                      // )
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: CircleAvatar(
+                            backgroundColor: Colors.white,
+                            radius: 21,
+                            child: CircleAvatar(
+                                radius: 18,
+                                backgroundColor: Theme.of(context).primaryColor,
+                                child: IconButton(
+                                  splashRadius: 20,
+                                  onPressed: () {
+                                    openImages(ImageSource.gallery);
+                                  },
+                                  icon: Icon(
+                                    Icons.edit,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                ))),
+                      )
                     ],
                   ),
                   SizedBox(

@@ -1,7 +1,5 @@
+import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
-import 'package:doormster/components/bottombar/bottombar.dart';
-import 'package:doormster/components/button/button.dart';
-import 'package:doormster/components/button/button_ontline.dart';
 import 'package:doormster/components/dropdown/dropdown.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/models/create_company_model.dart';
@@ -10,8 +8,8 @@ import 'package:doormster/models/get_multi_company.dart';
 import 'package:doormster/models/login_model.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert' as convert;
+// import 'package:http/http.dart' as http;
+// import 'dart:convert' as convert;
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -43,14 +41,16 @@ class _Add_CompanyState extends State<Add_Company> {
         loading = true;
       });
       var url = '${Connect_api().domain}/getcompanyactive';
-      var response = await http.get(Uri.parse(url), headers: {
-        'Connect-type': 'application/json',
-        'Accept': 'application/json',
-      });
+      var response = await Dio().get(
+        url,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        }),
+      );
 
       if (response.statusCode == 200) {
-        getCompany company =
-            getCompany.fromJson(convert.jsonDecode(response.body));
+        getCompany company = getCompany.fromJson(response.data);
         setState(() {
           listCompany = company.data!;
           loading = false;
@@ -85,14 +85,16 @@ class _Add_CompanyState extends State<Add_Company> {
         loading = true;
       });
       var url = '${Connect_api().domain}/get/multicompanymobile/$uuId';
-      var response = await http.get(Uri.parse(url), headers: {
-        'Connect-type': 'application/json',
-        'Accept': 'application/json',
-      });
+      var response = await Dio().get(
+        url,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        }),
+      );
 
       if (response.statusCode == 200) {
-        getMultiCompany company =
-            getMultiCompany.fromJson(convert.jsonDecode(response.body));
+        getMultiCompany company = getMultiCompany.fromJson(response.data);
         setState(() {
           multiCompany = company.data!;
           loading = false;
@@ -121,13 +123,13 @@ class _Add_CompanyState extends State<Add_Company> {
         loading = true;
       });
       var url = '${Connect_api().domain}/create/createMultiCompanyforMobile';
-      var response = await http.post(Uri.parse(url),
-          headers: {
+      var response = await Dio().post(url,
+          options: Options(headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-          },
-          body: convert.jsonEncode(values));
-      var jsonRes = createCompany.fromJson(convert.jsonDecode(response.body));
+          }),
+          data: values);
+      var jsonRes = createCompany.fromJson(response.data);
       if (jsonRes.status == 200) {
         print('add Success');
         print(values);
@@ -144,7 +146,7 @@ class _Add_CompanyState extends State<Add_Company> {
           Navigator.of(context).pop();
         }, false);
         print('add not Success!!');
-        print(response.body);
+        print(response.data);
         setState(() {
           loading = false;
         });
@@ -174,11 +176,16 @@ class _Add_CompanyState extends State<Add_Company> {
         loading = true;
       });
       var url = '${Connect_api().domain}/loginmulticompany';
-      var response = await http.post(Uri.parse(url), body: {
-        "_id": uId,
-        "company_id": comId,
-      });
-      var jsonRes = LoginModel.fromJson(convert.jsonDecode(response.body));
+      var response = await Dio().post(url,
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          }),
+          data: {
+            "_id": uId,
+            "company_id": comId,
+          });
+      var jsonRes = LoginModel.fromJson(response.data);
       if (jsonRes.status == 200) {
         var token = jsonRes.accessToken;
         List<User> data = jsonRes.user!; //ตัวแปร List จาก model
@@ -199,7 +206,7 @@ class _Add_CompanyState extends State<Add_Company> {
           await prefs.setString('deviceId', data.single.devicegroupUuid!);
         }
         print('loginMulti Success');
-        print(response.body);
+        print(response.data);
 
         Navigator.of(context).pushNamedAndRemoveUntil(
             '/bottom', (Route<dynamic> route) => false);
@@ -209,12 +216,17 @@ class _Add_CompanyState extends State<Add_Company> {
         // snackbar(context, Theme.of(context).primaryColor, 'เลือกสำเร็จ',
         //     Icons.check_circle_outline_rounded);
       } else {
-        dialogOnebutton_Subtitle(context, 'เพิ่มไม่สำเร็จ', '${jsonRes.data}',
-            Icons.highlight_off_rounded, Colors.red, 'ตกลง', () {
+        dialogOnebutton_Subtitle(
+            context,
+            'เพิ่มไม่สำเร็จ',
+            'กรุณาลองใหม่อีกครั้ง',
+            Icons.highlight_off_rounded,
+            Colors.red,
+            'ตกลง', () {
           Navigator.of(context).pop();
         }, false);
         print('loginMulti fail!!');
-        print(response.body);
+        print(response.data);
         setState(() {
           loading = false;
         });

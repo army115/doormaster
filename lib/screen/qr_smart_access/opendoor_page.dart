@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
@@ -6,11 +7,10 @@ import 'package:doormster/models/opendoors_model.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:doormster/service/connect_native.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert' as convert;
-import 'dart:async';
+// import 'package:http/http.dart' as http;
+// import 'dart:convert' as convert;
+// import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 
 class Opendoor_Page extends StatefulWidget {
@@ -44,14 +44,16 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
         loading = true;
       });
       var url = '${Connect_api().domain}/getdeviceuuidmobile/$deviceId';
-      var response = await http.get(Uri.parse(url), headers: {
-        'Connect-type': 'application/json',
-        'Accept': 'application/json',
-      });
+      var response = await Dio().get(
+        url,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        }),
+      );
 
       if (response.statusCode == 200) {
-        DoorsDeviece deviceDoors =
-            DoorsDeviece.fromJson(convert.jsonDecode(response.body));
+        DoorsDeviece deviceDoors = DoorsDeviece.fromJson(response.data);
         setState(() {
           listDevice = deviceDoors.lists!;
           loading = false;
@@ -83,17 +85,14 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
         loading = true;
       });
       var url = '${Connect_api().domain}/openDevice/$companyId/$devSn';
-      var response = await http.post(
-        Uri.parse(url),
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-      );
+      var response = await Dio().post(url,
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          }));
 
       if (response.statusCode == 200) {
-        var jsonRes =
-            openDoorsModel.fromJson(convert.jsonDecode(response.body));
+        var jsonRes = openDoorsModel.fromJson(response.data);
         if (jsonRes.data!.code == 0) {
           var visitorData;
           var QRcodeData;
@@ -130,7 +129,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
         snackbar(context, Colors.red, 'เปิดประตูไม่สำเร็จ',
             Icons.highlight_off_rounded);
         print('OpenDoor Fail!!');
-        print(response.body);
+        print(response.data);
         setState(() {
           loading = false;
         });

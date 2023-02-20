@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors_in_immutables, avoid_single_cascade_in_expression_statements
+import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/button/button.dart';
@@ -12,9 +13,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
-import 'dart:async';
-import 'dart:convert' as convert;
+// import 'package:http/http.dart' as http;
+// import 'dart:async';
+// import 'dart:convert' as convert;
 
 class Login_Page extends StatefulWidget {
   Login_Page({Key? key}) : super(key: key);
@@ -42,28 +43,33 @@ class _Login_PageState extends State<Login_Page> {
           "user_name": _username.text,
           "user_password": _password.text,
         };
-        var response = await http.post(Uri.parse(url), body: body);
+        var response = await Dio().post(url,
+            options: Options(headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            }),
+            data: body);
         // เช็คการเชื่อมต่อ api
         if (response.statusCode == 200) {
-          var jsonRes = LoginModel.fromJson(convert.jsonDecode(response.body));
+          var jsonRes = LoginModel.fromJson(response.data);
           // เช็คสถานะ การเข้าสู่ระบบ
+          print('error ${jsonRes.status}');
+          print('body ${body}');
           if (jsonRes.status == 200) {
             var token = jsonRes.accessToken;
             List<User> data = jsonRes.user!; //ตัวแปร List จาก model
 
             print('userId: ${data.single.sId}');
-            print('token: ${token}');
+            print('uuId: ${data.single.userUuid}');
             print('login success');
+            print('token: ${token}');
 
             // ส่งค่าตัวแปร
             SharedPreferences prefs = await SharedPreferences.getInstance();
             await prefs.setString('token', token!);
             await prefs.setString('username', data.single.userName!);
 
-            if (prefs.getString('userId') == null &&
-                prefs.getString('companyId') == null &&
-                prefs.getInt('role') == null &&
-                prefs.getString('uuId') == null) {
+            if (data.single.userUuid != prefs.getString('uuId')) {
               await prefs.setString('userId', data.single.sId!);
               await prefs.setString('companyId', data.single.companyId!);
               await prefs.setInt('role', data.single.mobile!);
@@ -109,8 +115,6 @@ class _Login_PageState extends State<Login_Page> {
             Colors.orange,
             'ตกลง', () async {
           Navigator.of(context).pop();
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          prefs.clear();
         }, false);
         setState(() {
           loading = false;

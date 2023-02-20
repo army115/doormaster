@@ -1,8 +1,6 @@
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
-import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/drawer/drawer.dart';
 import 'package:doormster/components/girdManu/gird_menu.dart';
-import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/screen/qr_smart_access/opendoor_page.dart';
 import 'package:doormster/screen/qr_smart_access/scan_qrcode_page.dart';
 import 'package:doormster/screen/qr_smart_access/visitor_page.dart';
@@ -10,7 +8,6 @@ import 'package:doormster/service/check_connected.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 // import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 

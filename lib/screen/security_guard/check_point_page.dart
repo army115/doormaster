@@ -1,12 +1,8 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/checkBox/checkbox_formfield.dart';
 import 'package:doormster/components/dropdown/dropdown_noborder.dart';
-import 'package:doormster/components/text_form/text_form.dart';
-import 'package:doormster/components/text_form/text_form_noborder.dart';
 import 'package:doormster/components/text_form/text_form_novalidator.dart';
-import 'package:doormster/components/text_form/text_form_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 

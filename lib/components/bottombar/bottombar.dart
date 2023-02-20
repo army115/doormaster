@@ -18,8 +18,9 @@ int _selectedIndex = 0;
 bool loading = false;
 
 class BottomBar extends StatefulWidget {
-  final page;
-  BottomBar({Key? key, this.page});
+  BottomBar({
+    Key? key,
+  });
 
   @override
   State<BottomBar> createState() => _BottomBarState();
@@ -35,8 +36,8 @@ class _BottomBarState extends State<BottomBar> {
   @override
   void initState() {
     super.initState();
-    _selectedIndex = widget.page == null ? _selectedIndex : widget.page;
-    print(_selectedIndex);
+    _selectedIndex = 0;
+    // _selectedIndex = widget.page == null ? _selectedIndex : widget.page;
   }
 
   DateTime PressTime = DateTime.now();
@@ -62,7 +63,7 @@ class _BottomBarState extends State<BottomBar> {
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                backgroundColor: Colors.black87,
+                backgroundColor: Theme.of(context).primaryColor,
                 content: Text(
                   "กดอีกครั้งเพื่อออก",
                   textAlign: TextAlign.center,
@@ -183,6 +184,8 @@ class NavbarNotifier extends ChangeNotifier {
         if (homeKey.currentState != null && homeKey.currentState!.canPop()) {
           homeKey.currentState?.popUntil((route) => route.isFirst);
         } else if (_selectedIndex == 0) {
+          // SharedPreferences prefs = await SharedPreferences.getInstance();
+          // prefs.clear();
           homeKey.currentState?.popAndPushNamed('/');
         }
         return;

@@ -1,13 +1,14 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert' as convert;
+// import 'package:http/http.dart' as http;
+// import 'dart:convert' as convert;
 
 class Password_Page extends StatefulWidget {
   final userpass;
@@ -46,18 +47,17 @@ class _Password_PageState extends State<Password_Page> {
         loading = true;
       });
       String url = '${Connect_api().domain}/changpassword';
-      var jsonRes = await http.post(Uri.parse(url),
-          headers: {
+      var jsonRes = await Dio().post(url,
+          options: Options(headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Authorization': 'Bearer $token',
-          },
-          body: convert.jsonEncode(values));
-      var _response = jsonRes.body.split(',').first.split(':').last;
+          }),
+          data: values);
+      var _response = jsonRes.toString().split(',').first.split(':').last;
       print(_response);
       if (_response != '400') {
         print('Change Success!');
-        Navigator.pop(context);
+        // Navigator.pop(context);
         snackbar(context, Theme.of(context).primaryColor,
             'เปลี่ยนรหัสผ่านสำเร็จ', Icons.check_circle_outline_rounded);
       } else {

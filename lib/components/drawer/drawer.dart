@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_twobutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
@@ -9,8 +10,8 @@ import 'package:doormster/screen/main_screen/login_page.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert' as convert;
+// import 'package:http/http.dart' as http;
+// import 'dart:convert' as convert;
 
 class MyDrawer extends StatefulWidget {
   final pressProfile;
@@ -28,7 +29,8 @@ class _MyDrawerState extends State<MyDrawer> {
 
   Future _Logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove('token');
+    prefs.clear();
+    // prefs.remove('token');
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (BuildContext context) => Login_Page()),
         (Route<dynamic> route) => false);
@@ -45,14 +47,16 @@ class _MyDrawerState extends State<MyDrawer> {
         loading = true;
       });
       var url = '${Connect_api().domain}/get/multicompanymobile/$uuId';
-      var response = await http.get(Uri.parse(url), headers: {
-        'Connect-type': 'application/json',
-        'Accept': 'application/json',
-      });
+      var response = await Dio().get(
+        url,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        }),
+      );
 
       if (response.statusCode == 200) {
-        getMultiCompany company =
-            getMultiCompany.fromJson(convert.jsonDecode(response.body));
+        getMultiCompany company = getMultiCompany.fromJson(response.data);
         setState(() {
           multiCompany = company.data!;
           loading = false;
@@ -76,11 +80,11 @@ class _MyDrawerState extends State<MyDrawer> {
         loading = true;
       });
       var url = '${Connect_api().domain}/loginmulticompany';
-      var response = await http.post(Uri.parse(url), body: {
+      var response = await Dio().post(url, data: {
         "_id": uId,
         "company_id": comId,
       });
-      var jsonRes = LoginModel.fromJson(convert.jsonDecode(response.body));
+      var jsonRes = LoginModel.fromJson(response.data);
       if (jsonRes.status == 200) {
         var token = jsonRes.accessToken;
         List<User> data = jsonRes.user!; //ตัวแปร List จาก model
@@ -99,9 +103,9 @@ class _MyDrawerState extends State<MyDrawer> {
 
         print('userId: ${data.single.sId}');
         print('Select Success');
-        print(response.body);
+        print(response.data);
 
-        Navigator.of(context).popUntil(ModalRoute.withName('/bottom'));
+        Navigator.of(context).pop();
 
         setState(() {
           homeKey.currentState?.popAndPushNamed('/');
@@ -116,7 +120,7 @@ class _MyDrawerState extends State<MyDrawer> {
           Navigator.of(context).pop();
         }, false);
         print('Select fail!!');
-        print(response.body);
+        print(response.data);
         setState(() {
           loading = false;
         });
@@ -384,13 +388,14 @@ class _MyDrawerState extends State<MyDrawer> {
                               onTap: () {
                                 if (companyId ==
                                     multiCompany[index].companyId) {
-                                  Navigator.of(context)
-                                      .popUntil(ModalRoute.withName('/bottom'));
+                                  Navigator.of(context).pop();
+                                  Navigator.of(context).pop();
                                 } else {
                                   _selectCompany(
                                       context,
                                       multiCompany[index].sId,
                                       multiCompany[index].companyId);
+                                  Navigator.of(context).pop();
                                 }
                               },
                             ),
