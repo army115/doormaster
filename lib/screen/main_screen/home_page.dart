@@ -152,6 +152,12 @@ class _Home_PageState extends State<Home_Page> {
     _getMenu();
   }
 
+  // @override
+  // void dispose() {
+  //   _getMenu;
+  //   super.dispose();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Stack(

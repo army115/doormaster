@@ -13,14 +13,14 @@ class _Parcel_serviceState extends State<Parcel_service> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: MyDrawer(),
+      // drawer: MyDrawer(),
       appBar: AppBar(
         title: Text('Parcels'),
-        leading: IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            }),
+        // leading: IconButton(
+        //     icon: Icon(Icons.menu),
+        //     onPressed: () {
+        //       Scaffold.of(context).openDrawer();
+        //     }),
       ),
       body: Center(child: Text('Parcels')),
     );

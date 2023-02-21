@@ -13,14 +13,14 @@ class _Managemant_ServiceState extends State<Managemant_Service> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: MyDrawer(),
+      // drawer: MyDrawer(),
       appBar: AppBar(
         title: Text('Managemant'),
-        leading: IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            }),
+        // leading: IconButton(
+        //     icon: Icon(Icons.menu),
+        //     onPressed: () {
+        //       Scaffold.of(context).openDrawer();
+        //     }),
       ),
       body: Center(child: Text('Managemant')),
     );

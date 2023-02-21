@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/dropdown/dropdown.dart';
+import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/models/create_company_model.dart';
 import 'package:doormster/models/get_company.dart';
@@ -262,22 +263,27 @@ class _Add_CompanyState extends State<Add_Company> {
             '/bottom', (Route<dynamic> route) => false);
         return false;
       },
-      child: Scaffold(
-        appBar: AppBar(title: Text('เพิ่มโครงการใหม่')),
-        body: SafeArea(
-            child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          child: Form(
-            key: _formkey,
-            child: Column(children: [
-              DropDownCompany(),
-              SizedBox(
-                height: 20,
+      child: Stack(
+        children: [
+          Scaffold(
+            appBar: AppBar(title: Text('เพิ่มโครงการใหม่')),
+            body: SafeArea(
+                child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              child: Form(
+                key: _formkey,
+                child: Column(children: [
+                  DropDownCompany(),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  button()
+                ]),
               ),
-              button()
-            ]),
+            )),
           ),
-        )),
+          loading ? Loading() : Container()
+        ],
       ),
     );
   }

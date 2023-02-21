@@ -120,7 +120,7 @@ class _BottomBarState extends State<BottomBar> {
                   label: 'ข้อความ',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.school),
+                  icon: Icon(Icons.account_circle_rounded),
                   label: 'โปรไฟล์',
                 ),
               ],
@@ -195,7 +195,7 @@ class NavbarNotifier extends ChangeNotifier {
           messageKey.currentState!.popUntil((route) => route.isFirst);
         }
         if (_selectedIndex == 1) {
-          messageKey.currentState;
+          messageKey.currentState?.popAndPushNamed('/');
         }
         return;
       case 2:

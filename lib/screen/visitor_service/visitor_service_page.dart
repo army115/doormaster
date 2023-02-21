@@ -13,14 +13,14 @@ class _Visitor_ServiceState extends State<Visitor_Service> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: MyDrawer(),
+      // drawer: MyDrawer(),
       appBar: AppBar(
         title: Text('Visitor'),
-        leading: IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            }),
+        // leading: IconButton(
+        //     icon: Icon(Icons.menu),
+        //     onPressed: () {
+        //       Scaffold.of(context).openDrawer();
+        //     }),
       ),
       body: Center(child: Text('Visitor')),
     );

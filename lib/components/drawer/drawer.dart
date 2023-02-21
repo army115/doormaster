@@ -111,6 +111,7 @@ class _MyDrawerState extends State<MyDrawer> {
         print(response.data);
 
         Navigator.of(context).pop();
+        Navigator.of(context).pop();
 
         setState(() {
           homeKey.currentState?.popAndPushNamed('/');
@@ -400,7 +401,6 @@ class _MyDrawerState extends State<MyDrawer> {
                                       context,
                                       multiCompany[index].sId,
                                       multiCompany[index].companyId);
-                                  Navigator.of(context).pop();
                                 }
                               },
                             ),

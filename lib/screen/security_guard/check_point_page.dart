@@ -63,6 +63,7 @@ class _Check_PointState extends State<Check_Point> {
       if (pickedImages != null) {
         setState(() {
           listImage?.add(pickedImages);
+          print('image ${pickedImages.name}');
         });
       } else {
         print("No image is selected.");

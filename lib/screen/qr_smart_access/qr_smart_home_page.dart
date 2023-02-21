@@ -68,14 +68,15 @@ class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: MyDrawer(),
+      // drawer: MyDrawer(),
       appBar: AppBar(
         title: Text('HIP Smart Community'),
-        leading: IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            }),
+        // leading: IconButton(
+        //     icon: Icon(Icons.menu),
+        //     onPressed: () {
+        //       Navigator.pop(context);
+        //       Scaffold.of(context).openDrawer();
+        //     }),
       ),
       body: mobileRole == 0
           ? Center(

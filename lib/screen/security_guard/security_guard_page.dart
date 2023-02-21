@@ -38,14 +38,14 @@ class _Security_GuardState extends State<Security_Guard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: MyDrawer(),
+      // drawer: MyDrawer(),
       appBar: AppBar(
         title: Text('Security Guard'),
-        leading: IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            }),
+        // leading: IconButton(
+        //     icon: Icon(Icons.menu),
+        //     onPressed: () {
+        //       Scaffold.of(context).openDrawer();
+        //     }),
       ),
       body: SingleChildScrollView(
         child: Container(
