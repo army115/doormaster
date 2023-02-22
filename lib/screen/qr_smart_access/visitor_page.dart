@@ -81,7 +81,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
       dialogOnebutton_Subtitle(context, 'พบข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อได้',
           Icons.warning_amber_rounded, Colors.orange, 'ตกลง', () {
         Navigator.popUntil(context, (route) => route.isFirst);
-      }, false);
+      }, false, false);
       setState(() {
         loading = false;
       });
@@ -152,7 +152,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
           Colors.orange,
           'ตกลง', () {
         Navigator.of(context).pop();
-      }, false);
+      }, false, false);
       setState(() {
         loading = false;
       });

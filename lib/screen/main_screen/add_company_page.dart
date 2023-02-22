@@ -69,7 +69,7 @@ class _Add_CompanyState extends State<Add_Company> {
           'ตกลง', () {
         Navigator.of(context).pushNamedAndRemoveUntil(
             '/bottom', (Route<dynamic> route) => false);
-      }, false);
+      }, false, false);
       setState(() {
         loading = false;
       });
@@ -111,7 +111,7 @@ class _Add_CompanyState extends State<Add_Company> {
           Colors.orange,
           'ตกลง', () {
         Navigator.popUntil(context, (route) => route.isFirst);
-      }, false);
+      }, false, false);
       setState(() {
         loading = false;
       });
@@ -145,7 +145,7 @@ class _Add_CompanyState extends State<Add_Company> {
         dialogOnebutton_Subtitle(context, 'เพิ่มไม่สำเร็จ', '${jsonRes.status}',
             Icons.highlight_off_rounded, Colors.red, 'ตกลง', () {
           Navigator.of(context).pop();
-        }, false);
+        }, false, false);
         print('add not Success!!');
         print(response.data);
         setState(() {
@@ -162,7 +162,7 @@ class _Add_CompanyState extends State<Add_Company> {
           Colors.orange,
           'ตกลง', () {
         Navigator.of(context).pop();
-      }, false);
+      }, false, false);
       // snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
       //     Icons.warning_amber_rounded);
       setState(() {
@@ -225,7 +225,7 @@ class _Add_CompanyState extends State<Add_Company> {
             Colors.red,
             'ตกลง', () {
           Navigator.of(context).pop();
-        }, false);
+        }, false, false);
         print('loginMulti fail!!');
         print(response.data);
         setState(() {
@@ -242,7 +242,7 @@ class _Add_CompanyState extends State<Add_Company> {
           Colors.orange,
           'ตกลง', () {
         Navigator.of(context).pop();
-      }, false);
+      }, false, false);
       setState(() {
         loading = false;
       });
@@ -358,7 +358,7 @@ class _Add_CompanyState extends State<Add_Company> {
                     Colors.orange,
                     'ตกลง', () {
                   Navigator.of(context).pop();
-                }, false);
+                }, false, false);
               } else {
                 Map<String, dynamic> valuse = Map();
                 valuse['id'] = userId;

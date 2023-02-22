@@ -71,7 +71,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
             Colors.orange,
             'ตกลง', () {
           Navigator.popUntil(context, (route) => route.isFirst);
-        }, false);
+        }, false, false);
       }
       setState(() {
         loading = false;
@@ -144,7 +144,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
           Colors.orange,
           'ตกลง', () {
         Navigator.of(context).pop();
-      }, false);
+      }, false, false);
       setState(() {
         loading = false;
       });

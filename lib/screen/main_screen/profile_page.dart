@@ -60,8 +60,8 @@ class _Profile_PageState extends State<Profile_Page> {
         });
       }
     } catch (error) {
-      await Future.delayed(Duration(milliseconds: 500));
       print(error);
+      await Future.delayed(Duration(milliseconds: 500));
       dialogOnebutton_Subtitle(
           context,
           'พบข้อผิดพลาด',
@@ -69,11 +69,11 @@ class _Profile_PageState extends State<Profile_Page> {
           Icons.warning_amber_rounded,
           Colors.orange,
           'ตกลง', () {
+        Navigator.of(context, rootNavigator: true).pop();
         setState(() {
-          Navigator.pop(context);
           _getInfo();
         });
-      }, false);
+      }, false, false);
       setState(() {
         loading = false;
       });

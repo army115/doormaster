@@ -124,7 +124,7 @@ class _MyDrawerState extends State<MyDrawer> {
         dialogOnebutton_Subtitle(context, 'เลือกไม่สำเร็จ', '${jsonRes.data}',
             Icons.highlight_off_rounded, Colors.red, 'ตกลง', () {
           Navigator.of(context).pop();
-        }, false);
+        }, false, false);
         print('Select fail!!');
         print(response.data);
         setState(() {
@@ -141,7 +141,7 @@ class _MyDrawerState extends State<MyDrawer> {
           Colors.orange,
           'ตกลง', () {
         Navigator.of(context).pop();
-      }, false);
+      }, false, false);
       setState(() {
         loading = false;
       });
@@ -289,6 +289,7 @@ class _MyDrawerState extends State<MyDrawer> {
                     () {
                       Navigator.pop(context);
                     },
+                    true,
                     true);
               },
               leading: Icon(

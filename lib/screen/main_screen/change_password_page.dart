@@ -70,7 +70,7 @@ class _Password_PageState extends State<Password_Page> {
             Colors.red,
             'ตกลง', () {
           Navigator.of(context).pop();
-        }, false);
+        }, false, false);
       }
     } catch (error) {
       print(error);
@@ -82,7 +82,7 @@ class _Password_PageState extends State<Password_Page> {
           Colors.orange,
           'ตกลง', () {
         Navigator.of(context).pop();
-      }, false);
+      }, false, false);
       // snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
       //     Icons.warning_amber_rounded);
       setState(() {

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class Gird_Menu extends StatelessWidget {
+class Grid_Menu extends StatelessWidget {
   String title;
   VoidCallback press;
   final icon;
-  Gird_Menu(
+  Grid_Menu(
       {Key? key, required this.title, required this.press, required this.icon})
       : super(key: key);
 
@@ -46,6 +46,5 @@ class Gird_Menu extends StatelessWidget {
         ),
       ),
     );
-    ;
   }
 }

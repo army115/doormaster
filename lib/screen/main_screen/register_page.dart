@@ -66,7 +66,7 @@ class _Register_PageState extends State<Register_Page> {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (BuildContext context) => Login_Page()),
             (Route<dynamic> route) => false);
-      }, false);
+      }, false, false);
       setState(() {
         loading = false;
       });
@@ -107,7 +107,7 @@ class _Register_PageState extends State<Register_Page> {
             Colors.red,
             'ตกลง', () {
           Navigator.of(context).pop();
-        }, false);
+        }, false, false);
         print('Register not Success!!');
         print(response.data);
         setState(() {
@@ -124,7 +124,7 @@ class _Register_PageState extends State<Register_Page> {
           Colors.orange,
           'ตกลง', () {
         Navigator.of(context).pop();
-      }, false);
+      }, false, false);
       // snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
       //     Icons.warning_amber_rounded);
       setState(() {

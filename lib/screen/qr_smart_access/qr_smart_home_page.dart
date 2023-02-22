@@ -1,6 +1,6 @@
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/drawer/drawer.dart';
-import 'package:doormster/components/girdManu/gird_menu.dart';
+import 'package:doormster/components/girdManu/grid_menu.dart';
 import 'package:doormster/screen/qr_smart_access/opendoor_page.dart';
 import 'package:doormster/screen/qr_smart_access/scan_qrcode_page.dart';
 import 'package:doormster/screen/qr_smart_access/visitor_page.dart';
@@ -52,10 +52,8 @@ class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
           Colors.orange,
           'ตกลง', () {
         openAppSettings();
-        Navigator.of(
-          context,
-        ).pop();
-      }, false);
+        Navigator.of(context, rootNavigator: true).pop();
+      }, false, false);
     }
   }
 
@@ -110,28 +108,28 @@ class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
                     crossAxisSpacing: 20,
                     mainAxisSpacing: 20,
                     children: [
-                      Gird_Menu(
+                      Grid_Menu(
                         title: 'ผู้มาติดต่อ',
                         icon: Icons.person,
                         press: () {
                           checkInternet(context, Visitor_Page());
                         },
                       ),
-                      Gird_Menu(
+                      Grid_Menu(
                         title: 'สแกน',
                         icon: Icons.qr_code_scanner_rounded,
                         press: () {
                           checkInternet(context, Scanner());
                         },
                       ),
-                      Gird_Menu(
+                      Grid_Menu(
                         title: 'เปิดประตู',
                         icon: Icons.meeting_room_rounded,
                         press: () {
                           requestLocationPermission();
                         },
                       ),
-                      Gird_Menu(
+                      Grid_Menu(
                           title: 'Emergency Call',
                           icon: Icons.phone_forwarded_rounded,
                           press: () async {

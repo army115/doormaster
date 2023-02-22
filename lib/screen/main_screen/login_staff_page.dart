@@ -17,14 +17,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 // import 'dart:async';
 // import 'dart:convert' as convert;
 
-class Login_Page extends StatefulWidget {
-  Login_Page({Key? key}) : super(key: key);
+class Login_Staff extends StatefulWidget {
+  Login_Staff({Key? key}) : super(key: key);
 
   @override
-  State<Login_Page> createState() => _Login_PageState();
+  State<Login_Staff> createState() => _Login_StaffState();
 }
 
-class _Login_PageState extends State<Login_Page> {
+class _Login_StaffState extends State<Login_Staff> {
   final _formkey = GlobalKey<FormState>();
   TextEditingController _username = TextEditingController();
   TextEditingController _password = TextEditingController();
@@ -206,32 +206,32 @@ class _Login_PageState extends State<Login_Page> {
                             doLogin();
                           },
                         ),
-                  SizedBox(height: 20),
-                  RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black,
-                          fontFamily: 'Prompt',
-                        ),
-                        text: 'ยังไม่ได้เป็นสมาชิก HIP Smart Community ',
-                        children: [
-                          TextSpan(
-                              text: 'กรุณาลงทะเบียน',
-                              style: TextStyle(
-                                decoration: TextDecoration.underline,
-                                color: Theme.of(context).primaryColor,
-                              ),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(
-                                          builder: ((context) =>
-                                              Register_Page())));
-                                })
-                        ],
-                      ))
+                  // SizedBox(height: 20),
+                  // RichText(
+                  //     textAlign: TextAlign.center,
+                  //     text: TextSpan(
+                  //       style: TextStyle(
+                  //         fontSize: 18,
+                  //         color: Colors.black,
+                  //         fontFamily: 'Prompt',
+                  //       ),
+                  //       text: 'ยังไม่ได้เป็นสมาชิก HIP Smart Community ',
+                  //       children: [
+                  //         TextSpan(
+                  //             text: 'กรุณาลงทะเบียน',
+                  //             style: TextStyle(
+                  //               decoration: TextDecoration.underline,
+                  //               color: Theme.of(context).primaryColor,
+                  //             ),
+                  //             recognizer: TapGestureRecognizer()
+                  //               ..onTap = () {
+                  //                 Navigator.of(context).pushReplacement(
+                  //                     MaterialPageRoute(
+                  //                         builder: ((context) =>
+                  //                             Register_Page())));
+                  //               })
+                  //       ],
+                  //     ))
                 ],
               )),
         ),

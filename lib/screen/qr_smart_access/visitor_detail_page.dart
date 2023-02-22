@@ -85,7 +85,7 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
           Colors.orange,
           'ตกลง', () {
         Navigator.of(context).pop();
-      }, false);
+      }, false, false);
     }
   }
 

@@ -1,12 +1,15 @@
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
+import 'package:doormster/screen/main_screen/auth_page.dart';
 import 'package:doormster/screen/main_screen/home_page.dart';
 import 'package:doormster/screen/main_screen/login_page.dart';
 import 'package:doormster/screen/main_screen/change_password_page.dart';
+import 'package:doormster/screen/main_screen/login_staff_page.dart';
 import 'package:doormster/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:doormster/screen/managemant_service/managemant_service_page.dart';
 import 'package:doormster/screen/parcel_service/parcel_service_page.dart';
@@ -31,7 +34,7 @@ void main() async {
 }
 
 Future init(BuildContext? context) async {
-  await Future.delayed(Duration(seconds: 1));
+  await Future.delayed(Duration(milliseconds: 100));
   FlutterNativeSplash.remove();
 }
 
@@ -40,14 +43,16 @@ class MyApp extends StatelessWidget {
   MyApp({Key? key, this.token}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'HIP Smart Community',
       debugShowCheckedModeBanner: false,
       theme: mytheme(),
       // home: token == null ? Login_Page() : BottomBar(),
-      initialRoute: token == null ? '/login' : '/bottom',
+      initialRoute: token == null ? '/auth' : '/bottom',
       routes: {
+        '/auth': (context) => Auth_Page(),
         '/login': (context) => Login_Page(),
+        '/staff': (context) => Login_Staff(),
         '/home': (context) => Home_Page(),
         '/bottom': (context) => BottomBar(),
         '/qrsmart': (context) => QRSmart_HomePage(),

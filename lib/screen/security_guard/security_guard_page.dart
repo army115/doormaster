@@ -1,5 +1,5 @@
 import 'package:doormster/components/drawer/drawer.dart';
-import 'package:doormster/components/girdManu/gird_menu.dart';
+import 'package:doormster/components/girdManu/grid_menu.dart';
 import 'package:doormster/screen/security_guard/check_point_page.dart';
 import 'package:doormster/service/check_connected.dart';
 import 'package:flutter/material.dart';
@@ -60,24 +60,24 @@ class _Security_GuardState extends State<Security_Guard> {
               crossAxisSpacing: 20,
               mainAxisSpacing: 20,
               children: [
-                Gird_Menu(
+                Grid_Menu(
                   title: 'บันทึกเหตุการณ์',
                   icon: Icons.assignment_outlined,
                   press: () {
                     checkInternet(context, Check_Point());
                   },
                 ),
-                Gird_Menu(
+                Grid_Menu(
                   title: 'ดูบันทึกเหตุการณ์ย้อนหลัง',
                   icon: Icons.event_note,
                   press: () {},
                 ),
-                Gird_Menu(
+                Grid_Menu(
                   title: 'ประวัติส่วนตัว',
                   icon: Icons.person,
                   press: () {},
                 ),
-                Gird_Menu(
+                Grid_Menu(
                     title: 'บันทึกเหตุการณ์เพิ่มเติม',
                     icon: Icons.assignment_rounded,
                     press: () {}),
