@@ -33,29 +33,48 @@ class _Add_CompanyState extends State<Add_Company> {
   Future _getCompany() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     userId = prefs.getString('userId');
+    uuId = prefs.getString('uuId');
     companyId = prefs.getString('companyId');
 
     print('userId: ${userId}');
+    print("uuId ${uuId}");
     print('companyId: ${companyId}');
     try {
       setState(() {
         loading = true;
       });
-      var url = '${Connect_api().domain}/getcompanyactive';
-      var response = await Dio().get(
-        url,
+
+      //call api get campany
+      var urlCompany = '${Connect_api().domain}/getcompanyactive';
+      var responseCompany = await Dio().get(
+        urlCompany,
         options: Options(headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
         }),
       );
 
-      if (response.statusCode == 200) {
-        getCompany company = getCompany.fromJson(response.data);
+      //call api get Muticampany
+      var urlMutiCompany =
+          '${Connect_api().domain}/get/multicompanymobile/$uuId';
+      var responseMutiCompany = await Dio().get(
+        urlMutiCompany,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        }),
+      );
+
+      if (responseCompany.statusCode == 200 &&
+          responseMutiCompany.statusCode == 200) {
+        getCompany company = getCompany.fromJson(responseCompany.data);
+
+        getMultiCompany Muticompany =
+            getMultiCompany.fromJson(responseMutiCompany.data);
         setState(() {
           listCompany = company.data!;
+          multiCompany = Muticompany.data!;
           loading = false;
-          _getMultiCompany();
         });
       }
     } catch (error) {
@@ -69,48 +88,6 @@ class _Add_CompanyState extends State<Add_Company> {
           'ตกลง', () {
         Navigator.of(context).pushNamedAndRemoveUntil(
             '/bottom', (Route<dynamic> route) => false);
-      }, false, false);
-      setState(() {
-        loading = false;
-      });
-    }
-  }
-
-  Future _getMultiCompany() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    uuId = prefs.getString('uuId');
-    companyId = prefs.getString('companyId');
-    print(uuId);
-    try {
-      setState(() {
-        loading = true;
-      });
-      var url = '${Connect_api().domain}/get/multicompanymobile/$uuId';
-      var response = await Dio().get(
-        url,
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        }),
-      );
-
-      if (response.statusCode == 200) {
-        getMultiCompany company = getMultiCompany.fromJson(response.data);
-        setState(() {
-          multiCompany = company.data!;
-          loading = false;
-        });
-      }
-    } catch (error) {
-      print(error);
-      dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง', () {
-        Navigator.popUntil(context, (route) => route.isFirst);
       }, false, false);
       setState(() {
         loading = false;

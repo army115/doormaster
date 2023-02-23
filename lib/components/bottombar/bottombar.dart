@@ -184,8 +184,6 @@ class NavbarNotifier extends ChangeNotifier {
         if (homeKey.currentState != null && homeKey.currentState!.canPop()) {
           homeKey.currentState?.popUntil((route) => route.isFirst);
         } else if (_selectedIndex == 0) {
-          // SharedPreferences prefs = await SharedPreferences.getInstance();
-          // prefs.clear();
           homeKey.currentState?.popAndPushNamed('/');
         }
         return;

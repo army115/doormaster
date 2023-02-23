@@ -1,3 +1,4 @@
+import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:flutter/material.dart';
 
 class Loading extends StatelessWidget {
@@ -7,8 +8,8 @@ class Loading extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black38,
-      body: Center(
-        child: Container(
+      body: AlertDialog(
+        title: Container(
           decoration: BoxDecoration(
               color: Colors.white, borderRadius: BorderRadius.circular(10)),
           width: 150,

@@ -1,4 +1,6 @@
 // ignore_for_file: prefer_const_constructors
+import 'dart:async';
+
 import 'package:card_swiper/card_swiper.dart';
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton.dart';
@@ -31,6 +33,9 @@ class _Home_PageState extends State<Home_Page> {
   List<Data> listads = [];
   bool loading = false;
   var checkNet;
+  final Connectivity _connectivity = Connectivity();
+
+  StreamSubscription<ConnectivityResult>? _subscription;
 
   List<String> _images = [
     'https://resize.indiatvnews.com/en/resize/newbucket/715_-/2020/09/breakingnews-live-blog-1568185450-1595123397-1600221127.jpg',
@@ -58,6 +63,7 @@ class _Home_PageState extends State<Home_Page> {
         loading = true;
       });
 
+      //call api manu
       var url = '${Connect_api().domain}/get/menumobile/$companyId';
       var response = await Dio().get(
         url,
@@ -67,12 +73,24 @@ class _Home_PageState extends State<Home_Page> {
         }),
       );
 
-      if (response.statusCode == 200) {
+      //call api ads
+      var urlAds = '${Connect_api().domain}/get/ads/$companyId';
+      var responseAds = await Dio().get(
+        urlAds,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        }),
+      );
+
+      if (response.statusCode == 200 && responseAds.statusCode == 200) {
         await Future.delayed(Duration(milliseconds: 400));
         getMenu menuHome = getMenu.fromJson(response.data);
+
+        getAdsCompany asdcompany = getAdsCompany.fromJson(responseAds.data);
         setState(() {
           listMenu = menuHome.data!;
-          _getAds();
+          listads = asdcompany.data!;
           loading = false;
         });
       }
@@ -88,7 +106,7 @@ class _Home_PageState extends State<Home_Page> {
           'ตกลง', () {
         Navigator.of(context, rootNavigator: true).pop();
         setState(() {
-          _getMenu();
+          loading ? Loading() : _getMenu();
         });
       }, false, false);
       setState(() {
@@ -97,53 +115,7 @@ class _Home_PageState extends State<Home_Page> {
     }
   }
 
-  Future _getAds() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    companyId = prefs.getString('companyId');
-
-    print('companyId: ${companyId}');
-    try {
-      setState(() {
-        loading = true;
-      });
-
-      var url = '${Connect_api().domain}/get/ads/$companyId';
-      var response = await Dio().get(
-        url,
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        }),
-      );
-
-      if (response.statusCode == 200) {
-        getAdsCompany asdcompany = getAdsCompany.fromJson(response.data);
-        setState(() {
-          listads = asdcompany.data!;
-          loading = false;
-        });
-      }
-    } catch (error) {
-      print(error);
-      if (companyId == null) {
-      } else {
-        dialogOnebutton_Subtitle(
-            context,
-            'พบข้อผิดพลาด',
-            'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-            Icons.warning_amber_rounded,
-            Colors.orange,
-            'ตกลง', () {
-          Navigator.of(context, rootNavigator: true).pop();
-        }, false, false);
-      }
-      setState(() {
-        loading = false;
-      });
-    }
-  }
-
-  void checkInternet() async {
+  Future<void> checkInternet() async {
     checkNet = await Connectivity().checkConnectivity();
   }
 
@@ -152,13 +124,30 @@ class _Home_PageState extends State<Home_Page> {
     super.initState();
     checkInternet();
     _getMenu();
+    _subscription =
+        _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.none) {
+        dialogOnebutton_Subtitle(
+            context,
+            'พบข้อผิดพลาด',
+            'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+            Icons.warning_amber_rounded,
+            Colors.orange,
+            'ตกลง', () {
+          Navigator.of(context, rootNavigator: true).pop();
+          setState(() {
+            _getMenu();
+          });
+        }, false, false);
+      }
+    });
   }
 
-  // @override
-  // void dispose() {
-  //   _getMenu;
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    _subscription?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -269,14 +258,6 @@ class _Home_PageState extends State<Home_Page> {
                         ),
                       ),
                       // SizedBox(height: 20),
-                      // Buttons(
-                      //     title: 'test',
-                      //     press: () {
-                      //       dialogOnebutton(context, 'test', Icons.warning,
-                      //           Colors.amber, 'back', () {
-                      //         Navigator.of(context, rootNavigator: true).pop();
-                      //       }, false, false);
-                      //     })
                     ],
                   ),
                 ),
