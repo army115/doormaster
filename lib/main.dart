@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
+import 'package:restart_app/restart_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:doormster/screen/managemant_service/managemant_service_page.dart';
 import 'package:doormster/screen/parcel_service/parcel_service_page.dart';
@@ -21,7 +22,6 @@ import 'package:doormster/screen/visitor_service/visitor_service_page.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
 void main() async {
-  FlutterNativeSplash.remove();
   WidgetsFlutterBinding.ensureInitialized();
   // FlutterNativeSplash.preserve(
   //     widgetsBinding: WidgetsFlutterBinding.ensureInitialized());
@@ -31,7 +31,7 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
   final token = prefs.getString('token');
   print(token == null ? 'login : false' : 'login : true');
-
+  FlutterNativeSplash.remove();
   runApp(result == ConnectivityResult.none
       ? Check_Connected()
       : MyApp(
@@ -75,100 +75,46 @@ class Check_Connected extends StatelessWidget {
       title: 'HIP Smart Community',
       debugShowCheckedModeBanner: false,
       theme: mytheme(),
-      home: Scaffold(
-        backgroundColor: Color(0xFF0B4D9C),
-        body: SafeArea(
-          child: Stack(
-            children: [
-              Center(
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: Image.asset(
-                        'assets/images/HIP Smart Community Icon-03.png',
+      home: WillPopScope(
+        onWillPop: (() async => false),
+        child: Scaffold(
+          backgroundColor: Color(0xFF0B4D9C),
+          body: SafeArea(
+            child: Stack(
+              children: [
+                Center(
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: Image.asset(
+                          'assets/images/HIP Smart Community Icon-03.png',
+                          scale: 4,
+                        ),
+                      ),
+                      Image.asset(
+                        'assets/images/banner.png',
                         scale: 4,
                       ),
-                    ),
-                    Image.asset(
-                      'assets/images/banner.png',
-                      scale: 4,
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                height: double.infinity,
-                color: Colors.black38,
-                child: dialogmain(
-                    'พบข้อผิดพลาด',
-                    'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-                    Icons.warning_amber_rounded,
-                    Colors.orange,
-                    'ตกลง', () {
-                  SystemNavigator.pop(animated: true);
-                }),
-              ),
-            ],
+                Container(
+                  height: double.infinity,
+                  color: Colors.black38,
+                  child: dialogmain(
+                      'พบข้อผิดพลาด',
+                      'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+                      Icons.warning_amber_rounded,
+                      Colors.orange,
+                      'ตกลง', () {
+                    Restart.restartApp();
+                  }),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 }
-
-// class MyApp extends StatefulWidget {
-//   final token;
-//   const MyApp({Key? key, this.token});
-
-//   @override
-//   State<MyApp> createState() => _MyAppState();
-// }
-
-// class _MyAppState extends State<MyApp> {
-//   final Connectivity _connectivity = Connectivity();
-
-//   StreamSubscription<ConnectivityResult>? _subscription;
-//   @override
-//   void initState() {
-//     super.initState();
-//     _subscription =
-//         _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
-//       if (result == ConnectivityResult.none && widget.token == null) {
-//         dialogOnebutton_Subtitle(
-//             context,
-//             'พบข้อผิดพลาด',
-//             'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-//             Icons.warning_amber_rounded,
-//             Colors.orange,
-//             'ตกลง', () {
-//           Navigator.of(context, rootNavigator: true).pop();
-//           setState(() {});
-//         }, false, false);
-//       }
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return GetMaterialApp(
-//       title: 'HIP Smart Community',
-//       debugShowCheckedModeBanner: false,
-//       theme: mytheme(),
-//       // home: token == null ? Login_Page() : BottomBar(),
-//       initialRoute: widget.token == null ? '/auth' : '/bottom',
-//       routes: {
-//         '/auth': (context) => Auth_Page(),
-//         '/login': (context) => Login_Page(),
-//         '/staff': (context) => Login_Staff(),
-//         '/home': (context) => Home_Page(),
-//         '/bottom': (context) => BottomBar(),
-//         '/qrsmart': (context) => QRSmart_HomePage(),
-//         '/parcel': (context) => Parcel_service(),
-//         '/managemant': (context) => Managemant_Service(),
-//         '/security': (context) => Security_Guard(),
-//         '/visitor': (context) => Visitor_Service(),
-//         '/password': (context) => Password_Page(),
-//       },
-//     );
-//   }
-// }
