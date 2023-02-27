@@ -10,6 +10,7 @@ import 'package:doormster/screen/main_screen/login_staff_page.dart';
 import 'package:doormster/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 import 'package:restart_app/restart_app.dart';
@@ -46,6 +47,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      builder: EasyLoading.init(),
       title: 'HIP Smart Community',
       debugShowCheckedModeBanner: false,
       theme: mytheme(),

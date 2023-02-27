@@ -39,6 +39,7 @@ ThemeData mytheme() {
         centerTitle: true,
         iconTheme: IconThemeData(size: 30, color: Colors.white),
         titleTextStyle: TextStyle(
+          color: Colors.white,
           fontWeight: FontWeight.bold,
           fontFamily: 'Prompt',
           fontSize: 17,

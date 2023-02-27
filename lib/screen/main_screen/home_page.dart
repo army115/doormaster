@@ -5,6 +5,7 @@ import 'package:card_swiper/card_swiper.dart';
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
+import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/girdManu/menu_home.dart';
 import 'package:doormster/components/loading/loading.dart';

@@ -156,7 +156,7 @@ class _Login_StaffState extends State<Login_Staff> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: _onBackButtonDoubleClicked,
+      onWillPop: () async => true,
       child: Scaffold(
           body: SafeArea(
               child: SingleChildScrollView(

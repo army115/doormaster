@@ -53,7 +53,7 @@ class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
           'ตกลง', () {
         openAppSettings();
         Navigator.of(context, rootNavigator: true).pop();
-      }, false, false);
+      }, false, true);
     }
   }
 
