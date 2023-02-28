@@ -172,7 +172,17 @@ class _Login_StaffState extends State<Login_Staff> {
                     scale: 4,
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 5,
+                  ),
+                  Text(
+                    'เข้าสู่ระบบใช้งาน สำหรับพนักงาน',
+                    style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1),
+                  ),
+                  SizedBox(
+                    height: 15,
                   ),
                   Text_Form(
                     controller: _username,

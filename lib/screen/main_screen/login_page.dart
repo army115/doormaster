@@ -74,6 +74,7 @@ class _Login_PageState extends State<Login_Page> {
               await prefs.setString('companyId', data.single.companyId!);
               await prefs.setInt('role', data.single.mobile!);
               await prefs.setString('uuId', data.single.userUuid!);
+              await prefs.setString('weiganId', data.single.weigangroupUuid!);
             }
 
             if (data.single.devicegroupUuid != null) {

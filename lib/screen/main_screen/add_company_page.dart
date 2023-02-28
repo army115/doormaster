@@ -179,6 +179,7 @@ class _Add_CompanyState extends State<Add_Company> {
         await prefs.setString('companyId', data.single.companyId!);
         await prefs.setInt('role', data.single.mobile!);
         await prefs.setString('uuId', data.single.userUuid!);
+        await prefs.setString('weiganId', data.single.weigangroupUuid!);
 
         if (data.single.devicegroupUuid != null) {
           await prefs.setString('deviceId', data.single.devicegroupUuid!);
@@ -244,20 +245,22 @@ class _Add_CompanyState extends State<Add_Company> {
         children: [
           Scaffold(
             appBar: AppBar(title: Text('เพิ่มโครงการใหม่')),
-            body: SafeArea(
-                child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              child: Form(
-                key: _formkey,
-                child: Column(children: [
-                  DropDownCompany(),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  button()
-                ]),
-              ),
-            )),
+            body: SingleChildScrollView(
+              child: SafeArea(
+                  child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                child: Form(
+                  key: _formkey,
+                  child: Column(children: [
+                    DropDownCompany(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    button()
+                  ]),
+                ),
+              )),
+            ),
           ),
           loading ? Loading() : Container()
         ],

@@ -164,87 +164,85 @@ class _Home_PageState extends State<Home_Page> {
           ),
           body: checkNet == ConnectivityResult.none || loading == true
               ? Container()
-              : SafeArea(
-                  child: mobileRole == 0 || listMenu.isEmpty
-                      ? Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'โปรดติดต่อผู้ดูแล\nเพื่ออนุมัติสิทธิ์การใช้งาน',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                              Image.asset(
-                                'assets/images/Smart Community Logo.png',
-                                scale: 4.5,
-                                // opacity: AlwaysStoppedAnimation(0.7),
-                              ),
-                            ],
-                          ),
-                        )
-                      : Column(
-                          children: [
-                            Container(
-                              height: MediaQuery.of(context).size.height * 0.26,
-                              width: double.infinity,
-                              child: listads.length > 0
-                                  ? Swiper(
-                                      autoplay: true,
-                                      loop: true,
-                                      pagination: SwiperPagination(
-                                          builder: DotSwiperPaginationBuilder(
-                                              color: Colors.grey,
-                                              activeColor: Colors.white)),
-                                      itemCount: listads.length,
-                                      itemBuilder: (context, index) {
-                                        var _Images = convert.base64Decode(
-                                            ('${listads[index].adsversitingPic}')
-                                                .split(',')
-                                                .last);
-                                        return InkWell(
-                                            // onTap: () {
-                                            //   launchUrlString(
-                                            //       'https://hipglobal.co.th/');
-                                            // },
-                                            // child: Container(
-                                            //     child:
-                                            //         Image.network('${_images[index]}')),
-                                            child: Image.memory(
-                                          _Images,
-                                          fit: BoxFit.cover,
-                                        ));
-                                      },
-                                    )
-                                  : Swiper(
-                                      autoplay: true,
-                                      loop: true,
-                                      itemCount: 1,
-                                      itemBuilder: (context, index) {
-                                        return Container(
-                                            child: Image.asset(
-                                          'assets/images/ads.png',
-                                          fit: BoxFit.cover,
-                                        ));
-                                      },
-                                    ),
+              : SingleChildScrollView(
+                  child: SafeArea(
+                    child: mobileRole == 0 || listMenu.isEmpty
+                        ? Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'โปรดติดต่อผู้ดูแล\nเพื่ออนุมัติสิทธิ์การใช้งาน',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.normal),
+                                ),
+                                Image.asset(
+                                  'assets/images/Smart Community Logo.png',
+                                  scale: 4.5,
+                                  // opacity: AlwaysStoppedAnimation(0.7),
+                                ),
+                              ],
                             ),
-                            Expanded(
-                              child: Container(
+                          )
+                        : Column(
+                            children: [
+                              Container(
+                                height: MediaQuery.of(context).size.width * 0.6,
+                                width: double.infinity,
+                                child: listads.length > 0
+                                    ? Swiper(
+                                        autoplay: true,
+                                        loop: true,
+                                        pagination: SwiperPagination(
+                                            builder: DotSwiperPaginationBuilder(
+                                                color: Colors.grey,
+                                                activeColor: Colors.white)),
+                                        itemCount: listads.length,
+                                        itemBuilder: (context, index) {
+                                          var _Images = convert.base64Decode(
+                                              ('${listads[index].adsversitingPic}')
+                                                  .split(',')
+                                                  .last);
+                                          return InkWell(
+                                              // onTap: () {
+                                              //   launchUrlString(
+                                              //       'https://hipglobal.co.th/');
+                                              // },
+                                              // child: Container(
+                                              //     child:
+                                              //         Image.network('${_images[index]}')),
+                                              child: Image.memory(
+                                            _Images,
+                                            fit: BoxFit.cover,
+                                          ));
+                                        },
+                                      )
+                                    : Swiper(
+                                        autoplay: true,
+                                        loop: true,
+                                        itemCount: 1,
+                                        itemBuilder: (context, index) {
+                                          return Image.asset(
+                                            'assets/images/ads.png',
+                                            fit: BoxFit.cover,
+                                          );
+                                        },
+                                      ),
+                              ),
+                              Container(
                                 padding: EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 15),
+                                    horizontal: 20, vertical: 10),
                                 child: GridView.builder(
-                                  scrollDirection: Axis.vertical,
                                   shrinkWrap: true,
                                   primary: false,
                                   gridDelegate:
                                       SliverGridDelegateWithFixedCrossAxisCount(
-                                    // childAspectRatio: 1,
+                                    childAspectRatio: 0.65,
                                     crossAxisCount: 4,
-                                    crossAxisSpacing: 0,
-                                    mainAxisSpacing: 20,
+                                    crossAxisSpacing: 20,
+                                    mainAxisSpacing: 5,
                                   ),
                                   itemCount: listMenu.length,
                                   itemBuilder: (context, index) {
@@ -256,24 +254,24 @@ class _Home_PageState extends State<Home_Page> {
                                   },
                                 ),
                               ),
-                            ),
-                            // SizedBox(height: 20),
-                            // Buttons(
-                            //     title: 'test',
-                            //     press: () {
-                            //       dialogOnebutton_Subtitle(
-                            //           context,
-                            //           'พบข้อผิดพลาด',
-                            //           'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-                            //           Icons.warning_amber_rounded,
-                            //           Colors.orange,
-                            //           'ตกลง', () {
-                            //         Navigator.of(context, rootNavigator: true)
-                            //             .pop();
-                            //       }, false, false);
-                            //     })
-                          ],
-                        ),
+                              // SizedBox(height: 20),
+                              // Buttons(
+                              //     title: 'test',
+                              //     press: () {
+                              //       dialogOnebutton_Subtitle(
+                              //           context,
+                              //           'พบข้อผิดพลาด',
+                              //           'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+                              //           Icons.warning_amber_rounded,
+                              //           Colors.orange,
+                              //           'ตกลง', () {
+                              //         Navigator.of(context, rootNavigator: true)
+                              //             .pop();
+                              //       }, false, false);
+                              //     })
+                            ],
+                          ),
+                  ),
                 ),
         ),
         loading ? Loading() : Container(),

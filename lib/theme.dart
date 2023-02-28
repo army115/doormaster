@@ -18,6 +18,7 @@ ThemeData mytheme() {
   return ThemeData(
     primarySwatch: MaterialColor(0xFF0b4d9c, color),
     primaryColor: Color(0xFF0B4D9C),
+    // accentColor: Colors.transparent, //? Scroll Colors
     textTheme: TextTheme(
       bodyText2: TextStyle(
         fontSize: 17,
@@ -36,6 +37,7 @@ ThemeData mytheme() {
         unselectedLabelStyle: TextStyle(fontSize: 14)),
     scaffoldBackgroundColor: Colors.grey[200],
     appBarTheme: AppBarTheme(
+        backgroundColor: Color(0xFF0B4D9C),
         centerTitle: true,
         iconTheme: IconThemeData(size: 30, color: Colors.white),
         titleTextStyle: TextStyle(

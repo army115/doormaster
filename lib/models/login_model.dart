@@ -64,6 +64,7 @@ class User {
   bool? permission4;
   String? email;
   String? userUuid;
+  String? weigangroupUuid;
 
   User(
       {this.sId,
@@ -86,7 +87,8 @@ class User {
       this.permission3,
       this.permission4,
       this.email,
-      this.userUuid});
+      this.userUuid,
+      this.weigangroupUuid});
 
   User.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -110,6 +112,7 @@ class User {
     permission4 = json['permission4'];
     email = json['email'];
     userUuid = json['user_uuid'];
+    weigangroupUuid = json['weigangroup_uuid'];
   }
 
   Map<String, dynamic> toJson() {
@@ -135,6 +138,7 @@ class User {
     data['permission4'] = this.permission4;
     data['email'] = this.email;
     data['user_uuid'] = this.userUuid;
+    data['weigangroup_uuid'] = this.weigangroupUuid;
     return data;
   }
 }

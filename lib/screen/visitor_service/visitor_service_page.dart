@@ -2,7 +2,7 @@ import 'package:doormster/components/drawer/drawer.dart';
 import 'package:flutter/material.dart';
 
 class Visitor_Service extends StatefulWidget {
-  const Visitor_Service({Key? key});
+  Visitor_Service({Key? key});
   static const String route = '/visitor';
 
   @override

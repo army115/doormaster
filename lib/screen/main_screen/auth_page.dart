@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class Auth_Page extends StatefulWidget {
-  const Auth_Page({Key? key});
+  Auth_Page({Key? key});
 
   @override
   State<Auth_Page> createState() => _Auth_PageState();

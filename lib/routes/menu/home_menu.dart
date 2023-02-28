@@ -1,7 +1,7 @@
+import 'package:doormster/screen/management_service/management_service_page.dart';
 import 'package:flutter/material.dart';
 import 'package:doormster/screen/main_screen/home_page.dart';
 import 'package:doormster/screen/parcel_service/parcel_service_page.dart';
-import 'package:doormster/screen/managemant_service/managemant_service_page.dart';
 import 'package:doormster/screen/qr_smart_access/qr_smart_home_page.dart';
 import 'package:doormster/screen/security_guard/security_guard_page.dart';
 import 'package:doormster/screen/visitor_service/visitor_service_page.dart';
@@ -32,8 +32,8 @@ class _Home_MenuState extends State<Home_Menu> {
           case '/parcel':
             builder = (BuildContext context) => Parcel_service();
             break;
-          case '/managemant':
-            builder = (BuildContext context) => Managemant_Service();
+          case '/management':
+            builder = (BuildContext context) => Management_Service();
             break;
           case '/security':
             builder = (BuildContext context) => Security_Guard();

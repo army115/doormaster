@@ -12,7 +12,7 @@ import 'package:permission_handler/permission_handler.dart';
 // import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
 class QRSmart_HomePage extends StatefulWidget {
-  const QRSmart_HomePage({
+  QRSmart_HomePage({
     Key? key,
   }) : super(key: key);
   static const String route = '/qrsmart';

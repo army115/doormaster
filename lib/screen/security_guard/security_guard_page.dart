@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Security_Guard extends StatefulWidget {
-  const Security_Guard({Key? key});
+  Security_Guard({Key? key});
   static const String route = '/security';
 
   @override

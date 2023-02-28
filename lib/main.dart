@@ -7,6 +7,7 @@ import 'package:doormster/screen/main_screen/home_page.dart';
 import 'package:doormster/screen/main_screen/login_page.dart';
 import 'package:doormster/screen/main_screen/change_password_page.dart';
 import 'package:doormster/screen/main_screen/login_staff_page.dart';
+import 'package:doormster/screen/management_service/management_service_page.dart';
 import 'package:doormster/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,7 +16,6 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 import 'package:restart_app/restart_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:doormster/screen/managemant_service/managemant_service_page.dart';
 import 'package:doormster/screen/parcel_service/parcel_service_page.dart';
 import 'package:doormster/screen/qr_smart_access/qr_smart_home_page.dart';
 import 'package:doormster/screen/security_guard/security_guard_page.dart';
@@ -43,7 +43,7 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final token;
-  MyApp({Key? key, this.token}) : super(key: key);
+  const MyApp({Key? key, this.token}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -61,7 +61,7 @@ class MyApp extends StatelessWidget {
         '/bottom': (context) => BottomBar(),
         '/qrsmart': (context) => QRSmart_HomePage(),
         '/parcel': (context) => Parcel_service(),
-        '/managemant': (context) => Managemant_Service(),
+        '/managemant': (context) => Management_Service(),
         '/security': (context) => Security_Guard(),
         '/visitor': (context) => Visitor_Service(),
         '/password': (context) => Password_Page(),
@@ -80,7 +80,7 @@ class Check_Connected extends StatelessWidget {
       home: WillPopScope(
         onWillPop: (() async => false),
         child: Scaffold(
-          backgroundColor: Color(0xFF0B4D9C),
+          backgroundColor: const Color(0xFF0B4D9C),
           body: SafeArea(
             child: Stack(
               children: [

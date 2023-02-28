@@ -1,28 +1,28 @@
 import 'package:doormster/components/drawer/drawer.dart';
 import 'package:flutter/material.dart';
 
-class Managemant_Service extends StatefulWidget {
-  const Managemant_Service({Key? key});
+class Management_Service extends StatefulWidget {
+  Management_Service({Key? key});
   static const String route = '/managemant';
 
   @override
-  State<Managemant_Service> createState() => _Managemant_ServiceState();
+  State<Management_Service> createState() => _Management_ServiceState();
 }
 
-class _Managemant_ServiceState extends State<Managemant_Service> {
+class _Management_ServiceState extends State<Management_Service> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       // drawer: MyDrawer(),
       appBar: AppBar(
-        title: Text('Managemant'),
+        title: Text('Management'),
         // leading: IconButton(
         //     icon: Icon(Icons.menu),
         //     onPressed: () {
         //       Scaffold.of(context).openDrawer();
         //     }),
       ),
-      body: Center(child: Text('Managemant')),
+      body: Center(child: Text('Management')),
     );
   }
 }

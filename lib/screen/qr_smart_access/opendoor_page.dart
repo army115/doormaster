@@ -3,6 +3,7 @@ import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/models/doors_device.dart';
+import 'package:doormster/models/getdoor_weigan.dart';
 import 'package:doormster/models/opendoors_model.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:doormster/service/connect_native.dart';
@@ -24,8 +25,10 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
   var token;
   var companyId;
   var deviceId;
+  var weiganId;
 
   List<Lists> listDevice = [];
+  List<DataWeigan> listWeigan = [];
   bool loading = false;
 
   Future _getDevice() async {
@@ -151,10 +154,63 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
     }
   }
 
+  Future _getDoorWeigan() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    weiganId = prefs.getString('weiganId');
+    companyId = prefs.getString('companyId');
+    deviceId = prefs.getString('deviceId');
+
+    print('companyId: ${companyId}');
+    print('weiganId: ${weiganId}');
+
+    try {
+      setState(() {
+        loading = true;
+      });
+      var url =
+          '${Connect_api().domain}/get/weigan_group_id/$weiganId/$companyId';
+      var response = await Dio().get(
+        url,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        getDoorWeigan DoorsWeigan = getDoorWeigan.fromJson(response.data);
+        setState(() {
+          listWeigan = DoorsWeigan.data!;
+          loading = false;
+          print(listWeigan);
+        });
+      }
+    } catch (error) {
+      print(error);
+      if (deviceId == null) {
+      } else {
+        dialogOnebutton_Subtitle(
+            context,
+            'พบข้อผิดพลาด',
+            'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+            Icons.warning_amber_rounded,
+            Colors.orange,
+            'ตกลง', () {
+          Navigator.popUntil(context, (route) => route.isFirst);
+        }, false, false);
+      }
+      setState(() {
+        loading = false;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _getDevice();
+    _getDoorWeigan();
     // _loadStatusAutoDoors();
   }
 
@@ -197,29 +253,55 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
                       ],
                     ),
                   )
-                : ListView.builder(
-                    padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-                    shrinkWrap: true,
-                    itemCount: listDevice.length,
-                    itemBuilder: (context, index) {
-                      return Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          margin: EdgeInsets.symmetric(vertical: 5),
-                          elevation: 5,
-                          child: listDevice[index].connectionStatus == 1
-                              ? DoorOnline(
-                                  name: listDevice[index].name!,
-                                  press: () {
-                                    _openDoors(listDevice[index].devSn);
-                                  },
-                                  devSn: listDevice[index].devSn!,
-                                  devMac: listDevice[index].devMac!,
-                                  appKey: listDevice[index].appEkey!,
-                                  valueDoor: listDevice[index].screenType!,
-                                )
-                              : doorsOFFline('${listDevice[index].name}'));
-                    },
+                : SingleChildScrollView(
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                      child: Column(
+                        children: [
+                          ListView.builder(
+                            shrinkWrap: true,
+                            primary: false,
+                            itemCount: listDevice.length,
+                            itemBuilder: (context, index) {
+                              return Card(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)),
+                                  margin: EdgeInsets.symmetric(vertical: 5),
+                                  elevation: 5,
+                                  child: listDevice[index].connectionStatus == 1
+                                      ? DoorOnline(
+                                          name: listDevice[index].name!,
+                                          press: () {
+                                            _openDoors(listDevice[index].devSn);
+                                          },
+                                          devSn: listDevice[index].devSn!,
+                                          devMac: listDevice[index].devMac!,
+                                          appKey: listDevice[index].appEkey!,
+                                          valueDoor:
+                                              listDevice[index].screenType!,
+                                        )
+                                      : doorsOFFline(
+                                          '${listDevice[index].name}'));
+                            },
+                          ),
+                          ListView.builder(
+                            shrinkWrap: true,
+                            primary: false,
+                            itemCount: listWeigan.length,
+                            itemBuilder: (context, index) {
+                              return Card(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)),
+                                  margin: EdgeInsets.symmetric(vertical: 5),
+                                  elevation: 5,
+                                  child: doorsWeigan(
+                                      '${listWeigan[index].det?.single.doorName}'));
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
           ),
           loading ? Loading() : Container()
@@ -242,7 +324,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
           padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
         ),
         child: Wrap(
-          children: [
+          children: const [
             Icon(
               Icons.no_meeting_room_rounded,
               size: 30,
@@ -259,6 +341,42 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
         onPressed: () async {
           snackbar(context, Colors.red, 'ประตูออฟไลน์อยู่',
               Icons.highlight_off_rounded);
+        },
+      ),
+    );
+  }
+
+  Widget doorsWeigan(name) {
+    return ListTile(
+      contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      title: Text(name, style: TextStyle(fontSize: 20)),
+      trailing: ElevatedButton(
+        style: TextButton.styleFrom(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          elevation: 5,
+          primary: Colors.white,
+          backgroundColor: Theme.of(context).primaryColor,
+          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+        ),
+        child: Wrap(
+          children: const [
+            Icon(
+              Icons.meeting_room_rounded,
+              size: 30,
+            ),
+            SizedBox(
+              width: 3,
+            ),
+            Text(
+              'เปิดประตู',
+              style: TextStyle(fontSize: 18),
+            ),
+          ],
+        ),
+        onPressed: () async {
+          // snackbar(context, Colors.red, 'ประตูออฟไลน์อยู่',
+          //     Icons.highlight_off_rounded);
         },
       ),
     );

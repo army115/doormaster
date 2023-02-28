@@ -2,7 +2,7 @@ import 'package:doormster/components/drawer/drawer.dart';
 import 'package:flutter/material.dart';
 
 class Parcel_service extends StatefulWidget {
-  const Parcel_service({Key? key});
+  Parcel_service({Key? key});
   static const String route = '/parcel';
 
   @override
