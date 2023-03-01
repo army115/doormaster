@@ -8,6 +8,8 @@ import 'package:doormster/components/text_form/text_form.dart';
 import 'package:doormster/components/text_form/text_form_password.dart';
 import 'package:doormster/models/login_model.dart';
 import 'package:doormster/screen/main_screen/register_page.dart';
+import 'package:doormster/screen/main_screen/test.dart';
+import 'package:doormster/screen/visitor_service/visitor_service_page.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -28,99 +30,105 @@ class _Login_PageState extends State<Login_Page> {
   final _formkey = GlobalKey<FormState>();
   TextEditingController _username = TextEditingController();
   TextEditingController _password = TextEditingController();
-
   bool loading = false;
+  bool isAnimating = true;
 
   Future doLogin() async {
     if (_formkey.currentState!.validate()) {
-      try {
-        setState(() {
-          loading = true;
-        });
-        // เชื่อมต่อ api
-        String url = '${Connect_api().domain}/login';
-        var body = {
-          "user_name": _username.text,
-          "user_password": _password.text,
-        };
-        var response = await Dio().post(url,
-            options: Options(headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
-            }),
-            data: body);
-        // เช็คการเชื่อมต่อ api
-        if (response.statusCode == 200) {
-          var jsonRes = LoginModel.fromJson(response.data);
-          // เช็คสถานะ การเข้าสู่ระบบ
-          print('error ${jsonRes.status}');
-          print('body ${body}');
-          if (jsonRes.status == 200) {
-            var token = jsonRes.accessToken;
-            List<User> data = jsonRes.user!; //ตัวแปร List จาก model
+      // try {
+      setState(() {
+        loading = true;
+      });
+      // เชื่อมต่อ api
+      String url = '${Connect_api().domain}/login';
+      var body = {
+        "user_name": _username.text,
+        "user_password": _password.text,
+      };
+      var response = await Dio().post(url,
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          }),
+          data: body);
+      // เช็คการเชื่อมต่อ api
+      if (response.statusCode == 200) {
+        var jsonRes = LoginModel.fromJson(response.data);
+        // เช็คสถานะ การเข้าสู่ระบบ
+        print('body ${body}');
+        if (jsonRes.status == 200) {
+          await Future.delayed(Duration(milliseconds: 600));
+          var token = jsonRes.accessToken;
+          List<User> data = jsonRes.user!; //ตัวแปร List จาก model
 
-            print('userId: ${data.single.sId}');
-            print('uuId: ${data.single.userUuid}');
-            print('login success');
-            print('token: ${token}');
+          print('userId: ${data.single.sId}');
+          print('uuId: ${data.single.userUuid}');
+          print('login success');
+          print('token: ${token}');
 
-            // ส่งค่าตัวแปร
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            await prefs.setString('token', token!);
-            await prefs.setString('username', data.single.userName!);
+          //ส่งค่าตัวแปร
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString('token', token!);
+          await prefs.setString('username', data.single.userName!);
 
-            if (data.single.userUuid != prefs.getString('uuId')) {
-              await prefs.setString('userId', data.single.sId!);
-              await prefs.setString('companyId', data.single.companyId!);
-              await prefs.setInt('role', data.single.mobile!);
-              await prefs.setString('uuId', data.single.userUuid!);
-              await prefs.setString('weiganId', data.single.weigangroupUuid!);
-            }
-
-            if (data.single.devicegroupUuid != null) {
-              await prefs.setString('deviceId', data.single.devicegroupUuid!);
-            }
-
-            Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => BottomBar()));
-            snackbar(context, Theme.of(context).primaryColor,
-                'เข้าสู่ระบบสำเร็จ', Icons.check_circle_outline_rounded);
-            setState(() {
-              loading = false;
-            });
-          } else {
-            print(jsonRes.data);
-            print('username หรือ password ไม่ถูกต้อง');
-            snackbar(context, Colors.red, 'ชื่อผู้ใช้ หรือ รหัสผ่าน ไม่ถูกต้อง',
-                Icons.highlight_off_rounded);
-            setState(() {
-              loading = false;
-            });
+          if (data.single.userUuid != prefs.getString('uuId')) {
+            await prefs.setString('userId', data.single.sId!);
+            await prefs.setString('companyId', data.single.companyId!);
+            await prefs.setInt('role', data.single.mobile!);
+            await prefs.setString('uuId', data.single.userUuid!);
           }
+
+          if (data.single.devicegroupUuid != null) {
+            await prefs.setString('deviceId', data.single.devicegroupUuid!);
+          }
+          if (data.single.devicegroupUuid != null) {
+            await prefs.setString('weiganId', data.single.weigangroupUuid!);
+          }
+
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => BottomBar()));
+          snackbar(context, Theme.of(context).primaryColor, 'เข้าสู่ระบบสำเร็จ',
+              Icons.check_circle_outline_rounded);
+
+          setState(() {
+            loading = false;
+          });
         } else {
-          print(response.statusCode);
-          print('Connection Fail');
-          snackbar(context, Colors.red, 'เข้าสู่ระบบไม่สำเร็จ',
+          await Future.delayed(Duration(milliseconds: 600));
+          print(jsonRes.data);
+          print('username หรือ password ไม่ถูกต้อง');
+          snackbar(context, Colors.red, 'ชื่อผู้ใช้ หรือ รหัสผ่าน ไม่ถูกต้อง',
               Icons.highlight_off_rounded);
           setState(() {
             loading = false;
           });
         }
-      } catch (error) {
-        print(error);
-        dialogOnebutton_Subtitle(
-            context,
-            'พบข้อผิดพลาด',
-            'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-            Icons.warning_amber_rounded,
-            Colors.orange,
-            'ตกลง', () async {
-          Navigator.of(context).pop();
-        }, false, false);
+      } else {
+        await Future.delayed(Duration(milliseconds: 600));
+        print(response.statusCode);
+        print('Connection Fail');
+        snackbar(context, Colors.red, 'เข้าสู่ระบบไม่สำเร็จ',
+            Icons.highlight_off_rounded);
         setState(() {
           loading = false;
         });
       }
+      // } catch (error) {
+      //   await Future.delayed(Duration(milliseconds: 600));
+      //   print(error);
+      //   dialogOnebutton_Subtitle(
+      //       context,
+      //       'พบข้อผิดพลาด',
+      //       'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+      //       Icons.warning_amber_rounded,
+      //       Colors.orange,
+      //       'ตกลง', () async {
+      //     Navigator.of(context).pop();
+      //   }, false, false);
+      //   setState(() {
+      //     loading = false;
+      //   });
+      // }
     }
   }
 
@@ -156,6 +164,7 @@ class _Login_PageState extends State<Login_Page> {
 
   @override
   Widget build(BuildContext context) {
+    final isInit = isAnimating || loading == false;
     return WillPopScope(
       onWillPop: () async => true,
       child: Scaffold(
@@ -197,16 +206,32 @@ class _Login_PageState extends State<Login_Page> {
                   SizedBox(
                     height: 15,
                   ),
-                  loading
-                      ? CircularProgressIndicator(
-                          color: Theme.of(context).primaryColor,
-                        )
-                      : Buttons(
-                          title: 'เข้าสู่ระบบ',
-                          press: () {
-                            doLogin();
-                          },
-                        ),
+                  AnimatedContainer(
+                    duration: Duration(milliseconds: 200),
+                    onEnd: () => setState(() {
+                      isAnimating = !isAnimating;
+                    }),
+                    width:
+                        !loading ? MediaQuery.of(context).size.width * 0.5 : 70,
+                    height: 45,
+                    child: !isInit
+                        ? Container(
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Theme.of(context).primaryColor),
+                            child: Center(
+                              child: const CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            ),
+                          )
+                        : Buttons(
+                            title: 'เข้าสู่ระบบ',
+                            press: () {
+                              doLogin();
+                            },
+                          ),
+                  ),
                   SizedBox(height: 20),
                   RichText(
                       textAlign: TextAlign.center,
@@ -229,7 +254,7 @@ class _Login_PageState extends State<Login_Page> {
                                   Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
                                           builder: ((context) =>
-                                              Register_Page())));
+                                              ButtonStates())));
                                 })
                         ],
                       ))

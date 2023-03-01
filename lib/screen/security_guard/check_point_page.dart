@@ -5,6 +5,7 @@ import 'package:doormster/components/dropdown/dropdown_noborder.dart';
 import 'package:doormster/components/text_form/text_form_novalidator.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'dart:convert' as convert;
 
 class Check_Point extends StatefulWidget {
   const Check_Point({Key? key});
@@ -54,16 +55,20 @@ class _Check_PointState extends State<Check_Point> {
   TextEditingController detail = TextEditingController();
 
   final ImagePicker imgpicker = ImagePicker();
-  List<XFile>? listImage = [];
+  // List<XFile>? listImage = [];
+  List<String>? listImage64 = [];
 
   selectedImages(ImageSource TypeImage) async {
     try {
       // var pickedfiles = await imgpicker.pickMultiImage();
       final XFile? pickedImages = await imgpicker.pickImage(source: TypeImage);
       if (pickedImages != null) {
+        List<int> imageBytes = await pickedImages.readAsBytes();
+        var ImagesBase64 = convert.base64Encode(imageBytes);
         setState(() {
-          listImage?.add(pickedImages);
-          print('image ${pickedImages.name}');
+          // listImage?.add(pickedImages);
+          listImage64?.add(ImagesBase64);
+          print('image64: ${ImagesBase64}');
         });
       } else {
         print("No image is selected.");
@@ -133,14 +138,14 @@ class _Check_PointState extends State<Check_Point> {
                         // itemBuilder: (context, index) =>
 
                         children: [
-                          listImage != null
+                          listImage64 != null
                               ? Container(
                                   height: 150,
                                   child: ListView.builder(
                                       shrinkWrap: true,
                                       reverse: true,
                                       scrollDirection: Axis.horizontal,
-                                      itemCount: listImage!.length,
+                                      itemCount: listImage64!.length,
                                       itemBuilder: ((context, index) => Card(
                                               child: Padding(
                                             padding: const EdgeInsets.all(0),
@@ -154,9 +159,13 @@ class _Check_PointState extends State<Check_Point> {
                                                   decoration: BoxDecoration(
                                                     image: DecorationImage(
                                                         fit: BoxFit.cover,
-                                                        image: FileImage(File(
-                                                            listImage![index]
-                                                                .path))),
+                                                        image: MemoryImage(
+                                                            convert.base64Decode(
+                                                                '${listImage64![index]}'))
+                                                        // FileImage(File(
+                                                        //     listImage64![
+                                                        //         index]))
+                                                        ),
                                                   ),
                                                 ),
                                                 Positioned(
@@ -173,9 +182,14 @@ class _Check_PointState extends State<Check_Point> {
                                                       icon: Icon(Icons.close),
                                                       onPressed: () {
                                                         setState(() {
-                                                          listImage?.remove(
-                                                              listImage![
+                                                          // listImage?.remove(
+                                                          //     listImage![
+                                                          //         index]);
+                                                          listImage64?.remove(
+                                                              listImage64![
                                                                   index]);
+                                                          print(
+                                                              'Image :  ${index}');
                                                         });
                                                       },
                                                       iconSize: 18,
@@ -188,12 +202,12 @@ class _Check_PointState extends State<Check_Point> {
                                           )))),
                                 )
                               : Container(),
-                          listImage?.length == 4
+                          listImage64?.length == 4
                               ? Container()
                               : Card(
                                   child: InkWell(
                                       onTap: () {
-                                        selectedImages(ImageSource.camera);
+                                        selectedImages(ImageSource.gallery);
                                       },
                                       child: Container(
                                         width: 150,

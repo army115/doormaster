@@ -11,6 +11,7 @@ import 'package:doormster/components/girdManu/menu_home.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/models/get_ads_company.dart';
 import 'package:doormster/models/get_menu.dart';
+import 'package:doormster/screen/main_screen/test.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -164,29 +165,29 @@ class _Home_PageState extends State<Home_Page> {
           ),
           body: checkNet == ConnectivityResult.none || loading == true
               ? Container()
-              : SingleChildScrollView(
-                  child: SafeArea(
-                    child: mobileRole == 0 || listMenu.isEmpty
-                        ? Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'โปรดติดต่อผู้ดูแล\nเพื่ออนุมัติสิทธิ์การใช้งาน',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.normal),
-                                ),
-                                Image.asset(
-                                  'assets/images/Smart Community Logo.png',
-                                  scale: 4.5,
-                                  // opacity: AlwaysStoppedAnimation(0.7),
-                                ),
-                              ],
-                            ),
-                          )
-                        : Column(
+              : SafeArea(
+                  child: mobileRole == 0 || listMenu.isEmpty
+                      ? Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'โปรดติดต่อผู้ดูแล\nเพื่ออนุมัติสิทธิ์การใช้งาน',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.normal),
+                              ),
+                              Image.asset(
+                                'assets/images/Smart Community Logo.png',
+                                scale: 4.5,
+                                // opacity: AlwaysStoppedAnimation(0.7),
+                              ),
+                            ],
+                          ),
+                        )
+                      : SingleChildScrollView(
+                          child: Column(
                             children: [
                               Container(
                                 height: MediaQuery.of(context).size.width * 0.6,
@@ -258,20 +259,14 @@ class _Home_PageState extends State<Home_Page> {
                               // Buttons(
                               //     title: 'test',
                               //     press: () {
-                              //       dialogOnebutton_Subtitle(
-                              //           context,
-                              //           'พบข้อผิดพลาด',
-                              //           'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-                              //           Icons.warning_amber_rounded,
-                              //           Colors.orange,
-                              //           'ตกลง', () {
-                              //         Navigator.of(context, rootNavigator: true)
-                              //             .pop();
-                              //       }, false, false);
+                              //       Navigator.of(context).push(
+                              //           MaterialPageRoute(
+                              //               builder: (context) =>
+                              //                   ButtonStates()));
                               //     })
                             ],
                           ),
-                  ),
+                        ),
                 ),
         ),
         loading ? Loading() : Container(),

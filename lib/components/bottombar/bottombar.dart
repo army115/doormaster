@@ -15,7 +15,6 @@ GlobalKey<NavigatorState> messageKey = GlobalKey<NavigatorState>();
 GlobalKey<NavigatorState> profileKey = GlobalKey<NavigatorState>();
 final NavbarNotifier _navbarNotifier = NavbarNotifier();
 int _selectedIndex = 0;
-bool loading = false;
 
 class BottomBar extends StatefulWidget {
   BottomBar({
@@ -89,54 +88,49 @@ class _BottomBarState extends State<BottomBar> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () => _onBackButtonDoubleClicked(),
-      child: Stack(
-        children: [
-          Scaffold(
-            key: _scaffoldKey,
-            drawer: MyDrawer(
-              pressProfile: () {
-                setState(() {
-                  profileKey.currentState?.popAndPushNamed('/');
-                  _selectedIndex = 2;
-                });
-                Navigator.of(context).pop();
-              },
-            ),
-            body: IndexedStack(
-              index: _selectedIndex,
-              children: buildBody,
-            ),
-            // buildBody[
-            //     _selectedIndex], //จะไม่ค้างอยู่หน้าปัจจุบัน เวลากดปุ่มเมนูกลับมา
+      child: Scaffold(
+        key: _scaffoldKey,
+        drawer: MyDrawer(
+          pressProfile: () {
+            setState(() {
+              profileKey.currentState?.popAndPushNamed('/');
+              _selectedIndex = 2;
+            });
+            Navigator.of(context).pop();
+          },
+        ),
+        body: IndexedStack(
+          index: _selectedIndex,
+          children: buildBody,
+        ),
+        // buildBody[
+        //     _selectedIndex], //จะไม่ค้างอยู่หน้าปัจจุบัน เวลากดปุ่มเมนูกลับมา
 
-            bottomNavigationBar: BottomNavigationBar(
-              items: [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.home_rounded),
-                  label: 'หน้าหลัก',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.message_rounded),
-                  label: 'ข้อความ',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.account_circle_rounded),
-                  label: 'โปรไฟล์',
-                ),
-              ],
-              currentIndex: _selectedIndex,
-              onTap: (value) {
-                if (_navbarNotifier._index == value) {
-                  _navbarNotifier.popAllRoutes(value);
-                } else {
-                  _navbarNotifier._index = value;
-                }
-                setState(() => _selectedIndex = value);
-              },
+        bottomNavigationBar: BottomNavigationBar(
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home_rounded),
+              label: 'หน้าหลัก',
             ),
-          ),
-          loading ? Loading() : Container()
-        ],
+            BottomNavigationBarItem(
+              icon: Icon(Icons.message_rounded),
+              label: 'ข้อความ',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle_rounded),
+              label: 'โปรไฟล์',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          onTap: (value) {
+            if (_navbarNotifier._index == value) {
+              _navbarNotifier.popAllRoutes(value);
+            } else {
+              _navbarNotifier._index = value;
+            }
+            setState(() => _selectedIndex = value);
+          },
+        ),
       ),
     );
   }

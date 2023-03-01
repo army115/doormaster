@@ -29,25 +29,30 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
 
   List<Lists> listDevice = [];
   List<DataWeigan> listWeigan = [];
+  List<Det>? listdet = [];
   bool loading = false;
 
-  Future _getDevice() async {
+  Future _getDoorDevice() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     token = prefs.getString('token');
     companyId = prefs.getString('companyId');
     deviceId = prefs.getString('deviceId');
+    weiganId = prefs.getString('weiganId');
 
     print('token: ${token}');
     print('companyId: ${companyId}');
     print('deviceId: ${deviceId}');
+    print('weiganId: ${weiganId}');
 
     try {
       setState(() {
         loading = true;
       });
+
+      //call api device
       var url = '${Connect_api().domain}/getdeviceuuidmobile/$deviceId';
-      var response = await Dio().get(
+      var res = await Dio().get(
         url,
         options: Options(headers: {
           'Content-Type': 'application/json',
@@ -55,12 +60,31 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
         }),
       );
 
-      if (response.statusCode == 200) {
-        DoorsDeviece deviceDoors = DoorsDeviece.fromJson(response.data);
+      //call api Weigan
+      var urlWeigan =
+          '${Connect_api().domain}/get/weigan_group_id/$weiganId/$companyId';
+      var response = await Dio().get(
+        urlWeigan,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        }),
+      );
+
+      if (res.statusCode == 200 && response.statusCode == 200) {
+        DoorsDeviece deviceDoors = DoorsDeviece.fromJson(res.data);
+
+        getDoorWeigan DoorsWeigan = getDoorWeigan.fromJson(response.data);
         setState(() {
           listDevice = deviceDoors.lists!;
+          listWeigan = DoorsWeigan.data!;
           loading = false;
         });
+        // วน loop เพื่อดึง Det จากแต่ละ DataWeigan
+        for (int i = 0; i < listWeigan.length; i++) {
+          // เก็บ List Det จาก DataWeigan ลงในตัวแปร listdet
+          listdet?.addAll(listWeigan[i].det!);
+        }
       }
     } catch (error) {
       print(error);
@@ -154,52 +178,51 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
     }
   }
 
-  Future _getDoorWeigan() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    weiganId = prefs.getString('weiganId');
-    companyId = prefs.getString('companyId');
-    deviceId = prefs.getString('deviceId');
-
-    print('companyId: ${companyId}');
-    print('weiganId: ${weiganId}');
-
+  Future _openDoorsWeigan(DoorId, Num) async {
     try {
       setState(() {
         loading = true;
       });
-      var url =
-          '${Connect_api().domain}/get/weigan_group_id/$weiganId/$companyId';
-      var response = await Dio().get(
-        url,
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        }),
-      );
+      var url = '${Connect_api().domain}/openDoorweigan';
+      var response = await Dio().post(url,
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          }),
+          data: {
+            "door_id": DoorId,
+            "door_num": Num,
+          });
 
       if (response.statusCode == 200) {
-        getDoorWeigan DoorsWeigan = getDoorWeigan.fromJson(response.data);
+        await Future.delayed(Duration(milliseconds: 400));
+        print('OpenDoor Success');
+        print('Status : ${response.data}');
         setState(() {
-          listWeigan = DoorsWeigan.data!;
           loading = false;
-          print(listWeigan);
+        });
+        snackbar(context, Theme.of(context).primaryColor, 'เปิดประตูสำเร็จ',
+            Icons.check_circle_outline_rounded);
+      } else {
+        snackbar(context, Colors.red, 'เปิดประตูไม่สำเร็จ',
+            Icons.highlight_off_rounded);
+        print('OpenDoor Fail!!');
+        print(response.data);
+        setState(() {
+          loading = false;
         });
       }
     } catch (error) {
       print(error);
-      if (deviceId == null) {
-      } else {
-        dialogOnebutton_Subtitle(
-            context,
-            'พบข้อผิดพลาด',
-            'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-            Icons.warning_amber_rounded,
-            Colors.orange,
-            'ตกลง', () {
-          Navigator.popUntil(context, (route) => route.isFirst);
-        }, false, false);
-      }
+      dialogOnebutton_Subtitle(
+          context,
+          'พบข้อผิดพลาด',
+          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+          Icons.warning_amber_rounded,
+          Colors.orange,
+          'ตกลง', () {
+        Navigator.of(context).pop();
+      }, false, false);
       setState(() {
         loading = false;
       });
@@ -209,8 +232,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
   @override
   void initState() {
     super.initState();
-    _getDevice();
-    _getDoorWeigan();
+    _getDoorDevice();
     // _loadStatusAutoDoors();
   }
 
@@ -234,7 +256,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
                     Navigator.pop(context);
                   }),
             ),
-            body: deviceId == null
+            body: deviceId == null && weiganId == null
                 ? Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -288,7 +310,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
                           ListView.builder(
                             shrinkWrap: true,
                             primary: false,
-                            itemCount: listWeigan.length,
+                            itemCount: listdet?.length,
                             itemBuilder: (context, index) {
                               return Card(
                                   shape: RoundedRectangleBorder(
@@ -296,7 +318,9 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
                                   margin: EdgeInsets.symmetric(vertical: 5),
                                   elevation: 5,
                                   child: doorsWeigan(
-                                      '${listWeigan[index].det?.single.doorName}'));
+                                      '${listdet?[index].doorName}',
+                                      listdet?[index].doorId,
+                                      listdet?[index].doorNum));
                             },
                           ),
                         ],
@@ -346,7 +370,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
     );
   }
 
-  Widget doorsWeigan(name) {
+  Widget doorsWeigan(name, DoorId, Num) {
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       title: Text(name, style: TextStyle(fontSize: 20)),
@@ -375,8 +399,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
           ],
         ),
         onPressed: () async {
-          // snackbar(context, Colors.red, 'ประตูออฟไลน์อยู่',
-          //     Icons.highlight_off_rounded);
+          _openDoorsWeigan(DoorId, Num);
         },
       ),
     );

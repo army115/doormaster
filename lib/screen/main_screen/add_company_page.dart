@@ -179,10 +179,12 @@ class _Add_CompanyState extends State<Add_Company> {
         await prefs.setString('companyId', data.single.companyId!);
         await prefs.setInt('role', data.single.mobile!);
         await prefs.setString('uuId', data.single.userUuid!);
-        await prefs.setString('weiganId', data.single.weigangroupUuid!);
 
         if (data.single.devicegroupUuid != null) {
           await prefs.setString('deviceId', data.single.devicegroupUuid!);
+        }
+        if (data.single.devicegroupUuid != null) {
+          await prefs.setString('weiganId', data.single.weigangroupUuid!);
         }
         print('loginMulti Success');
         print(response.data);
