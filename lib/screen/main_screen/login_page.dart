@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors_in_immutables, avoid_single_cascade_in_expression_statements
 import 'package:dio/dio.dart';
-import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
@@ -8,8 +7,6 @@ import 'package:doormster/components/text_form/text_form.dart';
 import 'package:doormster/components/text_form/text_form_password.dart';
 import 'package:doormster/models/login_model.dart';
 import 'package:doormster/screen/main_screen/register_page.dart';
-import 'package:doormster/screen/main_screen/test.dart';
-import 'package:doormster/screen/visitor_service/visitor_service_page.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +54,7 @@ class _Login_PageState extends State<Login_Page> {
         // เช็คสถานะ การเข้าสู่ระบบ
         print('body ${body}');
         if (jsonRes.status == 200) {
-          await Future.delayed(Duration(milliseconds: 600));
+          await Future.delayed(const Duration(milliseconds: 600));
           var token = jsonRes.accessToken;
           List<User> data = jsonRes.user!; //ตัวแปร List จาก model
 
@@ -94,7 +91,7 @@ class _Login_PageState extends State<Login_Page> {
             loading = false;
           });
         } else {
-          await Future.delayed(Duration(milliseconds: 600));
+          await Future.delayed(const Duration(milliseconds: 600));
           print(jsonRes.data);
           print('username หรือ password ไม่ถูกต้อง');
           snackbar(context, Colors.red, 'ชื่อผู้ใช้ หรือ รหัสผ่าน ไม่ถูกต้อง',
@@ -104,7 +101,7 @@ class _Login_PageState extends State<Login_Page> {
           });
         }
       } else {
-        await Future.delayed(Duration(milliseconds: 600));
+        await Future.delayed(const Duration(milliseconds: 600));
         print(response.statusCode);
         print('Connection Fail');
         snackbar(context, Colors.red, 'เข้าสู่ระบบไม่สำเร็จ',
@@ -144,13 +141,13 @@ class _Login_PageState extends State<Login_Page> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Theme.of(context).primaryColor,
-          content: Text(
+          content: const Text(
             "กดอีกครั้งเพื่อออก",
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 16, fontFamily: 'Kanit'),
           ),
           width: MediaQuery.of(context).size.width * 0.45,
-          padding: EdgeInsets.symmetric(vertical: 10),
+          padding: const EdgeInsets.symmetric(vertical: 10),
           duration: const Duration(milliseconds: 1500),
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
@@ -173,7 +170,7 @@ class _Login_PageState extends State<Login_Page> {
         child: Form(
           key: _formkey,
           child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
               child: Column(
                 // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -181,7 +178,7 @@ class _Login_PageState extends State<Login_Page> {
                     'assets/images/Smart Community Logo.png',
                     scale: 4,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Text_Form(
@@ -203,11 +200,11 @@ class _Login_PageState extends State<Login_Page> {
                       }
                     },
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   AnimatedContainer(
-                    duration: Duration(milliseconds: 200),
+                    duration: const Duration(milliseconds: 200),
                     onEnd: () => setState(() {
                       isAnimating = !isAnimating;
                     }),
@@ -219,8 +216,8 @@ class _Login_PageState extends State<Login_Page> {
                             decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: Theme.of(context).primaryColor),
-                            child: Center(
-                              child: const CircularProgressIndicator(
+                            child: const Center(
+                              child: CircularProgressIndicator(
                                 color: Colors.white,
                               ),
                             ),
@@ -232,11 +229,11 @@ class _Login_PageState extends State<Login_Page> {
                             },
                           ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   RichText(
                       textAlign: TextAlign.center,
                       text: TextSpan(
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 18,
                           color: Colors.black,
                           fontFamily: 'Prompt',
@@ -254,7 +251,7 @@ class _Login_PageState extends State<Login_Page> {
                                   Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
                                           builder: ((context) =>
-                                              ButtonStates())));
+                                              Register_Page())));
                                 })
                         ],
                       ))

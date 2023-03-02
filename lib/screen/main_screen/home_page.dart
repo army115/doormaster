@@ -249,8 +249,9 @@ class _Home_PageState extends State<Home_Page> {
                                   itemBuilder: (context, index) {
                                     return Menu_Home(
                                       title: '${listMenu[index].name}',
-                                      icon: '${listMenu[index].icon}',
+                                      icon: listMenu[index].icon,
                                       press: listMenu[index].page,
+                                      type: '${listMenu[index].type}',
                                     );
                                   },
                                 ),

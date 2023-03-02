@@ -331,7 +331,31 @@ class _MyDrawerState extends State<MyDrawer> {
                     toolbarHeight: 40,
                     automaticallyImplyLeading: false,
                     centerTitle: false,
-                    title: Text('สลับโครงการ'),
+                    title: Container(
+                      width: double.infinity,
+                      child: SingleChildScrollView(
+                          primary: false,
+                          controller: scrollController,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Center(
+                                child: Container(
+                                    height: 4,
+                                    width: 40,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius:
+                                            BorderRadius.circular(10))),
+                              ),
+                              SizedBox(height: 23),
+                              Text(
+                                'สลับโครงการ',
+                                style: TextStyle(height: 0),
+                              )
+                            ],
+                          )),
+                    ),
                     elevation: 0,
                   ),
                   backgroundColor: Colors.transparent,

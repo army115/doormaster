@@ -1,11 +1,19 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Menu_Home extends StatelessWidget {
   String title;
   final press;
   final icon;
+  String type;
   Menu_Home(
-      {Key? key, required this.title, required this.press, required this.icon})
+      {Key? key,
+      required this.title,
+      required this.press,
+      required this.icon,
+      required this.type})
       : super(key: key);
 
   @override
@@ -26,7 +34,11 @@ class Menu_Home extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(5),
               child: Icon(
-                  IconData(int.parse(icon), fontFamily: 'MaterialIcons'),
+                  type == 'cuper'
+                      ? IconData(int.parse(icon),
+                          fontFamily: CupertinoIcons.iconFont,
+                          fontPackage: CupertinoIcons.iconFontPackage)
+                      : IconData(int.parse(icon), fontFamily: 'MaterialIcons'),
                   size: 45,
                   color: Colors.white),
             ),

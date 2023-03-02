@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/checkBox/checkbox_formfield.dart';
 import 'package:doormster/components/dropdown/dropdown_noborder.dart';
@@ -100,38 +99,28 @@ class _Check_PointState extends State<Check_Point> {
         child: Form(
           key: _formkey,
           child: Container(
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('รายการตรวจ'),
+                  const Text('รายการตรวจ'),
                   ListView.builder(
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
+                      primary: false,
+                      // physics: NeverScrollableScrollPhysics(),
                       itemCount: checkBox.length,
                       itemBuilder: ((context, index) => CheckBox_FormField(
                             title: '${checkBox[index].title}',
                             value: checkBox[index].value,
                             validator: 'กรุณาเลือกรายการ',
                           ))),
-                  Text('รูปภาพประกอบ'),
-                  // Card(
-                  //   child: InkWell(
-                  //       onTap: () {
-                  //         openImages(ImageSource.gallery);
-                  //       },
-                  //       child: Container(
-                  //         width: 150,
-                  //         height: 150,
-                  //         child: Icon(
-                  //           Icons.camera_alt_rounded,
-                  //           size: 40,
-                  //         ),
-                  //       )),
-                  // ),
+                  const Text('รูปภาพประกอบ'),
                   Container(
+                    margin: EdgeInsets.symmetric(vertical: 10),
                     height: 150,
                     child: ListView(
+                        physics: BouncingScrollPhysics(),
+                        primary: false,
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
                         // itemCount: listImage?.length,
@@ -139,72 +128,69 @@ class _Check_PointState extends State<Check_Point> {
 
                         children: [
                           listImage64 != null
-                              ? Container(
-                                  height: 150,
-                                  child: ListView.builder(
-                                      shrinkWrap: true,
-                                      reverse: true,
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: listImage64!.length,
-                                      itemBuilder: ((context, index) => Card(
-                                              child: Padding(
-                                            padding: const EdgeInsets.all(0),
-                                            child: Stack(
-                                              children: [
-                                                Container(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.4,
-                                                  decoration: BoxDecoration(
-                                                    image: DecorationImage(
-                                                        fit: BoxFit.cover,
-                                                        image: MemoryImage(
-                                                            convert.base64Decode(
-                                                                '${listImage64![index]}'))
-                                                        // FileImage(File(
-                                                        //     listImage64![
-                                                        //         index]))
-                                                        ),
-                                                  ),
-                                                ),
-                                                Positioned(
-                                                  top: 3,
-                                                  right: 3,
-                                                  child: CircleAvatar(
-                                                    radius: 10,
-                                                    backgroundColor: Colors.red,
-                                                    child: IconButton(
-                                                      padding: EdgeInsets.zero,
-                                                      constraints:
-                                                          BoxConstraints(),
-                                                      splashRadius: 10,
-                                                      icon: Icon(Icons.close),
-                                                      onPressed: () {
-                                                        setState(() {
-                                                          // listImage?.remove(
-                                                          //     listImage![
-                                                          //         index]);
-                                                          listImage64?.remove(
-                                                              listImage64![
-                                                                  index]);
-                                                          print(
-                                                              'Image :  ${index}');
-                                                        });
-                                                      },
-                                                      iconSize: 18,
-                                                      color: Colors.white,
+                              ? ListView.builder(
+                                  shrinkWrap: true,
+                                  reverse: true,
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: listImage64!.length,
+                                  itemBuilder: ((context, index) => Card(
+                                        elevation: 5,
+                                        child: Stack(
+                                          children: [
+                                            Container(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.4,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                image: DecorationImage(
+                                                    fit: BoxFit.cover,
+                                                    image: MemoryImage(
+                                                        convert.base64Decode(
+                                                            '${listImage64![index]}'))
+                                                    // FileImage(File(
+                                                    //     listImage64![
+                                                    //         index]))
                                                     ),
-                                                  ),
-                                                )
-                                              ],
+                                              ),
                                             ),
-                                          )))),
-                                )
+                                            Positioned(
+                                              top: 3,
+                                              right: 3,
+                                              child: CircleAvatar(
+                                                radius: 10,
+                                                backgroundColor: Colors.red,
+                                                child: IconButton(
+                                                  padding: EdgeInsets.zero,
+                                                  constraints: BoxConstraints(),
+                                                  splashRadius: 10,
+                                                  icon: Icon(Icons.close),
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      // listImage?.remove(
+                                                      //     listImage![
+                                                      //         index]);
+                                                      listImage64?.remove(
+                                                          listImage64![index]);
+                                                      print(
+                                                          'Image :  ${index}');
+                                                    });
+                                                  },
+                                                  iconSize: 18,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      )))
                               : Container(),
                           listImage64?.length == 4
                               ? Container()
                               : Card(
+                                  elevation: 5,
                                   child: InkWell(
                                       onTap: () {
                                         selectedImages(ImageSource.gallery);
@@ -212,7 +198,7 @@ class _Check_PointState extends State<Check_Point> {
                                       child: Container(
                                         width: 150,
                                         height: 150,
-                                        child: Icon(
+                                        child: const Icon(
                                           Icons.camera_alt_rounded,
                                           size: 40,
                                         ),
@@ -220,7 +206,7 @@ class _Check_PointState extends State<Check_Point> {
                                 ),
                         ]),
                   ),
-                  Text('บันทึกเหตุการณ์'),
+                  const Text('บันทึกเหตุการณ์'),
                   DropDownType(),
                   Text_Form_NoValidator(
                     TypeInput: TextInputType.text,
@@ -239,7 +225,6 @@ class _Check_PointState extends State<Check_Point> {
   Widget DropDownType() {
     return Dropdown_NoBorder(
       title: 'เลือกสถานการณ์',
-      // deviceId == null ? 'ไม่มีอุปกรณ์' : 'เลือกอุปกรณ์',
       values: dropdownValue,
       listItem: ['ปกติ', 'ไม่ปกติ'].map((value) {
         return DropdownMenuItem(

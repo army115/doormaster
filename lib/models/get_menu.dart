@@ -31,6 +31,7 @@ class DataMenu {
   String? page;
   String? companyId;
   String? modulename;
+  String? type;
 
   DataMenu(
       {this.sId,
@@ -38,7 +39,8 @@ class DataMenu {
       this.name,
       this.page,
       this.companyId,
-      this.modulename});
+      this.modulename,
+      this.type});
 
   DataMenu.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -47,6 +49,7 @@ class DataMenu {
     page = json['page'];
     companyId = json['company_id'];
     modulename = json['modulename'];
+    type = json['type'];
   }
 
   Map<String, dynamic> toJson() {
@@ -57,6 +60,7 @@ class DataMenu {
     data['page'] = this.page;
     data['company_id'] = this.companyId;
     data['modulename'] = this.modulename;
+    data['type'] = this.type;
     return data;
   }
 }

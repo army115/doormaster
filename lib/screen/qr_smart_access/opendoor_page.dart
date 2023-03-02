@@ -292,19 +292,34 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
                                   margin: EdgeInsets.symmetric(vertical: 5),
                                   elevation: 5,
                                   child: listDevice[index].connectionStatus == 1
-                                      ? DoorOnline(
-                                          name: listDevice[index].name!,
-                                          press: () {
-                                            _openDoors(listDevice[index].devSn);
-                                          },
-                                          devSn: listDevice[index].devSn!,
-                                          devMac: listDevice[index].devMac!,
-                                          appKey: listDevice[index].appEkey!,
-                                          valueDoor:
-                                              listDevice[index].screenType!,
-                                        )
-                                      : doorsOFFline(
-                                          '${listDevice[index].name}'));
+                                      ? doorsButton(
+                                          '${listdet?[index].doorName}',
+                                          'เปิดประตู',
+                                          Icons.meeting_room_rounded,
+                                          Theme.of(context).primaryColor,
+                                          () => _openDoors(
+                                              listDevice[index].devSn))
+                                      // DoorOnline(
+                                      //     name: listDevice[index].name!,
+                                      //     press: () {
+                                      //       _openDoors(listDevice[index].devSn);
+                                      //     },
+                                      //     devSn: listDevice[index].devSn!,
+                                      //     devMac: listDevice[index].devMac!,
+                                      //     appKey: listDevice[index].appEkey!,
+                                      //     valueDoor:
+                                      //         listDevice[index].screenType!,
+                                      //   )
+                                      : doorsButton(
+                                          '${listDevice[index].name}',
+                                          'ประตูออฟไลน์',
+                                          Icons.no_meeting_room_rounded,
+                                          Colors.red,
+                                          () => snackbar(
+                                              context,
+                                              Colors.red,
+                                              'ประตูออฟไลน์อยู่',
+                                              Icons.highlight_off_rounded)));
                             },
                           ),
                           ListView.builder(
@@ -317,10 +332,14 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
                                       borderRadius: BorderRadius.circular(10)),
                                   margin: EdgeInsets.symmetric(vertical: 5),
                                   elevation: 5,
-                                  child: doorsWeigan(
+                                  child: doorsButton(
                                       '${listdet?[index].doorName}',
-                                      listdet?[index].doorId,
-                                      listdet?[index].doorNum));
+                                      'เปิดประตู',
+                                      Icons.meeting_room_rounded,
+                                      Theme.of(context).primaryColor,
+                                      () => _openDoorsWeigan(
+                                          listdet?[index].doorId,
+                                          listdet?[index].doorNum)));
                             },
                           ),
                         ],
@@ -334,7 +353,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
     );
   }
 
-  Widget doorsOFFline(name) {
+  Widget doorsButton(name, button, icon, color, press) {
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       title: Text(name, style: TextStyle(fontSize: 20)),
@@ -344,63 +363,25 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           elevation: 5,
           primary: Colors.white,
-          backgroundColor: Colors.redAccent,
+          backgroundColor: color,
           padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
         ),
         child: Wrap(
-          children: const [
+          children: [
             Icon(
-              Icons.no_meeting_room_rounded,
+              icon,
               size: 30,
             ),
             SizedBox(
               width: 3,
             ),
             Text(
-              'ประตูออฟไลน์',
+              button,
               style: TextStyle(fontSize: 18),
             ),
           ],
         ),
-        onPressed: () async {
-          snackbar(context, Colors.red, 'ประตูออฟไลน์อยู่',
-              Icons.highlight_off_rounded);
-        },
-      ),
-    );
-  }
-
-  Widget doorsWeigan(name, DoorId, Num) {
-    return ListTile(
-      contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      title: Text(name, style: TextStyle(fontSize: 20)),
-      trailing: ElevatedButton(
-        style: TextButton.styleFrom(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          elevation: 5,
-          primary: Colors.white,
-          backgroundColor: Theme.of(context).primaryColor,
-          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-        ),
-        child: Wrap(
-          children: const [
-            Icon(
-              Icons.meeting_room_rounded,
-              size: 30,
-            ),
-            SizedBox(
-              width: 3,
-            ),
-            Text(
-              'เปิดประตู',
-              style: TextStyle(fontSize: 18),
-            ),
-          ],
-        ),
-        onPressed: () async {
-          _openDoorsWeigan(DoorId, Num);
-        },
+        onPressed: press,
       ),
     );
   }

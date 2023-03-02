@@ -8,6 +8,7 @@ void snackbar(
 ) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
+      dismissDirection: DismissDirection.none,
       backgroundColor: color,
       // action: SnackBarAction(
       //   label: 'Action',

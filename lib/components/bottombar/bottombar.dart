@@ -62,13 +62,14 @@ class _BottomBarState extends State<BottomBar> {
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
+                dismissDirection: DismissDirection.none,
                 backgroundColor: Theme.of(context).primaryColor,
                 content: Text(
                   "กดอีกครั้งเพื่อออก",
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 16, fontFamily: 'Kanit'),
                 ),
-                width: MediaQuery.of(context).size.width * 0.45,
+                width: 150,
                 padding: EdgeInsets.symmetric(vertical: 10),
                 duration: const Duration(milliseconds: 1500),
                 behavior: SnackBarBehavior.floating,
