@@ -62,9 +62,14 @@ class User {
   bool? permission2;
   bool? permission3;
   bool? permission4;
+  bool? qrcode;
+  bool? keycard;
+  bool? bluetooth;
+  bool? pin;
   String? email;
   String? userUuid;
   String? weigangroupUuid;
+  bool? isSecurity;
 
   User(
       {this.sId,
@@ -86,9 +91,14 @@ class User {
       this.permission2,
       this.permission3,
       this.permission4,
+      this.qrcode,
+      this.keycard,
+      this.bluetooth,
+      this.pin,
       this.email,
       this.userUuid,
-      this.weigangroupUuid});
+      this.weigangroupUuid,
+      this.isSecurity});
 
   User.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -110,9 +120,14 @@ class User {
     permission2 = json['permission2'];
     permission3 = json['permission3'];
     permission4 = json['permission4'];
+    qrcode = json['qrcode'];
+    keycard = json['keycard'];
+    bluetooth = json['bluetooth'];
+    pin = json['pin'];
     email = json['email'];
     userUuid = json['user_uuid'];
     weigangroupUuid = json['weigangroup_uuid'];
+    isSecurity = json['isSecurity'];
   }
 
   Map<String, dynamic> toJson() {
@@ -136,9 +151,14 @@ class User {
     data['permission2'] = this.permission2;
     data['permission3'] = this.permission3;
     data['permission4'] = this.permission4;
+    data['qrcode'] = this.qrcode;
+    data['keycard'] = this.keycard;
+    data['bluetooth'] = this.bluetooth;
+    data['pin'] = this.pin;
     data['email'] = this.email;
     data['user_uuid'] = this.userUuid;
     data['weigangroup_uuid'] = this.weigangroupUuid;
+    data['isSecurity'] = this.isSecurity;
     return data;
   }
 }

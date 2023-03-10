@@ -35,7 +35,6 @@ class _Visitor_PageState extends State<Visitor_Page> {
   final endDate = TextEditingController();
   final useCount = TextEditingController();
 
-  var token;
   var userId;
   var companyId;
   var deviceId;
@@ -45,13 +44,10 @@ class _Visitor_PageState extends State<Visitor_Page> {
 
   Future _getDevice() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    token = prefs.getString('token');
     userId = prefs.getString('userId');
     companyId = prefs.getString('companyId');
     deviceId = prefs.getString('deviceId');
 
-    print('token: ${token}');
     print('userId: ${userId}');
     print('companyId: ${companyId}');
     print('deviceId: ${deviceId}');
@@ -282,7 +278,9 @@ class _Visitor_PageState extends State<Visitor_Page> {
   var dropdownValue;
   Widget DropDownSn() {
     return Dropdown(
-      title: deviceId == null ? 'ไม่มีอุปกรณ์' : 'เลือกอุปกรณ์',
+      title: deviceId == null || listDevice.length == 0
+          ? 'ไม่มีอุปกรณ์'
+          : 'เลือกอุปกรณ์',
       values: dropdownValue,
       listItem: listDevice.map((value) {
         return DropdownMenuItem(

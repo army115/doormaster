@@ -47,7 +47,7 @@ class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
       dialogOnebutton_Subtitle(
           context,
           'อนุญาตการเข้าถึง',
-          'จำเป็นต้องการเข้าถึงอุปกรณ์ของคุณ',
+          'จำเป็นต้องเข้าถึงอุปกรณ์ของคุณ',
           Icons.warning_amber_rounded,
           Colors.orange,
           'ตกลง', () {

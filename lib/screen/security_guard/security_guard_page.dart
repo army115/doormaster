@@ -1,8 +1,13 @@
+import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/drawer/drawer.dart';
 import 'package:doormster/components/girdManu/grid_menu.dart';
 import 'package:doormster/screen/security_guard/check_point_page.dart';
+import 'package:doormster/screen/security_guard/record_check_page.dart';
+import 'package:doormster/screen/security_guard/scan_qr_check_page.dart';
 import 'package:doormster/service/check_connected.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Security_Guard extends StatefulWidget {
@@ -27,6 +32,24 @@ class _Security_GuardState extends State<Security_Guard> {
     setState(() {
       loading = false;
     });
+  }
+
+  Future<void> requestLocationPermission() async {
+    final permission = await Permission.location.request();
+    if (permission.isGranted) {
+      checkInternet(context, ScanQR_Check());
+    } else {
+      dialogOnebutton_Subtitle(
+          context,
+          'อนุญาตการเข้าถึง',
+          'จำเป็นต้องเข้าถึงตำแหน่งอุปกรณ์ของคุณ',
+          Icons.warning_amber_rounded,
+          Colors.orange,
+          'ตกลง', () {
+        openAppSettings();
+        Navigator.of(context, rootNavigator: true).pop();
+      }, false, true);
+    }
   }
 
   @override
@@ -61,25 +84,29 @@ class _Security_GuardState extends State<Security_Guard> {
               mainAxisSpacing: 20,
               children: [
                 Grid_Menu(
-                  title: 'บันทึกเหตุการณ์',
-                  icon: Icons.assignment_outlined,
+                  title: 'บันทึกจุดตรวจ',
+                  icon: Icons.qr_code_scanner_rounded,
                   press: () {
-                    checkInternet(context, Check_Point());
+                    requestLocationPermission();
                   },
                 ),
                 Grid_Menu(
-                  title: 'ดูบันทึกเหตุการณ์ย้อนหลัง',
-                  icon: Icons.event_note,
-                  press: () {},
+                  title: 'ลงทะเบียนจุดตรวจ',
+                  icon: Icons.pin_drop_outlined,
+                  press: () {
+                    requestLocationPermission();
+                  },
                 ),
                 Grid_Menu(
-                  title: 'ประวัติส่วนตัว',
-                  icon: Icons.person,
-                  press: () {},
+                  title: 'ดูรายการบันทึกเหตุการณ์',
+                  icon: Icons.event_note,
+                  press: () {
+                    checkInternet(context, Record_Check());
+                  },
                 ),
                 Grid_Menu(
                     title: 'บันทึกเหตุการณ์เพิ่มเติม',
-                    icon: Icons.assignment_rounded,
+                    icon: Icons.assignment_outlined,
                     press: () {}),
               ],
             ),

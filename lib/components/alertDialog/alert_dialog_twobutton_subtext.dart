@@ -37,7 +37,7 @@ void dialogTwobutton_Subtitle(
                         title,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+                            fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                         height: 5,
@@ -45,7 +45,7 @@ void dialogTwobutton_Subtitle(
                       Text(
                         subtitle,
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(fontSize: 18),
                       ),
                       SizedBox(
                         height: 10,
@@ -64,7 +64,7 @@ void dialogTwobutton_Subtitle(
                               child: Text(
                                 button1,
                                 style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 18,
                                     letterSpacing: 1,
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold),
@@ -80,7 +80,7 @@ void dialogTwobutton_Subtitle(
                               child: Text(
                                 button2,
                                 style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 18,
                                     letterSpacing: 1,
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold),

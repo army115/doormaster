@@ -38,7 +38,7 @@ void dialogTwobutton(
                       Text(
                         title,
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(fontSize: 20),
                       ),
                       SizedBox(
                         height: 20,
@@ -57,7 +57,7 @@ void dialogTwobutton(
                               child: Text(
                                 button1,
                                 style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 18,
                                     letterSpacing: 1,
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold),
@@ -73,7 +73,7 @@ void dialogTwobutton(
                               child: Text(
                                 button2,
                                 style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 18,
                                     letterSpacing: 1,
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold),

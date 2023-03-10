@@ -7,6 +7,7 @@ import 'package:doormster/models/get_multi_company.dart';
 import 'package:doormster/models/login_model.dart';
 import 'package:doormster/screen/main_screen/add_company_page.dart';
 import 'package:doormster/screen/main_screen/login_page.dart';
+import 'package:doormster/screen/main_screen/login_staff_page.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,24 +25,44 @@ class MyDrawer extends StatefulWidget {
 class _MyDrawerState extends State<MyDrawer> {
   var uuId;
   var companyId;
+  var security;
   bool loading = false;
   List<Data> multiCompany = [];
+  late SharedPreferences prefs;
 
   Future _Logout() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.clear();
-    // prefs.remove('token');
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (BuildContext context) => Login_Page()),
-        (Route<dynamic> route) => false);
+    prefs = await SharedPreferences.getInstance();
+    if (security == true) {
+      prefs.clear();
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => Login_Staff()),
+          (Route<dynamic> route) => false);
+    } else {
+      prefs.remove('token');
+      prefs.remove('role');
+      prefs.remove('deviceId');
+      prefs.remove('weiganId');
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => Login_Page()),
+          (Route<dynamic> route) => false);
+    }
     print('logout success');
   }
 
-  Future _getMultiCompany() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future getValueShared() async {
+    prefs = await SharedPreferences.getInstance();
     uuId = prefs.getString('uuId');
     companyId = prefs.getString('companyId');
-    print(uuId);
+    security = prefs.getBool('security');
+
+    print('uuId: ${uuId}');
+    print('companyId: ${companyId}');
+    print('security: ${security}');
+
+    _getMultiCompany();
+  }
+
+  Future _getMultiCompany() async {
     try {
       setState(() {
         loading = true;
@@ -75,6 +96,7 @@ class _MyDrawerState extends State<MyDrawer> {
   }
 
   Future _selectCompany(context, uId, comId) async {
+    prefs.clear();
     try {
       setState(() {
         loading = true;
@@ -95,7 +117,6 @@ class _MyDrawerState extends State<MyDrawer> {
         List<User> data = jsonRes.user!; //ตัวแปร List จาก model
 
         // ส่งค่าตัวแปร
-        SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('token', token!);
         await prefs.setString('userId', data.single.sId!);
         await prefs.setString('companyId', data.single.companyId!);
@@ -104,6 +125,9 @@ class _MyDrawerState extends State<MyDrawer> {
 
         if (data.single.devicegroupUuid != null) {
           await prefs.setString('deviceId', data.single.devicegroupUuid!);
+        }
+        if (data.single.weigangroupUuid != null) {
+          await prefs.setString('weiganId', data.single.weigangroupUuid!);
         }
 
         print('userId: ${data.single.sId}');
@@ -151,7 +175,7 @@ class _MyDrawerState extends State<MyDrawer> {
   @override
   void initState() {
     super.initState();
-    _getMultiCompany();
+    getValueShared();
   }
 
   @override
@@ -190,18 +214,20 @@ class _MyDrawerState extends State<MyDrawer> {
                                         'assets/images/HIP Smart Community Icon-03.png')),
                               ),
                             ),
-                            IconButton(
-                                constraints: BoxConstraints(),
-                                splashRadius: 20,
-                                padding: EdgeInsets.zero,
-                                iconSize: 30,
-                                color: Colors.white,
-                                icon: const Icon(
-                                  Icons.more_vert_rounded,
-                                ),
-                                onPressed: () {
-                                  bottomsheet();
-                                }),
+                            security == true
+                                ? Container()
+                                : IconButton(
+                                    constraints: BoxConstraints(),
+                                    splashRadius: 20,
+                                    padding: EdgeInsets.zero,
+                                    iconSize: 30,
+                                    color: Colors.white,
+                                    icon: const Icon(
+                                      Icons.more_vert_rounded,
+                                    ),
+                                    onPressed: () {
+                                      bottomsheet();
+                                    }),
                           ],
                         ),
                         const SizedBox(

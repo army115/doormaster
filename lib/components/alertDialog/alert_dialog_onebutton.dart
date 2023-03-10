@@ -36,7 +36,7 @@ void dialogOnebutton(
                       Text(
                         title,
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(fontSize: 20),
                       ),
                       SizedBox(
                         height: 20,
@@ -52,7 +52,7 @@ void dialogOnebutton(
                           child: Text(
                             button,
                             style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 18,
                                 letterSpacing: 1,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),

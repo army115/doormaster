@@ -7,6 +7,7 @@ import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/components/text_form/text_form.dart';
 import 'package:doormster/components/text_form/text_form_password.dart';
 import 'package:doormster/models/login_model.dart';
+import 'package:doormster/screen/main_screen/login_page.dart';
 import 'package:doormster/screen/main_screen/register_page.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/gestures.dart';
@@ -30,6 +31,7 @@ class _Login_StaffState extends State<Login_Staff> {
   TextEditingController _password = TextEditingController();
 
   bool loading = false;
+  bool isAnimating = true;
 
   Future doLogin() async {
     if (_formkey.currentState!.validate()) {
@@ -38,7 +40,7 @@ class _Login_StaffState extends State<Login_Staff> {
           loading = true;
         });
         // เชื่อมต่อ api
-        String url = '${Connect_api().domain}/login';
+        String url = '${Connect_api().domain}/loginsecurity';
         var body = {
           "user_name": _username.text,
           "user_password": _password.text,
@@ -56,6 +58,7 @@ class _Login_StaffState extends State<Login_Staff> {
           print('error ${jsonRes.status}');
           print('body ${body}');
           if (jsonRes.status == 200) {
+            await Future.delayed(const Duration(milliseconds: 600));
             var token = jsonRes.accessToken;
             List<User> data = jsonRes.user!; //ตัวแปร List จาก model
 
@@ -68,17 +71,11 @@ class _Login_StaffState extends State<Login_Staff> {
             SharedPreferences prefs = await SharedPreferences.getInstance();
             await prefs.setString('token', token!);
             await prefs.setString('username', data.single.userName!);
-
-            if (data.single.userUuid != prefs.getString('uuId')) {
-              await prefs.setString('userId', data.single.sId!);
-              await prefs.setString('companyId', data.single.companyId!);
-              await prefs.setInt('role', data.single.mobile!);
-              await prefs.setString('uuId', data.single.userUuid!);
-            }
-
-            if (data.single.devicegroupUuid != null) {
-              await prefs.setString('deviceId', data.single.devicegroupUuid!);
-            }
+            await prefs.setString('userId', data.single.sId!);
+            await prefs.setString('companyId', data.single.companyId!);
+            await prefs.setString('uuId', data.single.userUuid!);
+            await prefs.setBool('security', data.single.isSecurity!);
+            print(data.single.isSecurity);
 
             Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (context) => BottomBar()));
@@ -88,6 +85,7 @@ class _Login_StaffState extends State<Login_Staff> {
               loading = false;
             });
           } else {
+            await Future.delayed(const Duration(milliseconds: 600));
             print(jsonRes.data);
             print('username หรือ password ไม่ถูกต้อง');
             snackbar(context, Colors.red, 'ชื่อผู้ใช้ หรือ รหัสผ่าน ไม่ถูกต้อง',
@@ -97,6 +95,7 @@ class _Login_StaffState extends State<Login_Staff> {
             });
           }
         } else {
+          await Future.delayed(const Duration(milliseconds: 600));
           print(response.statusCode);
           print('Connection Fail');
           snackbar(context, Colors.red, 'เข้าสู่ระบบไม่สำเร็จ',
@@ -106,6 +105,7 @@ class _Login_StaffState extends State<Login_Staff> {
           });
         }
       } catch (error) {
+        await Future.delayed(const Duration(milliseconds: 600));
         print(error);
         dialogOnebutton_Subtitle(
             context,
@@ -155,6 +155,7 @@ class _Login_StaffState extends State<Login_Staff> {
 
   @override
   Widget build(BuildContext context) {
+    final isInit = isAnimating || loading == false;
     return WillPopScope(
       onWillPop: () async => true,
       child: Scaffold(
@@ -206,42 +207,64 @@ class _Login_StaffState extends State<Login_Staff> {
                   SizedBox(
                     height: 15,
                   ),
-                  loading
-                      ? CircularProgressIndicator(
-                          color: Theme.of(context).primaryColor,
-                        )
-                      : Buttons(
-                          title: 'เข้าสู่ระบบ',
-                          press: () {
-                            doLogin();
-                          },
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    onEnd: () => setState(() {
+                      isAnimating = !isAnimating;
+                    }),
+                    width:
+                        !loading ? MediaQuery.of(context).size.width * 0.5 : 70,
+                    height: 45,
+                    child: !isInit
+                        ? Container(
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Theme.of(context).primaryColor),
+                            child: const Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            ),
+                          )
+                        : Buttons(
+                            title: 'เข้าสู่ระบบ',
+                            press: () {
+                              doLogin();
+                            },
+                          ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15, bottom: 10),
+                    child: Divider(
+                      thickness: 1,
+                      color: Colors.black,
+                    ),
+                  ),
+                  RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                          fontFamily: 'Prompt',
                         ),
-                  // SizedBox(height: 20),
-                  // RichText(
-                  //     textAlign: TextAlign.center,
-                  //     text: TextSpan(
-                  //       style: TextStyle(
-                  //         fontSize: 18,
-                  //         color: Colors.black,
-                  //         fontFamily: 'Prompt',
-                  //       ),
-                  //       text: 'ยังไม่ได้เป็นสมาชิก HIP Smart Community ',
-                  //       children: [
-                  //         TextSpan(
-                  //             text: 'กรุณาลงทะเบียน',
-                  //             style: TextStyle(
-                  //               decoration: TextDecoration.underline,
-                  //               color: Theme.of(context).primaryColor,
-                  //             ),
-                  //             recognizer: TapGestureRecognizer()
-                  //               ..onTap = () {
-                  //                 Navigator.of(context).pushReplacement(
-                  //                     MaterialPageRoute(
-                  //                         builder: ((context) =>
-                  //                             Register_Page())));
-                  //               })
-                  //       ],
-                  //     ))
+                        text: 'เข้าสู่ระบบใช้งาน ',
+                        children: [
+                          TextSpan(
+                              text: 'ลูกบ้าน',
+                              style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                          builder: ((context) =>
+                                              Login_Page())));
+                                })
+                        ],
+                      ))
                 ],
               )),
         ),

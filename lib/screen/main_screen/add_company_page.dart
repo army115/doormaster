@@ -29,16 +29,23 @@ class _Add_CompanyState extends State<Add_Company> {
   bool loading = false;
   List<DataCom> listCompany = [];
   List<Data> multiCompany = [];
+  late SharedPreferences prefs;
 
-  Future _getCompany() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future getValueShared() async {
+    prefs = await SharedPreferences.getInstance();
+
     userId = prefs.getString('userId');
-    uuId = prefs.getString('uuId');
     companyId = prefs.getString('companyId');
+    uuId = prefs.getString('uuId');
 
     print('userId: ${userId}');
-    print("uuId ${uuId}");
     print('companyId: ${companyId}');
+    print('uuId: ${uuId}');
+
+    _getCompany();
+  }
+
+  Future _getCompany() async {
     try {
       setState(() {
         loading = true;
@@ -173,7 +180,6 @@ class _Add_CompanyState extends State<Add_Company> {
         print('login success');
 
         // ส่งค่าตัวแปร
-        SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('token', token!);
         await prefs.setString('userId', data.single.sId!);
         await prefs.setString('companyId', data.single.companyId!);
@@ -232,7 +238,7 @@ class _Add_CompanyState extends State<Add_Company> {
   @override
   void initState() {
     super.initState();
-    _getCompany();
+    getValueShared();
   }
 
   @override

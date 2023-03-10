@@ -27,8 +27,8 @@ void main() async {
   // FlutterNativeSplash.preserve(
   //     widgetsBinding: WidgetsFlutterBinding.ensureInitialized());
   final result = await Connectivity().checkConnectivity();
-  // SystemChrome.setPreferredOrientations(
-  //     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   final prefs = await SharedPreferences.getInstance();
   final token = prefs.getString('token');
   print(token == null ? 'login : false' : 'login : true');

@@ -59,7 +59,7 @@ void dialogOnebutton_Subtitle(
                           child: Text(
                             button,
                             style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 18,
                                 letterSpacing: 1,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
@@ -116,7 +116,7 @@ Widget dialogmain(title, subtitle, icon, coloricon, button, press) {
             child: Text(
               button,
               style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 18,
                   letterSpacing: 1,
                   color: Colors.white,
                   fontWeight: FontWeight.bold),

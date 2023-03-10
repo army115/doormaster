@@ -57,7 +57,7 @@ class _Password_PageState extends State<Password_Page> {
       print(_response);
       if (_response != '400') {
         print('Change Success!');
-        // Navigator.pop(context);
+        Navigator.pop(context);
         snackbar(context, Theme.of(context).primaryColor,
             'เปลี่ยนรหัสผ่านสำเร็จ', Icons.check_circle_outline_rounded);
       } else {
