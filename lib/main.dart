@@ -43,11 +43,18 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final token;
-  const MyApp({Key? key, this.token}) : super(key: key);
+  MyApp({Key? key, this.token}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      builder: EasyLoading.init(),
+      builder: EasyLoading.init(
+        builder: (context, child) => MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            textScaleFactor: 1.25,
+          ),
+          child: child!,
+        ),
+      ),
       title: 'HIP Smart Community',
       debugShowCheckedModeBanner: false,
       theme: mytheme(),

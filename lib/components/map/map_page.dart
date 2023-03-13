@@ -66,8 +66,8 @@ class _Map_PageState extends State<Map_Page> {
                     scrollGesturesEnabled: false,
                     mapType: maptype,
                     markers: _markers,
-                    myLocationButtonEnabled: true,
-                    myLocationEnabled: true,
+                    // myLocationButtonEnabled: true,
+                    // myLocationEnabled: true,
                     initialCameraPosition: CameraPosition(
                       target: LatLng(widget.lat, widget.lng),
                       zoom: 15.0,
@@ -81,7 +81,7 @@ class _Map_PageState extends State<Map_Page> {
             child: Card(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(2)),
-              margin: EdgeInsets.only(top: 70, right: 15),
+              margin: EdgeInsets.only(top: 15, right: 15),
               color: Colors.white,
               child: IconButton(
                   constraints: BoxConstraints(),

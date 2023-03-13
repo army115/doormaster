@@ -244,14 +244,14 @@ class _Login_StaffState extends State<Login_Staff> {
                       textAlign: TextAlign.center,
                       text: TextSpan(
                         style: const TextStyle(
-                          fontSize: 16,
+                          fontSize: 18,
                           color: Colors.black,
                           fontFamily: 'Prompt',
                         ),
                         text: 'เข้าสู่ระบบใช้งาน ',
                         children: [
                           TextSpan(
-                              text: 'ลูกบ้าน',
+                              text: 'ผู้ใช้ทั่วไป',
                               style: TextStyle(
                                 decoration: TextDecoration.underline,
                                 color: Theme.of(context).primaryColor,

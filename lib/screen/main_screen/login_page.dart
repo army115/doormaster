@@ -236,7 +236,7 @@ class _Login_PageState extends State<Login_Page> {
                       textAlign: TextAlign.center,
                       text: TextSpan(
                         style: const TextStyle(
-                          fontSize: 16,
+                          fontSize: 18,
                           color: Colors.black,
                           fontFamily: 'Prompt',
                         ),
@@ -268,7 +268,7 @@ class _Login_PageState extends State<Login_Page> {
                       textAlign: TextAlign.center,
                       text: TextSpan(
                         style: const TextStyle(
-                          fontSize: 16,
+                          fontSize: 18,
                           color: Colors.black,
                           fontFamily: 'Prompt',
                         ),

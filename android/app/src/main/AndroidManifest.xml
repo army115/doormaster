@@ -58,7 +58,7 @@
             android:value="2" />
 
         <meta-data android:name="com.google.android.geo.API_KEY"
-               android:value="AIzaSyAJKHqLdS_jB8H2LeXFIn3AK_GfKe_gUZg"/>
+               android:value="AIzaSyDk3cf5H7gW5s4Olrsh68CiYnIwWoFkbj4"/>
 
         <service android:name="com.intelligoo.sdk.BluetoothLeService" android:enabled="true" />
         <service android:name="com.intelligoo.sdk.AutoOpenService" android:enabled="true" />

@@ -62,7 +62,7 @@ class _Auth_PageState extends State<Auth_Page> {
                     crossAxisSpacing: 20,
                     shrinkWrap: true,
                     children: [
-                      menuButton('ลูกบ้าน', Icons.person, () {
+                      menuButton('ผู้ใช้ทั่วไป', Icons.person, () {
                         Navigator.pushNamed(context, '/login');
                       }),
                       menuButton('พนักงาน', Icons.manage_accounts_rounded, () {
@@ -107,6 +107,7 @@ class _Auth_PageState extends State<Auth_Page> {
                 style: TextStyle(
                     color: Theme.of(context).primaryColor,
                     fontSize: 18,
+                    letterSpacing: 0.5,
                     fontWeight: FontWeight.bold),
               ),
             ),

@@ -21,7 +21,7 @@ ThemeData mytheme() {
     // accentColor: Colors.transparent, //? Scroll Colors
     textTheme: TextTheme(
       bodyText2: TextStyle(
-        fontSize: 17,
+        fontSize: 16,
         letterSpacing: 0.5,
       ),
     ),

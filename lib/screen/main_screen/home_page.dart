@@ -150,11 +150,13 @@ class _Home_PageState extends State<Home_Page> {
                     Scaffold.of(context).openDrawer();
                   }),
             ),
-            body: checkNet == ConnectivityResult.none || loading
-                ? Container()
-                : security == true
-                    ? Security()
-                    : normalUser()),
+            body: SafeArea(
+              child: checkNet == ConnectivityResult.none || loading
+                  ? Container()
+                  : security == true
+                      ? Security()
+                      : normalUser(),
+            )),
         loading ? Loading() : Container(),
       ],
     );

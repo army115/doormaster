@@ -107,7 +107,18 @@ class _Security_GuardState extends State<Security_Guard> {
                 Grid_Menu(
                     title: 'บันทึกเหตุการณ์เพิ่มเติม',
                     icon: Icons.assignment_outlined,
-                    press: () {}),
+                    press: () {
+                      // Navigator.of(context).push(
+                      //   MaterialPageRoute<void>(
+                      //     builder: (BuildContext context) => Check_Point(
+                      //         checkpointId:
+                      //             'd05154cb-8787-40b1-acdb-13f62303859e',
+                      //         timeCheck: DateTime.now(),
+                      //         lat: 13.695287,
+                      //         lng: 100.6417099),
+                      //   ),
+                      // );
+                    }),
               ],
             ),
           ]),

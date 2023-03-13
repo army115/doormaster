@@ -43,8 +43,8 @@ class _Check_PointState extends State<Check_Point> {
   selectedImages(ImageSource TypeImage) async {
     try {
       // var pickedfiles = await imgpicker.pickMultiImage();
-      final XFile? pickedImages = await imgpicker.pickImage(
-          source: TypeImage, maxHeight: 1920, maxWidth: 1080);
+      final XFile? pickedImages =
+          await imgpicker.pickImage(source: TypeImage, maxHeight: 1080);
       if (pickedImages != null) {
         List<int> imageBytes = await pickedImages.readAsBytes();
         var ImagesBase64 = convert.base64Encode(imageBytes);
@@ -74,7 +74,7 @@ class _Check_PointState extends State<Check_Point> {
     userId = prefs.getString('userId');
     print('companyId: ${companyId}');
     print('userId: ${userId}');
-    print('idChech: ${widget.checkpointId}');
+    print('idCheck: ${widget.checkpointId}');
     print('timeCheck: ${widget.timeCheck}');
     print('lat: ${widget.lat}');
     print('lng: ${widget.lng}');
@@ -137,8 +137,8 @@ class _Check_PointState extends State<Check_Point> {
             'Accept': 'application/json',
           }),
           data: values);
-
-      if (response.statusCode == 200) {
+      var _response = response.toString().split(',').first.split(':').last;
+      if (_response == 200) {
         print('checkIn Success');
         print(values);
         print(response.data);
@@ -159,7 +159,7 @@ class _Check_PointState extends State<Check_Point> {
         dialogOnebutton_Subtitle(
             context,
             'ตรวจเช็คไม่สำเร็จ',
-            'ลองใหม่อีกครั้ง',
+            'ตำแหน่งไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง',
             Icons.highlight_off_rounded,
             Colors.red,
             'ตกลง', () {
@@ -232,6 +232,7 @@ class _Check_PointState extends State<Check_Point> {
                       valuse['uuid'] = widget.checkpointId;
                       valuse['Desciption'] = detail.text;
                       valuse['EventCheck'] = dropdownValue;
+                      valuse['pic'] = listImage64;
                       _checkIn(valuse);
                     }
                   }),
@@ -251,20 +252,24 @@ class _Check_PointState extends State<Check_Point> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Icon(Icons.calendar_month_rounded, size: 25),
                                 SizedBox(width: 5),
-                                Text(
-                                  'วันที่ $date เวลา $timeน.',
+                                Expanded(
+                                  child: Text('วันที่ $date เวลา $time น.'),
                                 ),
                               ],
                             ),
                             SizedBox(height: 10),
                             Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Icon(Icons.maps_home_work_rounded, size: 25),
                                 SizedBox(width: 5),
-                                Text('ชื่อจุดตรวจ : $checkpointName'),
+                                Expanded(
+                                  child: Text('ชื่อจุดตรวจ : $checkpointName'),
+                                ),
                               ],
                             ),
                             SizedBox(height: 10),
@@ -402,7 +407,11 @@ class _Check_PointState extends State<Check_Point> {
                             SizedBox(height: 10),
                             Row(
                               children: [
-                                Icon(Icons.location_on_sharp, size: 30),
+                                Icon(
+                                  Icons.location_on_sharp,
+                                  size: 30,
+                                  color: Colors.red.shade600,
+                                ),
                                 SizedBox(width: 5),
                                 Text('ตำแหน่งจุดตรวจ'),
                               ],
