@@ -122,6 +122,7 @@ class _MyDrawerState extends State<MyDrawer> {
         await prefs.setString('companyId', data.single.companyId!);
         await prefs.setInt('role', data.single.mobile!);
         await prefs.setString('uuId', data.single.userUuid!);
+        await prefs.setBool('security', false);
 
         if (data.single.devicegroupUuid != null) {
           await prefs.setString('deviceId', data.single.devicegroupUuid!);
@@ -237,7 +238,7 @@ class _MyDrawerState extends State<MyDrawer> {
                           'HIP Smart Community',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 17,
+                              fontSize: 16,
                               letterSpacing: 0.5,
                               color: Colors.white),
                         ),
@@ -263,7 +264,6 @@ class _MyDrawerState extends State<MyDrawer> {
                             'ข้อมูลส่วนตัว',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 16,
                                 letterSpacing: 0.5,
                                 color: Colors.white),
                           ),
@@ -282,7 +282,6 @@ class _MyDrawerState extends State<MyDrawer> {
                             'เปลี่ยนรหัสผ่าน',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 16,
                                 letterSpacing: 0.5,
                                 color: Colors.white),
                           ),
@@ -326,7 +325,6 @@ class _MyDrawerState extends State<MyDrawer> {
               title: Text('ออกจากระบบ',
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 16,
                       letterSpacing: 0.5,
                       color: Colors.white)),
               // tileColor: Colors.cyan,
@@ -431,6 +429,9 @@ class _MyDrawerState extends State<MyDrawer> {
                                           style: TextStyle(
                                               fontSize: 16,
                                               color: Colors.white)),
+                                    ),
+                                    SizedBox(
+                                      width: 10,
                                     ),
                                     companyId == multiCompany[index].companyId
                                         ? Icon(

@@ -70,6 +70,7 @@ class _Login_PageState extends State<Login_Page> {
             await prefs.setString('token', token!);
             await prefs.setString('username', data.single.userName!);
             await prefs.setInt('role', data.single.mobile!);
+            await prefs.setBool('security', false);
 
             if (data.single.userUuid != prefs.getString('uuId')) {
               await prefs.setString('userId', data.single.sId!);
@@ -165,7 +166,7 @@ class _Login_PageState extends State<Login_Page> {
   Widget build(BuildContext context) {
     final isInit = isAnimating || loading == false;
     return WillPopScope(
-      onWillPop: () async => true,
+      onWillPop: () async => _onBackButtonDoubleClicked(),
       child: Scaffold(
           body: SafeArea(
               child: SingleChildScrollView(
@@ -282,10 +283,8 @@ class _Login_PageState extends State<Login_Page> {
                               ),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-                                  Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(
-                                          builder: ((context) =>
-                                              Login_Staff())));
+                                  Navigator.pushReplacementNamed(
+                                      context, '/staff');
                                 })
                         ],
                       ))

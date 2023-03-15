@@ -34,10 +34,14 @@ class _Security_GuardState extends State<Security_Guard> {
     });
   }
 
-  Future<void> requestLocationPermission() async {
+  Future<void> requestLocationPermission(String name) async {
     final permission = await Permission.location.request();
     if (permission.isGranted) {
-      checkInternet(context, ScanQR_Check());
+      checkInternet(
+          context,
+          ScanQR_Check(
+            name: name,
+          ));
     } else {
       dialogOnebutton_Subtitle(
           context,
@@ -87,14 +91,14 @@ class _Security_GuardState extends State<Security_Guard> {
                   title: 'บันทึกจุดตรวจ',
                   icon: Icons.qr_code_scanner_rounded,
                   press: () {
-                    requestLocationPermission();
+                    requestLocationPermission('check');
                   },
                 ),
                 Grid_Menu(
                   title: 'ลงทะเบียนจุดตรวจ',
                   icon: Icons.pin_drop_outlined,
                   press: () {
-                    requestLocationPermission();
+                    requestLocationPermission('add');
                   },
                 ),
                 Grid_Menu(
@@ -108,16 +112,16 @@ class _Security_GuardState extends State<Security_Guard> {
                     title: 'บันทึกเหตุการณ์เพิ่มเติม',
                     icon: Icons.assignment_outlined,
                     press: () {
-                      // Navigator.of(context).push(
-                      //   MaterialPageRoute<void>(
-                      //     builder: (BuildContext context) => Check_Point(
-                      //         checkpointId:
-                      //             'd05154cb-8787-40b1-acdb-13f62303859e',
-                      //         timeCheck: DateTime.now(),
-                      //         lat: 13.695287,
-                      //         lng: 100.6417099),
-                      //   ),
-                      // );
+                      Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                          builder: (BuildContext context) => Check_Point(
+                              timeCheck: DateTime.now(),
+                              checkpointId:
+                                  'd05154cb-8787-40b1-acdb-13f62303859e',
+                              lat: 13.695287,
+                              lng: 100.6417099),
+                        ),
+                      );
                     }),
               ],
             ),

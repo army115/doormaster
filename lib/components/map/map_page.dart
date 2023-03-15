@@ -63,14 +63,14 @@ class _Map_PageState extends State<Map_Page> {
                     //?     print(position.target);
                     //   });
                     // },
-                    scrollGesturesEnabled: false,
+                    // scrollGesturesEnabled: false,
                     mapType: maptype,
                     markers: _markers,
                     // myLocationButtonEnabled: true,
                     // myLocationEnabled: true,
                     initialCameraPosition: CameraPosition(
                       target: LatLng(widget.lat, widget.lng),
-                      zoom: 15.0,
+                      zoom: 20.0,
                     ),
                     onMapCreated: (GoogleMapController controller) {
                       _mapController = controller;

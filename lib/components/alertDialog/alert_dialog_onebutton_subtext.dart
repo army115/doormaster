@@ -35,7 +35,7 @@ void dialogOnebutton_Subtitle(
                         title,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                         height: 5,
@@ -43,7 +43,7 @@ void dialogOnebutton_Subtitle(
                       Text(
                         subtitle,
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(fontSize: 16),
                       ),
                       SizedBox(
                         height: 10,
@@ -59,7 +59,7 @@ void dialogOnebutton_Subtitle(
                           child: Text(
                             button,
                             style: TextStyle(
-                                fontSize: 18,
+                                fontSize: 16,
                                 letterSpacing: 1,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
@@ -92,7 +92,7 @@ Widget dialogmain(title, subtitle, icon, coloricon, button, press) {
         Text(
           title,
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         SizedBox(
           height: 5,
@@ -100,7 +100,7 @@ Widget dialogmain(title, subtitle, icon, coloricon, button, press) {
         Text(
           subtitle,
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 18),
+          style: TextStyle(fontSize: 16),
         ),
         SizedBox(
           height: 10,
@@ -116,7 +116,7 @@ Widget dialogmain(title, subtitle, icon, coloricon, button, press) {
             child: Text(
               button,
               style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   letterSpacing: 1,
                   color: Colors.white,
                   fontWeight: FontWeight.bold),

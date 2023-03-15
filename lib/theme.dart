@@ -44,7 +44,7 @@ ThemeData mytheme() {
           color: Colors.white,
           fontWeight: FontWeight.bold,
           fontFamily: 'Prompt',
-          fontSize: 17,
+          fontSize: 16,
           letterSpacing: 1,
         )),
     fontFamily: 'Prompt',

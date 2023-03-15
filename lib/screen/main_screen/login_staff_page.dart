@@ -157,7 +157,7 @@ class _Login_StaffState extends State<Login_Staff> {
   Widget build(BuildContext context) {
     final isInit = isAnimating || loading == false;
     return WillPopScope(
-      onWillPop: () async => true,
+      onWillPop: () async => _onBackButtonDoubleClicked(),
       child: Scaffold(
           body: SafeArea(
               child: SingleChildScrollView(
@@ -258,10 +258,8 @@ class _Login_StaffState extends State<Login_Staff> {
                               ),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-                                  Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(
-                                          builder: ((context) =>
-                                              Login_Page())));
+                                  Navigator.pushReplacementNamed(
+                                      context, '/login');
                                 })
                         ],
                       ))

@@ -78,11 +78,16 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
       );
 
       if (res.statusCode == 200 && response.statusCode == 200) {
-        DoorsDeviece deviceDoors = DoorsDeviece.fromJson(res.data);
-
         getDoorWeigan doorsWeigan = getDoorWeigan.fromJson(response.data);
-        setState(() {
+
+        if (res.data == 'มีบางอย่างผิดพลาด') {
+          listDevice = [];
+        } else {
+          DoorsDeviece deviceDoors = DoorsDeviece.fromJson(res.data);
           listDevice = deviceDoors.lists!;
+        }
+
+        setState(() {
           listWeigan = doorsWeigan.data!;
           loading = false;
         });
@@ -91,6 +96,16 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
           // เก็บ List Det จาก DataWeigan ลงในตัวแปร listdet
           listdet?.addAll(listWeigan[i].det!);
         }
+      }
+
+      if (res.data == 'มีบางอย่างผิดพลาด') {
+        listDevice = [];
+      } else {
+        DoorsDeviece deviceDoors = DoorsDeviece.fromJson(res.data);
+        setState(() {
+          listDevice = deviceDoors.lists!;
+          loading = false;
+        });
       }
     } catch (error) {
       print(error);
@@ -103,7 +118,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
             Icons.warning_amber_rounded,
             Colors.orange,
             'ตกลง', () {
-          Navigator.popUntil(context, (route) => route.isFirst);
+          Navigator.of(context).popUntil((route) => route.isFirst);
         }, false, false);
       }
       setState(() {
@@ -461,7 +476,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
   Widget doorsButton(name, button, icon, color, press) {
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      title: Text(name, style: TextStyle(fontSize: 20)),
+      title: Text(name, style: TextStyle(fontSize: 18)),
       trailing: ElevatedButton(
         style: TextButton.styleFrom(
           shape:
@@ -482,7 +497,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
             ),
             Text(
               button,
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(fontSize: 16),
             ),
           ],
         ),

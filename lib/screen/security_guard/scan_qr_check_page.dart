@@ -1,14 +1,17 @@
 import 'dart:io';
 import 'package:doormster/components/alertDialog/alert_dialog_twobutton_subtext.dart';
 import 'package:doormster/components/loading/loading.dart';
+import 'package:doormster/screen/security_guard/add_checkpoint_page.dart';
 import 'package:doormster/screen/security_guard/check_point_page.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class ScanQR_Check extends StatefulWidget {
+  final name;
   ScanQR_Check({
     Key? key,
+    this.name,
   }) : super(key: key);
 
   @override
@@ -40,15 +43,27 @@ class _ScanQR_CheckState extends State<ScanQR_Check> {
         result = scanData;
         controller.pauseCamera();
       });
-      Navigator.of(context).push(
-        MaterialPageRoute<void>(
-          builder: (BuildContext context) => Check_Point(
-              checkpointId: '${result?.code}',
-              timeCheck: DateTime.now(),
-              lat: position?.latitude,
-              lng: position?.longitude),
-        ),
-      );
+      if (widget.name == 'check') {
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (BuildContext context) => Check_Point(
+                timeCheck: DateTime.now(),
+                checkpointId: '${result?.code}',
+                lat: position?.latitude,
+                lng: position?.longitude),
+          ),
+        );
+      } else if (widget.name == 'add') {
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (BuildContext context) => Add_CheckPoint(
+                timeCheck: DateTime.now(),
+                checkpointId: '${result?.code}',
+                lat: position?.latitude,
+                lng: position?.longitude),
+          ),
+        );
+      }
     });
   }
 

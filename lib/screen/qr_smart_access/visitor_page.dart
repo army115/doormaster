@@ -64,7 +64,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
           'Accept': 'application/json',
         }),
       );
-
+      print(response.data);
       if (response.statusCode == 200) {
         DeviceGroup deviceGp = DeviceGroup.fromJson(response.data);
         setState(() {
@@ -74,8 +74,13 @@ class _Visitor_PageState extends State<Visitor_Page> {
       }
     } catch (error) {
       print(error);
-      dialogOnebutton_Subtitle(context, 'พบข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อได้',
-          Icons.warning_amber_rounded, Colors.orange, 'ตกลง', () {
+      dialogOnebutton_Subtitle(
+          context,
+          'พบข้อผิดพลาด',
+          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+          Icons.warning_amber_rounded,
+          Colors.orange,
+          'ตกลง', () {
         Navigator.popUntil(context, (route) => route.isFirst);
       }, false, false);
       setState(() {

@@ -63,10 +63,10 @@ class _Auth_PageState extends State<Auth_Page> {
                     shrinkWrap: true,
                     children: [
                       menuButton('ผู้ใช้ทั่วไป', Icons.person, () {
-                        Navigator.pushNamed(context, '/login');
+                        Navigator.pushReplacementNamed(context, '/login');
                       }),
                       menuButton('พนักงาน', Icons.manage_accounts_rounded, () {
-                        Navigator.pushNamed(context, '/staff');
+                        Navigator.pushReplacementNamed(context, '/staff');
                       })
                     ],
                   )
@@ -106,7 +106,7 @@ class _Auth_PageState extends State<Auth_Page> {
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                     color: Theme.of(context).primaryColor,
-                    fontSize: 18,
+                    fontSize: 16,
                     letterSpacing: 0.5,
                     fontWeight: FontWeight.bold),
               ),

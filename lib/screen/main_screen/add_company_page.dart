@@ -304,6 +304,7 @@ class _Add_CompanyState extends State<Add_Company> {
       },
       onChange: (value) {
         setState(() {
+          _formkey.currentState?.validate();
           dropdownValue = value;
           print('company : ${value}');
         });
