@@ -21,7 +21,7 @@ class Buttons_Outline extends StatelessWidget {
             title,
             style: TextStyle(
               color: Colors.white,
-              fontSize: 16,
+              fontSize: 18,
               fontWeight: FontWeight.normal,
               letterSpacing: 1,
             ),

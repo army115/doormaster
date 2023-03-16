@@ -41,6 +41,7 @@ class Data {
   String? devicegroupUuid;
   String? department;
   String? email;
+  String? image;
 
   Data(
       {this.sId,
@@ -58,7 +59,8 @@ class Data {
       this.mobile,
       this.devicegroupUuid,
       this.department,
-      this.email});
+      this.email,
+      this.image});
 
   Data.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -77,6 +79,7 @@ class Data {
     devicegroupUuid = json['devicegroup_uuid'];
     department = json['department'];
     email = json['email'];
+    image = json['image'];
   }
 
   Map<String, dynamic> toJson() {
@@ -97,6 +100,7 @@ class Data {
     data['devicegroup_uuid'] = this.devicegroupUuid;
     data['department'] = this.department;
     data['email'] = this.email;
+    data['image'] = this.image;
     return data;
   }
 }

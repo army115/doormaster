@@ -19,11 +19,10 @@ class Menu_Security extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Card(
-          elevation: 5,
+        PhysicalModel(
+          borderRadius: BorderRadius.circular(10),
+          elevation: 10,
           color: Theme.of(context).primaryColor,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           child: InkWell(
             borderRadius: BorderRadius.circular(10),
             splashColor: Colors.black12,

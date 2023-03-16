@@ -84,8 +84,8 @@ class _Security_GuardState extends State<Security_Guard> {
               primary: false,
               childAspectRatio: 1.0,
               crossAxisCount: 2,
-              crossAxisSpacing: 20,
-              mainAxisSpacing: 20,
+              crossAxisSpacing: 30,
+              mainAxisSpacing: 30,
               children: [
                 Grid_Menu(
                   title: 'บันทึกจุดตรวจ',

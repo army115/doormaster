@@ -69,8 +69,14 @@ class _Login_PageState extends State<Login_Page> {
             SharedPreferences prefs = await SharedPreferences.getInstance();
             await prefs.setString('token', token!);
             await prefs.setString('username', data.single.userName!);
+            await prefs.setString('fname', data.single.firstName!);
+            await prefs.setString('lname', data.single.surName!);
             await prefs.setInt('role', data.single.mobile!);
             await prefs.setBool('security', false);
+
+            if (data.single.image != null) {
+              await prefs.setString('image', data.single.image!);
+            }
 
             if (data.single.userUuid != prefs.getString('uuId')) {
               await prefs.setString('userId', data.single.sId!);
@@ -90,9 +96,9 @@ class _Login_PageState extends State<Login_Page> {
             snackbar(context, Theme.of(context).primaryColor,
                 'เข้าสู่ระบบสำเร็จ', Icons.check_circle_outline_rounded);
 
-            setState(() {
-              loading = false;
-            });
+            // setState(() {
+            //   loading = false;
+            // });
           } else {
             await Future.delayed(const Duration(milliseconds: 600));
             print(jsonRes.data);
@@ -168,130 +174,160 @@ class _Login_PageState extends State<Login_Page> {
     return WillPopScope(
       onWillPop: () async => _onBackButtonDoubleClicked(),
       child: Scaffold(
+          // backgroundColor: Theme.of(context).primaryColor,
           body: SafeArea(
-              child: SingleChildScrollView(
         child: Form(
-          key: _formkey,
-          child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+            key: _formkey,
+            child: SingleChildScrollView(
+              // physics: NeverScrollableScrollPhysics(),
               child: Column(
-                // mainAxisAlignment: MainAxisAlignment.center,
+                // alignment: Alignment.bottomCenter,
+                // fit: StackFit.expand,
                 children: [
-                  Image.asset(
-                    'assets/images/Smart Community Logo.png',
-                    scale: 4,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Text_Form(
-                    controller: _username,
-                    title: 'ชื่อผู้ใช้',
-                    icon: Icons.account_circle_rounded,
-                    error: 'กรุณากรอกชื่อผู้ใช้',
-                    TypeInput: TextInputType.name,
-                  ),
-                  TextForm_Password(
-                    controller: _password,
-                    title: 'รหัสผ่าน',
-                    iconLaft: Icons.key,
-                    error: (values) {
-                      if (values!.isEmpty) {
-                        return 'กรุณากรอกรหัสผ่าน';
-                      } else {
-                        return null;
-                      }
-                    },
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    onEnd: () => setState(() {
-                      isAnimating = !isAnimating;
-                    }),
-                    width:
-                        !loading ? MediaQuery.of(context).size.width * 0.5 : 70,
-                    height: 45,
-                    child: !isInit
-                        ? Container(
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Theme.of(context).primaryColor),
-                            child: const Center(
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                              ),
-                            ),
-                          )
-                        : Buttons(
-                            title: 'เข้าสู่ระบบ',
-                            press: () {
-                              doLogin();
-                            },
-                          ),
-                  ),
-                  const SizedBox(height: 20),
-                  RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                        style: const TextStyle(
-                          fontSize: 18,
-                          color: Colors.black,
-                          fontFamily: 'Prompt',
+                  Container(
+                    // height: MediaQuery.of(context).size.height * 0.3,
+                    color: Theme.of(context).primaryColor,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Image.asset(
+                          'assets/images/Smart Logo White.png',
+                          scale: 4,
                         ),
-                        text: 'ยังไม่ได้เป็นสมาชิก HIP Smart Community ',
-                        children: [
-                          TextSpan(
-                              text: 'กรุณาลงทะเบียน',
-                              style: TextStyle(
-                                decoration: TextDecoration.underline,
-                                color: Theme.of(context).primaryColor,
-                              ),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(
-                                          builder: ((context) =>
-                                              Register_Page())));
-                                })
-                        ],
-                      )),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 6),
-                    child: Divider(
-                      thickness: 1,
-                      color: Colors.black,
+                      ],
                     ),
                   ),
-                  RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                        style: const TextStyle(
-                          fontSize: 18,
-                          color: Colors.black,
-                          fontFamily: 'Prompt',
-                        ),
-                        text: 'เข้าสู่ระบบใช้งาน ',
-                        children: [
-                          TextSpan(
-                              text: 'พนักงาน',
-                              style: TextStyle(
-                                decoration: TextDecoration.underline,
-                                color: Theme.of(context).primaryColor,
+                  PhysicalModel(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20)),
+                    elevation: 10,
+                    color: Colors.white,
+                    child: Container(
+                        height: MediaQuery.of(context).size.height * .7,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 30, vertical: 30),
+                        child: Column(
+                          // mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text_Form(
+                              controller: _username,
+                              title: 'ชื่อผู้ใช้',
+                              icon: Icons.account_circle_rounded,
+                              error: 'กรุณากรอกชื่อผู้ใช้',
+                              TypeInput: TextInputType.name,
+                            ),
+                            TextForm_Password(
+                              controller: _password,
+                              title: 'รหัสผ่าน',
+                              iconLaft: Icons.key,
+                              error: (values) {
+                                if (values!.isEmpty) {
+                                  return 'กรุณากรอกรหัสผ่าน';
+                                } else {
+                                  return null;
+                                }
+                              },
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            AnimatedContainer(
+                              duration: const Duration(milliseconds: 200),
+                              onEnd: () => setState(() {
+                                isAnimating = !isAnimating;
+                              }),
+                              width: !loading
+                                  ? MediaQuery.of(context).size.width * 0.5
+                                  : 70,
+                              height: 45,
+                              child: !isInit
+                                  ? Container(
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color:
+                                              Theme.of(context).primaryColor),
+                                      child: const Center(
+                                        child: CircularProgressIndicator(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    )
+                                  : Buttons(
+                                      title: 'เข้าสู่ระบบ',
+                                      press: () {
+                                        doLogin();
+                                      },
+                                    ),
+                            ),
+                            const SizedBox(height: 20),
+                            RichText(
+                                textAlign: TextAlign.center,
+                                text: TextSpan(
+                                  style: const TextStyle(
+                                    fontSize: 19,
+                                    letterSpacing: 0.5,
+                                    color: Colors.black,
+                                    fontFamily: 'Prompt',
+                                  ),
+                                  text:
+                                      'ยังไม่ได้เป็นสมาชิก HIP Smart Community ',
+                                  children: [
+                                    TextSpan(
+                                        text: 'กรุณาลงทะเบียน',
+                                        style: TextStyle(
+                                          decoration: TextDecoration.underline,
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = () {
+                                            Navigator.of(context)
+                                                .pushReplacement(
+                                                    MaterialPageRoute(
+                                                        builder: ((context) =>
+                                                            Register_Page())));
+                                          })
+                                  ],
+                                )),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 6),
+                              child: Divider(
+                                thickness: 1,
+                                color: Colors.black,
                               ),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  Navigator.pushReplacementNamed(
-                                      context, '/staff');
-                                })
-                        ],
-                      ))
+                            ),
+                            RichText(
+                                textAlign: TextAlign.center,
+                                text: TextSpan(
+                                  style: const TextStyle(
+                                    fontSize: 19,
+                                    letterSpacing: 0.5,
+                                    color: Colors.black,
+                                    fontFamily: 'Prompt',
+                                  ),
+                                  text: 'เข้าสู่ระบบใช้งาน ',
+                                  children: [
+                                    TextSpan(
+                                        text: 'พนักงาน',
+                                        style: TextStyle(
+                                          decoration: TextDecoration.underline,
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = () {
+                                            Navigator.pushReplacementNamed(
+                                                context, '/staff');
+                                          })
+                                  ],
+                                ))
+                          ],
+                        )),
+                  ),
                 ],
-              )),
-        ),
-      ))),
+              ),
+            )),
+      )),
     );
   }
 }

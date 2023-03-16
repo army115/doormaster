@@ -11,8 +11,8 @@ import 'package:doormster/screen/main_screen/login_staff_page.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert' as convert;
 // import 'package:http/http.dart' as http;
-// import 'dart:convert' as convert;
 
 class MyDrawer extends StatefulWidget {
   final pressProfile;
@@ -26,6 +26,10 @@ class _MyDrawerState extends State<MyDrawer> {
   var uuId;
   var companyId;
   var security;
+  var image;
+  var fname;
+  var lname;
+
   bool loading = false;
   List<Data> multiCompany = [];
   late SharedPreferences prefs;
@@ -42,6 +46,10 @@ class _MyDrawerState extends State<MyDrawer> {
       prefs.remove('role');
       prefs.remove('deviceId');
       prefs.remove('weiganId');
+      prefs.remove('security');
+      prefs.remove('image');
+      prefs.remove('fname');
+      prefs.remove('lname');
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) => Login_Page()),
           (Route<dynamic> route) => false);
@@ -54,6 +62,9 @@ class _MyDrawerState extends State<MyDrawer> {
     uuId = prefs.getString('uuId');
     companyId = prefs.getString('companyId');
     security = prefs.getBool('security');
+    image = prefs.getString('image');
+    fname = prefs.getString('fname');
+    lname = prefs.getString('lname');
 
     print('uuId: ${uuId}');
     print('companyId: ${companyId}');
@@ -122,7 +133,6 @@ class _MyDrawerState extends State<MyDrawer> {
         await prefs.setString('companyId', data.single.companyId!);
         await prefs.setInt('role', data.single.mobile!);
         await prefs.setString('uuId', data.single.userUuid!);
-        await prefs.setBool('security', false);
 
         if (data.single.devicegroupUuid != null) {
           await prefs.setString('deviceId', data.single.devicegroupUuid!);
@@ -209,10 +219,28 @@ class _MyDrawerState extends State<MyDrawer> {
                                 radius: 33,
                                 backgroundColor: Colors.white,
                                 child: CircleAvatar(
-                                    radius: 30,
-                                    backgroundColor: Colors.grey[100],
-                                    backgroundImage: const AssetImage(
-                                        'assets/images/HIP Smart Community Icon-03.png')),
+                                  radius: 30,
+                                  backgroundColor: Colors.grey[100],
+                                  child: image != null
+                                      ? Container(
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            image: DecorationImage(
+                                                fit: BoxFit.cover,
+                                                image: MemoryImage(convert
+                                                    .base64Decode(image!))),
+                                          ),
+                                        )
+                                      : Container(
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            image: DecorationImage(
+                                                fit: BoxFit.cover,
+                                                image: AssetImage(
+                                                    'assets/images/HIP Smart Community Icon-03.png')),
+                                          ),
+                                        ),
+                                ),
                               ),
                             ),
                             security == true
@@ -234,8 +262,8 @@ class _MyDrawerState extends State<MyDrawer> {
                         const SizedBox(
                           height: 10,
                         ),
-                        const Text(
-                          'HIP Smart Community',
+                        Text(
+                          '${fname} ${lname}',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,

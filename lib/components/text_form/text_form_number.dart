@@ -22,31 +22,53 @@ class TextForm_Number extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 8),
-      child: TextFormField(
-          style: TextStyle(fontSize: 16),
-          controller: controller,
-          maxLength: maxLength,
-          keyboardType: type,
-          inputFormatters: <TextInputFormatter>[
-            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-          ],
-          decoration: InputDecoration(
-            counterText: "",
-            contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 13),
-            // labelText: 'Username',
-            hintText: title,
-            hintStyle: TextStyle(fontSize: 16),
-            errorStyle: TextStyle(fontSize: 15),
-            // ignore: prefer_const_constructors
-            prefixIcon: Icon(
-              icon,
-              size: 25,
+      child: PhysicalModel(
+        borderRadius: BorderRadius.circular(10),
+        elevation: 10,
+        color: Colors.white,
+        child: TextFormField(
+            style: TextStyle(fontSize: 16),
+            controller: controller,
+            maxLength: maxLength,
+            keyboardType: type,
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+            ],
+            decoration: InputDecoration(
+              counterText: "",
+              contentPadding:
+                  EdgeInsets.symmetric(horizontal: 10, vertical: 13),
+              // labelText: 'Username',
+              hintText: title,
+              hintStyle: TextStyle(fontSize: 16),
+              errorStyle: TextStyle(fontSize: 15),
+              // ignore: prefer_const_constructors
+              prefixIcon: Icon(
+                icon,
+                size: 25,
+              ),
+              // filled: true, พื้นหลังช่อง
+              // fillColor: Colors.white,
+              focusedBorder: OutlineInputBorder(
+                borderSide:
+                    BorderSide(color: Theme.of(context).primaryColor, width: 2),
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide.none,
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.red, width: 2),
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              errorBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.red, width: 2),
+                borderRadius: BorderRadius.circular(10.0),
+              ),
             ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-          ),
-          validator: error),
+            validator: error),
+      ),
     );
   }
 }

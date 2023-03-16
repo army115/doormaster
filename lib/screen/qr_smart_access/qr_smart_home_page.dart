@@ -105,8 +105,8 @@ class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
                     primary: false,
                     childAspectRatio: 1.0,
                     crossAxisCount: 2,
-                    crossAxisSpacing: 20,
-                    mainAxisSpacing: 20,
+                    crossAxisSpacing: 30,
+                    mainAxisSpacing: 30,
                     children: [
                       Grid_Menu(
                         title: 'ผู้มาติดต่อ',

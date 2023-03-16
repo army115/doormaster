@@ -10,10 +10,10 @@ class Grid_Menu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
+    return PhysicalModel(
+      borderRadius: BorderRadius.circular(20),
+      elevation: 10,
       color: Theme.of(context).primaryColor,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: InkWell(
         borderRadius: BorderRadius.circular(20),
         splashColor: Colors.black12,

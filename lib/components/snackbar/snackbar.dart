@@ -29,7 +29,7 @@ void snackbar(
           Expanded(
             child: Text(
               title,
-              style: TextStyle(fontSize: 17, fontFamily: 'Kanit'),
+              style: TextStyle(fontSize: 16, fontFamily: 'Kanit'),
             ),
           ),
         ],

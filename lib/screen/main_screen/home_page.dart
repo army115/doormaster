@@ -258,7 +258,7 @@ class _Home_PageState extends State<Home_Page> {
                         )
                       : Container(
                           padding: EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
+                              horizontal: 20, vertical: 20),
                           child: GridView.builder(
                             shrinkWrap: true,
                             primary: false,
@@ -334,7 +334,7 @@ class _Home_PageState extends State<Home_Page> {
                     ),
             ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: GridView.count(
                 shrinkWrap: true,
                 primary: false,

@@ -14,6 +14,7 @@ import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert' as convert;
 
 // import 'package:http/http.dart' as http;
 // import 'dart:convert' as convert;
@@ -30,11 +31,22 @@ class _Profile_PageState extends State<Profile_Page> {
   TextEditingController fname = TextEditingController();
   TextEditingController lname = TextEditingController();
   TextEditingController email = TextEditingController();
+  String? imageProfile;
 
   bool loading = false;
   List<Data> profileInfo = [];
   var check;
   var uuId;
+
+  Future _sharedInfo() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    await prefs.setString('fname', fname.text);
+    await prefs.setString('lname', lname.text);
+    if (image != null) {
+      await prefs.setString('image', image!);
+    }
+  }
 
   Future _getInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -150,20 +162,21 @@ class _Profile_PageState extends State<Profile_Page> {
     fname = TextEditingController(text: profileInfo.single.firstName);
     lname = TextEditingController(text: profileInfo.single.surName);
     email = TextEditingController(text: profileInfo.single.email);
+    imageProfile = profileInfo.single.image;
   }
 
   final ImagePicker imgpicker = ImagePicker();
-  XFile? image;
+  String? image;
 
   openImages(ImageSource TypeImage) async {
     try {
       // var pickedfiles = await imgpicker.pickMultiImage();
       final XFile? photo = await imgpicker.pickImage(source: TypeImage);
-      //you can use ImageCourse.camera for Camera capture
+      List<int> imageBytes = await photo!.readAsBytes();
+      var ImagesBase64 = convert.base64Encode(imageBytes);
       if (photo != null) {
-        // imagefiles = pickedfiles;
         setState(() {
-          image = photo;
+          image = ImagesBase64;
         });
       } else {
         print("No image is selected.");
@@ -206,7 +219,15 @@ class _Profile_PageState extends State<Profile_Page> {
                           valuse['first_name'] = fname.text;
                           valuse['email'] = email.text;
                           valuse['sur_name'] = lname.text;
+
+                          if (image != null) {
+                            valuse['image'] = image;
+                          } else {
+                            valuse['image'] = imageProfile;
+                          }
+
                           _editProfile(valuse);
+                          _sharedInfo();
                         }
                       }),
                 ),
@@ -225,20 +246,44 @@ class _Profile_PageState extends State<Profile_Page> {
                             backgroundColor: Colors.white,
                             child: CircleAvatar(
                                 radius: 70,
-                                backgroundColor: Colors.grey[100],
+                                backgroundColor: Colors.grey.shade100,
                                 child: image != null
                                     ? Container(
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                           image: DecorationImage(
                                               fit: BoxFit.cover,
-                                              image:
-                                                  FileImage(File(image!.path))),
+                                              image: MemoryImage(convert
+                                                  .base64Decode(image!))),
                                         ),
                                       )
-                                    : Container(),
-                                backgroundImage: AssetImage(
-                                    'assets/images/HIP Smart Community Icon-03.png')),
+                                    : imageProfile != null
+                                        ? Container(
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              image: DecorationImage(
+                                                  fit: BoxFit.cover,
+                                                  image: MemoryImage(
+                                                      convert.base64Decode(
+                                                          imageProfile!))),
+                                            ),
+                                          )
+                                        : loading
+                                            ? Container(
+                                                child: Icon(
+                                                    Icons.person_rounded,
+                                                    size: 140,
+                                                    color: Colors.grey),
+                                              )
+                                            : Container(
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  image: DecorationImage(
+                                                      fit: BoxFit.cover,
+                                                      image: AssetImage(
+                                                          'assets/images/HIP Smart Community Icon-03.png')),
+                                                ),
+                                              )),
                           ),
                           Positioned(
                             bottom: 0,
