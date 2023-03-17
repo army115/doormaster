@@ -284,12 +284,17 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
                                   primary: false,
                                   // physics: NeverScrollableScrollPhysics(),
                                   itemCount: listcheck.length,
-                                  itemBuilder: ((context, index) => Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 30, vertical: 5),
-                                        child: Text(
-                                            '- ${listcheck[index].checklist}'),
-                                      ))),
+                                  itemBuilder: ((context, index) =>
+                                      listcheck[index].checklist == ''
+                                          ? Container()
+                                          : Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 30,
+                                                      vertical: 5),
+                                              child: Text(
+                                                  '- ${listcheck[index].checklist}'),
+                                            ))),
                             ),
                             Row(
                               children: [
@@ -303,16 +308,14 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
                               ],
                             ),
                             SizedBox(height: 10),
-                            Map_Page(
-                              lat: listdata.single.verify == 1
-                                  ? null
-                                  : widget.lat,
-                              lng: listdata.single.verify == 1
-                                  ? null
-                                  : widget.lng,
-                              width: double.infinity,
-                              height: 300,
-                            )
+                            listdata.single.verify == 1
+                                ? Container()
+                                : Map_Page(
+                                    lat: widget.lat,
+                                    lng: widget.lng,
+                                    width: double.infinity,
+                                    height: 300,
+                                  )
                           ],
                         )),
               ),

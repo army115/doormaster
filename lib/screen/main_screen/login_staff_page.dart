@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/button/button.dart';
+import 'package:doormster/components/button/button_animation.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/components/text_form/text_form.dart';
 import 'package:doormster/components/text_form/text_form_password.dart';
@@ -94,8 +95,8 @@ class _Login_StaffState extends State<Login_Staff> {
             await Future.delayed(const Duration(milliseconds: 600));
             print(jsonRes.data);
             print('username หรือ password ไม่ถูกต้อง');
-            snackbar(context, Colors.red, 'ชื่อผู้ใช้ หรือ รหัสผ่าน ไม่ถูกต้อง',
-                Icons.highlight_off_rounded);
+            // snackbar(context, Colors.red, 'ชื่อผู้ใช้ หรือ รหัสผ่าน ไม่ถูกต้อง',
+            //     Icons.highlight_off_rounded);
             setState(() {
               loading = false;
             });
@@ -162,10 +163,11 @@ class _Login_StaffState extends State<Login_Staff> {
   @override
   Widget build(BuildContext context) {
     final isInit = isAnimating || loading == false;
+
     return WillPopScope(
       onWillPop: () async => _onBackButtonDoubleClicked(),
       child: Scaffold(
-          // backgroundColor: Colors.white,
+          // backgroundColor: Theme.of(context).primaryColor,
           body: SafeArea(
               child: SingleChildScrollView(
         child: Form(
@@ -182,13 +184,13 @@ class _Login_StaffState extends State<Login_Staff> {
                 ),
               ),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
                 child: Column(
                   // mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
                       'assets/images/Smart Logo White.png',
-                      scale: 4,
+                      scale: 3.5,
                     ),
                     Text(
                       'เข้าสู่ระบบใช้งาน สำหรับพนักงาน',
@@ -230,32 +232,42 @@ class _Login_StaffState extends State<Login_Staff> {
                             SizedBox(
                               height: 15,
                             ),
-                            AnimatedContainer(
-                              duration: const Duration(milliseconds: 200),
-                              onEnd: () => setState(() {
-                                isAnimating = !isAnimating;
-                              }),
-                              width: !loading
-                                  ? MediaQuery.of(context).size.width * 0.5
-                                  : 70,
-                              height: 45,
-                              child: !isInit
-                                  ? Container(
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Colors.white),
-                                      child: Center(
-                                        child: CircularProgressIndicator(
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                      ),
-                                    )
-                                  : Buttons(
-                                      title: 'เข้าสู่ระบบ',
-                                      press: () {
-                                        doLogin();
-                                      },
-                                    ),
+                            // AnimatedContainer(
+                            //   duration: const Duration(milliseconds: 200),
+                            //   onEnd: () => setState(() {
+                            //     isAnimating = !isAnimating;
+                            //   }),
+                            //   width: !loading
+                            //       ? MediaQuery.of(context).size.width * 0.5
+                            //       : 70,
+                            //   height: 45,
+                            //   child: !isInit
+                            //       ? Container(
+                            //           decoration: BoxDecoration(
+                            //               shape: BoxShape.circle,
+                            //               color:
+                            //                   Theme.of(context).primaryColor),
+                            //           child: const Center(
+                            //             child: CircularProgressIndicator(
+                            //               color: Colors.white,
+                            //             ),
+                            //           ),
+                            //         )
+                            //       : Buttons(
+                            //           title: 'เข้าสู่ระบบ',
+                            //           press: () {
+                            //             doLogin();
+                            //           },
+                            //         ),
+                            // ),
+                            // SizedBox(
+                            //   height: 20,
+                            // ),
+                            Button_Animation(
+                              title: 'เข้าสู่ระบบ',
+                              press: () async {
+                                await doLogin();
+                              },
                             ),
                             Padding(
                               padding:

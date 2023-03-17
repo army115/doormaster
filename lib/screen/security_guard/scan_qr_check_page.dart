@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:doormster/components/alertDialog/alert_dialog_twobutton_subtext.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/screen/security_guard/add_checkpoint_page.dart';
-import 'package:doormster/screen/security_guard/check_point_page.dart';
+import 'package:doormster/screen/security_guard/check_in_page.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -46,7 +46,7 @@ class _ScanQR_CheckState extends State<ScanQR_Check> {
       if (widget.name == 'check') {
         Navigator.of(context).push(
           MaterialPageRoute<void>(
-            builder: (BuildContext context) => Check_Point(
+            builder: (BuildContext context) => Check_In(
                 timeCheck: DateTime.now(),
                 checkpointId: '${result?.code}',
                 lat: position?.latitude,

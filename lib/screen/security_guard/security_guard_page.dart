@@ -1,8 +1,10 @@
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/drawer/drawer.dart';
 import 'package:doormster/components/girdManu/grid_menu.dart';
+import 'package:doormster/screen/security_guard/check_in_page.dart';
 import 'package:doormster/screen/security_guard/check_point_page.dart';
 import 'package:doormster/screen/security_guard/record_check_page.dart';
+import 'package:doormster/screen/security_guard/round_check_page.dart';
 import 'package:doormster/screen/security_guard/scan_qr_check_page.dart';
 import 'package:doormster/service/check_connected.dart';
 import 'package:flutter/material.dart';
@@ -114,7 +116,7 @@ class _Security_GuardState extends State<Security_Guard> {
                     press: () {
                       Navigator.of(context).push(
                         MaterialPageRoute<void>(
-                          builder: (BuildContext context) => Check_Point(
+                          builder: (BuildContext context) => Check_In(
                               timeCheck: DateTime.now(),
                               checkpointId:
                                   'd05154cb-8787-40b1-acdb-13f62303859e',
@@ -122,6 +124,18 @@ class _Security_GuardState extends State<Security_Guard> {
                               lng: 100.6417099),
                         ),
                       );
+                    }),
+                Grid_Menu(
+                    title: 'รอบเดินตรวจ',
+                    icon: Icons.edit_calendar_rounded,
+                    press: () {
+                      checkInternet(context, Round_Check());
+                    }),
+                Grid_Menu(
+                    title: 'จุดเดินตรวจ',
+                    icon: Icons.share_location_outlined,
+                    press: () {
+                      checkInternet(context, Check_Point());
                     }),
               ],
             ),
