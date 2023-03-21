@@ -173,13 +173,12 @@ class _Check_InState extends State<Check_In> {
         print(values);
         print(response.data);
 
-        // Navigator.of(context).push(
-        //   MaterialPageRoute(
-        //     builder: (BuildContext context) => const Record_Check(),
-        //   ),
-        // );
-        Navigator.of(context, rootNavigator: true).pop();
-
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (BuildContext context) => const Record_Check(),
+          ),
+        );
+        // Navigator.popUntil(context, (route) => route.isFirst);
         snackbar(context, Theme.of(context).primaryColor, 'ตรวจเช็คสำเร็จ',
             Icons.check_circle_outline_rounded);
 
@@ -260,13 +259,12 @@ class _Check_InState extends State<Check_In> {
                             press: () {
                               if (_formkey.currentState!.validate()) {
                                 Map<String, dynamic> valuse = Map();
-                                valuse['time'] =
-                                    // widget.timeCheck
-                                    //     .toUtc() //todo ค่าเวลากลาง Utc + 0 ได้ค่ามี Z ต่อท้ายเวลา 2023-03-15 14:05:58.075406Z
-                                    //     .add(
-                                    //         Duration(hours: 7)) //todo time zone + 7 ชม.
-                                    //     .toIso8601String(); //todo ได้ค่ามี T ท้ายวันที่ 2023-03-15T14:45:36.325350
-                                    '2014-08-18T${time}.000Z';
+                                valuse['time'] = '2014-08-18T${time}.000Z';
+                                // valuse['time'] = widget.timeCheck
+                                //     .toUtc() //todo ค่าเวลากลาง Utc + 0 ได้ค่ามี Z ต่อท้ายเวลา 2023-03-15 14:05:58.075406Z
+                                //     .add(
+                                //         Duration(hours: 7)) //todo time zone + 7 ชม.
+                                //     .toIso8601String(); //todo ได้ค่ามี T ท้ายวันที่ 2023-03-15T14:45:36.325350
                                 valuse['lat'] = widget.lat;
                                 valuse['lng'] = widget.lng;
                                 valuse['EmpID'] = userId;
@@ -421,7 +419,7 @@ class _Check_InState extends State<Check_In> {
                                             child: InkWell(
                                                 onTap: () {
                                                   selectedImages(
-                                                      ImageSource.camera);
+                                                      ImageSource.gallery);
                                                 },
                                                 child: Container(
                                                   width: 200,
@@ -463,14 +461,14 @@ class _Check_InState extends State<Check_In> {
                               ],
                             ),
                             SizedBox(height: 10),
-                            listdata.single.verify == 0
-                                ? Container()
-                                : Map_Page(
-                                    lat: widget.lat,
-                                    lng: widget.lng,
-                                    width: double.infinity,
-                                    height: 300,
-                                  )
+                            // listdata.single.verify == 0
+                            //     ? Container()
+                            //     : Map_Page(
+                            //         lat: widget.lat,
+                            //         lng: widget.lng,
+                            //         width: double.infinity,
+                            //         height: 300,
+                            //       )
                           ],
                         )),
               ),

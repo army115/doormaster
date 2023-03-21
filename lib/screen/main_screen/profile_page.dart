@@ -1,4 +1,4 @@
-// ignore_for_file: unrelated_type_equality_checks
+// ignore_for_file: unrelated_type_equality_checks, prefer_const_constructors
 
 import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -298,7 +298,7 @@ class _Profile_PageState extends State<Profile_Page> {
                                     child: IconButton(
                                       splashRadius: 20,
                                       onPressed: () {
-                                        openImages(ImageSource.gallery);
+                                        editProfile();
                                       },
                                       icon: Icon(
                                         Icons.edit,
@@ -342,6 +342,50 @@ class _Profile_PageState extends State<Profile_Page> {
         ),
         loading ? Loading() : Container()
       ],
+    );
+  }
+
+  void editProfile() {
+    showDialog(
+      useRootNavigator: true,
+      barrierDismissible: true,
+      context: context,
+      builder: (_) => AlertDialog(
+        titlePadding: EdgeInsets.fromLTRB(30, 20, 20, 0),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        title: Text(
+          'เปลี่ยนรูปโปรไฟล์',
+          style: TextStyle(
+              fontSize: 16, letterSpacing: 0.5, fontWeight: FontWeight.bold),
+        ),
+        actions: [
+          ListTile(
+              title: Text('ถ่ายรูป',
+                  style: TextStyle(fontSize: 15, letterSpacing: 0.5)),
+              onTap: () {
+                openImages(ImageSource.camera);
+                Navigator.of(context, rootNavigator: true).pop();
+              }),
+          ListTile(
+            title: Text('เลือกรูปภาพ',
+                style: TextStyle(fontSize: 15, letterSpacing: 0.5)),
+            onTap: () {
+              openImages(ImageSource.gallery);
+              Navigator.of(context, rootNavigator: true).pop();
+            },
+          ),
+          ListTile(
+            title: Text('ยกเลิก',
+                style: TextStyle(
+                  fontSize: 15,
+                  letterSpacing: 0.5,
+                )),
+            onTap: () {
+              Navigator.of(context, rootNavigator: true).pop();
+            },
+          ),
+        ],
+      ),
     );
   }
 }

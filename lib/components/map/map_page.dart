@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Map_Page extends StatefulWidget {
-  double lat;
-  double lng;
+  final lat;
+  final lng;
   double width;
   double height;
 
   Map_Page({
     Key? key,
-    required this.lat,
-    required this.lng,
+    this.lat,
+    this.lng,
     required this.width,
     required this.height,
   });
@@ -27,7 +27,7 @@ class _Map_PageState extends State<Map_Page> {
   @override
   void initState() {
     super.initState();
-    setState(() {
+    if (widget.lat != null) {
       _markers.add(
         Marker(
           markerId: MarkerId('id'),
@@ -35,7 +35,7 @@ class _Map_PageState extends State<Map_Page> {
           infoWindow: InfoWindow(title: '${widget.lat}, ${widget.lng}'),
         ),
       );
-    });
+    }
   }
 
   @override
