@@ -104,14 +104,14 @@ class _Security_GuardState extends State<Security_Guard> {
                   },
                 ),
                 Grid_Menu(
-                  title: 'ดูรายการบันทึกเหตุการณ์',
+                  title: 'ดูรายการบันทึกการตรวจ',
                   icon: Icons.event_note,
                   press: () {
                     checkInternet(context, Record_Check());
                   },
                 ),
                 Grid_Menu(
-                    title: 'บันทึกเหตุการณ์เพิ่มเติม',
+                    title: 'บันทึกการตรวจนอกรอบ',
                     icon: Icons.assignment_outlined,
                     press: () {
                       Navigator.of(context).push(

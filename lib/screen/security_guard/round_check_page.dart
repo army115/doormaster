@@ -31,6 +31,10 @@ class _Round_CheckState extends State<Round_Check> {
   Color? textColor;
   Color? line;
   DateTime now = DateTime.now();
+  List<DateTime> timeStart = [];
+  List<DateTime> timeEnd = [];
+  DateTime? timeStartCheck;
+  DateTime? timeEndCheck;
 
   Future _setColor(now, timeStart, timeEnd) async {
     if (now.isAfter(timeStart) && now.isBefore(timeEnd)) {
@@ -42,6 +46,23 @@ class _Round_CheckState extends State<Round_Check> {
       textColor = Colors.black;
       line = Colors.grey;
     }
+  }
+
+  Future _setTime(DateTime _start, DateTime _end) async {
+    timeStart.add(_start);
+    timeEnd.add(_end);
+    // print(timeStart);
+    // print(timeEnd);
+
+    // for (int i = 0; i < timeStart.length; i++) {
+    //   timeStartCheck = timeStart[i];
+    //   print(timeStartCheck);
+    // }
+
+    // for (int i = 0; i < timeEnd.length; i++) {
+    //   timeEndCheck = timeEnd[i];
+    //   print(timeEndCheck);
+    // }
   }
 
   Future _getCheckRound() async {
@@ -120,10 +141,29 @@ class _Round_CheckState extends State<Round_Check> {
   @override
   Widget build(BuildContext context) {
     String date = DateFormat('y-MM-dd').format(now);
+
     return Stack(
       children: [
         Scaffold(
           appBar: AppBar(title: Text('รายการรอบเดินตรวจ')),
+          floatingActionButton: FloatingActionButton(
+            elevation: 10,
+            backgroundColor: Theme.of(context).primaryColor,
+            child: Icon(Icons.qr_code_scanner_rounded, size: 30),
+            onPressed: () {
+              now.isAfter(timeStartCheck!) && now.isBefore(timeEndCheck!)
+                  ? requestLocationPermission('check')
+                  : dialogOnebutton_Subtitle(
+                      context,
+                      'ไม่สามารถตรวจได้',
+                      'เลยเวลาเดินตรวจรอบนี้แล้ว',
+                      Icons.warning_amber_rounded,
+                      Colors.orange,
+                      'ตกลง', () {
+                      Navigator.popUntil(context, (route) => route.isFirst);
+                    }, false, false);
+            },
+          ),
           body: loading
               ? Container()
               : SafeArea(
@@ -142,177 +182,116 @@ class _Round_CheckState extends State<Round_Check> {
                                       '$date ${listdata[index].roundStart}');
                                   DateTime timeEnd = DateTime.parse(
                                       '$date ${listdata[index].roundEnd}');
-
+                                  timeStartCheck = timeStart;
+                                  timeEndCheck = timeEndCheck;
+                                  _setTime(timeStart, timeEnd);
                                   _setColor(now, timeStart, timeEnd);
 
-                                  return Column(
-                                    children: [
-                                      Card(
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        margin:
-                                            EdgeInsets.symmetric(vertical: 5),
-                                        elevation: 10,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              color: containerColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          padding: EdgeInsets.all(10),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              now.isAfter(timeStart) &&
-                                                      now.isBefore(timeEnd)
-                                                  ? Column(
-                                                      children: [
-                                                        Text(
-                                                          'รอบที่ต้องเดินตรวจ',
-                                                          style: TextStyle(
-                                                              color: textColor),
-                                                        ),
-                                                        Divider(
-                                                            height: 15,
-                                                            thickness: 1.5,
-                                                            color: line),
-                                                      ],
-                                                    )
-                                                  : Container(),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Expanded(
-                                                    child: Text(
-                                                      'ชื่อรอบเดิน : ${listdata[index].roundName}',
-                                                      maxLines: now.isAfter(
-                                                                  timeStart) &&
-                                                              now.isBefore(
-                                                                  timeEnd)
-                                                          ? 2
-                                                          : 1,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style: TextStyle(
-                                                          color: textColor),
-                                                    ),
-                                                  ),
-                                                  now.isAfter(timeStart) &&
-                                                          now.isBefore(timeEnd)
-                                                      ? button('เช็คจุดตรวจ',
-                                                          Colors.white, () {
-                                                          now.isAfter(timeStart) &&
-                                                                  now.isBefore(
-                                                                      timeEnd)
-                                                              ? requestLocationPermission(
-                                                                  'check')
-                                                              : dialogOnebutton_Subtitle(
-                                                                  context,
-                                                                  'ไม่สามารถตรวจได้',
-                                                                  'เลยเวลาเดินตรวจรอบนี้แล้ว',
-                                                                  Icons
-                                                                      .warning_amber_rounded,
-                                                                  Colors.orange,
-                                                                  'ตกลง', () {
-                                                                  Navigator.popUntil(
-                                                                      context,
-                                                                      (route) =>
-                                                                          route
-                                                                              .isFirst);
-                                                                },
-                                                                  false, false);
-                                                        })
-                                                      : Container()
-                                                ],
-                                              ),
-                                              Divider(
-                                                  height: 15,
-                                                  thickness: 1.5,
-                                                  color: line),
-                                              IntrinsicHeight(
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceAround,
+                                  return Card(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    margin: EdgeInsets.symmetric(vertical: 5),
+                                    elevation: 10,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: containerColor,
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                      padding: EdgeInsets.all(10),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          now.isAfter(timeStart) &&
+                                                  now.isBefore(timeEnd)
+                                              ? Column(
                                                   children: [
                                                     Text(
-                                                      'เริ่มต้น : ${listdata[index].roundStart} น.',
+                                                      'รอบที่ต้องเดินตรวจ',
                                                       style: TextStyle(
                                                           color: textColor),
                                                     ),
-                                                    VerticalDivider(
+                                                    Divider(
+                                                        height: 15,
                                                         thickness: 1.5,
-                                                        color: line,
-                                                        width: 1),
-                                                    Text(
-                                                      'สิ้นสุด : ${listdata[index].roundEnd} น.',
-                                                      style: TextStyle(
-                                                          color: textColor),
-                                                    ),
+                                                        color: line),
                                                   ],
+                                                )
+                                              : Container(),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  'ชื่อรอบเดิน : ${listdata[index].roundName}',
+                                                  maxLines: now.isAfter(
+                                                              timeStart) &&
+                                                          now.isBefore(timeEnd)
+                                                      ? 2
+                                                      : 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                      color: textColor),
                                                 ),
-                                              )
+                                              ),
+                                              now.isAfter(timeStart) &&
+                                                      now.isBefore(timeEnd)
+                                                  ? button('เช็คจุดตรวจ',
+                                                      Colors.white, () {
+                                                      now.isAfter(timeStart) &&
+                                                              now.isBefore(
+                                                                  timeEnd)
+                                                          ? requestLocationPermission(
+                                                              'check')
+                                                          : dialogOnebutton_Subtitle(
+                                                              context,
+                                                              'ไม่สามารถตรวจได้',
+                                                              'เลยเวลาเดินตรวจรอบนี้แล้ว',
+                                                              Icons
+                                                                  .warning_amber_rounded,
+                                                              Colors.orange,
+                                                              'ตกลง', () {
+                                                              Navigator.popUntil(
+                                                                  context,
+                                                                  (route) => route
+                                                                      .isFirst);
+                                                            }, false, false);
+                                                    })
+                                                  : Container()
                                             ],
                                           ),
-                                        ),
-                                        // now.isAfter(timeStart) &&
-                                        //         now.isBefore(timeEnd)
-                                        //     ? Container(
-                                        //         decoration: BoxDecoration(
-                                        //             color: Colors.white,
-                                        //             borderRadius:
-                                        //                 BorderRadius
-                                        //                     .circular(10)),
-                                        //         padding: EdgeInsets.all(10),
-                                        //         child: Column(
-                                        //           crossAxisAlignment:
-                                        //               CrossAxisAlignment
-                                        //                   .start,
-                                        //           children: [
-                                        //             Text(
-                                        //               'ชื่อรอบเดิน : ${listdata[index].roundName}',
-                                        //               style: TextStyle(
-                                        //                   color: textColor),
-                                        //             ),
-                                        //             Divider(
-                                        //                 height: 15,
-                                        //                 thickness: 1.5,
-                                        //                 color: line),
-                                        //             IntrinsicHeight(
-                                        //               child: Row(
-                                        //                 mainAxisAlignment:
-                                        //                     MainAxisAlignment
-                                        //                         .spaceAround,
-                                        //                 children: [
-                                        //                   Text(
-                                        //                     'เริ่มต้น : ${listdata[index].roundStart} น.',
-                                        //                     style: TextStyle(
-                                        //                         color:
-                                        //                             textColor),
-                                        //                   ),
-                                        //                   VerticalDivider(
-                                        //                       thickness:
-                                        //                           1.5,
-                                        //                       color: line,
-                                        //                       width: 1),
-                                        //                   Text(
-                                        //                     'สิ้นสุด : ${listdata[index].roundEnd} น.',
-                                        //                     style: TextStyle(
-                                        //                         color:
-                                        //                             textColor),
-                                        //                   ),
-                                        //                 ],
-                                        //               ),
-                                        //             )
-                                        //           ],
-                                        //         ),
-                                        //       )
-                                        //     : Container()
+                                          Divider(
+                                              height: 15,
+                                              thickness: 1.5,
+                                              color: line),
+                                          IntrinsicHeight(
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              children: [
+                                                Text(
+                                                  'เริ่มต้น : ${listdata[index].roundStart} น.',
+                                                  style: TextStyle(
+                                                      color: textColor),
+                                                ),
+                                                VerticalDivider(
+                                                    thickness: 1.5,
+                                                    color: line,
+                                                    width: 1),
+                                                Text(
+                                                  'สิ้นสุด : ${listdata[index].roundEnd} น.',
+                                                  style: TextStyle(
+                                                      color: textColor),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        ],
                                       ),
-                                    ],
+                                    ),
                                   );
                                 }),
                           ),

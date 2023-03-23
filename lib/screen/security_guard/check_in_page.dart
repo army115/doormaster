@@ -297,7 +297,7 @@ class _Check_InState extends State<Check_In> {
                                 Icon(Icons.calendar_month_rounded, size: 25),
                                 SizedBox(width: 5),
                                 Expanded(
-                                  child: Text('วันที่ $date เวลา $time น.'),
+                                  child: Text('วันที่ $date เวลา $time'),
                                 ),
                               ],
                             ),
@@ -461,14 +461,14 @@ class _Check_InState extends State<Check_In> {
                               ],
                             ),
                             SizedBox(height: 10),
-                            // listdata.single.verify == 0
-                            //     ? Container()
-                            //     : Map_Page(
-                            //         lat: widget.lat,
-                            //         lng: widget.lng,
-                            //         width: double.infinity,
-                            //         height: 300,
-                            //       )
+                            listdata.single.verify == 0
+                                ? Container()
+                                : Map_Page(
+                                    lat: widget.lat,
+                                    lng: widget.lng,
+                                    width: double.infinity,
+                                    height: 300,
+                                  )
                           ],
                         )),
               ),

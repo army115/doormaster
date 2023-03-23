@@ -255,7 +255,7 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
                                 Icon(Icons.calendar_month_rounded, size: 25),
                                 SizedBox(width: 5),
                                 Expanded(
-                                  child: Text('วันที่ $date เวลา $time น.'),
+                                  child: Text('วันที่ $date เวลา $time'),
                                 ),
                               ],
                             ),

@@ -2,14 +2,11 @@
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
-import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/button/button_animation.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/components/text_form/text_form.dart';
 import 'package:doormster/components/text_form/text_form_password.dart';
 import 'package:doormster/models/login_model.dart';
-import 'package:doormster/screen/main_screen/login_page.dart';
-import 'package:doormster/screen/main_screen/register_page.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
