@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/list_logo_opacity/logo_opacity.dart';
@@ -10,7 +13,8 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Record_Check extends StatefulWidget {
-  const Record_Check({Key? key});
+  final dateValue;
+  const Record_Check({Key? key, this.dateValue});
 
   @override
   State<Record_Check> createState() => _Record_CheckState();
@@ -22,7 +26,8 @@ class _Record_CheckState extends State<Record_Check> {
   List<Data> listlogs = [];
   List<Data> listdata = [];
   bool loading = false;
-  DateFormat formater = DateFormat.Hm();
+  DateFormat formatTime = DateFormat.Hm();
+  DateFormat formatDate = DateFormat('y-MM-dd');
   DateTime now = DateTime.now();
   String? dateNow;
 
@@ -121,11 +126,13 @@ class _Record_CheckState extends State<Record_Check> {
                             changed: (value) {
                               _searchData(value);
                             },
+                            ontap: () {
+                              calendar(context);
+                            },
                             clear: () {
                               setState(() {
                                 fieldText.text == '';
                               });
-
                               fieldText.clear();
                               _getLogs();
                             }),
@@ -204,7 +211,7 @@ class _Record_CheckState extends State<Record_Check> {
                                                     color: Colors.black,
                                                     width: 1),
                                                 Text(
-                                                  'เวลา : ${formater.format(time)} น.',
+                                                  'เวลา : ${formatTime.format(time)}',
                                                 ),
                                               ],
                                             ),
@@ -223,5 +230,77 @@ class _Record_CheckState extends State<Record_Check> {
         ],
       ),
     );
+  }
+
+  List<DateTime?> _pickerValue = [DateTime.now()];
+
+  void calendar(context) async {
+    DateTime? _startDate;
+    DateTime? _endDate;
+    String? _startDateText;
+    String? _endDateText;
+    String? dateDifferent;
+    final datePicker = await showCalendarDatePicker2Dialog(
+      context: context,
+      initialValue: _pickerValue,
+      config: CalendarDatePicker2WithActionButtonsConfig(
+          firstDayOfWeek: 1,
+          weekdayLabelTextStyle: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+              color: Theme.of(context).primaryColor),
+          centerAlignModePickerButton: true,
+          lastDate: DateTime.now(),
+          calendarType: CalendarDatePicker2Type.range,
+          cancelButton: Text(
+            'ยกเลิก',
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).primaryColor),
+          ),
+          okButton: Text(
+            'ตกลง',
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).primaryColor),
+          )),
+      dialogSize: const Size(300, 400),
+      borderRadius: BorderRadius.circular(10),
+    );
+
+    log('$_pickerValue');
+
+    if (datePicker != null) {
+      if (datePicker.length == 2) {
+        setState(() {
+          _startDate = datePicker[0]!;
+          _endDate = datePicker[1]!;
+
+          _startDateText = formatDate.format(_startDate!);
+          _endDateText = formatDate.format(_endDate!);
+
+          dateDifferent = "${_startDateText} ถึง ${_endDateText}";
+          fieldText.text = dateDifferent!;
+
+          _searchData(dateDifferent!);
+        });
+      } else if (datePicker.length == 1) {
+        setState(() {
+          _startDate = datePicker[0]!;
+          _endDate = datePicker[0]!;
+
+          _startDateText = formatDate.format(_startDate!);
+          _endDateText = formatDate.format(_endDate!);
+
+          fieldText.text = _startDateText!;
+          _searchData(_startDateText!);
+        });
+      }
+      setState(() {
+        _pickerValue = datePicker;
+      });
+    }
+    // print("${_startDate} ${_endDate}");
+    // print("${_startDateText} ถึง ${_endDateText}");
   }
 }

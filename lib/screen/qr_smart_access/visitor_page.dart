@@ -64,7 +64,6 @@ class _Visitor_PageState extends State<Visitor_Page> {
           'Accept': 'application/json',
         }),
       );
-      print(response.data);
       if (response.statusCode == 200) {
         DeviceGroup deviceGp = DeviceGroup.fromJson(response.data);
         setState(() {

@@ -110,9 +110,11 @@ class _Round_CheckState extends State<Round_Check> {
     }
   }
 
-  Future<void> requestLocationPermission(String name) async {
+  Future<void> requestLocationPermission(String name, String roundId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     final permission = await Permission.location.request();
     if (permission.isGranted) {
+      await prefs.setString('roundId', roundId);
       checkInternet(
           context,
           ScanQR_Check(
@@ -146,24 +148,24 @@ class _Round_CheckState extends State<Round_Check> {
       children: [
         Scaffold(
           appBar: AppBar(title: Text('รายการรอบเดินตรวจ')),
-          floatingActionButton: FloatingActionButton(
-            elevation: 10,
-            backgroundColor: Theme.of(context).primaryColor,
-            child: Icon(Icons.qr_code_scanner_rounded, size: 30),
-            onPressed: () {
-              now.isAfter(timeStartCheck!) && now.isBefore(timeEndCheck!)
-                  ? requestLocationPermission('check')
-                  : dialogOnebutton_Subtitle(
-                      context,
-                      'ไม่สามารถตรวจได้',
-                      'เลยเวลาเดินตรวจรอบนี้แล้ว',
-                      Icons.warning_amber_rounded,
-                      Colors.orange,
-                      'ตกลง', () {
-                      Navigator.popUntil(context, (route) => route.isFirst);
-                    }, false, false);
-            },
-          ),
+          // floatingActionButton: FloatingActionButton(
+          //   elevation: 10,
+          //   backgroundColor: Theme.of(context).primaryColor,
+          //   child: Icon(Icons.qr_code_scanner_rounded, size: 30),
+          //   onPressed: () {
+          //     now.isAfter(timeStartCheck!) && now.isBefore(timeEndCheck!)
+          //         ? requestLocationPermission('check')
+          //         : dialogOnebutton_Subtitle(
+          //             context,
+          //             'ไม่สามารถตรวจได้',
+          //             'เลยเวลาเดินตรวจรอบนี้แล้ว',
+          //             Icons.warning_amber_rounded,
+          //             Colors.orange,
+          //             'ตกลง', () {
+          //             Navigator.popUntil(context, (route) => route.isFirst);
+          //           }, false, false);
+          //   },
+          // ),
           body: loading
               ? Container()
               : SafeArea(
@@ -245,7 +247,9 @@ class _Round_CheckState extends State<Round_Check> {
                                                               now.isBefore(
                                                                   timeEnd)
                                                           ? requestLocationPermission(
-                                                              'check')
+                                                              'check',
+                                                              listdata[index]
+                                                                  .sId!)
                                                           : dialogOnebutton_Subtitle(
                                                               context,
                                                               'ไม่สามารถตรวจได้',
@@ -313,7 +317,8 @@ class _Round_CheckState extends State<Round_Check> {
       ),
       child: Text(
         name,
-        style: TextStyle(fontSize: 16, color: Colors.black),
+        style: TextStyle(
+            fontSize: 16, color: Colors.black, fontWeight: FontWeight.normal),
       ),
       onPressed: press,
     );

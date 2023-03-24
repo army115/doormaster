@@ -12,8 +12,10 @@ import 'package:doormster/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:restart_app/restart_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:doormster/screen/parcel_service/parcel_service_page.dart';
@@ -55,6 +57,15 @@ class MyApp extends StatelessWidget {
           child: child!,
         ),
       ),
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en', 'US'),
+        Locale('th', 'TH'),
+      ],
       title: 'HIP Smart Community',
       debugShowCheckedModeBanner: false,
       theme: mytheme(),

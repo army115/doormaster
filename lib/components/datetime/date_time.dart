@@ -15,6 +15,7 @@ class Date_time extends StatefulWidget {
 }
 
 class _Date_timeState extends State<Date_time> {
+  DateTime? dateSelect;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -69,13 +70,14 @@ class _Date_timeState extends State<Date_time> {
               context,
               showTitleActions: true,
               onConfirm: (date) {
-                String datetime = DateFormat('y-M-d HH:mm:ss').format(date);
+                String datetime = DateFormat('y-MM-dd HH:mm').format(date);
                 setState(() {
                   widget.controller.text = datetime;
+                  dateSelect = date;
                 });
                 print(datetime);
               },
-              currentTime: DateTime.now(),
+              currentTime: dateSelect == null ? DateTime.now() : dateSelect!,
               locale: LocaleType.th,
               theme: DatePickerTheme(
                 titleHeight: 45,

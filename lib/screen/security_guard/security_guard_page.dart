@@ -1,6 +1,7 @@
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/drawer/drawer.dart';
 import 'package:doormster/components/girdManu/grid_menu.dart';
+import 'package:doormster/screen/main_screen/test.dart';
 import 'package:doormster/screen/security_guard/check_in_page.dart';
 import 'package:doormster/screen/security_guard/check_point_page.dart';
 import 'package:doormster/screen/security_guard/record_check_page.dart';
@@ -116,12 +117,9 @@ class _Security_GuardState extends State<Security_Guard> {
                     press: () {
                       Navigator.of(context).push(
                         MaterialPageRoute<void>(
-                          builder: (BuildContext context) => Check_In(
-                              timeCheck: DateTime.now(),
-                              checkpointId:
-                                  'd05154cb-8787-40b1-acdb-13f62303859e',
-                              lat: 13.695287,
-                              lng: 100.6417099),
+                          builder: (BuildContext context) => MyHomePage(
+                            title: 'test',
+                          ),
                         ),
                       );
                     }),

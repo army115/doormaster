@@ -28,6 +28,11 @@ ThemeData mytheme() {
     drawerTheme: DrawerThemeData(
       backgroundColor: Color(0xFF0B4D9C),
     ),
+    dialogTheme: DialogTheme(
+        titleTextStyle: TextStyle(
+            fontWeight: FontWeight.normal,
+            color: Colors.black,
+            fontFamily: 'Prompt')),
     bottomAppBarTheme: BottomAppBarTheme(color: Color(0xFF0B4D9C)),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
         selectedIconTheme: IconThemeData(size: 30),

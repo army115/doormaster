@@ -66,6 +66,7 @@ class _Check_InState extends State<Check_In> {
 
   var companyId;
   var userId;
+  var roundId;
   List<Data> listdata = [];
   List<Checklist> listcheck = [];
   bool loading = false;
@@ -75,6 +76,7 @@ class _Check_InState extends State<Check_In> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     companyId = prefs.getString('companyId');
     userId = prefs.getString('userId');
+    roundId = prefs.getString('roundId');
     print('companyId: ${companyId}');
     print('userId: ${userId}');
     print('timeCheck: ${widget.timeCheck}');
@@ -270,6 +272,7 @@ class _Check_InState extends State<Check_In> {
                                 valuse['EmpID'] = userId;
                                 valuse['id'] = companyId;
                                 valuse['uuid'] = widget.checkpointId;
+                                valuse['Round_uuid'] = roundId;
                                 valuse['Desciption'] = detail.text;
                                 valuse['EventCheck'] = dropdownValue;
                                 valuse['pic'] = listImage64;
