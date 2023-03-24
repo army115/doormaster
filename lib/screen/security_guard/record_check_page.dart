@@ -268,8 +268,6 @@ class _Record_CheckState extends State<Record_Check> {
       borderRadius: BorderRadius.circular(10),
     );
 
-    log('$_pickerValue');
-
     if (datePicker != null) {
       if (datePicker.length == 2) {
         setState(() {
@@ -298,9 +296,8 @@ class _Record_CheckState extends State<Record_Check> {
       }
       setState(() {
         _pickerValue = datePicker;
+        print(_pickerValue);
       });
     }
-    // print("${_startDate} ${_endDate}");
-    // print("${_startDateText} ถึง ${_endDateText}");
   }
 }
