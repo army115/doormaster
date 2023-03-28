@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:developer';
 
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
@@ -6,7 +8,9 @@ import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.
 import 'package:doormster/components/list_logo_opacity/logo_opacity.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/searchbar/search_bar.dart';
-import 'package:doormster/models/get_logs.dart';
+import 'package:doormster/models/get_log.dart';
+import 'package:doormster/models/get_logs_all.dart';
+import 'package:doormster/screen/security_guard/record_point_page.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -21,10 +25,11 @@ class Record_Check extends StatefulWidget {
 }
 
 class _Record_CheckState extends State<Record_Check> {
-  var companyId;
+  String? companyId;
   TextEditingController fieldText = TextEditingController();
   List<Data> listlogs = [];
   List<Data> listdata = [];
+  List<DataLog> listLog = [];
   bool loading = false;
   DateFormat formatTime = DateFormat.Hm();
   DateFormat formatDate = DateFormat('y-MM-dd');
@@ -35,8 +40,6 @@ class _Record_CheckState extends State<Record_Check> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     companyId = prefs.getString('companyId');
     print('companyId: ${companyId}');
-    dateNow = DateFormat('y-MM-dd').format(now);
-    fieldText = TextEditingController(text: dateNow);
 
     try {
       setState(() {
@@ -54,7 +57,7 @@ class _Record_CheckState extends State<Record_Check> {
       );
 
       if (response.statusCode == 200) {
-        getLogs logslist = getLogs.fromJson(response.data);
+        getLogsAll logslist = getLogsAll.fromJson(response.data);
         setState(() {
           listlogs = logslist.data!;
           listdata = listlogs;
@@ -80,6 +83,57 @@ class _Record_CheckState extends State<Record_Check> {
     }
   }
 
+  Future _getLog(String dateStart, String dateEnd) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    companyId = prefs.getString('companyId');
+    print('companyId: ${companyId}');
+
+    try {
+      setState(() {
+        loading = true;
+      });
+
+      //call api
+      var url = '${Connect_api().domain}/get/getrounddetails';
+      var response = await Dio().post(url,
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          }),
+          data: {"id": companyId, "from": dateStart, "to": dateEnd});
+
+      if (response.statusCode == 200) {
+        getLog logslist = getLog.fromJson(response.data);
+        setState(() {
+          listLog = logslist.data!;
+          loading = false;
+        });
+      }
+    } catch (error) {
+      print(error);
+      await Future.delayed(Duration(milliseconds: 500));
+      dialogOnebutton_Subtitle(
+          context,
+          'พบข้อผิดพลาด',
+          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+          Icons.warning_amber_rounded,
+          Colors.orange,
+          'ตกลง', () {
+        Navigator.popUntil(context, (route) => route.isFirst);
+      }, false, false);
+      setState(() {
+        loading = false;
+      });
+    }
+  }
+
+  void dateNowAll() {
+    dateNow = DateFormat('y-MM-dd').format(now);
+    fieldText = TextEditingController(text: dateNow);
+    _startDateText = dateNow;
+    _endDateText = dateNow;
+  }
+
   void _searchData(String text) {
     setState(() {
       listlogs = listdata.where((item) {
@@ -92,7 +146,9 @@ class _Record_CheckState extends State<Record_Check> {
   @override
   void initState() {
     super.initState();
-    _getLogs();
+    dateNowAll();
+    // _getLogs();
+    _getLog(_startDateText!, _endDateText!);
   }
 
   @override
@@ -121,24 +177,27 @@ class _Record_CheckState extends State<Record_Check> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
                         child: Search_Bar(
-                            title: 'ค้นหา',
-                            fieldText: fieldText,
-                            changed: (value) {
-                              _searchData(value);
-                            },
-                            ontap: () {
-                              calendar(context);
-                            },
-                            clear: () {
-                              setState(() {
-                                fieldText.text == '';
-                              });
-                              fieldText.clear();
-                              _getLogs();
-                            }),
+                          title: 'ค้นหา',
+                          fieldText: fieldText,
+                          // changed: (value) {
+                          //   _getLog(_startDateText!, _endDateText!);
+                          // _searchData(value);
+                          // },
+                          ontap: () {
+                            calendar(context);
+                          },
+                          // clear: () {
+                          //   setState(() {
+                          //     fieldText.text == '';
+                          //   });
+                          //   fieldText.clear();
+                          //   _getLogs();
+                          // }
+                        ),
                       ),
                       Expanded(
-                        child: listlogs.isEmpty
+                        child: listLog.isEmpty
+                            //?listlogs.isEmpty
                             ? Logo_Opacity()
                             : ListView.builder(
                                 padding: EdgeInsets.symmetric(
@@ -146,83 +205,160 @@ class _Record_CheckState extends State<Record_Check> {
                                 // shrinkWrap: true,
                                 // primary: false,
                                 // reverse: true
-                                itemCount: listlogs.length,
+                                itemCount: listLog.length, //?listlogs.length
                                 itemBuilder: ((context, index) {
-                                  DateTime time = DateTime.parse(
-                                      '${listlogs[index].checktimeReal}');
                                   return Card(
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(10)),
                                     margin: EdgeInsets.symmetric(vertical: 5),
                                     elevation: 10,
-                                    child: Container(
-                                      // decoration: BoxDecoration(
-                                      //     color: containerColor,
-                                      //     borderRadius: BorderRadius.circular(10)),
-                                      padding: EdgeInsets.all(10),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          // now.isAfter(timeStart) &&
-                                          //         now.isBefore(timeEnd)
-                                          //     ? Column(
-                                          //         children: [
-                                          //           Text(
-                                          //             'รอบที่ต้องเดินตรวจ',
-                                          //             style: TextStyle(
-                                          //                 color: textColor),
-                                          //           ),
-                                          //           Divider(
-                                          //               height: 15,
-                                          //               thickness: 1.5,
-                                          //               color: line),
-                                          //         ],
-                                          //       )
-                                          //     : Container(),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Expanded(
-                                                child: Text(
-                                                  'เหตุการณ์ : ${listlogs[index].event}',
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Divider(
-                                              height: 15,
-                                              thickness: 1.5,
-                                              color: Colors.black),
-                                          IntrinsicHeight(
-                                            child: Row(
+                                    child: InkWell(
+                                      borderRadius: BorderRadius.circular(10),
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Record_Point(
+                                                      listPoint: listLog[index]
+                                                          .fileList,
+                                                    )));
+                                      },
+                                      child: Container(
+                                        // decoration: BoxDecoration(
+                                        //     color: containerColor,
+                                        //     borderRadius: BorderRadius.circular(10)),
+                                        padding: EdgeInsets.all(10),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceAround,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
-                                                Text(
-                                                  'วันที่ : ${listlogs[index].date}',
+                                                Expanded(
+                                                  child: Text(
+                                                    'รอบเดิน : ${listLog[index].roundName}',
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
                                                 ),
-                                                VerticalDivider(
-                                                    thickness: 1.5,
-                                                    color: Colors.black,
-                                                    width: 1),
-                                                Text(
-                                                  'เวลา : ${formatTime.format(time)}',
-                                                ),
+                                                Icon(Icons
+                                                    .arrow_forward_ios_rounded)
                                               ],
                                             ),
-                                          )
-                                        ],
+                                            RichText(
+                                              text: TextSpan(
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    fontFamily: 'Prompt'),
+                                                children: [
+                                                  TextSpan(
+                                                      text: 'สถานะ : ',
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                      )),
+                                                  if (listLog[index]
+                                                          .fileList!
+                                                          .length <=
+                                                      0) ...[
+                                                    TextSpan(
+                                                        text: 'ยังไม่ตรวจ',
+                                                        style: TextStyle(
+                                                          color: Colors.red,
+                                                        ))
+                                                  ] else if (listLog[index]
+                                                          .fileList!
+                                                          .length <
+                                                      6) ...[
+                                                    TextSpan(
+                                                        text: 'ตรวจไม่ครบ',
+                                                        style: TextStyle(
+                                                          color: Colors.orange,
+                                                        ))
+                                                  ] else ...[
+                                                    TextSpan(
+                                                        text: 'ตรวจแล้ว',
+                                                        style: TextStyle(
+                                                          color: Colors.green,
+                                                        ))
+                                                  ]
+                                                ],
+                                              ),
+                                            ),
+                                            IntrinsicHeight(
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                      'เริ่มต้น : ${listLog[index].roundStart} น.'),
+                                                  VerticalDivider(
+                                                      thickness: 1.5,
+                                                      color: Colors.black,
+                                                      width: 1),
+                                                  Text(
+                                                    'สิ้นสุด : ${listLog[index].roundEnd} น.',
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   );
-                                  // : Container();
                                 })),
                       ),
+                      // Expanded(
+                      //   child: listlogs.isEmpty
+                      //       ? Logo_Opacity()
+                      //       : ListView.builder(
+                      //           padding: EdgeInsets.symmetric(
+                      //               horizontal: 20, vertical: 5),
+                      //           // shrinkWrap: true,
+                      //           // primary: false,
+                      //           // reverse: true
+                      //           itemCount: listlogs.length,
+                      //           itemBuilder: ((context, index) {
+                      //             DateTime time = DateTime.parse(
+                      //                 '${listlogs[index].checktimeReal}');
+                      //             return Card(
+                      //               shape: RoundedRectangleBorder(
+                      //                   borderRadius:
+                      //                       BorderRadius.circular(10)),
+                      //               margin: EdgeInsets.symmetric(vertical: 5),
+                      //               elevation: 10,
+                      //               child: InkWell(
+                      //                 borderRadius: BorderRadius.circular(10),
+                      //                 child: Container(
+                      //                   padding: EdgeInsets.all(10),
+                      //                   child: Column(
+                      //                     crossAxisAlignment:
+                      //                         CrossAxisAlignment.start,
+                      //                     children: [
+                      //                       Text(
+                      //                         'เหตุการณ์ : ${listlogs[index].event}',
+                      //                         overflow: TextOverflow.ellipsis,
+                      //                       ),
+                      //                       Text(
+                      //                         'เพิ่มเติม : ${listlogs[index].desciption}',
+                      //                         overflow: TextOverflow.ellipsis,
+                      //                       ),
+                      //                       Text(
+                      //                         'วันที่ : ${listlogs[index].date} เวลา : ${formatTime.format(time)}',
+                      //                         overflow: TextOverflow.ellipsis,
+                      //                       ),
+                      //                     ],
+                      //                   ),
+                      //                 ),
+                      //               ),
+                      //             );
+                      //           })),
+                      // ),
                     ],
                   )),
           ),
@@ -233,13 +369,13 @@ class _Record_CheckState extends State<Record_Check> {
   }
 
   List<DateTime?> _pickerValue = [DateTime.now()];
+  DateTime? _startDate;
+  DateTime? _endDate;
+  String? _startDateText;
+  String? _endDateText;
+  String? dateDifferent;
 
   void calendar(context) async {
-    DateTime? _startDate;
-    DateTime? _endDate;
-    String? _startDateText;
-    String? _endDateText;
-    String? dateDifferent;
     final datePicker = await showCalendarDatePicker2Dialog(
       context: context,
       initialValue: _pickerValue,
@@ -267,6 +403,7 @@ class _Record_CheckState extends State<Record_Check> {
       dialogSize: const Size(300, 400),
       borderRadius: BorderRadius.circular(10),
     );
+    log('${datePicker}');
 
     if (datePicker != null) {
       if (datePicker.length == 2) {
@@ -280,7 +417,8 @@ class _Record_CheckState extends State<Record_Check> {
           dateDifferent = "${_startDateText} ถึง ${_endDateText}";
           fieldText.text = dateDifferent!;
 
-          _searchData(dateDifferent!);
+          _getLog(_startDateText!, _endDateText!);
+          // _searchData(dateDifferent!);
         });
       } else if (datePicker.length == 1) {
         setState(() {
@@ -291,12 +429,15 @@ class _Record_CheckState extends State<Record_Check> {
           _endDateText = formatDate.format(_endDate!);
 
           fieldText.text = _startDateText!;
-          _searchData(_startDateText!);
+
+          _getLog(_startDateText!, _endDateText!);
+          // _searchData(_startDateText!);
         });
       }
       setState(() {
         _pickerValue = datePicker;
-        print(_pickerValue);
+        print('datePicker ${datePicker}');
+        print('_pickerValue ${_pickerValue}');
       });
     }
   }

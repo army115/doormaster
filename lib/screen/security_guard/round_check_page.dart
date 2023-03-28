@@ -227,7 +227,7 @@ class _Round_CheckState extends State<Round_Check> {
                                             children: [
                                               Expanded(
                                                 child: Text(
-                                                  'ชื่อรอบเดิน : ${listdata[index].roundName}',
+                                                  'รอบเดิน : ${listdata[index].roundName}',
                                                   maxLines: now.isAfter(
                                                               timeStart) &&
                                                           now.isBefore(timeEnd)
@@ -249,7 +249,7 @@ class _Round_CheckState extends State<Round_Check> {
                                                           ? requestLocationPermission(
                                                               'check',
                                                               listdata[index]
-                                                                  .sId!)
+                                                                  .roundUuid!)
                                                           : dialogOnebutton_Subtitle(
                                                               context,
                                                               'ไม่สามารถตรวจได้',

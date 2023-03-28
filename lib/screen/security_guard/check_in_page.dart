@@ -53,7 +53,7 @@ class _Check_InState extends State<Check_In> {
         var ImagesBase64 = convert.base64Encode(imageBytes);
         setState(() {
           // listImage?.add(pickedImages);
-          listImage64?.add(ImagesBase64);
+          listImage64?.add("data:image/png;base64,$ImagesBase64");
           print('image64: ${ImagesBase64}');
         });
       } else {
@@ -175,11 +175,11 @@ class _Check_InState extends State<Check_In> {
         print(values);
         print(response.data);
 
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (BuildContext context) => const Record_Check(),
-          ),
-        );
+        // Navigator.of(context).push(
+        //   MaterialPageRoute(
+        //     builder: (BuildContext context) => const Record_Check(),
+        //   ),
+        // );
         // Navigator.popUntil(context, (route) => route.isFirst);
         snackbar(context, Theme.of(context).primaryColor, 'ตรวจเช็คสำเร็จ',
             Icons.check_circle_outline_rounded);
@@ -261,12 +261,13 @@ class _Check_InState extends State<Check_In> {
                             press: () {
                               if (_formkey.currentState!.validate()) {
                                 Map<String, dynamic> valuse = Map();
-                                valuse['time'] = '2014-08-18T${time}.000Z';
-                                // valuse['time'] = widget.timeCheck
-                                //     .toUtc() //todo ค่าเวลากลาง Utc + 0 ได้ค่ามี Z ต่อท้ายเวลา 2023-03-15 14:05:58.075406Z
-                                //     .add(
-                                //         Duration(hours: 7)) //todo time zone + 7 ชม.
-                                //     .toIso8601String(); //todo ได้ค่ามี T ท้ายวันที่ 2023-03-15T14:45:36.325350
+                                // valuse['time'] = '${DateTime.now()}';
+                                valuse['time'] = widget.timeCheck
+                                    .add(Duration(hours: 7))
+                                    .toString();
+                                // .toUtc() //todo ค่าเวลากลาง Utc + 0 ได้ค่ามี Z ต่อท้ายเวลา 2023-03-15 14:05:58.075406Z
+                                //todo time zone + 7 ชม.
+                                // .toIso8601String(); //todo ได้ค่ามี T ท้ายวันที่ 2023-03-15T14:45:36.325350
                                 valuse['lat'] = widget.lat;
                                 valuse['lng'] = widget.lng;
                                 valuse['EmpID'] = userId;
@@ -310,7 +311,7 @@ class _Check_InState extends State<Check_In> {
                                 Icon(Icons.maps_home_work_rounded, size: 25),
                                 SizedBox(width: 5),
                                 Expanded(
-                                  child: Text('ชื่อจุดตรวจ : $checkpointName'),
+                                  child: Text('จุดตรวจ : $checkpointName'),
                                 ),
                               ],
                             ),
@@ -357,63 +358,69 @@ class _Check_InState extends State<Check_In> {
                                             reverse: true,
                                             scrollDirection: Axis.horizontal,
                                             itemCount: listImage64!.length,
-                                            itemBuilder: ((context, index) =>
-                                                Card(
-                                                  elevation: 5,
-                                                  child: Stack(
-                                                    alignment: Alignment.center,
-                                                    children: [
-                                                      const CircularProgressIndicator(),
-                                                      Container(
-                                                        width: 200,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(5),
-                                                          image: DecorationImage(
-                                                              fit: BoxFit.cover,
-                                                              image:
-                                                                  // FileImage(File(
-                                                                  //     '${listImage![index].path}'))
-                                                                  MemoryImage(convert.base64Decode('${listImage64![index]}'))),
+                                            itemBuilder: ((context, index) {
+                                              final _Images =
+                                                  convert.base64Decode(
+                                                      ('${listImage64![index]}')
+                                                          .split(',')
+                                                          .last);
+                                              return Card(
+                                                elevation: 5,
+                                                child: Stack(
+                                                  alignment: Alignment.center,
+                                                  children: [
+                                                    const CircularProgressIndicator(),
+                                                    Container(
+                                                      width: 200,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                        image: DecorationImage(
+                                                            fit: BoxFit.cover,
+                                                            image:
+                                                                // FileImage(File(
+                                                                //     '${listImage![index].path}'))
+                                                                MemoryImage(
+                                                                    _Images)),
+                                                      ),
+                                                    ),
+                                                    Positioned(
+                                                      top: 5,
+                                                      right: 5,
+                                                      child: CircleAvatar(
+                                                        radius: 13,
+                                                        backgroundColor:
+                                                            Colors.red,
+                                                        child: IconButton(
+                                                          padding:
+                                                              EdgeInsets.zero,
+                                                          constraints:
+                                                              BoxConstraints(),
+                                                          splashRadius: 10,
+                                                          icon:
+                                                              Icon(Icons.close),
+                                                          onPressed: () {
+                                                            setState(() {
+                                                              // listImage?.remove(
+                                                              //     listImage![
+                                                              //         index]);
+                                                              listImage64?.remove(
+                                                                  listImage64![
+                                                                      index]);
+                                                              print(
+                                                                  'Image :  ${index}');
+                                                            });
+                                                          },
+                                                          iconSize: 18,
+                                                          color: Colors.white,
                                                         ),
                                                       ),
-                                                      Positioned(
-                                                        top: 5,
-                                                        right: 5,
-                                                        child: CircleAvatar(
-                                                          radius: 13,
-                                                          backgroundColor:
-                                                              Colors.red,
-                                                          child: IconButton(
-                                                            padding:
-                                                                EdgeInsets.zero,
-                                                            constraints:
-                                                                BoxConstraints(),
-                                                            splashRadius: 10,
-                                                            icon: Icon(
-                                                                Icons.close),
-                                                            onPressed: () {
-                                                              setState(() {
-                                                                // listImage?.remove(
-                                                                //     listImage![
-                                                                //         index]);
-                                                                listImage64?.remove(
-                                                                    listImage64![
-                                                                        index]);
-                                                                print(
-                                                                    'Image :  ${index}');
-                                                              });
-                                                            },
-                                                            iconSize: 18,
-                                                            color: Colors.white,
-                                                          ),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                )))
+                                                    )
+                                                  ],
+                                                ),
+                                              );
+                                            }))
                                         : Container(),
                                     listImage64?.length == 4
                                         ? Container()

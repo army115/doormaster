@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/list_logo_opacity/logo_opacity.dart';
@@ -103,7 +105,7 @@ class _Check_PointState extends State<Check_Point> {
                                       child: ExpansionTile(
                                           textColor: Colors.black,
                                           title: Text(
-                                              'ชื่อจุดตรวจ :  ${listdata[index].checkpointName}'),
+                                              'จุดตรวจ :  ${listdata[index].checkpointName}'),
                                           children: [
                                             Container(
                                               decoration: BoxDecoration(

@@ -265,7 +265,7 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
                                 Icon(Icons.maps_home_work_rounded, size: 25),
                                 SizedBox(width: 5),
                                 Expanded(
-                                  child: Text('ชื่อจุดตรวจ : $checkpointName'),
+                                  child: Text('จุดตรวจ : $checkpointName'),
                                 ),
                               ],
                             ),

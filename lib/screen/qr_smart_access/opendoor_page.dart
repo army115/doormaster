@@ -476,7 +476,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
   Widget doorsButton(name, button, icon, color, press) {
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      title: Text(name, style: TextStyle(fontSize: 18)),
+      title: Text(name, style: TextStyle(fontSize: 17)),
       trailing: ElevatedButton(
         style: TextButton.styleFrom(
           shape:
@@ -497,7 +497,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
             ),
             Text(
               button,
-              style: TextStyle(fontSize: 16),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
             ),
           ],
         ),

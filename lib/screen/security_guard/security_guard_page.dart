@@ -105,25 +105,6 @@ class _Security_GuardState extends State<Security_Guard> {
                   },
                 ),
                 Grid_Menu(
-                  title: 'ดูรายการบันทึกการตรวจ',
-                  icon: Icons.event_note,
-                  press: () {
-                    checkInternet(context, Record_Check());
-                  },
-                ),
-                Grid_Menu(
-                    title: 'บันทึกการตรวจนอกรอบ',
-                    icon: Icons.assignment_outlined,
-                    press: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute<void>(
-                          builder: (BuildContext context) => MyHomePage(
-                            title: 'test',
-                          ),
-                        ),
-                      );
-                    }),
-                Grid_Menu(
                     title: 'รอบเดินตรวจ',
                     icon: Icons.edit_calendar_rounded,
                     press: () {
@@ -135,6 +116,17 @@ class _Security_GuardState extends State<Security_Guard> {
                     press: () {
                       checkInternet(context, Check_Point());
                     }),
+                Grid_Menu(
+                  title: 'ดูรายการบันทึกการตรวจ',
+                  icon: Icons.event_note,
+                  press: () {
+                    checkInternet(context, Record_Check());
+                  },
+                ),
+                Grid_Menu(
+                    title: 'บันทึกการตรวจนอกรอบ',
+                    icon: Icons.assignment_outlined,
+                    press: () {}),
               ],
             ),
           ]),

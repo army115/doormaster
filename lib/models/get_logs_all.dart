@@ -1,10 +1,10 @@
-class getLogs {
+class getLogsAll {
   int? status;
   List<Data>? data;
 
-  getLogs({this.status, this.data});
+  getLogsAll({this.status, this.data});
 
-  getLogs.fromJson(Map<String, dynamic> json) {
+  getLogsAll.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     if (json['data'] != null) {
       data = <Data>[];
