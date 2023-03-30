@@ -44,7 +44,8 @@ class _Security_GuardState extends State<Security_Guard> {
           context,
           ScanQR_Check(
             name: name,
-          ));
+          ),
+          true);
     } else {
       dialogOnebutton_Subtitle(
           context,
@@ -79,7 +80,7 @@ class _Security_GuardState extends State<Security_Guard> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.all(30),
+          padding: EdgeInsets.all(25),
           child: Column(children: [
             GridView.count(
               // scrollDirection: Axis.vertical,
@@ -87,8 +88,8 @@ class _Security_GuardState extends State<Security_Guard> {
               primary: false,
               childAspectRatio: 1.0,
               crossAxisCount: 2,
-              crossAxisSpacing: 30,
-              mainAxisSpacing: 30,
+              crossAxisSpacing: 25,
+              mainAxisSpacing: 25,
               children: [
                 Grid_Menu(
                   title: 'บันทึกจุดตรวจ',
@@ -108,25 +109,33 @@ class _Security_GuardState extends State<Security_Guard> {
                     title: 'รอบเดินตรวจ',
                     icon: Icons.edit_calendar_rounded,
                     press: () {
-                      checkInternet(context, Round_Check());
+                      checkInternet(context, Round_Check(), false);
                     }),
                 Grid_Menu(
                     title: 'จุดเดินตรวจ',
                     icon: Icons.share_location_outlined,
                     press: () {
-                      checkInternet(context, Check_Point());
+                      checkInternet(context, Check_Point(), false);
                     }),
                 Grid_Menu(
                   title: 'ดูรายการบันทึกการตรวจ',
                   icon: Icons.event_note,
                   press: () {
-                    checkInternet(context, Record_Check());
+                    checkInternet(context, Record_Check(), false);
                   },
                 ),
                 Grid_Menu(
                     title: 'บันทึกการตรวจนอกรอบ',
                     icon: Icons.assignment_outlined,
-                    press: () {}),
+                    press: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                          builder: (BuildContext context) => MyHomePage(
+                            title: 'test',
+                          ),
+                        ),
+                      );
+                    }),
               ],
             ),
           ]),

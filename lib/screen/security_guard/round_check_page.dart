@@ -1,7 +1,7 @@
 import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
+import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/list_logo_opacity/logo_opacity.dart';
 import 'package:doormster/components/loading/loading.dart';
@@ -102,7 +102,8 @@ class _Round_CheckState extends State<Round_Check> {
           Icons.warning_amber_rounded,
           Colors.orange,
           'ตกลง', () {
-        Navigator.popUntil(context, (route) => route.isFirst);
+        homeKey.currentState?.popUntil(ModalRoute.withName('/security'));
+        Navigator.of(context, rootNavigator: true).pop();
       }, false, false);
       setState(() {
         loading = false;
@@ -119,7 +120,8 @@ class _Round_CheckState extends State<Round_Check> {
           context,
           ScanQR_Check(
             name: name,
-          ));
+          ),
+          true);
     } else {
       dialogOnebutton_Subtitle(
           context,

@@ -42,7 +42,7 @@ class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
     final status2 = await Permission.bluetoothScan.request();
     final status3 = await Permission.bluetoothConnect.request();
     if (status.isGranted && status2.isGranted && status3.isGranted) {
-      checkInternet(context, Opendoor_Page());
+      checkInternet(context, Opendoor_Page(), false);
     } else {
       dialogOnebutton_Subtitle(
           context,
@@ -105,21 +105,21 @@ class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
                     primary: false,
                     childAspectRatio: 1.0,
                     crossAxisCount: 2,
-                    crossAxisSpacing: 30,
-                    mainAxisSpacing: 30,
+                    crossAxisSpacing: 25,
+                    mainAxisSpacing: 25,
                     children: [
                       Grid_Menu(
                         title: 'ผู้มาติดต่อ',
                         icon: Icons.person,
                         press: () {
-                          checkInternet(context, Visitor_Page());
+                          checkInternet(context, Visitor_Page(), true);
                         },
                       ),
                       Grid_Menu(
                         title: 'สแกน',
                         icon: Icons.qr_code_scanner_rounded,
                         press: () {
-                          checkInternet(context, Scanner());
+                          checkInternet(context, Scanner(), true);
                         },
                       ),
                       Grid_Menu(

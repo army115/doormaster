@@ -46,6 +46,7 @@ class _Record_PointState extends State<Record_Point> {
                                   DateTime time = DateTime.parse(
                                       '${listLogs[index].checktimeReal}');
                                   final listpoint = listLogs[index].checkpoint;
+                                  final checkpoint = listpoint[0].checklist;
                                   final listPic = listLogs[index].pic;
                                   return Card(
                                     shape: RoundedRectangleBorder(
@@ -83,25 +84,6 @@ class _Record_PointState extends State<Record_Point> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  listLogs[index].desciption !=
-                                                          ''
-                                                      ? Row(
-                                                          children: [
-                                                            Icon(
-                                                                Icons
-                                                                    .description_rounded,
-                                                                size: 25),
-                                                            SizedBox(width: 5),
-                                                            Text(
-                                                                'รายละเอียดเพิ่มเติม'),
-                                                          ],
-                                                        )
-                                                      : Container(),
-                                                  listLogs[index].desciption !=
-                                                          ''
-                                                      ? Text(
-                                                          ' - ${listLogs[index].desciption}')
-                                                      : Container(),
                                                   Row(
                                                     children: [
                                                       Icon(Icons.task_rounded,
@@ -114,16 +96,14 @@ class _Record_PointState extends State<Record_Point> {
                                                     shrinkWrap: true,
                                                     primary: false,
                                                     padding:
-                                                        EdgeInsets.fromLTRB(
-                                                            20, 5, 20, 5),
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 5,
+                                                            horizontal: 20),
                                                     itemCount:
-                                                        listpoint?.length,
+                                                        checkpoint?.length,
                                                     itemBuilder:
                                                         (BuildContext context,
                                                             int index) {
-                                                      final checkpoint =
-                                                          listpoint[index]
-                                                              .checklist;
                                                       return checkpoint?[index]
                                                                   .checklist ==
                                                               ''
@@ -132,6 +112,56 @@ class _Record_PointState extends State<Record_Point> {
                                                               '- ${checkpoint?[index].checklist}');
                                                     },
                                                   ),
+                                                  // listLogs[index].desciption !=
+                                                  //         ''
+                                                  //     ?
+                                                  Row(
+                                                    children: [
+                                                      Icon(
+                                                          Icons
+                                                              .description_rounded,
+                                                          size: 25),
+                                                      SizedBox(width: 5),
+                                                      Text(
+                                                          'รายละเอียดเพิ่มเติม'),
+                                                    ],
+                                                  ),
+                                                  // : Container(),
+                                                  // listLogs[index].desciption !=
+                                                  //         ''
+                                                  //     ?
+                                                  Padding(
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        horizontal: 20,
+                                                        vertical: 3),
+                                                    child: Text(
+                                                      '- ${listLogs[index].desciption}',
+                                                    ),
+                                                  ),
+                                                  // : Container(),
+
+                                                  Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons
+                                                            .photo_library_rounded,
+                                                        size: 30,
+                                                        color: Colors.black,
+                                                      ),
+                                                      SizedBox(width: 5),
+                                                      Expanded(
+                                                          child: Text(
+                                                              'รูปภาพการตรวจ')),
+                                                      button(
+                                                          'ดูรูปภาพ',
+                                                          Theme.of(context)
+                                                              .primaryColor,
+                                                          Icons.photo,
+                                                          () {})
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: 3),
                                                   Row(
                                                     children: [
                                                       Icon(
@@ -141,14 +171,20 @@ class _Record_PointState extends State<Record_Point> {
                                                             Colors.red.shade600,
                                                       ),
                                                       SizedBox(width: 5),
-                                                      Text(
-                                                          'ตำแหน่งจุดตรวจที่บันทึก'),
+                                                      Expanded(
+                                                          child: Text(
+                                                              'ตำแหน่งที่ตรวจ')),
+                                                      button(
+                                                          'ดูตำแหน่ง',
+                                                          Colors.red.shade600,
+                                                          Icons.map,
+                                                          () {})
                                                     ],
                                                   ),
-                                                  SizedBox(height: 5),
+                                                  // SizedBox(height: 5),
                                                   // Map_Page(
-                                                  //   lat: listPoint[index].lat!,
-                                                  //   lng: listPoint[index].lng!,
+                                                  //   lat: listLogs[index].lat!,
+                                                  //   lng: listLogs[index].lng!,
                                                   //   width: double.infinity,
                                                   //   height: 200,
                                                   // )
@@ -164,6 +200,28 @@ class _Record_PointState extends State<Record_Point> {
         ),
         loading ? Loading() : Container()
       ],
+    );
+  }
+
+  Widget button(name, color, icon, press) {
+    return ElevatedButton(
+      style: TextButton.styleFrom(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        elevation: 10,
+        backgroundColor: color,
+        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      ),
+      child: Row(
+        children: [
+          Icon(icon),
+          SizedBox(width: 3),
+          Text(
+            name,
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
+          ),
+        ],
+      ),
+      onPressed: press,
     );
   }
 }

@@ -2,7 +2,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:flutter/material.dart';
 
-void checkInternet(context, page) async {
+void checkInternet(context, page, rootNavi) async {
   var result = await Connectivity().checkConnectivity();
   print(result);
   if (result == ConnectivityResult.none) {
@@ -10,7 +10,7 @@ void checkInternet(context, page) async {
         Icons.warning_amber_rounded);
     print('not connected');
   } else {
-    Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
+    Navigator.of(context, rootNavigator: rootNavi).push(MaterialPageRoute(
       builder: (context) => page,
     ));
   }

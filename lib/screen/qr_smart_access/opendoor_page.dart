@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
+import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/models/doors_device.dart';
@@ -118,7 +119,8 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
             Icons.warning_amber_rounded,
             Colors.orange,
             'ตกลง', () {
-          Navigator.of(context).popUntil((route) => route.isFirst);
+          homeKey.currentState?.popUntil(ModalRoute.withName('/qrsmart'));
+          Navigator.of(context, rootNavigator: true).pop();
         }, false, false);
       }
       setState(() {
@@ -406,7 +408,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
                                           borderRadius:
                                               BorderRadius.circular(10)),
                                       margin: EdgeInsets.symmetric(vertical: 5),
-                                      elevation: 5,
+                                      elevation: 10,
                                       child: listDevice[index]
                                                   .connectionStatus ==
                                               1

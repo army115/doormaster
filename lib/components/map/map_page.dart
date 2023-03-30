@@ -42,14 +42,18 @@ class _Map_PageState extends State<Map_Page> {
 
   @override
   Widget build(BuildContext context) {
+    return map(widget.width, widget.height, 'mini');
+  }
+
+  Widget map(width, height, size) {
     return Card(
       child: Stack(
         // alignment: Alignment.topLeft,
         children: [
           Container(
             padding: EdgeInsets.all(5),
-            width: widget.width,
-            height: widget.height,
+            width: width,
+            height: height,
             child: widget.lat == null
                 ? Center(
                     child: CircularProgressIndicator(),
@@ -89,22 +93,22 @@ class _Map_PageState extends State<Map_Page> {
             child: Opacity(
               opacity: 0.7,
               child: Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(2)),
-                color: Colors.white,
-                child: IconButton(
-                    constraints: BoxConstraints(),
-                    onPressed: () => setState(() {
-                          _mapController?.animateCamera(
-                            CameraUpdate.newLatLngZoom(
-                                LatLng(widget.lat, widget.lng), 20),
-                          );
-                        }),
-                    icon: Icon(
-                      Icons.my_location_rounded,
-                      color: Colors.grey[800],
-                    )),
-              ),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(2)),
+                  color: Colors.white,
+                  child: InkWell(
+                    onTap: () => setState(() {
+                      _mapController?.animateCamera(
+                        CameraUpdate.newLatLngZoom(
+                            LatLng(widget.lat, widget.lng), 20),
+                      );
+                    }),
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Icon(Icons.my_location_rounded,
+                          size: 30, color: Colors.grey[800]),
+                    ),
+                  )),
             ),
           ),
           Positioned(
@@ -113,25 +117,58 @@ class _Map_PageState extends State<Map_Page> {
             child: Opacity(
               opacity: 0.7,
               child: Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(2)),
-                color: Colors.white,
-                child: IconButton(
-                    constraints: BoxConstraints(),
-                    onPressed: () => setState(() {
-                          maptype = (maptype == MapType.normal)
-                              ? MapType.hybrid
-                              : MapType.normal;
-                        }),
-                    icon: Icon(
-                      Icons.map,
-                      color: Colors.grey[800],
-                    )),
-              ),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(2)),
+                  color: Colors.white,
+                  child: InkWell(
+                    onTap: () => setState(() {
+                      maptype = (maptype == MapType.normal)
+                          ? MapType.hybrid
+                          : MapType.normal;
+                    }),
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Icon(Icons.map, size: 30, color: Colors.grey[800]),
+                    ),
+                  )),
             ),
-          )
+          ),
+          // Positioned(
+          //   left: 10,
+          //   top: 60,
+          //   child: Opacity(
+          //     opacity: 0.7,
+          //     child: Card(
+          //         shape: RoundedRectangleBorder(
+          //             borderRadius: BorderRadius.circular(2)),
+          //         color: Colors.white,
+          //         child: InkWell(
+          //           onTap: () {
+          //             if (size == 'mini') {
+          //               showFullMap();
+          //             } else {
+          //               Navigator.of(context, rootNavigator: true).pop();
+          //             }
+          //           },
+          //           child: Icon(
+          //               size == 'mini'
+          //                   ? Icons.fullscreen_rounded
+          //                   : Icons.fullscreen_exit_rounded,
+          //               size: 40,
+          //               color: Colors.grey[800]),
+          //         )),
+          //   ),
+          // )
         ],
       ),
     );
+  }
+
+  void showFullMap() {
+    showDialog(
+        useRootNavigator: true,
+        // barrierDismissible: click,
+        context: context,
+        builder: (_) => Dialog(child: map(null, null, 'full')));
   }
 }

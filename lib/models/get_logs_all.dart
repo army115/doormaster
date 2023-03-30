@@ -1,15 +1,15 @@
 class getLogsAll {
   int? status;
-  List<Data>? data;
+  List<DatalogAll>? data;
 
   getLogsAll({this.status, this.data});
 
   getLogsAll.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     if (json['data'] != null) {
-      data = <Data>[];
+      data = <DatalogAll>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(new DatalogAll.fromJson(v));
       });
     }
   }
@@ -24,7 +24,7 @@ class getLogsAll {
   }
 }
 
-class Data {
+class DatalogAll {
   String? sId;
   String? chekpointUUid;
   String? companyId;
@@ -43,7 +43,7 @@ class Data {
   String? date;
   String? mouth;
 
-  Data(
+  DatalogAll(
       {this.sId,
       this.chekpointUUid,
       this.companyId,
@@ -62,7 +62,7 @@ class Data {
       this.date,
       this.mouth});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  DatalogAll.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     chekpointUUid = json['ChekpointUUid'];
     companyId = json['company_id'];

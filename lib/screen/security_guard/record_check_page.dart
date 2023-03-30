@@ -1,13 +1,15 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_is_empty
 
 import 'dart:developer';
 
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
+import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/list_logo_opacity/logo_opacity.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/searchbar/search_bar.dart';
+import 'package:doormster/models/get_checklist.dart';
 import 'package:doormster/models/get_log.dart';
 import 'package:doormster/models/get_logs_all.dart';
 import 'package:doormster/screen/security_guard/record_point_page.dart';
@@ -27,9 +29,10 @@ class Record_Check extends StatefulWidget {
 class _Record_CheckState extends State<Record_Check> {
   String? companyId;
   TextEditingController fieldText = TextEditingController();
-  List<Data> listlogs = [];
-  List<Data> listdata = [];
+  List<DatalogAll> listlogs = [];
+  List<DatalogAll> listdata = [];
   List<DataLog> listLog = [];
+  int? listLength;
   bool loading = false;
   DateFormat formatTime = DateFormat.Hm();
   DateFormat formatDate = DateFormat('y-MM-dd');
@@ -75,7 +78,8 @@ class _Record_CheckState extends State<Record_Check> {
           Icons.warning_amber_rounded,
           Colors.orange,
           'ตกลง', () {
-        Navigator.popUntil(context, (route) => route.isFirst);
+        homeKey.currentState?.popUntil(ModalRoute.withName('/security'));
+        Navigator.of(context, rootNavigator: true).pop();
       }, false, false);
       setState(() {
         loading = false;
@@ -119,11 +123,38 @@ class _Record_CheckState extends State<Record_Check> {
           Icons.warning_amber_rounded,
           Colors.orange,
           'ตกลง', () {
-        Navigator.popUntil(context, (route) => route.isFirst);
+        homeKey.currentState?.popUntil(ModalRoute.withName('/security'));
+        Navigator.of(context, rootNavigator: true).pop();
       }, false, false);
       setState(() {
         loading = false;
       });
+    }
+  }
+
+  Future _getCheckPoint() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    companyId = prefs.getString('companyId');
+    print('companyId: ${companyId}');
+
+    try {
+      //call api
+      var url = '${Connect_api().domain}/get/checkpoint/${companyId}';
+      var response = await Dio().get(
+        url,
+        options: Options(headers: {
+          'Connect-type': 'application/json',
+          'Accept': 'application/json',
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        getChecklist checklist = getChecklist.fromJson(response.data);
+        listLength = checklist.data?.length;
+        print(checklist.data?.length);
+      }
+    } catch (error) {
+      print(error);
     }
   }
 
@@ -143,11 +174,18 @@ class _Record_CheckState extends State<Record_Check> {
     });
   }
 
+  Future onGoBack(dynamic value) async {
+    setState(() {
+      _getLog(_startDateText!, _endDateText!);
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     dateNowAll();
     // _getLogs();
+    _getCheckPoint();
     _getLog(_startDateText!, _endDateText!);
   }
 
@@ -166,7 +204,8 @@ class _Record_CheckState extends State<Record_Check> {
               leading: IconButton(
                   icon: Icon(Icons.arrow_back),
                   onPressed: () {
-                    Navigator.popUntil(context, (route) => route.isFirst);
+                    homeKey.currentState
+                        ?.popUntil(ModalRoute.withName('/security'));
                   }),
             ),
             body: loading
@@ -216,13 +255,14 @@ class _Record_CheckState extends State<Record_Check> {
                                     child: InkWell(
                                       borderRadius: BorderRadius.circular(10),
                                       onTap: () {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
                                                 builder: (context) =>
                                                     Record_Point(
                                                       listPoint: listLog[index]
                                                           .fileList,
-                                                    )));
+                                                    )))
+                                            .then((onGoBack));
                                       },
                                       child: Container(
                                         // decoration: BoxDecoration(
@@ -262,27 +302,30 @@ class _Record_CheckState extends State<Record_Check> {
                                                       )),
                                                   if (listLog[index]
                                                           .fileList!
+                                                          .length ==
+                                                      listLength) ...[
+                                                    TextSpan(
+                                                        text: 'ตรวจแล้ว',
+                                                        style: TextStyle(
+                                                          color: Colors.green,
+                                                        ))
+                                                  ] else if (listLog[index]
+                                                          .fileList!
+                                                          .length <
+                                                      listLength!) ...[
+                                                    TextSpan(
+                                                        text: 'ตรวจไม่ครบ',
+                                                        style: TextStyle(
+                                                          color: Colors.orange,
+                                                        ))
+                                                  ] else if (listLog[index]
+                                                          .fileList!
                                                           .length <=
                                                       0) ...[
                                                     TextSpan(
                                                         text: 'ยังไม่ตรวจ',
                                                         style: TextStyle(
                                                           color: Colors.red,
-                                                        ))
-                                                  ] else if (listLog[index]
-                                                          .fileList!
-                                                          .length <
-                                                      6) ...[
-                                                    TextSpan(
-                                                        text: 'ตรวจไม่ครบ',
-                                                        style: TextStyle(
-                                                          color: Colors.orange,
-                                                        ))
-                                                  ] else ...[
-                                                    TextSpan(
-                                                        text: 'ตรวจแล้ว',
-                                                        style: TextStyle(
-                                                          color: Colors.green,
                                                         ))
                                                   ]
                                                 ],
@@ -403,10 +446,9 @@ class _Record_CheckState extends State<Record_Check> {
       dialogSize: const Size(300, 400),
       borderRadius: BorderRadius.circular(10),
     );
-    log('${datePicker}');
 
     if (datePicker != null) {
-      if (datePicker.length == 2) {
+      if (datePicker.length == 2 && datePicker[0] != datePicker[1]) {
         setState(() {
           _startDate = datePicker[0]!;
           _endDate = datePicker[1]!;
@@ -436,8 +478,7 @@ class _Record_CheckState extends State<Record_Check> {
       }
       setState(() {
         _pickerValue = datePicker;
-        print('datePicker ${datePicker}');
-        print('_pickerValue ${_pickerValue}');
+        log('_pickerValue ${_pickerValue}');
       });
     }
   }

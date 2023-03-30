@@ -46,8 +46,8 @@ class _Check_InState extends State<Check_In> {
   selectedImages(ImageSource TypeImage) async {
     try {
       // var pickedfiles = await imgpicker.pickMultiImage();
-      final XFile? pickedImages =
-          await imgpicker.pickImage(source: TypeImage, maxHeight: 1080);
+      final XFile? pickedImages = await imgpicker.pickImage(
+          source: TypeImage, maxHeight: 1080, maxWidth: 1080);
       if (pickedImages != null) {
         List<int> imageBytes = await pickedImages.readAsBytes();
         var ImagesBase64 = convert.base64Encode(imageBytes);
@@ -175,12 +175,12 @@ class _Check_InState extends State<Check_In> {
         print(values);
         print(response.data);
 
-        // Navigator.of(context).push(
+        // Navigator.of(context, rootNavigator: true).push(
         //   MaterialPageRoute(
         //     builder: (BuildContext context) => const Record_Check(),
         //   ),
         // );
-        // Navigator.popUntil(context, (route) => route.isFirst);
+        Navigator.popUntil(context, (route) => route.isFirst);
         snackbar(context, Theme.of(context).primaryColor, 'ตรวจเช็คสำเร็จ',
             Icons.check_circle_outline_rounded);
 

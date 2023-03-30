@@ -10,8 +10,10 @@ class Grid_Menu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PhysicalModel(
-      borderRadius: BorderRadius.circular(20),
+    return Card(
+      margin: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      // borderRadius: BorderRadius.circular(20),
       elevation: 10,
       color: Theme.of(context).primaryColor,
       child: InkWell(
@@ -22,11 +24,6 @@ class Grid_Menu extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // Image.asset(
-            //   //รูปภาพ
-            //   img,
-            //   width: 80,
-            // ),
             Icon(icon, size: 40, color: Colors.white),
             // SizedBox(height: 5),
             Padding(

@@ -2,6 +2,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
+import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/list_logo_opacity/logo_opacity.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/map/map_page.dart';
@@ -59,7 +60,8 @@ class _Check_PointState extends State<Check_Point> {
           Icons.warning_amber_rounded,
           Colors.orange,
           'ตกลง', () {
-        Navigator.popUntil(context, (route) => route.isFirst);
+        homeKey.currentState?.popUntil(ModalRoute.withName('/security'));
+        Navigator.of(context, rootNavigator: true).pop();
       }, false, false);
       setState(() {
         loading = false;
