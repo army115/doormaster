@@ -32,7 +32,7 @@ class _Record_CheckState extends State<Record_Check> {
   List<DatalogAll> listlogs = [];
   List<DatalogAll> listdata = [];
   List<DataLog> listLog = [];
-  int? listLength;
+  int? listLength = 0;
   bool loading = false;
   DateFormat formatTime = DateFormat.Hm();
   DateFormat formatDate = DateFormat('y-MM-dd');
@@ -150,8 +150,10 @@ class _Record_CheckState extends State<Record_Check> {
 
       if (response.statusCode == 200) {
         getChecklist checklist = getChecklist.fromJson(response.data);
-        listLength = checklist.data?.length;
-        print(checklist.data?.length);
+        setState(() {
+          listLength = checklist.data?.length;
+          print(checklist.data?.length);
+        });
       }
     } catch (error) {
       print(error);
@@ -291,45 +293,45 @@ class _Record_CheckState extends State<Record_Check> {
                                             ),
                                             RichText(
                                               text: TextSpan(
-                                                style: TextStyle(
-                                                    fontSize: 20,
-                                                    fontFamily: 'Prompt'),
-                                                children: [
-                                                  TextSpan(
-                                                      text: 'สถานะ : ',
-                                                      style: TextStyle(
-                                                        color: Colors.black,
-                                                      )),
-                                                  if (listLog[index]
-                                                          .fileList!
-                                                          .length ==
-                                                      listLength) ...[
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      fontFamily: 'Prompt'),
+                                                  children: [
                                                     TextSpan(
-                                                        text: 'ตรวจแล้ว',
+                                                        text: 'สถานะ : ',
                                                         style: TextStyle(
-                                                          color: Colors.green,
-                                                        ))
-                                                  ] else if (listLog[index]
-                                                          .fileList!
-                                                          .length <
-                                                      listLength!) ...[
-                                                    TextSpan(
-                                                        text: 'ตรวจไม่ครบ',
-                                                        style: TextStyle(
-                                                          color: Colors.orange,
-                                                        ))
-                                                  ] else if (listLog[index]
-                                                          .fileList!
-                                                          .length <=
-                                                      0) ...[
-                                                    TextSpan(
-                                                        text: 'ยังไม่ตรวจ',
-                                                        style: TextStyle(
-                                                          color: Colors.red,
-                                                        ))
-                                                  ]
-                                                ],
-                                              ),
+                                                          color: Colors.black,
+                                                        )),
+                                                    if (listLog[index]
+                                                            .fileList!
+                                                            .length ==
+                                                        listLength) ...[
+                                                      TextSpan(
+                                                          text: 'ตรวจแล้ว',
+                                                          style: TextStyle(
+                                                            color: Colors.green,
+                                                          ))
+                                                    ] else if (listLog[index]
+                                                            .fileList!
+                                                            .length <=
+                                                        0) ...[
+                                                      TextSpan(
+                                                          text: 'ยังไม่ตรวจ',
+                                                          style: TextStyle(
+                                                            color: Colors.red,
+                                                          ))
+                                                    ] else if (listLog[index]
+                                                            .fileList!
+                                                            .length <
+                                                        listLength!) ...[
+                                                      TextSpan(
+                                                          text: 'ตรวจไม่ครบ',
+                                                          style: TextStyle(
+                                                            color:
+                                                                Colors.orange,
+                                                          ))
+                                                    ],
+                                                  ]),
                                             ),
                                             IntrinsicHeight(
                                               child: Row(

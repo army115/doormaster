@@ -2,7 +2,9 @@ import 'package:doormster/components/list_logo_opacity/logo_opacity.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/map/map_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_swiper_plus/flutter_swiper_plus.dart';
 import 'package:intl/intl.dart';
+import 'dart:convert' as convert;
 
 class Record_Point extends StatefulWidget {
   final listPoint;
@@ -157,8 +159,9 @@ class _Record_PointState extends State<Record_Point> {
                                                           'ดูรูปภาพ',
                                                           Theme.of(context)
                                                               .primaryColor,
-                                                          Icons.photo,
-                                                          () {})
+                                                          Icons.photo, () {
+                                                        showImages(listPic);
+                                                      })
                                                     ],
                                                   ),
                                                   SizedBox(height: 3),
@@ -177,8 +180,13 @@ class _Record_PointState extends State<Record_Point> {
                                                       button(
                                                           'ดูตำแหน่ง',
                                                           Colors.red.shade600,
-                                                          Icons.map,
-                                                          () {})
+                                                          Icons.map, () {
+                                                        showMap(
+                                                            listLogs[index]
+                                                                .lat!,
+                                                            listLogs[index]
+                                                                .lng!);
+                                                      })
                                                     ],
                                                   ),
                                                   // SizedBox(height: 5),
@@ -201,6 +209,77 @@ class _Record_PointState extends State<Record_Point> {
         loading ? Loading() : Container()
       ],
     );
+  }
+
+  void showImages(listImages) {
+    showDialog(
+        useRootNavigator: true,
+        context: context,
+        builder: (_) => Dialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              backgroundColor: Colors.transparent,
+              insetPadding: EdgeInsets.symmetric(vertical: 180, horizontal: 30),
+              child: listImages.isEmpty
+                  ? Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white,
+                      ),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.image_not_supported_rounded,
+                              size: 50,
+                            ),
+                            Text('ไม่มีรูปภาพ')
+                          ]),
+                    )
+                  : Swiper(
+                      pagination: const SwiperPagination(
+                          builder: DotSwiperPaginationBuilder(
+                              size: 8,
+                              activeSize: 8,
+                              color: Colors.grey,
+                              activeColor: Colors.white)),
+                      control: const SwiperControl(
+                          color: Colors.white,
+                          iconPrevious: Icons.arrow_back_ios_new_rounded,
+                          iconNext: Icons.arrow_forward_ios_rounded),
+                      itemCount: listImages.length,
+                      itemBuilder: (context, index) {
+                        var _Images = convert.base64Decode(
+                            ('${listImages[index]}').split(',').last);
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.memory(
+                              _Images,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+            ));
+  }
+
+  void showMap(lat, lng) {
+    showDialog(
+        useRootNavigator: true,
+        context: context,
+        builder: (_) => Dialog(
+              backgroundColor: Colors.transparent,
+              insetPadding: EdgeInsets.symmetric(vertical: 180, horizontal: 30),
+              child: Map_Page(
+                width: double.infinity,
+                height: double.infinity,
+                lat: lat,
+                lng: lng,
+              ),
+            ));
   }
 
   Widget button(name, color, icon, press) {

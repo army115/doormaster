@@ -185,20 +185,34 @@ class _Check_PointState extends State<Check_Point> {
                                                                   ),
                                                                   SizedBox(
                                                                       width: 5),
-                                                                  Text(
-                                                                      'ตำแหน่งจุดตรวจ'),
+                                                                  Expanded(
+                                                                    child: Text(
+                                                                        'ตำแหน่งจุดตรวจ'),
+                                                                  ),
+                                                                  button(
+                                                                      'ดูตำแหน่ง',
+                                                                      Colors.red
+                                                                          .shade600,
+                                                                      Icons.map,
+                                                                      () {
+                                                                    showMap(
+                                                                        listdata[index]
+                                                                            .checkpointLat!,
+                                                                        listdata[index]
+                                                                            .checkpointLng!);
+                                                                  })
                                                                 ],
                                                               ),
-                                                        SizedBox(height: 5),
-                                                        Map_Page(
-                                                          lat: listdata[index]
-                                                              .checkpointLat!,
-                                                          lng: listdata[index]
-                                                              .checkpointLng!,
-                                                          width:
-                                                              double.infinity,
-                                                          height: 200,
-                                                        )
+                                                        // SizedBox(height: 5),
+                                                        // Map_Page(
+                                                        //   lat: listdata[index]
+                                                        //       .checkpointLat!,
+                                                        //   lng: listdata[index]
+                                                        //       .checkpointLng!,
+                                                        //   width:
+                                                        //       double.infinity,
+                                                        //   height: 200,
+                                                        // )
                                                       ],
                                                     ),
                                             ),
@@ -211,6 +225,44 @@ class _Check_PointState extends State<Check_Point> {
         ),
         loading ? Loading() : Container()
       ],
+    );
+  }
+
+  void showMap(lat, lng) {
+    showDialog(
+        useRootNavigator: true,
+        context: context,
+        builder: (_) => Dialog(
+              backgroundColor: Colors.transparent,
+              insetPadding: EdgeInsets.symmetric(vertical: 180, horizontal: 30),
+              child: Map_Page(
+                width: double.infinity,
+                height: double.infinity,
+                lat: lat,
+                lng: lng,
+              ),
+            ));
+  }
+
+  Widget button(name, color, icon, press) {
+    return ElevatedButton(
+      style: TextButton.styleFrom(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        elevation: 10,
+        backgroundColor: color,
+        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      ),
+      child: Row(
+        children: [
+          Icon(icon),
+          SizedBox(width: 3),
+          Text(
+            name,
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
+          ),
+        ],
+      ),
+      onPressed: press,
     );
   }
 }

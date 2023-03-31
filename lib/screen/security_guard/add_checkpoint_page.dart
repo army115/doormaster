@@ -296,26 +296,54 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
                                                   '- ${listcheck[index].checklist}'),
                                             ))),
                             ),
-                            Row(
+                            ExpansionTile(
+                              tilePadding: EdgeInsets.zero,
+                              title: Row(
+                                children: [
+                                  Icon(
+                                    Icons.location_on_sharp,
+                                    size: 30,
+                                    color: Colors.red.shade600,
+                                  ),
+                                  SizedBox(width: 5),
+                                  Text(
+                                    'ตำแหน่งจุดตรวจ',
+                                    style: TextStyle(
+                                        fontSize: 16, color: Colors.black),
+                                  ),
+                                ],
+                              ),
                               children: [
-                                Icon(
-                                  Icons.location_on_sharp,
-                                  size: 30,
-                                  color: Colors.red.shade600,
-                                ),
-                                SizedBox(width: 5),
-                                Text('ตำแหน่งจุดตรวจ'),
+                                listdata.single.verify == 1
+                                    ? Container()
+                                    : Map_Page(
+                                        lat: widget.lat,
+                                        lng: widget.lng,
+                                        width: double.infinity,
+                                        height: 300,
+                                      )
                               ],
                             ),
-                            SizedBox(height: 10),
-                            listdata.single.verify == 1
-                                ? Container()
-                                : Map_Page(
-                                    lat: widget.lat,
-                                    lng: widget.lng,
-                                    width: double.infinity,
-                                    height: 300,
-                                  )
+                            // Row(
+                            //   children: [
+                            //     Icon(
+                            //       Icons.location_on_sharp,
+                            //       size: 30,
+                            //       color: Colors.red.shade600,
+                            //     ),
+                            //     SizedBox(width: 5),
+                            //     Text('ตำแหน่งจุดตรวจ'),
+                            //   ],
+                            // ),
+                            // SizedBox(height: 10),
+                            // listdata.single.verify == 1
+                            //     ? Container()
+                            //     : Map_Page(
+                            //         lat: widget.lat,
+                            //         lng: widget.lng,
+                            //         width: double.infinity,
+                            //         height: 300,
+                            //       )
                           ],
                         )),
               ),

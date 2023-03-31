@@ -1,11 +1,8 @@
-import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
-import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/list_logo_opacity/logo_opacity.dart';
 import 'package:doormster/components/loading/loading.dart';
-import 'package:doormster/components/map/map_page.dart';
 import 'package:doormster/models/get_round.dart';
 import 'package:doormster/screen/security_guard/scan_qr_check_page.dart';
 import 'package:doormster/service/check_connected.dart';
@@ -51,18 +48,6 @@ class _Round_CheckState extends State<Round_Check> {
   Future _setTime(DateTime _start, DateTime _end) async {
     timeStart.add(_start);
     timeEnd.add(_end);
-    // print(timeStart);
-    // print(timeEnd);
-
-    // for (int i = 0; i < timeStart.length; i++) {
-    //   timeStartCheck = timeStart[i];
-    //   print(timeStartCheck);
-    // }
-
-    // for (int i = 0; i < timeEnd.length; i++) {
-    //   timeEndCheck = timeEnd[i];
-    //   print(timeEndCheck);
-    // }
   }
 
   Future _getCheckRound() async {

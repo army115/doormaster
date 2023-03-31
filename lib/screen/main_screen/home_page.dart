@@ -1,7 +1,5 @@
 // ignore_for_file: prefer_const_constructors
 import 'dart:async';
-
-import 'package:card_swiper/card_swiper.dart';
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/girdManu/menu_home.dart';
@@ -11,6 +9,7 @@ import 'package:doormster/models/get_ads_company.dart';
 import 'package:doormster/models/get_menu.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_swiper_plus/flutter_swiper_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'dart:convert' as convert;
@@ -195,6 +194,8 @@ class _Home_PageState extends State<Home_Page> {
                             loop: true,
                             pagination: SwiperPagination(
                                 builder: DotSwiperPaginationBuilder(
+                                    size: 8,
+                                    activeSize: 8,
                                     color: Colors.grey,
                                     activeColor: Colors.white)),
                             itemCount: listads.length,

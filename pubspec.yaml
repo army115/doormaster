@@ -56,7 +56,7 @@ dependencies:
   # location: ^4.4.0
   permission_handler: ^10.2.0
   image_picker: ^0.8.6+1
-  card_swiper: ^2.0.4
+  flutter_swiper_plus: ^2.0.4
   dio: ^5.0.0
   get: ^4.6.5
   restart_app: ^1.1.0
