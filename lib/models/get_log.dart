@@ -102,7 +102,7 @@ class FileList {
   String? checkTime;
   double? lat;
   double? lng;
-  List<String>? pic;
+  // List<String>? pic;
   String? timeInvalid;
   String? status;
   String? event;
@@ -122,7 +122,7 @@ class FileList {
       this.checkTime,
       this.lat,
       this.lng,
-      this.pic,
+      // this.pic,
       this.timeInvalid,
       this.status,
       this.event,
@@ -142,7 +142,7 @@ class FileList {
     checkTime = json['CheckTime'];
     lat = json['lat'];
     lng = json['lng'];
-    pic = json['pic'].cast<String>();
+    // pic = json['pic'].cast<String>();
     timeInvalid = json['TimeInvalid'];
     status = json['Status'];
     event = json['Event'];
@@ -169,7 +169,7 @@ class FileList {
     data['CheckTime'] = this.checkTime;
     data['lat'] = this.lat;
     data['lng'] = this.lng;
-    data['pic'] = this.pic;
+    // data['pic'] = this.pic;
     data['TimeInvalid'] = this.timeInvalid;
     data['Status'] = this.status;
     data['Event'] = this.event;

@@ -49,7 +49,7 @@ class _Record_PointState extends State<Record_Point> {
                                       '${listLogs[index].checktimeReal}');
                                   final listpoint = listLogs[index].checkpoint;
                                   final checkpoint = listpoint[0].checklist;
-                                  final listPic = listLogs[index].pic;
+                                  // final listPic = listLogs[index].pic;
                                   return Card(
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
@@ -60,7 +60,9 @@ class _Record_PointState extends State<Record_Point> {
                                       child: ExpansionTile(
                                           textColor: Colors.black,
                                           title: Text(
-                                              'จุดตรวจ :  ${listpoint[0].checkpointName}'),
+                                            'จุดตรวจ :  ${listpoint[0].checkpointName}',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
                                           subtitle: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
@@ -160,7 +162,7 @@ class _Record_PointState extends State<Record_Point> {
                                                           Theme.of(context)
                                                               .primaryColor,
                                                           Icons.photo, () {
-                                                        showImages(listPic);
+                                                        // showImages(listPic);
                                                       })
                                                     ],
                                                   ),

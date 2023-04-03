@@ -107,7 +107,9 @@ class _Check_PointState extends State<Check_Point> {
                                       child: ExpansionTile(
                                           textColor: Colors.black,
                                           title: Text(
-                                              'จุดตรวจ :  ${listdata[index].checkpointName}'),
+                                            'จุดตรวจ :  ${listdata[index].checkpointName}',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
                                           children: [
                                             Container(
                                               decoration: BoxDecoration(

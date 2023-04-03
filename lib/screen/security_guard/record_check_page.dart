@@ -98,7 +98,7 @@ class _Record_CheckState extends State<Record_Check> {
       });
 
       //call api
-      var url = '${Connect_api().domain}/get/getrounddetails';
+      var url = '${Connect_api().domain}/get/getRoundNoPic';
       var response = await Dio().post(url,
           options: Options(headers: {
             'Content-Type': 'application/json',
@@ -291,48 +291,49 @@ class _Record_CheckState extends State<Record_Check> {
                                                     .arrow_forward_ios_rounded)
                                               ],
                                             ),
-                                            RichText(
-                                              text: TextSpan(
-                                                  style: TextStyle(
-                                                      fontSize: 20,
-                                                      fontFamily: 'Prompt'),
-                                                  children: [
-                                                    TextSpan(
-                                                        text: 'สถานะ : ',
-                                                        style: TextStyle(
-                                                          color: Colors.black,
-                                                        )),
-                                                    if (listLog[index]
-                                                            .fileList!
-                                                            .length ==
-                                                        listLength) ...[
-                                                      TextSpan(
-                                                          text: 'ตรวจแล้ว',
-                                                          style: TextStyle(
-                                                            color: Colors.green,
-                                                          ))
-                                                    ] else if (listLog[index]
-                                                            .fileList!
-                                                            .length <=
-                                                        0) ...[
-                                                      TextSpan(
-                                                          text: 'ยังไม่ตรวจ',
-                                                          style: TextStyle(
-                                                            color: Colors.red,
-                                                          ))
-                                                    ] else if (listLog[index]
-                                                            .fileList!
-                                                            .length <
-                                                        listLength!) ...[
-                                                      TextSpan(
-                                                          text: 'ตรวจไม่ครบ',
-                                                          style: TextStyle(
-                                                            color:
-                                                                Colors.orange,
-                                                          ))
-                                                    ],
-                                                  ]),
-                                            ),
+                                            Text('วันที่ : ${fieldText.text}'),
+                                            // RichText(
+                                            //   text: TextSpan(
+                                            //       style: TextStyle(
+                                            //           fontSize: 20,
+                                            //           fontFamily: 'Prompt'),
+                                            //       children: [
+                                            //         TextSpan(
+                                            //             text: 'สถานะ : ',
+                                            //             style: TextStyle(
+                                            //               color: Colors.black,
+                                            //             )),
+                                            //         if (listLog[index]
+                                            //                 .fileList!
+                                            //                 .length ==
+                                            //             listLength) ...[
+                                            //           TextSpan(
+                                            //               text: 'ตรวจแล้ว',
+                                            //               style: TextStyle(
+                                            //                 color: Colors.green,
+                                            //               ))
+                                            //         ] else if (listLog[index]
+                                            //                 .fileList!
+                                            //                 .length <=
+                                            //             0) ...[
+                                            //           TextSpan(
+                                            //               text: 'ยังไม่ตรวจ',
+                                            //               style: TextStyle(
+                                            //                 color: Colors.red,
+                                            //               ))
+                                            //         ] else if (listLog[index]
+                                            //                 .fileList!
+                                            //                 .length <
+                                            //             listLength!) ...[
+                                            //           TextSpan(
+                                            //               text: 'ตรวจไม่ครบ',
+                                            //               style: TextStyle(
+                                            //                 color:
+                                            //                     Colors.orange,
+                                            //               ))
+                                            //         ],
+                                            //       ]),
+                                            // ),
                                             IntrinsicHeight(
                                               child: Row(
                                                 mainAxisAlignment:
