@@ -8,7 +8,7 @@ import 'package:doormster/screen/main_screen/login_page.dart';
 import 'package:doormster/screen/main_screen/change_password_page.dart';
 import 'package:doormster/screen/main_screen/login_staff_page.dart';
 import 'package:doormster/screen/management_service/management_service_page.dart';
-import 'package:doormster/theme.dart';
+import 'package:doormster/screen/style/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';

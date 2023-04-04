@@ -1,3 +1,4 @@
+import 'package:doormster/screen/style/styleButton/ButtonStyle.dart';
 import 'package:flutter/material.dart';
 
 void dialogTwobutton(
@@ -48,12 +49,13 @@ void dialogTwobutton(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            RaisedButton(
-                              padding: EdgeInsets.all(5),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5)),
-                              elevation: 5,
-                              color: Theme.of(context).primaryColor,
+                            ElevatedButton(
+                              style: styleButtons(
+                                  EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 35),
+                                  10.0,
+                                  Theme.of(context).primaryColor,
+                                  BorderRadius.circular(5)),
                               child: Text(
                                 button1,
                                 style: TextStyle(
@@ -64,12 +66,13 @@ void dialogTwobutton(
                               ),
                               onPressed: press1,
                             ),
-                            RaisedButton(
-                              padding: EdgeInsets.all(5),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5)),
-                              elevation: 5,
-                              color: Theme.of(context).primaryColor,
+                            ElevatedButton(
+                              style: styleButtons(
+                                  EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 25),
+                                  10.0,
+                                  Theme.of(context).primaryColor,
+                                  BorderRadius.circular(5)),
                               child: Text(
                                 button2,
                                 style: TextStyle(

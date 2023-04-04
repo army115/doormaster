@@ -3,6 +3,7 @@ import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.
 import 'package:doormster/components/dropdown/dropdown.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
+import 'package:doormster/screen/style/styleButton/ButtonStyle.dart';
 import 'package:doormster/models/create_company_model.dart';
 import 'package:doormster/models/get_company.dart';
 import 'package:doormster/models/get_multi_company.dart';
@@ -316,12 +317,9 @@ class _Add_CompanyState extends State<Add_Company> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        RaisedButton(
-          elevation: 5,
-          color: Colors.white,
-          padding: EdgeInsets.symmetric(horizontal: 40, vertical: 8),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        ElevatedButton(
+          style: styleButtons(EdgeInsets.symmetric(horizontal: 40, vertical: 8),
+              10.0, Colors.white, BorderRadius.circular(10)),
           onPressed: () {
             Navigator.of(context).pushNamedAndRemoveUntil(
                 '/bottom', (Route<dynamic> route) => false);
@@ -333,7 +331,7 @@ class _Add_CompanyState extends State<Add_Company> {
                   color: Colors.black,
                   fontWeight: FontWeight.normal)),
         ),
-        RaisedButton(
+        ElevatedButton(
           onPressed: () {
             if (_formkey.currentState!.validate()) {
               if (multiCompany
@@ -356,12 +354,9 @@ class _Add_CompanyState extends State<Add_Company> {
               }
             }
           },
-          color: Theme.of(context).primaryColor,
-          padding: EdgeInsets.symmetric(horizontal: 45, vertical: 8),
-          elevation: 5,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          child: Text(
+          style: styleButtons(EdgeInsets.symmetric(horizontal: 40, vertical: 8),
+              10.0, Theme.of(context).primaryColor, BorderRadius.circular(10)),
+          child: const Text(
             "บันทึก",
             style: TextStyle(
                 fontSize: 16,

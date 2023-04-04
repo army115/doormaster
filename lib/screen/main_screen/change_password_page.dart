@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
+import 'package:doormster/screen/style/styleButton/ButtonStyle.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -223,12 +224,9 @@ class _Password_PageState extends State<Password_Page> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        RaisedButton(
-          elevation: 5,
-          color: Colors.white,
-          padding: EdgeInsets.symmetric(horizontal: 40, vertical: 8),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        ElevatedButton(
+          style: styleButtons(EdgeInsets.symmetric(horizontal: 40, vertical: 8),
+              10.0, Colors.white, BorderRadius.circular(10)),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -239,7 +237,7 @@ class _Password_PageState extends State<Password_Page> {
                   color: Colors.black,
                   fontWeight: FontWeight.normal)),
         ),
-        RaisedButton(
+        ElevatedButton(
           onPressed: () {
             if (_formkey.currentState!.validate()) {
               Map<String, dynamic> valuse = Map();
@@ -249,11 +247,8 @@ class _Password_PageState extends State<Password_Page> {
               _changePassword(valuse);
             }
           },
-          color: Theme.of(context).primaryColor,
-          padding: EdgeInsets.symmetric(horizontal: 45, vertical: 8),
-          elevation: 5,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          style: styleButtons(EdgeInsets.symmetric(horizontal: 40, vertical: 8),
+              10.0, Theme.of(context).primaryColor, BorderRadius.circular(10)),
           child: Text(
             "บันทึก",
             style: TextStyle(

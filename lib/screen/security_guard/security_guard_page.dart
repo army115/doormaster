@@ -128,13 +128,13 @@ class _Security_GuardState extends State<Security_Guard> {
                     title: 'บันทึกการตรวจนอกรอบ',
                     icon: Icons.assignment_outlined,
                     press: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute<void>(
-                          builder: (BuildContext context) => MyHomePage(
-                            title: 'test',
-                          ),
-                        ),
-                      );
+                      // Navigator.of(context).push(
+                      //   MaterialPageRoute<void>(
+                      //     builder: (BuildContext context) => MyHomePage(
+                      //       title: 'test',
+                      //     ),
+                      //   ),
+                      // );
                     }),
               ],
             ),

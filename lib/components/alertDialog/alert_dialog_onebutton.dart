@@ -1,3 +1,4 @@
+import 'package:doormster/screen/style/styleButton/ButtonStyle.dart';
 import 'package:flutter/material.dart';
 
 void dialogOnebutton(
@@ -43,12 +44,12 @@ void dialogOnebutton(
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width,
-                        child: RaisedButton(
-                          padding: EdgeInsets.symmetric(vertical: 5),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)),
-                          elevation: 5,
-                          color: Theme.of(context).primaryColor,
+                        child: ElevatedButton(
+                          style: styleButtons(
+                              EdgeInsets.symmetric(vertical: 5),
+                              10.0,
+                              Theme.of(context).primaryColor,
+                              BorderRadius.circular(5)),
                           child: Text(
                             button,
                             style: TextStyle(

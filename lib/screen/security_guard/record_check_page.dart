@@ -424,14 +424,14 @@ class _Record_CheckState extends State<Record_Check> {
   void calendar(context) async {
     final datePicker = await showCalendarDatePicker2Dialog(
       context: context,
-      initialValue: _pickerValue,
+      value: _pickerValue,
       config: CalendarDatePicker2WithActionButtonsConfig(
           firstDayOfWeek: 1,
           weekdayLabelTextStyle: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 15,
               color: Theme.of(context).primaryColor),
-          centerAlignModePickerButton: true,
+          centerAlignModePicker: true,
           lastDate: DateTime.now(),
           calendarType: CalendarDatePicker2Type.range,
           cancelButton: Text(
@@ -446,7 +446,7 @@ class _Record_CheckState extends State<Record_Check> {
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).primaryColor),
           )),
-      dialogSize: const Size(300, 400),
+      dialogSize: Size(300, 400),
       borderRadius: BorderRadius.circular(10),
     );
 
