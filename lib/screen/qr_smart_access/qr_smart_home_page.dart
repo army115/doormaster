@@ -41,6 +41,9 @@ class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
     final status = await Permission.location.request();
     final status2 = await Permission.bluetoothScan.request();
     final status3 = await Permission.bluetoothConnect.request();
+    print("${status}");
+    print("${status2}");
+    print("${status3}");
     if (status.isGranted && status2.isGranted && status3.isGranted) {
       checkInternet(context, Opendoor_Page(), false);
     } else {
@@ -51,8 +54,8 @@ class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
           Icons.warning_amber_rounded,
           Colors.orange,
           'ตกลง', () {
-        openAppSettings();
         Navigator.of(context, rootNavigator: true).pop();
+        openAppSettings();
       }, false, true);
     }
   }

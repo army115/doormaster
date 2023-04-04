@@ -354,7 +354,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        CallNativeJava(false, null, null, null);
+        // CallNativeJava(false, null, null, null);
         Navigator.pop(context);
         return false;
       },
@@ -366,7 +366,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
               leading: IconButton(
                   icon: Icon(Icons.arrow_back),
                   onPressed: () {
-                    CallNativeJava(false, null, null, null);
+                    // CallNativeJava(false, null, null, null);
                     Navigator.pop(context);
                   }),
             ),
@@ -561,7 +561,6 @@ class _DoorOnlineState extends State<DoorOnline> {
 
       // SharedPreferences prefs = await SharedPreferences.getInstance();
       // await prefs.setBool("autoDoor", value);
-
     } catch (error) {
       print(error);
     }
