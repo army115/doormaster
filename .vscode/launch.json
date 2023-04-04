@@ -47,6 +47,12 @@
             "deviceId": "emulator-5554"
         },
         {
+            "name": "iPhone 14 Pro",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "25940670-35F3-4BA6-BDA7-8842855E6C9C"
+        },
+        {
             "name": "pixel3",
             "request": "launch",
             "type": "dart",
@@ -67,6 +73,7 @@
                 "note 8 pro",
                 "redmi 9t",
                 "LD Player",
+                "iPhone 14 Pro",
                 "pixel3",
                 "pixel4",
             ],
