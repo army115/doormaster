@@ -10,7 +10,7 @@ class DropdownMenuExample extends StatefulWidget {
 }
 
 class _DropdownMenuExampleState extends State<DropdownMenuExample> {
-  // final TextEditingController colorController = TextEditingController();
+  final TextEditingController colorController = TextEditingController();
   final TextEditingController iconController = TextEditingController();
   ColorLabel? selectedColor;
   IconLabel? selectedIcon;
@@ -42,17 +42,17 @@ class _DropdownMenuExampleState extends State<DropdownMenuExample> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  // DropdownMenu<ColorLabel>(
-                  //   initialSelection: ColorLabel.green,
-                  //   controller: colorController,
-                  //   label: const Text('Color'),
-                  //   dropdownMenuEntries: colorEntries,
-                  //   onSelected: (ColorLabel? color) {
-                  //     setState(() {
-                  //       selectedColor = color;
-                  //     });
-                  //   },
-                  // ),
+                  DropdownMenu<ColorLabel>(
+                    initialSelection: ColorLabel.green,
+                    controller: colorController,
+                    label: const Text('Color'),
+                    dropdownMenuEntries: colorEntries,
+                    onSelected: (ColorLabel? color) {
+                      setState(() {
+                        selectedColor = color;
+                      });
+                    },
+                  ),
                   const SizedBox(width: 20),
                   DropdownMenu(
                     controller: iconController,

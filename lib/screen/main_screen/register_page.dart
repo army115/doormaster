@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/checkBox/checkbox_formfield.dart';
+import 'package:doormster/components/dropdown/dropdonw_search.dart';
 import 'package:doormster/components/dropdown/dropdown.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
@@ -250,26 +251,6 @@ class _Register_PageState extends State<Register_Page> {
                           value: Checked,
                           validator: 'กรุณายอมรับเงื่อนไขการใช้บริการ',
                         ),
-                        // CheckboxListTileFormField(
-                        //   activeColor: Theme.of(context).primaryColor,
-                        //   title: Text(
-                        //     'ยอมรับเงื่อนไขการใช้บริการ',
-                        //     style: TextStyle(fontSize: 16),
-                        //   ),
-                        //   initialValue: Checked,
-                        //   onChanged: (value) {
-                        //     setState(() {
-                        //       Checked = value;
-                        //     });
-                        //   },
-                        //   validator: (values) {
-                        //     if (values!) {
-                        //       return null;
-                        //     } else {
-                        //       return 'กรุณายอมรับเงื่อนไขการใช้บริการ';
-                        //     }
-                        //   },
-                        // ),
                         Buttons(
                           title: 'ลงทะเบียน',
                           press: () {
@@ -324,31 +305,34 @@ class _Register_PageState extends State<Register_Page> {
 
   var dropdownValue;
   Widget DropDownCompany() {
-    return Dropdown(
+    return Dropdown_Search(
       title: 'เลือกบริษัท',
       // deviceId == null ? 'ไม่มีอุปกรณ์' : 'เลือกอุปกรณ์',
       values: dropdownValue,
+      width: 0.85,
+      height: 300,
       listItem: listCompany.map((value) {
-        return DropdownMenuItem(
+        return DropdownMenuEntry(
+          style: ButtonStyle(
+              textStyle: MaterialStateProperty.all(
+                  TextStyle(fontWeight: FontWeight.w500))),
           value: value.sId,
-          child: Text(
-            value.companyName == ""
-                ? 'บริษัทไม่ทราบชื่อ'
-                : '${value.companyName}',
-          ),
+          label: value.companyName == ""
+              ? 'บริษัทไม่ทราบชื่อ'
+              : '${value.companyName}',
         );
       }).toList(),
       leftIcon: Icons.home_work_rounded,
-      validate: (values) {
-        // if (deviceId != null) {
-        if (values == null) {
-          return 'กรุณาเลือกบริษัท';
-        }
-        return null;
-        // }
-        // return 'ไม่มีอุปกรณ์';
-      },
-      onChange: (value) {
+      // validate: (values) {
+      //   // if (deviceId != null) {
+      //   if (values == null) {
+      //     return 'กรุณาเลือกบริษัท';
+      //   }
+      //   return null;
+      //   // }
+      //   // return 'ไม่มีอุปกรณ์';
+      // },
+      onSelected: (value) {
         setState(() {
           dropdownValue = value;
           print('company : ${value}');

@@ -426,6 +426,7 @@ class _Record_CheckState extends State<Record_Check> {
       context: context,
       value: _pickerValue,
       config: CalendarDatePicker2WithActionButtonsConfig(
+          yearTextStyle: TextStyle(fontWeight: FontWeight.normal),
           firstDayOfWeek: 1,
           weekdayLabelTextStyle: TextStyle(
               fontWeight: FontWeight.bold,

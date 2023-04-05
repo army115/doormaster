@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
+import 'package:doormster/components/dropdown/dropdonw_search.dart';
 import 'package:doormster/components/dropdown/dropdown.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
@@ -270,28 +271,6 @@ class _Add_CompanyState extends State<Add_Company> {
                     SizedBox(
                       height: 20,
                     ),
-                    DropdownMenu(
-                      width: 200,
-                      controller: controller,
-                      enableFilter: true,
-                      label: Text('เลือกบริษัท'),
-                      dropdownMenuEntries: listCompany.map((value) {
-                        return DropdownMenuEntry(
-                          value: value.sId,
-                          label: value.companyName == ""
-                              ? 'บริษัทไม่ทราบชื่อ'
-                              : '${value.companyName}',
-                        );
-                      }).toList(),
-                      inputDecorationTheme:
-                          const InputDecorationTheme(filled: true),
-                      onSelected: (value) {
-                        setState(() {
-                          controller.text = value!;
-                          print('company : ${value}');
-                        });
-                      },
-                    ),
                     button()
                   ]),
                 ),
@@ -306,38 +285,30 @@ class _Add_CompanyState extends State<Add_Company> {
 
   var dropdownValue;
   Widget DropDownCompany() {
-    return Dropdown(
-      title: 'เลือกบริษัท',
-      // deviceId == null ? 'ไม่มีอุปกรณ์' : 'เลือกอุปกรณ์',
-      values: dropdownValue,
-      listItem: listCompany.map((value) {
-        return DropdownMenuItem(
-          value: value.sId,
-          child: Text(
-            value.companyName == ""
+    return Dropdown_Search(
+        title: 'เลือกบริษัท',
+        values: dropdownValue,
+        leftIcon: Icons.home_work_rounded,
+        height: 500,
+        width: 0.9,
+        listItem: listCompany.map((value) {
+          return DropdownMenuEntry(
+            style: ButtonStyle(
+                textStyle: MaterialStateProperty.all(
+                    TextStyle(fontWeight: FontWeight.w500))),
+            value: value.sId,
+            label: value.companyName == ""
                 ? 'บริษัทไม่ทราบชื่อ'
                 : '${value.companyName}',
-          ),
-        );
-      }).toList(),
-      leftIcon: Icons.home_work_rounded,
-      validate: (values) {
-        // if (deviceId != null) {
-        if (values == null) {
-          return 'กรุณาเลือกบริษัท';
-        }
-        return null;
-        // }
-        // return 'ไม่มีอุปกรณ์';
-      },
-      onChange: (value) {
-        setState(() {
-          _formkey.currentState?.validate();
-          dropdownValue = value;
-          print('company : ${value}');
+          );
+        }).toList(),
+        onSelected: (value) {
+          setState(() {
+            dropdownValue = value;
+            // controller.text = value;
+            print('company : ${value}');
+          });
         });
-      },
-    );
   }
 
   Widget button() {
@@ -379,7 +350,7 @@ class _Add_CompanyState extends State<Add_Company> {
                 Map<String, dynamic> valuse = Map();
                 valuse['id'] = userId;
                 valuse['company_id'] = dropdownValue;
-                _addCompany(valuse);
+                // _addCompany(valuse);
               }
             }
           },

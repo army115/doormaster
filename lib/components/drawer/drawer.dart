@@ -380,7 +380,7 @@ class _MyDrawerState extends State<MyDrawer> {
             builder: (context, scrollController) => Scaffold(
                   appBar: AppBar(
                     backgroundColor: Colors.transparent,
-                    toolbarHeight: 40,
+                    toolbarHeight: 45,
                     automaticallyImplyLeading: false,
                     centerTitle: false,
                     title: Container(
@@ -400,31 +400,15 @@ class _MyDrawerState extends State<MyDrawer> {
                                         borderRadius:
                                             BorderRadius.circular(10))),
                               ),
-                              SizedBox(height: 23),
-                              Text(
-                                'สลับโครงการ',
-                                style: TextStyle(height: 0),
-                              )
+                              Text('สลับโครงการ')
                             ],
                           )),
                     ),
                     elevation: 0,
                   ),
                   backgroundColor: Colors.transparent,
-                  bottomNavigationBar: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                    child: Buttons_Outline(
-                        title: 'เพิ่มโครงการใหม่',
-                        press: () {
-                          Navigator.pop(context);
-                          Navigator.of(context)
-                              .pushReplacement(MaterialPageRoute(
-                            builder: (context) => Add_Company(),
-                          ));
-                        }),
-                  ),
                   body: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                     child: multiCompany.length == 0
                         ? Center(
                             child: Text('โปรดตรวจสอบการเชื่อมต่อ',
@@ -436,9 +420,8 @@ class _MyDrawerState extends State<MyDrawer> {
                             itemCount: multiCompany.length,
                             itemBuilder: (context, index) => InkWell(
                               child: Container(
-                                // color: Colors.amber,
                                 padding:
-                                    const EdgeInsets.symmetric(vertical: 10),
+                                    const EdgeInsets.symmetric(vertical: 5),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -485,6 +468,18 @@ class _MyDrawerState extends State<MyDrawer> {
                               },
                             ),
                           ),
+                  ),
+                  bottomNavigationBar: Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                    child: Buttons_Outline(
+                        title: 'เพิ่มโครงการใหม่',
+                        press: () {
+                          Navigator.pop(context);
+                          Navigator.of(context)
+                              .pushReplacement(MaterialPageRoute(
+                            builder: (context) => Add_Company(),
+                          ));
+                        }),
                   ),
                 ));
       },

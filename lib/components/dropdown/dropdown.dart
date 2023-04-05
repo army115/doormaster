@@ -26,6 +26,7 @@ class Dropdown extends StatelessWidget {
         elevation: 10,
         color: Colors.white,
         child: DropdownButtonFormField(
+            menuMaxHeight: 300,
             hint: Text(title),
             style: TextStyle(
                 fontSize: 16,
