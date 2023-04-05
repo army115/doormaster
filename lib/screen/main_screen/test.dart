@@ -1,421 +1,121 @@
-// import 'package:calendar_date_picker2/calendar_date_picker2.dart';
-// import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
-// final today = DateUtils.dateOnly(DateTime.now());
+void main() => runApp(const DropdownMenuExample());
 
-// class MyHomePage extends StatefulWidget {
-//   const MyHomePage({Key? key, required this.title}) : super(key: key);
+class DropdownMenuExample extends StatefulWidget {
+  const DropdownMenuExample({super.key});
 
-//   final String title;
+  @override
+  State<DropdownMenuExample> createState() => _DropdownMenuExampleState();
+}
 
-//   @override
-//   State<MyHomePage> createState() => _MyHomePageState();
-// }
+class _DropdownMenuExampleState extends State<DropdownMenuExample> {
+  // final TextEditingController colorController = TextEditingController();
+  final TextEditingController iconController = TextEditingController();
+  ColorLabel? selectedColor;
+  IconLabel? selectedIcon;
 
-// class _MyHomePageState extends State<MyHomePage> {
-//   List<DateTime?> _dialogCalendarPickerValue = [
-//     DateTime(2021, 8, 10),
-//     DateTime(2021, 8, 13),
-//   ];
-//   List<DateTime?> _singleDatePickerValueWithDefaultValue = [
-//     DateTime.now(),
-//   ];
-//   List<DateTime?> _multiDatePickerValueWithDefaultValue = [
-//     DateTime(today.year, today.month, 1),
-//     DateTime(today.year, today.month, 5),
-//     DateTime(today.year, today.month, 14),
-//     DateTime(today.year, today.month, 17),
-//     DateTime(today.year, today.month, 25),
-//   ];
-//   List<DateTime?> _rangeDatePickerValueWithDefaultValue = [
-//     DateTime(1999, 05, 06),
-//     DateTime(1999, 05, 21),
-//   ];
+  @override
+  Widget build(BuildContext context) {
+    final List<DropdownMenuEntry<ColorLabel>> colorEntries =
+        <DropdownMenuEntry<ColorLabel>>[];
+    for (final ColorLabel color in ColorLabel.values) {
+      colorEntries.add(DropdownMenuEntry<ColorLabel>(
+          value: color, label: color.label, enabled: color.label != 'Grey'));
+    }
 
-//   List<DateTime?> _rangeDatePickerWithActionButtonsWithValue = [
-//     DateTime.now(),
-//     DateTime.now().add(const Duration(days: 5)),
-//   ];
+    final List<DropdownMenuEntry<IconLabel>> iconEntries =
+        <DropdownMenuEntry<IconLabel>>[];
+    for (final IconLabel icon in IconLabel.values) {
+      iconEntries
+          .add(DropdownMenuEntry<IconLabel>(value: icon, label: icon.label));
+    }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text(widget.title),
-//       ),
-//       body: Center(
-//         child: SizedBox(
-//           width: 375,
-//           child: ListView(
-//             children: <Widget>[
-//               _buildCalendarDialogButton(),
-//               _buildDefaultSingleDatePickerWithValue(),
-//               _buildDefaultMultiDatePickerWithValue(),
-//               _buildDefaultRangeDatePickerWithValue(),
-//               _buildCalendarWithActionButtons(),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
+    return MaterialApp(
+      theme: ThemeData(useMaterial3: true, colorSchemeSeed: Colors.green),
+      home: Scaffold(
+        body: SafeArea(
+            child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  // DropdownMenu<ColorLabel>(
+                  //   initialSelection: ColorLabel.green,
+                  //   controller: colorController,
+                  //   label: const Text('Color'),
+                  //   dropdownMenuEntries: colorEntries,
+                  //   onSelected: (ColorLabel? color) {
+                  //     setState(() {
+                  //       selectedColor = color;
+                  //     });
+                  //   },
+                  // ),
+                  const SizedBox(width: 20),
+                  DropdownMenu(
+                    controller: iconController,
+                    enableFilter: true,
+                    leadingIcon: const Icon(Icons.search),
+                    label: const Text('Icon'),
+                    dropdownMenuEntries: iconEntries,
+                    inputDecorationTheme:
+                        const InputDecorationTheme(filled: true),
+                    onSelected: (IconLabel? icon) {
+                      setState(() {
+                        selectedIcon = icon;
+                      });
+                    },
+                  )
+                ],
+              ),
+            ),
+            if (selectedColor != null && selectedIcon != null)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                      'You selected a ${selectedColor?.label} ${selectedIcon?.label}'),
+                  Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      child: Icon(
+                        selectedIcon?.icon,
+                        color: selectedColor?.color,
+                      ))
+                ],
+              )
+            else
+              const Text('Please select a color and an icon.')
+          ],
+        )),
+      ),
+    );
+  }
+}
 
-//   String _getValueText(
-//     CalendarDatePicker2Type datePickerType,
-//     List<DateTime?> values,
-//   ) {
-//     values =
-//         values.map((e) => e != null ? DateUtils.dateOnly(e) : null).toList();
-//     var valueText = (values.isNotEmpty ? values[0] : null)
-//         .toString()
-//         .replaceAll('00:00:00.000', '');
+enum ColorLabel {
+  blue('Blue', Colors.blue),
+  pink('Pink', Colors.pink),
+  green('Green', Colors.green),
+  yellow('Yellow', Colors.yellow),
+  grey('Grey', Colors.grey);
 
-//     if (datePickerType == CalendarDatePicker2Type.multi) {
-//       valueText = values.isNotEmpty
-//           ? values
-//               .map((v) => v.toString().replaceAll('00:00:00.000', ''))
-//               .join(', ')
-//           : 'null';
-//     } else if (datePickerType == CalendarDatePicker2Type.range) {
-//       if (values.isNotEmpty) {
-//         final startDate = values[0].toString().replaceAll('00:00:00.000', '');
-//         final endDate = values.length > 1
-//             ? values[1].toString().replaceAll('00:00:00.000', '')
-//             : 'null';
-//         valueText = '$startDate to $endDate';
-//       } else {
-//         return 'null';
-//       }
-//     }
+  const ColorLabel(this.label, this.color);
+  final String label;
+  final Color color;
+}
 
-//     return valueText;
-//   }
+enum IconLabel {
+  smile('Smile', Icons.sentiment_satisfied_outlined),
+  cloud(
+    'Cloud',
+    Icons.cloud_outlined,
+  ),
+  brush('Brush', Icons.brush_outlined),
+  heart('Heart', Icons.favorite);
 
-//   _buildCalendarDialogButton() {
-//     const dayTextStyle =
-//         TextStyle(color: Colors.black, fontWeight: FontWeight.w700);
-//     final weekendTextStyle =
-//         TextStyle(color: Colors.grey[500], fontWeight: FontWeight.w600);
-//     final anniversaryTextStyle = TextStyle(
-//       color: Colors.red[400],
-//       fontWeight: FontWeight.w700,
-//       decoration: TextDecoration.underline,
-//     );
-//     final config = CalendarDatePicker2WithActionButtonsConfig(
-//       dayTextStyle: dayTextStyle,
-//       calendarType: CalendarDatePicker2Type.range,
-//       selectedDayHighlightColor: Colors.purple[800],
-//       closeDialogOnCancelTapped: true,
-//       firstDayOfWeek: 1,
-//       weekdayLabelTextStyle: const TextStyle(
-//         color: Colors.black87,
-//         fontWeight: FontWeight.bold,
-//       ),
-//       controlsTextStyle: const TextStyle(
-//         color: Colors.black,
-//         fontSize: 15,
-//         fontWeight: FontWeight.bold,
-//       ),
-//       centerAlignModePickerButton: true,
-//       customModePickerButtonIcon: const SizedBox(),
-//       selectedDayTextStyle: dayTextStyle.copyWith(color: Colors.white),
-//       // dayTextStylePredicate: ({required date}) {
-//       //   TextStyle? textStyle;
-//       //   if (date.weekday == DateTime.saturday ||
-//       //       date.weekday == DateTime.sunday) {
-//       //     textStyle = weekendTextStyle;
-//       //   }
-//       //   if (DateUtils.isSameDay(date, DateTime(2021, 1, 25))) {
-//       //     textStyle = anniversaryTextStyle;
-//       //   }
-//       //   return textStyle;
-//       // },
-//       // dayBuilder: ({
-//       //   required date,
-//       //   textStyle,
-//       //   decoration,
-//       //   isSelected,
-//       //   isDisabled,
-//       //   isToday,
-//       // }) {
-//       //   Widget? dayWidget;
-//       //   if (date.day % 3 == 0 && date.day % 9 != 0) {
-//       //     dayWidget = Container(
-//       //       decoration: decoration,
-//       //       child: Center(
-//       //         child: Stack(
-//       //           alignment: AlignmentDirectional.center,
-//       //           children: [
-//       //             Text(
-//       //               MaterialLocalizations.of(context).formatDecimal(date.day),
-//       //               style: textStyle,
-//       //             ),
-//       //             Padding(
-//       //               padding: const EdgeInsets.only(top: 27.5),
-//       //               child: Container(
-//       //                 height: 4,
-//       //                 width: 4,
-//       //                 decoration: BoxDecoration(
-//       //                   borderRadius: BorderRadius.circular(5),
-//       //                   color: isSelected == true
-//       //                       ? Colors.white
-//       //                       : Colors.grey[500],
-//       //                 ),
-//       //               ),
-//       //             ),
-//       //           ],
-//       //         ),
-//       //       ),
-//       //     );
-//       //   }
-//       //   return dayWidget;
-//       // },
-//       // yearBuilder: ({
-//       //   required year,
-//       //   decoration,
-//       //   isCurrentYear,
-//       //   isDisabled,
-//       //   isSelected,
-//       //   textStyle,
-//       // }) {
-//       //   return Center(
-//       //     child: Container(
-//       //       decoration: decoration,
-//       //       height: 36,
-//       //       width: 72,
-//       //       child: Center(
-//       //         child: Semantics(
-//       //           selected: isSelected,
-//       //           button: true,
-//       //           child: Row(
-//       //             mainAxisAlignment: MainAxisAlignment.center,
-//       //             children: [
-//       //               Text(
-//       //                 year.toString(),
-//       //                 style: textStyle,
-//       //               ),
-//       //               if (isCurrentYear == true)
-//       //                 Container(
-//       //                   padding: const EdgeInsets.all(5),
-//       //                   margin: const EdgeInsets.only(left: 5),
-//       //                   decoration: const BoxDecoration(
-//       //                     shape: BoxShape.circle,
-//       //                     color: Colors.redAccent,
-//       //                   ),
-//       //                 ),
-//       //             ],
-//       //           ),
-//       //         ),
-//       //       ),
-//       //     ),
-//       //   );
-//       // },
-//     );
-//     return Padding(
-//       padding: const EdgeInsets.all(15),
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.center,
-//         children: [
-//           ElevatedButton(
-//             onPressed: () async {
-//               final values = await showCalendarDatePicker2Dialog(
-//                 context: context,
-//                 config: config,
-//                 dialogSize: const Size(325, 400),
-//                 borderRadius: BorderRadius.circular(15),
-//                 initialValue: _dialogCalendarPickerValue,
-//                 dialogBackgroundColor: Colors.white,
-//               );
-//               if (values != null) {
-//                 // ignore: avoid_print
-//                 print(_getValueText(
-//                   config.calendarType,
-//                   values,
-//                 ));
-//                 setState(() {
-//                   _dialogCalendarPickerValue = values;
-//                   print(_dialogCalendarPickerValue);
-//                 });
-//               }
-//             },
-//             child: const Text('Open Calendar Dialog'),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-
-//   Widget _buildDefaultSingleDatePickerWithValue() {
-//     final config = CalendarDatePicker2Config(
-//       selectedDayHighlightColor: Colors.amber[900],
-//       weekdayLabels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-//       weekdayLabelTextStyle: const TextStyle(
-//         color: Colors.black87,
-//         fontWeight: FontWeight.bold,
-//       ),
-//       firstDayOfWeek: 1,
-//       controlsHeight: 50,
-//       controlsTextStyle: const TextStyle(
-//         color: Colors.black,
-//         fontSize: 15,
-//         fontWeight: FontWeight.bold,
-//       ),
-//       dayTextStyle: const TextStyle(
-//         color: Colors.amber,
-//         fontWeight: FontWeight.bold,
-//       ),
-//       disabledDayTextStyle: const TextStyle(
-//         color: Colors.grey,
-//       ),
-//       selectableDayPredicate: (day) => !day
-//           .difference(DateTime.now().subtract(const Duration(days: 3)))
-//           .isNegative,
-//     );
-//     return Column(
-//       mainAxisSize: MainAxisSize.min,
-//       children: [
-//         const SizedBox(height: 10),
-//         const Text('Single Date Picker (With default value)'),
-//         CalendarDatePicker2(
-//           config: config,
-//           initialValue: _singleDatePickerValueWithDefaultValue,
-//           onValueChanged: (values) =>
-//               setState(() => _singleDatePickerValueWithDefaultValue = values),
-//         ),
-//         const SizedBox(height: 10),
-//         Row(
-//           mainAxisSize: MainAxisSize.min,
-//           children: [
-//             const Text('Selection(s):  '),
-//             const SizedBox(width: 10),
-//             Text(
-//               _getValueText(
-//                 config.calendarType,
-//                 _singleDatePickerValueWithDefaultValue,
-//               ),
-//             ),
-//           ],
-//         ),
-//         const SizedBox(height: 25),
-//       ],
-//     );
-//   }
-
-//   Widget _buildDefaultMultiDatePickerWithValue() {
-//     final config = CalendarDatePicker2Config(
-//       calendarType: CalendarDatePicker2Type.multi,
-//       selectedDayHighlightColor: Colors.indigo,
-//     );
-//     return Column(
-//       mainAxisSize: MainAxisSize.min,
-//       children: [
-//         const SizedBox(height: 10),
-//         const Text('Multi Date Picker (With default value)'),
-//         CalendarDatePicker2(
-//           config: config,
-//           initialValue: _multiDatePickerValueWithDefaultValue,
-//           onValueChanged: (values) =>
-//               setState(() => _multiDatePickerValueWithDefaultValue = values),
-//         ),
-//         const SizedBox(height: 10),
-//         Wrap(
-//           children: [
-//             const Text('Selection(s):  '),
-//             const SizedBox(width: 10),
-//             Text(
-//               _getValueText(
-//                 config.calendarType,
-//                 _multiDatePickerValueWithDefaultValue,
-//               ),
-//               overflow: TextOverflow.ellipsis,
-//               maxLines: 1,
-//               softWrap: false,
-//             ),
-//           ],
-//         ),
-//         const SizedBox(height: 25),
-//       ],
-//     );
-//   }
-
-//   Widget _buildDefaultRangeDatePickerWithValue() {
-//     final config = CalendarDatePicker2Config(
-//       calendarType: CalendarDatePicker2Type.range,
-//       selectedDayHighlightColor: Colors.teal[800],
-//       weekdayLabelTextStyle: const TextStyle(
-//         color: Colors.black87,
-//         fontWeight: FontWeight.bold,
-//       ),
-//       controlsTextStyle: const TextStyle(
-//         color: Colors.black,
-//         fontSize: 15,
-//         fontWeight: FontWeight.bold,
-//       ),
-//     );
-//     return Column(
-//       mainAxisSize: MainAxisSize.min,
-//       children: [
-//         const SizedBox(height: 10),
-//         const Text('Range Date Picker (With default value)'),
-//         CalendarDatePicker2(
-//           config: config,
-//           initialValue: _rangeDatePickerValueWithDefaultValue,
-//           onValueChanged: (values) =>
-//               setState(() => _rangeDatePickerValueWithDefaultValue = values),
-//         ),
-//         const SizedBox(height: 10),
-//         Row(
-//           mainAxisSize: MainAxisSize.min,
-//           children: [
-//             const Text('Selection(s):  '),
-//             const SizedBox(width: 10),
-//             Text(
-//               _getValueText(
-//                 config.calendarType,
-//                 _rangeDatePickerValueWithDefaultValue,
-//               ),
-//             ),
-//           ],
-//         ),
-//         const SizedBox(height: 25),
-//       ],
-//     );
-//   }
-
-//   Widget _buildCalendarWithActionButtons() {
-//     final config = CalendarDatePicker2WithActionButtonsConfig(
-//       calendarType: CalendarDatePicker2Type.range,
-//       disableModePicker: true,
-//     );
-//     return Column(
-//       mainAxisSize: MainAxisSize.min,
-//       children: [
-//         const SizedBox(height: 10),
-//         const Text('Date Picker With Action Buttons'),
-//         CalendarDatePicker2WithActionButtons(
-//           config: config,
-//           initialValue: _rangeDatePickerWithActionButtonsWithValue,
-//           onValueChanged: (values) => setState(
-//               () => _rangeDatePickerWithActionButtonsWithValue = values),
-//         ),
-//         const SizedBox(height: 10),
-//         Row(
-//           mainAxisSize: MainAxisSize.min,
-//           children: [
-//             const Text('Selection(s):  '),
-//             const SizedBox(width: 10),
-//             Flexible(
-//               child: Text(
-//                 _getValueText(
-//                   config.calendarType,
-//                   _rangeDatePickerWithActionButtonsWithValue,
-//                 ),
-//               ),
-//             ),
-//           ],
-//         ),
-//         const SizedBox(height: 25),
-//       ],
-//     );
-//   }
-// }
+  const IconLabel(this.label, this.icon);
+  final String label;
+  final IconData icon;
+}

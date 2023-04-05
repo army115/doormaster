@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
+import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/dropdown/dropdown.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
@@ -31,6 +32,7 @@ class _Add_CompanyState extends State<Add_Company> {
   List<DataCom> listCompany = [];
   List<Data> multiCompany = [];
   late SharedPreferences prefs;
+  TextEditingController controller = TextEditingController();
 
   Future getValueShared() async {
     prefs = await SharedPreferences.getInstance();
@@ -253,7 +255,10 @@ class _Add_CompanyState extends State<Add_Company> {
       child: Stack(
         children: [
           Scaffold(
-            appBar: AppBar(title: Text('เพิ่มโครงการใหม่')),
+            appBar: AppBar(
+              title: Text('เพิ่มโครงการใหม่'),
+              automaticallyImplyLeading: false,
+            ),
             body: SingleChildScrollView(
               child: SafeArea(
                   child: Container(
@@ -264,6 +269,28 @@ class _Add_CompanyState extends State<Add_Company> {
                     DropDownCompany(),
                     SizedBox(
                       height: 20,
+                    ),
+                    DropdownMenu(
+                      width: 200,
+                      controller: controller,
+                      enableFilter: true,
+                      label: Text('เลือกบริษัท'),
+                      dropdownMenuEntries: listCompany.map((value) {
+                        return DropdownMenuEntry(
+                          value: value.sId,
+                          label: value.companyName == ""
+                              ? 'บริษัทไม่ทราบชื่อ'
+                              : '${value.companyName}',
+                        );
+                      }).toList(),
+                      inputDecorationTheme:
+                          const InputDecorationTheme(filled: true),
+                      onSelected: (value) {
+                        setState(() {
+                          controller.text = value!;
+                          print('company : ${value}');
+                        });
+                      },
                     ),
                     button()
                   ]),
@@ -321,8 +348,10 @@ class _Add_CompanyState extends State<Add_Company> {
           style: styleButtons(EdgeInsets.symmetric(horizontal: 40, vertical: 8),
               10.0, Colors.white, BorderRadius.circular(10)),
           onPressed: () {
-            Navigator.of(context).pushNamedAndRemoveUntil(
-                '/bottom', (Route<dynamic> route) => false);
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                    builder: (BuildContext context) => BottomBar()),
+                (Route<dynamic> route) => true);
           },
           child: Text("ยกเลิก",
               style: TextStyle(
