@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_is_empty
 
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:dio/dio.dart';
@@ -204,7 +205,9 @@ class _Record_CheckState extends State<Record_Check> {
             appBar: AppBar(
               title: Text('บันทึกรายการตรวจ'),
               leading: IconButton(
-                  icon: Icon(Icons.arrow_back),
+                  icon: Platform.isIOS
+                      ? Icon(Icons.arrow_back_ios_new_rounded)
+                      : Icon(Icons.arrow_back),
                   onPressed: () {
                     homeKey.currentState
                         ?.popUntil(ModalRoute.withName('/security'));

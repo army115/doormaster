@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 import 'dart:async';
+import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/girdManu/menu_home.dart';
@@ -104,6 +105,7 @@ class _Home_PageState extends State<Home_Page> {
 
   Future<void> checkInternet() async {
     checkNet = await Connectivity().checkConnectivity();
+    log('net $checkNet');
   }
 
   @override
@@ -111,24 +113,24 @@ class _Home_PageState extends State<Home_Page> {
     super.initState();
     checkInternet();
     _getMenu();
-    _subscription =
-        _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
-      if (result == ConnectivityResult.none) {
-        dialogOnebutton_Subtitle(
-            context,
-            'พบข้อผิดพลาด',
-            'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-            Icons.warning_amber_rounded,
-            Colors.orange,
-            'ตกลง', () {
-          Navigator.of(context, rootNavigator: true).pop();
-          setState(() {
-            _getMenu();
-          });
-        }, false, false);
-      }
-      print(result);
-    });
+    // _subscription =
+    //     _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
+    //   if (result == ConnectivityResult.none) {
+    //     dialogOnebutton_Subtitle(
+    //         context,
+    //         'พบข้อผิดพลาด',
+    //         'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+    //         Icons.warning_amber_rounded,
+    //         Colors.orange,
+    //         'ตกลง', () {
+    //       Navigator.of(context, rootNavigator: true).pop();
+    //       setState(() {
+    //         _getMenu();
+    //       });
+    //     }, false, false);
+    //   }
+    //   log("result $result");
+    // });
   }
 
   @override

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
@@ -364,7 +366,9 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
             appBar: AppBar(
               title: Text('เปิดประตู'),
               leading: IconButton(
-                  icon: Icon(Icons.arrow_back),
+                  icon: Platform.isIOS
+                      ? Icon(Icons.arrow_back_ios_new_rounded)
+                      : Icon(Icons.arrow_back),
                   onPressed: () {
                     // CallNativeJava(false, null, null, null);
                     Navigator.pop(context);

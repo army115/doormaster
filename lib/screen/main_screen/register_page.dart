@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/button/button.dart';
@@ -155,7 +157,9 @@ class _Register_PageState extends State<Register_Page> {
           Scaffold(
             appBar: AppBar(
               leading: IconButton(
-                  icon: Icon(Icons.arrow_back),
+                  icon: Platform.isIOS
+                      ? Icon(Icons.arrow_back_ios_new_rounded)
+                      : Icon(Icons.arrow_back),
                   onPressed: () {
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(

@@ -131,8 +131,14 @@ class _MyDrawerState extends State<MyDrawer> {
         await prefs.setString('token', token!);
         await prefs.setString('userId', data.single.sId!);
         await prefs.setString('companyId', data.single.companyId!);
+        // await prefs.setString('fname', data.single.firstName!);
+        // await prefs.setString('lname', data.single.surName!);
         await prefs.setInt('role', data.single.mobile!);
         await prefs.setString('uuId', data.single.userUuid!);
+
+        // if (data.single.image != null) {
+        //   await prefs.setString('image', data.single.image!);
+        // }
 
         if (data.single.devicegroupUuid != null) {
           await prefs.setString('deviceId', data.single.devicegroupUuid!);

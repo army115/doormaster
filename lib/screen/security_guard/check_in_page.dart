@@ -1,5 +1,7 @@
 // ignore_for_file: use_key_in_widget_constructors
 
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/button/button.dart';
@@ -245,7 +247,9 @@ class _Check_InState extends State<Check_In> {
             appBar: AppBar(
               title: Text('เช็คจุดตรวจ'),
               leading: IconButton(
-                  icon: Icon(Icons.arrow_back),
+                  icon: Platform.isIOS
+                      ? Icon(Icons.arrow_back_ios_new_rounded)
+                      : Icon(Icons.arrow_back),
                   onPressed: () {
                     Navigator.popUntil(context, (route) => route.isFirst);
                   }),

@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
@@ -107,7 +108,9 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
         appBar: AppBar(
             title: Text('ผู้มาติดต่อ'),
             leading: IconButton(
-                icon: Icon(Icons.arrow_back),
+                icon: Platform.isIOS
+                    ? Icon(Icons.arrow_back_ios_new_rounded)
+                    : Icon(Icons.arrow_back),
                 onPressed: () {
                   Navigator.popUntil(context, (route) => route.isFirst);
                 }),
