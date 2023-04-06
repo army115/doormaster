@@ -129,7 +129,8 @@ class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
                         title: 'เปิดประตู',
                         icon: Icons.meeting_room_rounded,
                         press: () {
-                          requestLocationPermission();
+                          checkInternet(context, Opendoor_Page(), false);
+                          // requestLocationPermission();
                         },
                       ),
                       Grid_Menu(

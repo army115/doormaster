@@ -9,7 +9,7 @@ import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/list_logo_opacity/logo_opacity.dart';
 import 'package:doormster/components/loading/loading.dart';
-import 'package:doormster/components/searchbar/search_bar.dart';
+import 'package:doormster/components/searchbar/search_calendar.dart';
 import 'package:doormster/models/get_checklist.dart';
 import 'package:doormster/models/get_log.dart';
 import 'package:doormster/models/get_logs_all.dart';
@@ -133,33 +133,33 @@ class _Record_CheckState extends State<Record_Check> {
     }
   }
 
-  Future _getCheckPoint() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    companyId = prefs.getString('companyId');
-    print('companyId: ${companyId}');
+  // Future _getCheckPoint() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   companyId = prefs.getString('companyId');
+  //   print('companyId: ${companyId}');
 
-    try {
-      //call api
-      var url = '${Connect_api().domain}/get/checkpoint/${companyId}';
-      var response = await Dio().get(
-        url,
-        options: Options(headers: {
-          'Connect-type': 'application/json',
-          'Accept': 'application/json',
-        }),
-      );
+  //   try {
+  //     //call api
+  //     var url = '${Connect_api().domain}/get/checkpoint/${companyId}';
+  //     var response = await Dio().get(
+  //       url,
+  //       options: Options(headers: {
+  //         'Connect-type': 'application/json',
+  //         'Accept': 'application/json',
+  //       }),
+  //     );
 
-      if (response.statusCode == 200) {
-        getChecklist checklist = getChecklist.fromJson(response.data);
-        setState(() {
-          listLength = checklist.data?.length;
-          print(checklist.data?.length);
-        });
-      }
-    } catch (error) {
-      print(error);
-    }
-  }
+  //     if (response.statusCode == 200) {
+  //       getChecklist checklist = getChecklist.fromJson(response.data);
+  //       setState(() {
+  //         listLength = checklist.data?.length;
+  //         print(checklist.data?.length);
+  //       });
+  //     }
+  //   } catch (error) {
+  //     print(error);
+  //   }
+  // }
 
   void dateNowAll() {
     dateNow = DateFormat('y-MM-dd').format(now);
@@ -188,7 +188,7 @@ class _Record_CheckState extends State<Record_Check> {
     super.initState();
     dateNowAll();
     // _getLogs();
-    _getCheckPoint();
+    // _getCheckPoint();
     _getLog(_startDateText!, _endDateText!);
   }
 
@@ -220,7 +220,7 @@ class _Record_CheckState extends State<Record_Check> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
-                        child: Search_Bar(
+                        child: Search_Calendar(
                           title: 'ค้นหา',
                           fieldText: fieldText,
                           // changed: (value) {

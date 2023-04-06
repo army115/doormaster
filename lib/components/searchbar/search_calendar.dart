@@ -1,31 +1,22 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:calendar_date_picker2/calendar_date_picker2.dart';
-import 'package:doormster/screen/security_guard/record_check_page.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
-class Search_Bar extends StatefulWidget {
+class Search_Calendar extends StatelessWidget {
   String title;
   final changed;
-  var fieldText;
+  final fieldText;
   final clear;
   final ontap;
-  Search_Bar(
+  Search_Calendar(
       {Key? key,
       required this.title,
       this.changed,
-      this.fieldText,
       this.clear,
-      this.ontap})
+      this.ontap,
+      this.fieldText})
       : super(key: key);
 
-  @override
-  State<Search_Bar> createState() => _Search_BarState();
-}
-
-class _Search_BarState extends State<Search_Bar> {
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -34,11 +25,11 @@ class _Search_BarState extends State<Search_Bar> {
       borderRadius: BorderRadius.all(Radius.circular(10)),
       child: TextField(
           readOnly: true,
-          controller: widget.fieldText,
+          controller: fieldText,
           style: TextStyle(fontSize: 15),
           // cursorColor: Colors.cyan,
           decoration: InputDecoration(
-            hintText: widget.title,
+            hintText: title,
             hintStyle: TextStyle(color: Colors.black38, fontSize: 16),
             prefixIcon: Icon(
               Icons.search,
@@ -62,8 +53,8 @@ class _Search_BarState extends State<Search_Bar> {
             // contentPadding:
             //     EdgeInsets.symmetric(horizontal: 25, vertical: 13)
           ),
-          onTap: widget.ontap,
-          onChanged: widget.changed),
+          onTap: ontap,
+          onChanged: changed),
     );
   }
 }

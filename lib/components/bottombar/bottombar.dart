@@ -85,6 +85,12 @@ class _BottomBarState extends State<BottomBar> {
     return false;
   }
 
+  Future stateHome() async {
+    setState(() {
+      _selectedIndex = 0;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -99,6 +105,7 @@ class _BottomBarState extends State<BottomBar> {
             });
             Navigator.of(context).pop();
           },
+          // selectCompany: stateHome()
         ),
         body: IndexedStack(
           index: _selectedIndex,

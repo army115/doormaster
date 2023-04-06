@@ -1,9 +1,9 @@
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/loading/loading.dart';
+import 'package:doormster/components/searchbar/search_from.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/models/doors_device.dart';
 import 'package:doormster/models/getdoor_weigan.dart';
@@ -30,9 +30,13 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
   var deviceId;
   var weiganId;
 
+  TextEditingController fieldText = TextEditingController();
+
   List<Lists> listDevice = [];
+  List<Lists> devicelidt = [];
   List<DataWeigan> listWeigan = [];
   List<Det>? listdet = [];
+  List<Det>? detlist = [];
   bool loading = false;
   late SharedPreferences prefs;
 
@@ -50,7 +54,6 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
     print('weiganId: ${weiganId}');
 
     _getDoorDevice();
-    // _getDoorWeigan();
   }
 
   Future _getDoorDevice() async {
@@ -88,10 +91,13 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
         } else {
           DoorsDeviece deviceDoors = DoorsDeviece.fromJson(res.data);
           listDevice = deviceDoors.lists!;
+          devicelidt = listDevice;
         }
 
         setState(() {
           listWeigan = doorsWeigan.data!;
+
+          detlist = listdet;
           loading = false;
         });
         // วน loop เพื่อดึง Det จากแต่ละ DataWeigan
@@ -106,6 +112,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
       } else {
         DoorsDeviece deviceDoors = DoorsDeviece.fromJson(res.data);
         setState(() {
+          devicelidt = listDevice;
           listDevice = deviceDoors.lists!;
           loading = false;
         });
@@ -125,97 +132,6 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
           Navigator.of(context, rootNavigator: true).pop();
         }, false, false);
       }
-      setState(() {
-        loading = false;
-      });
-    }
-  }
-
-  // Future _getDoorDevice() async {
-  //   try {
-  //     setState(() {
-  //       loading = true;
-  //     });
-
-  //     //call api device
-  //     var url = '${Connect_api().domain}/getdeviceuuidmobile/$deviceId';
-  //     var res = await Dio().get(
-  //       url,
-  //       options: Options(headers: {
-  //         'Content-Type': 'application/json',
-  //         'Accept': 'application/json',
-  //       }),
-  //     );
-
-  //     if (res.statusCode == 200) {
-  //       DoorsDeviece deviceDoors = DoorsDeviece.fromJson(res.data);
-
-  //       setState(() {
-  //         listDevice = deviceDoors.lists!;
-  //         loading = false;
-  //       });
-  //     }
-  //   } catch (error) {
-  //     print(error);
-
-  //     dialogOnebutton_Subtitle(
-  //         context,
-  //         'พบข้อผิดพลาด',
-  //         'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-  //         Icons.warning_amber_rounded,
-  //         Colors.orange,
-  //         'ตกลง', () {
-  //       Navigator.popUntil(context, (route) => route.isFirst);
-  //     }, false, false);
-
-  //     setState(() {
-  //       loading = false;
-  //     });
-  //   }
-  // }
-
-  Future _getDoorWeigan() async {
-    try {
-      setState(() {
-        loading = true;
-      });
-
-      //call api Weigan
-      var urlWeigan =
-          '${Connect_api().domain}/get/weigan_group_id/$weiganId/$companyId';
-      var response = await Dio().get(
-        urlWeigan,
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        }),
-      );
-
-      if (response.statusCode == 200) {
-        getDoorWeigan DoorsWeigan = getDoorWeigan.fromJson(response.data);
-        setState(() {
-          listWeigan = DoorsWeigan.data!;
-          loading = false;
-        });
-        // วน loop เพื่อดึง Det จากแต่ละ DataWeigan
-        for (int i = 0; i < listWeigan.length; i++) {
-          // เก็บ List Det จาก DataWeigan ลงในตัวแปร listdet
-          listdet?.addAll(listWeigan[i].det!);
-        }
-      }
-    } catch (error) {
-      print(error);
-
-      dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง', () {
-        Navigator.popUntil(context, (route) => route.isFirst);
-      }, false, false);
-
       setState(() {
         loading = false;
       });
@@ -352,6 +268,15 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
     // _loadStatusAutoDoors();
   }
 
+  void _searchData(String text) {
+    setState(() {
+      // listlogs = listdata.where((item) {
+      //   var date = item.date!.toLowerCase();
+      //   return date.contains(text);
+      // }).toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -378,99 +303,118 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
                 ? Container()
                 : deviceId == null && weiganId == null ||
                         listDevice.isEmpty && listdet!.isEmpty
-                    ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'ไม่มีประตูที่คุณใช้ได้\nโปรดติดต่อผู้ดูแล',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 22, fontWeight: FontWeight.normal),
-                            ),
-                            Image.asset(
-                              'assets/images/Smart Community Logo.png',
-                              scale: 4.5,
-                              // opacity: AlwaysStoppedAnimation(0.7),
-                            ),
-                          ],
-                        ),
+                    ? Column(
+                        // mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'ไม่มีประตูที่คุณใช้ได้\nโปรดติดต่อผู้ดูแล',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 22, fontWeight: FontWeight.normal),
+                          ),
+                          Image.asset(
+                            'assets/images/Smart Community Logo.png',
+                            scale: 4.5,
+                            // opacity: AlwaysStoppedAnimation(0.7),
+                          ),
+                        ],
                       )
-                    : SingleChildScrollView(
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 20, horizontal: 10),
-                          child: Column(
-                            children: [
-                              ListView.builder(
-                                shrinkWrap: true,
-                                primary: false,
-                                itemCount: listDevice.length,
-                                itemBuilder: (context, index) {
-                                  return Card(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      margin: EdgeInsets.symmetric(vertical: 5),
-                                      elevation: 10,
-                                      child: listDevice[index]
-                                                  .connectionStatus ==
-                                              1
-                                          ? doorsButton(
-                                              '${listDevice[index].name}',
+                    : Column(
+                        children: [
+                          Container(
+                              padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
+                              child: Search_From(
+                                  title: 'ค้นหาประตู',
+                                  fieldText: fieldText,
+                                  clear: () {
+                                    fieldText.clear();
+                                    // getValueShared();
+                                  }
+                                  // changed: (value) {
+                                  //   _getLog(_startDateText!, _endDateText!);
+                                  // _searchData(value);
+                                  // },
+                                  )),
+                          SizedBox(height: 10),
+                          Expanded(
+                            child: SingleChildScrollView(
+                              padding: EdgeInsets.fromLTRB(20, 0, 20, 5),
+                              child: Column(
+                                children: [
+                                  ListView.builder(
+                                    shrinkWrap: true,
+                                    primary: false,
+                                    itemCount: listDevice.length,
+                                    itemBuilder: (context, index) {
+                                      return Card(
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          margin:
+                                              EdgeInsets.symmetric(vertical: 5),
+                                          elevation: 10,
+                                          child: listDevice[index]
+                                                      .connectionStatus ==
+                                                  1
+                                              ? doorsButton(
+                                                  '${listDevice[index].name}',
+                                                  'เปิดประตู',
+                                                  Icons.meeting_room_rounded,
+                                                  Theme.of(context)
+                                                      .primaryColor,
+                                                  () => _openDoors(
+                                                      listDevice[index].devSn))
+                                              // DoorOnline(
+                                              //     name: listDevice[index].name!,
+                                              //     press: () {
+                                              //       _openDoors(listDevice[index].devSn);
+                                              //     },
+                                              //     devSn: listDevice[index].devSn!,
+                                              //     devMac: listDevice[index].devMac!,
+                                              //     appKey: listDevice[index].appEkey!,
+                                              //     valueDoor:
+                                              //         listDevice[index].screenType!,
+                                              //   )
+                                              : doorsButton(
+                                                  '${listDevice[index].name}',
+                                                  'ประตูออฟไลน์',
+                                                  Icons.no_meeting_room_rounded,
+                                                  Colors.red,
+                                                  () => snackbar(
+                                                      context,
+                                                      Colors.red,
+                                                      'ประตูออฟไลน์อยู่',
+                                                      Icons
+                                                          .highlight_off_rounded)));
+                                    },
+                                  ),
+                                  ListView.builder(
+                                    shrinkWrap: true,
+                                    primary: false,
+                                    itemCount: listdet?.length,
+                                    itemBuilder: (context, index) {
+                                      return Card(
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          margin:
+                                              EdgeInsets.symmetric(vertical: 5),
+                                          elevation: 5,
+                                          child: doorsButton(
+                                              '${listdet?[index].doorName}',
                                               'เปิดประตู',
                                               Icons.meeting_room_rounded,
                                               Theme.of(context).primaryColor,
-                                              () => _openDoors(
-                                                  listDevice[index].devSn))
-                                          // DoorOnline(
-                                          //     name: listDevice[index].name!,
-                                          //     press: () {
-                                          //       _openDoors(listDevice[index].devSn);
-                                          //     },
-                                          //     devSn: listDevice[index].devSn!,
-                                          //     devMac: listDevice[index].devMac!,
-                                          //     appKey: listDevice[index].appEkey!,
-                                          //     valueDoor:
-                                          //         listDevice[index].screenType!,
-                                          //   )
-                                          : doorsButton(
-                                              '${listDevice[index].name}',
-                                              'ประตูออฟไลน์',
-                                              Icons.no_meeting_room_rounded,
-                                              Colors.red,
-                                              () => snackbar(
-                                                  context,
-                                                  Colors.red,
-                                                  'ประตูออฟไลน์อยู่',
-                                                  Icons
-                                                      .highlight_off_rounded)));
-                                },
+                                              () => _openDoorsWeigan(
+                                                  listdet?[index].doorId,
+                                                  listdet?[index].doorNum)));
+                                    },
+                                  ),
+                                ],
                               ),
-                              ListView.builder(
-                                shrinkWrap: true,
-                                primary: false,
-                                itemCount: listdet?.length,
-                                itemBuilder: (context, index) {
-                                  return Card(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      margin: EdgeInsets.symmetric(vertical: 5),
-                                      elevation: 5,
-                                      child: doorsButton(
-                                          '${listdet?[index].doorName}',
-                                          'เปิดประตู',
-                                          Icons.meeting_room_rounded,
-                                          Theme.of(context).primaryColor,
-                                          () => _openDoorsWeigan(
-                                              listdet?[index].doorId,
-                                              listdet?[index].doorNum)));
-                                },
-                              ),
-                            ],
+                            ),
                           ),
-                        ),
+                        ],
                       ),
           ),
           loading ? Loading() : Container()
@@ -509,136 +453,6 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
         ),
         onPressed: press,
       ),
-    );
-  }
-}
-
-class DoorOnline extends StatefulWidget {
-  String name;
-  final press;
-  String devSn;
-  String devMac;
-  String appKey;
-  bool valueDoor;
-  DoorOnline(
-      {Key? key,
-      required this.name,
-      required this.press,
-      required this.devSn,
-      required this.valueDoor,
-      required this.devMac,
-      required this.appKey});
-
-  @override
-  State<DoorOnline> createState() => _DoorOnlineState();
-}
-
-class _DoorOnlineState extends State<DoorOnline> {
-  void _loadStatusAutoDoors() async {
-    try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      var DoorAuto = prefs.getBool("autoDoor") ?? false;
-      print('autoDoor : $DoorAuto');
-      if (DoorAuto) {
-        setState(() {
-          widget.valueDoor = true;
-          // _CallJavaSDK(widget.valueDoor);
-        });
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  Future<void> checkLocationStatus(value) async {
-    LocationPermission permission = await Geolocator.checkPermission();
-    try {
-      if (value == true) {
-        Position position = await Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.high);
-      }
-      await CallNativeJava(value, widget.devSn, widget.devMac, widget.appKey);
-      setState(() {
-        widget.valueDoor = value;
-        print("autoDoor : $value");
-      });
-
-      // SharedPreferences prefs = await SharedPreferences.getInstance();
-      // await prefs.setBool("autoDoor", value);
-    } catch (error) {
-      print(error);
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    // _loadStatusAutoDoors();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ListTile(
-          contentPadding: EdgeInsets.fromLTRB(10, 5, 10, 0),
-          title: Text(widget.name,
-              style: TextStyle(
-                fontSize: 20,
-              )),
-          trailing: ElevatedButton(
-              style: TextButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
-                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                elevation: 5,
-              ),
-              child: Wrap(
-                children: [
-                  Icon(
-                    Icons.meeting_room_rounded,
-                    size: 30,
-                  ),
-                  Text(
-                    'เปิดประตู',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ],
-              ),
-              onPressed: widget.press),
-        ),
-        ListTile(
-          contentPadding: EdgeInsets.symmetric(horizontal: 10),
-          title: Row(
-            children: [
-              widget.valueDoor
-                  ? Icon(Icons.meeting_room_rounded,
-                      size: 30, color: Theme.of(context).primaryColor)
-                  : Icon(
-                      Icons.door_front_door,
-                      size: 30,
-                      color: Colors.grey,
-                    ),
-              Text('เปิดประตูอัตโนมัติ',
-                  style: TextStyle(
-                      fontSize: 20,
-                      color: widget.valueDoor == false
-                          ? Colors.grey
-                          : Theme.of(context).primaryColor)),
-            ],
-          ),
-          trailing: Transform.scale(
-            scale: 1.5,
-            child: Switch(
-              value: widget.valueDoor,
-              activeColor: Theme.of(context).primaryColor,
-              onChanged: (bool value) async {
-                checkLocationStatus(value);
-              },
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

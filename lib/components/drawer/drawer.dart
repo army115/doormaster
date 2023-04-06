@@ -1,3 +1,5 @@
+// ignore_for_file: sort_child_properties_last, prefer_const_constructors
+
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_twobutton_subtext.dart';
@@ -16,7 +18,8 @@ import 'dart:convert' as convert;
 
 class MyDrawer extends StatefulWidget {
   final pressProfile;
-  MyDrawer({Key? key, this.pressProfile});
+  final selectCompany;
+  MyDrawer({Key? key, this.pressProfile, this.selectCompany});
 
   @override
   State<MyDrawer> createState() => _MyDrawerState();
@@ -131,14 +134,14 @@ class _MyDrawerState extends State<MyDrawer> {
         await prefs.setString('token', token!);
         await prefs.setString('userId', data.single.sId!);
         await prefs.setString('companyId', data.single.companyId!);
-        // await prefs.setString('fname', data.single.firstName!);
-        // await prefs.setString('lname', data.single.surName!);
+        await prefs.setString('fname', data.single.firstName!);
+        await prefs.setString('lname', data.single.surName!);
         await prefs.setInt('role', data.single.mobile!);
         await prefs.setString('uuId', data.single.userUuid!);
 
-        // if (data.single.image != null) {
-        //   await prefs.setString('image', data.single.image!);
-        // }
+        if (data.single.image != null) {
+          await prefs.setString('image', data.single.image!);
+        }
 
         if (data.single.devicegroupUuid != null) {
           await prefs.setString('deviceId', data.single.devicegroupUuid!);
@@ -156,6 +159,7 @@ class _MyDrawerState extends State<MyDrawer> {
 
         setState(() {
           homeKey.currentState?.popAndPushNamed('/');
+          widget.selectCompany;
           loading = false;
         });
 
@@ -425,54 +429,70 @@ class _MyDrawerState extends State<MyDrawer> {
                             shrinkWrap: true,
                             itemCount: multiCompany.length,
                             itemBuilder: (context, index) => InkWell(
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 5),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Icon(
-                                      Icons.home_work_sharp,
-                                      size: 20,
-                                      color: Colors.white,
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                          '${multiCompany[index].companyName}',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white)),
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    companyId == multiCompany[index].companyId
-                                        ? Icon(
-                                            Icons.check_circle_rounded,
-                                            size: 20,
-                                            color: Colors.white,
-                                          )
-                                        : Container()
-                                  ],
+                                child: Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 5),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Icon(
+                                        Icons.home_work_sharp,
+                                        size: 20,
+                                        color: Colors.white,
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Expanded(
+                                        child: Text(
+                                            '${multiCompany[index].companyName}',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.white)),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      companyId == multiCompany[index].companyId
+                                          ? Icon(
+                                              Icons.check_circle_rounded,
+                                              size: 20,
+                                              color: Colors.white,
+                                            )
+                                          : Container()
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              onTap: () {
-                                if (companyId ==
-                                    multiCompany[index].companyId) {
-                                  Navigator.of(context).pop();
-                                  Navigator.of(context).pop();
-                                } else {
-                                  _selectCompany(
-                                      context,
-                                      multiCompany[index].sId,
-                                      multiCompany[index].companyId);
-                                }
-                              },
-                            ),
+                                onTap:
+                                    companyId == multiCompany[index].companyId
+                                        ? () {
+                                            Navigator.of(context).pop();
+                                            Navigator.of(context).pop();
+                                          }
+                                        : () {
+                                            _selectCompany(
+                                              context,
+                                              multiCompany[index].sId,
+                                              multiCompany[index].companyId,
+                                            );
+                                            // widget.selectCompany;
+                                          }
+                                // () {
+                                //   if (companyId ==
+                                //       multiCompany[index].companyId) {
+                                //     // Navigator.of(context).pop();
+                                //     // Navigator.of(context).pop();
+                                //     ontap;
+                                //   } else {
+                                //     _selectCompany(
+                                //         context,
+                                //         multiCompany[index].sId,
+                                //         multiCompany[index].companyId,
+                                //         widget.pressProfile);
+                                //   }
+                                // },
+                                ),
                           ),
                   ),
                   bottomNavigationBar: Padding(

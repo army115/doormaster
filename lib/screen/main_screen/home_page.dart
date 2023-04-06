@@ -15,8 +15,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'dart:convert' as convert;
 
-import 'package:url_launcher/url_launcher_string.dart';
-
 class Home_Page extends StatefulWidget {
   Home_Page({
     Key? key,

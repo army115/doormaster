@@ -171,7 +171,8 @@ class _Profile_PageState extends State<Profile_Page> {
   openImages(ImageSource TypeImage) async {
     try {
       // var pickedfiles = await imgpicker.pickMultiImage();
-      final XFile? photo = await imgpicker.pickImage(source: TypeImage);
+      final XFile? photo = await imgpicker.pickImage(
+          source: TypeImage, maxHeight: 1080, maxWidth: 1080);
       List<int> imageBytes = await photo!.readAsBytes();
       var ImagesBase64 = convert.base64Encode(imageBytes);
       if (photo != null) {

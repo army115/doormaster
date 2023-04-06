@@ -96,7 +96,7 @@ class FileList {
   String? sId;
   String? chekpointUUid;
   String? companyId;
-  Null? shift;
+  String? shift;
   String? roundUuid;
   String? empID;
   String? checkTime;
@@ -192,7 +192,7 @@ class Checkpoint {
   String? checkpointUuid;
   int? verify;
   String? companyId;
-  Null? createdBy;
+  String? createdBy;
   String? createdAt;
   String? updatedBy;
   bool? checked;
