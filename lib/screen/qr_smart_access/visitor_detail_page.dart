@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
+import 'package:doormster/components/button/buttonback_appbar.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -107,13 +108,9 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
       child: Scaffold(
         appBar: AppBar(
             title: Text('ผู้มาติดต่อ'),
-            leading: IconButton(
-                icon: Platform.isIOS
-                    ? Icon(Icons.arrow_back_ios_new_rounded)
-                    : Icon(Icons.arrow_back),
-                onPressed: () {
-                  Navigator.popUntil(context, (route) => route.isFirst);
-                }),
+            leading: button_back(() {
+              Navigator.popUntil(context, (route) => route.isFirst);
+            }),
             actions: [
               PopupMenuButton(
                 icon: Icon(

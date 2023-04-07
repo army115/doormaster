@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
+import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/searchbar/search_from.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
@@ -96,7 +97,6 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
 
         setState(() {
           listWeigan = doorsWeigan.data!;
-
           detlist = listdet;
           loading = false;
         });
@@ -270,10 +270,14 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
 
   void _searchData(String text) {
     setState(() {
-      // listlogs = listdata.where((item) {
-      //   var date = item.date!.toLowerCase();
-      //   return date.contains(text);
-      // }).toList();
+      listdet = detlist?.where((item) {
+        var date = item.doorName!.toLowerCase();
+        return date.contains(text);
+      }).toList();
+      listDevice = devicelidt.where((item) {
+        var date = item.name!.toLowerCase();
+        return date.contains(text);
+      }).toList();
     });
   }
 
@@ -290,129 +294,122 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
           Scaffold(
             appBar: AppBar(
               title: Text('เปิดประตู'),
-              leading: IconButton(
-                  icon: Platform.isIOS
-                      ? Icon(Icons.arrow_back_ios_new_rounded)
-                      : Icon(Icons.arrow_back),
-                  onPressed: () {
-                    // CallNativeJava(false, null, null, null);
-                    Navigator.pop(context);
-                  }),
+              // leading: IconButton(
+              //     icon: Platform.isIOS
+              //         ? Icon(Icons.arrow_back_ios_new_rounded)
+              //         : Icon(Icons.arrow_back),
+              //     onPressed: () {
+              //       // CallNativeJava(false, null, null, null);
+              //       Navigator.pop(context);
+              //     }),
             ),
             body: loading
                 ? Container()
-                : deviceId == null && weiganId == null ||
-                        listDevice.isEmpty && listdet!.isEmpty
-                    ? Column(
-                        // mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'ไม่มีประตูที่คุณใช้ได้\nโปรดติดต่อผู้ดูแล',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 22, fontWeight: FontWeight.normal),
-                          ),
-                          Image.asset(
-                            'assets/images/Smart Community Logo.png',
-                            scale: 4.5,
-                            // opacity: AlwaysStoppedAnimation(0.7),
-                          ),
-                        ],
-                      )
+                : deviceId == null && weiganId == null
+                    ? Logo_Opacity(
+                        title: 'ไม่มีประตูที่คุณใช้ได้\nโปรดติดต่อผู้ดูแล')
                     : Column(
                         children: [
                           Container(
-                              padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
+                              padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
                               child: Search_From(
-                                  title: 'ค้นหาประตู',
-                                  fieldText: fieldText,
-                                  clear: () {
+                                title: 'ค้นหาประตู',
+                                fieldText: fieldText,
+                                clear: () {
+                                  setState(() {
                                     fieldText.clear();
-                                    // getValueShared();
-                                  }
-                                  // changed: (value) {
-                                  //   _getLog(_startDateText!, _endDateText!);
-                                  // _searchData(value);
-                                  // },
-                                  )),
-                          SizedBox(height: 10),
+                                    listdet = detlist;
+                                    listDevice = devicelidt;
+                                  });
+                                },
+                                changed: (value) {
+                                  _searchData(value);
+                                },
+                              )),
                           Expanded(
-                            child: SingleChildScrollView(
-                              padding: EdgeInsets.fromLTRB(20, 0, 20, 5),
-                              child: Column(
-                                children: [
-                                  ListView.builder(
-                                    shrinkWrap: true,
-                                    primary: false,
-                                    itemCount: listDevice.length,
-                                    itemBuilder: (context, index) {
-                                      return Card(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          margin:
-                                              EdgeInsets.symmetric(vertical: 5),
-                                          elevation: 10,
-                                          child: listDevice[index]
-                                                      .connectionStatus ==
-                                                  1
-                                              ? doorsButton(
-                                                  '${listDevice[index].name}',
-                                                  'เปิดประตู',
-                                                  Icons.meeting_room_rounded,
-                                                  Theme.of(context)
-                                                      .primaryColor,
-                                                  () => _openDoors(
-                                                      listDevice[index].devSn))
-                                              // DoorOnline(
-                                              //     name: listDevice[index].name!,
-                                              //     press: () {
-                                              //       _openDoors(listDevice[index].devSn);
-                                              //     },
-                                              //     devSn: listDevice[index].devSn!,
-                                              //     devMac: listDevice[index].devMac!,
-                                              //     appKey: listDevice[index].appEkey!,
-                                              //     valueDoor:
-                                              //         listDevice[index].screenType!,
-                                              //   )
-                                              : doorsButton(
-                                                  '${listDevice[index].name}',
-                                                  'ประตูออฟไลน์',
-                                                  Icons.no_meeting_room_rounded,
-                                                  Colors.red,
-                                                  () => snackbar(
-                                                      context,
-                                                      Colors.red,
-                                                      'ประตูออฟไลน์อยู่',
-                                                      Icons
-                                                          .highlight_off_rounded)));
-                                    },
+                            child: listDevice.isEmpty && listdet!.isEmpty
+                                ? Logo_Opacity(title: 'ไม่พบประตูที่ใช้ได้')
+                                : SingleChildScrollView(
+                                    padding: EdgeInsets.fromLTRB(20, 0, 20, 5),
+                                    child: Column(
+                                      children: [
+                                        ListView.builder(
+                                          shrinkWrap: true,
+                                          primary: false,
+                                          itemCount: listDevice.length,
+                                          itemBuilder: (context, index) {
+                                            return Card(
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(
+                                                        10)),
+                                                margin: EdgeInsets.symmetric(
+                                                    vertical: 5),
+                                                elevation: 10,
+                                                child: listDevice[index]
+                                                            .connectionStatus ==
+                                                        1
+                                                    ? doorsButton(
+                                                        '${listDevice[index].name}',
+                                                        'เปิดประตู',
+                                                        Icons
+                                                            .meeting_room_rounded,
+                                                        Theme.of(context)
+                                                            .primaryColor,
+                                                        () => _openDoors(
+                                                            listDevice[index]
+                                                                .devSn))
+                                                    // DoorOnline(
+                                                    //     name: listDevice[index].name!,
+                                                    //     press: () {
+                                                    //       _openDoors(listDevice[index].devSn);
+                                                    //     },
+                                                    //     devSn: listDevice[index].devSn!,
+                                                    //     devMac: listDevice[index].devMac!,
+                                                    //     appKey: listDevice[index].appEkey!,
+                                                    //     valueDoor:
+                                                    //         listDevice[index].screenType!,
+                                                    //   )
+                                                    : doorsButton(
+                                                        '${listDevice[index].name}',
+                                                        'ประตูออฟไลน์',
+                                                        Icons
+                                                            .no_meeting_room_rounded,
+                                                        Colors.red,
+                                                        () => snackbar(
+                                                            context,
+                                                            Colors.red,
+                                                            'ประตูออฟไลน์อยู่',
+                                                            Icons.highlight_off_rounded)));
+                                          },
+                                        ),
+                                        ListView.builder(
+                                          shrinkWrap: true,
+                                          primary: false,
+                                          itemCount: listdet?.length,
+                                          itemBuilder: (context, index) {
+                                            return Card(
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                                margin: EdgeInsets.symmetric(
+                                                    vertical: 5),
+                                                elevation: 5,
+                                                child: doorsButton(
+                                                    '${listdet?[index].doorName}',
+                                                    'เปิดประตู',
+                                                    Icons.meeting_room_rounded,
+                                                    Theme.of(context)
+                                                        .primaryColor,
+                                                    () => _openDoorsWeigan(
+                                                        listdet?[index].doorId,
+                                                        listdet?[index]
+                                                            .doorNum)));
+                                          },
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  ListView.builder(
-                                    shrinkWrap: true,
-                                    primary: false,
-                                    itemCount: listdet?.length,
-                                    itemBuilder: (context, index) {
-                                      return Card(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          margin:
-                                              EdgeInsets.symmetric(vertical: 5),
-                                          elevation: 5,
-                                          child: doorsButton(
-                                              '${listdet?[index].doorName}',
-                                              'เปิดประตู',
-                                              Icons.meeting_room_rounded,
-                                              Theme.of(context).primaryColor,
-                                              () => _openDoorsWeigan(
-                                                  listdet?[index].doorId,
-                                                  listdet?[index].doorNum)));
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
                           ),
                         ],
                       ),

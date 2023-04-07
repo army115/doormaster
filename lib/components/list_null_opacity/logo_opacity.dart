@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Logo_Opacity extends StatelessWidget {
-  const Logo_Opacity({Key? key});
+  String title;
+  Logo_Opacity({Key? key, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +14,8 @@ class Logo_Opacity extends StatelessWidget {
           children: [
             Image.asset('assets/images/Smart Community Logo.png', scale: 5),
             Text(
-              'ไม่มีข้อมูลที่บันทึก',
+              title,
+              textAlign: TextAlign.center,
               style: TextStyle(fontSize: 20),
             )
           ],

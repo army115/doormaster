@@ -7,7 +7,8 @@ import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
-import 'package:doormster/components/list_logo_opacity/logo_opacity.dart';
+import 'package:doormster/components/button/buttonback_appbar.dart';
+import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/searchbar/search_calendar.dart';
 import 'package:doormster/models/get_checklist.dart';
@@ -204,14 +205,9 @@ class _Record_CheckState extends State<Record_Check> {
           Scaffold(
             appBar: AppBar(
               title: Text('บันทึกรายการตรวจ'),
-              leading: IconButton(
-                  icon: Platform.isIOS
-                      ? Icon(Icons.arrow_back_ios_new_rounded)
-                      : Icon(Icons.arrow_back),
-                  onPressed: () {
-                    homeKey.currentState
-                        ?.popUntil(ModalRoute.withName('/security'));
-                  }),
+              leading: button_back(() {
+                Navigator.popUntil(context, (route) => route.isFirst);
+              }),
             ),
             body: loading
                 ? Container()
@@ -223,13 +219,13 @@ class _Record_CheckState extends State<Record_Check> {
                         child: Search_Calendar(
                           title: 'ค้นหา',
                           fieldText: fieldText,
+                          ontap: () {
+                            calendar(context);
+                          },
                           // changed: (value) {
                           //   _getLog(_startDateText!, _endDateText!);
                           // _searchData(value);
                           // },
-                          ontap: () {
-                            calendar(context);
-                          },
                           // clear: () {
                           //   setState(() {
                           //     fieldText.text == '';
@@ -242,10 +238,9 @@ class _Record_CheckState extends State<Record_Check> {
                       Expanded(
                         child: listLog.isEmpty
                             //?listlogs.isEmpty
-                            ? Logo_Opacity()
+                            ? Logo_Opacity(title: 'ไม่มีข้อมูลที่บันทึก')
                             : ListView.builder(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 5),
+                                padding: EdgeInsets.fromLTRB(20, 0, 20, 5),
                                 // shrinkWrap: true,
                                 // primary: false,
                                 // reverse: true

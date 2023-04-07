@@ -21,7 +21,6 @@ class Search_From extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("test${fieldText.text}");
     return Material(
       color: Colors.white,
       elevation: 10,
@@ -44,11 +43,7 @@ class Search_From extends StatelessWidget {
                     icon: Icon(
                       Icons.close,
                     ))
-                : IconButton(
-                    onPressed: clear,
-                    icon: Icon(
-                      Icons.chair,
-                    )),
+                : null,
             // suffixIcon: Icon(
             //   Icons.event_note,
             //   color: Theme.of(context).primaryColor,

@@ -5,6 +5,8 @@ import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/girdManu/menu_home.dart';
 import 'package:doormster/components/girdManu/menu_security.dart';
+import 'package:doormster/components/list_null_opacity/icon_opacity.dart';
+import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/models/get_ads_company.dart';
 import 'package:doormster/models/get_menu.dart';
@@ -165,24 +167,8 @@ class _Home_PageState extends State<Home_Page> {
   Widget normalUser() {
     return SafeArea(
       child: mobileRole == 0
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'โปรดติดต่อผู้ดูแล\nเพื่ออนุมัติสิทธิ์การใช้งาน',
-                    textAlign: TextAlign.center,
-                    style:
-                        TextStyle(fontSize: 22, fontWeight: FontWeight.normal),
-                  ),
-                  Image.asset(
-                    'assets/images/Smart Community Logo.png',
-                    scale: 4.5,
-                    // opacity: AlwaysStoppedAnimation(0.7),
-                  ),
-                ],
-              ),
-            )
+          ? Logo_Opacity(
+              title: 'โปรดติดต่อผู้ดูแล\nเพื่ออนุมัติสิทธิ์การใช้งาน')
           : SingleChildScrollView(
               child: Column(
                 children: [
@@ -228,35 +214,13 @@ class _Home_PageState extends State<Home_Page> {
                           ),
                   ),
                   listMenu.isEmpty
-                      ? Center(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 100),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: const [
-                                Icon(
-                                  Icons.warning_amber_rounded,
-                                  color: Colors.orange,
-                                  size: 100,
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  'ไม่มีเมนูที่คุณใช้งานได้\nโปรดติดต่อผู้ดูแล',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.normal),
-                                ),
-                                // Image.asset(
-                                //   'assets/images/Smart Community Logo.png',
-                                //   scale: 4.5,
-                                //   // opacity: AlwaysStoppedAnimation(0.7),
-                                // ),
-                              ],
-                            ),
-                          ),
+                      ? Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical:
+                                  MediaQuery.of(context).size.height * 0.13),
+                          child: Icon_Opacity(
+                              title:
+                                  'ไม่มีเมนูที่คุณใช้งานได้\nโปรดติดต่อผู้ดูแล'),
                         )
                       : Container(
                           padding: EdgeInsets.symmetric(

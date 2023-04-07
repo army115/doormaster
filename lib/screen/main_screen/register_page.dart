@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/button/button.dart';
+import 'package:doormster/components/button/buttonback_appbar.dart';
 import 'package:doormster/components/checkBox/checkbox_formfield.dart';
 import 'package:doormster/components/dropdown/dropdonw_search.dart';
 import 'package:doormster/components/dropdown/dropdown.dart';
@@ -32,6 +33,7 @@ class _Register_PageState extends State<Register_Page> {
   TextEditingController fname = TextEditingController();
   TextEditingController lname = TextEditingController();
   TextEditingController email = TextEditingController();
+  TextEditingController company = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController passwordCon = TextEditingController();
 
@@ -156,16 +158,12 @@ class _Register_PageState extends State<Register_Page> {
         children: [
           Scaffold(
             appBar: AppBar(
-              leading: IconButton(
-                  icon: Platform.isIOS
-                      ? Icon(Icons.arrow_back_ios_new_rounded)
-                      : Icon(Icons.arrow_back),
-                  onPressed: () {
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => Login_Page()),
-                        (Route<dynamic> route) => false);
-                  }),
+              leading: button_back(() {
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => Login_Page()),
+                    (Route<dynamic> route) => false);
+              }),
               title: Text('ลงทะเบียน'),
             ),
             body: SafeArea(
@@ -220,7 +218,12 @@ class _Register_PageState extends State<Register_Page> {
                                 return null;
                               }
                             }),
-                        DropDownCompany(),
+                        Dropdown_Search(
+                          title: 'เลือกบริษัท',
+                          controller: company,
+                          listItem: listCompany,
+                          error: 'เลือกบริษัท',
+                        ),
                         TextForm_Password(
                           controller: password,
                           title: 'รหัสผ่าน',
@@ -266,7 +269,7 @@ class _Register_PageState extends State<Register_Page> {
                               valuse['email'] = email.text;
                               valuse['role'] = "0";
                               valuse['created_by'] = "0";
-                              valuse['company_id'] = dropdownValue;
+                              valuse['company_id'] = company.text;
                               valuse['user_password'] = passwordCon.text;
                               _register(valuse);
                             }
@@ -307,41 +310,41 @@ class _Register_PageState extends State<Register_Page> {
     );
   }
 
-  var dropdownValue;
-  Widget DropDownCompany() {
-    return Dropdown_Search(
-      title: 'เลือกบริษัท',
-      // deviceId == null ? 'ไม่มีอุปกรณ์' : 'เลือกอุปกรณ์',
-      values: dropdownValue,
-      width: 0.85,
-      height: 300,
-      listItem: listCompany.map((value) {
-        return DropdownMenuEntry(
-          style: ButtonStyle(
-              textStyle: MaterialStateProperty.all(
-                  TextStyle(fontWeight: FontWeight.w500))),
-          value: value.sId,
-          label: value.companyName == ""
-              ? 'บริษัทไม่ทราบชื่อ'
-              : '${value.companyName}',
-        );
-      }).toList(),
-      leftIcon: Icons.home_work_rounded,
-      // validate: (values) {
-      //   // if (deviceId != null) {
-      //   if (values == null) {
-      //     return 'กรุณาเลือกบริษัท';
-      //   }
-      //   return null;
-      //   // }
-      //   // return 'ไม่มีอุปกรณ์';
-      // },
-      onSelected: (value) {
-        setState(() {
-          dropdownValue = value;
-          print('company : ${value}');
-        });
-      },
-    );
-  }
+  // var dropdownValue;
+  // Widget DropDownCompany() {
+  //   return Dropdown_Search(
+  //     title: 'เลือกบริษัท',
+  //     // deviceId == null ? 'ไม่มีอุปกรณ์' : 'เลือกอุปกรณ์',
+  //     values: dropdownValue,
+  //     width: 0.85,
+  //     height: 300,
+  //     listItem: listCompany.map((value) {
+  //       return DropdownMenuEntry(
+  //         style: ButtonStyle(
+  //             textStyle: MaterialStateProperty.all(
+  //                 TextStyle(fontWeight: FontWeight.w500))),
+  //         value: value.sId,
+  //         label: value.companyName == ""
+  //             ? 'บริษัทไม่ทราบชื่อ'
+  //             : '${value.companyName}',
+  //       );
+  //     }).toList(),
+  //     leftIcon: Icons.home_work_rounded,
+  //     // validate: (values) {
+  //     //   // if (deviceId != null) {
+  //     //   if (values == null) {
+  //     //     return 'กรุณาเลือกบริษัท';
+  //     //   }
+  //     //   return null;
+  //     //   // }
+  //     //   // return 'ไม่มีอุปกรณ์';
+  //     // },
+  //     onSelected: (value) {
+  //       setState(() {
+  //         dropdownValue = value;
+  //         print('company : ${value}');
+  //       });
+  //     },
+  //   );
+  // }
 }

@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/button/button.dart';
+import 'package:doormster/components/button/buttonback_appbar.dart';
 import 'package:doormster/components/checkBox/checkbox_formfield.dart';
 import 'package:doormster/components/dropdown/dropdown_noborder.dart';
 import 'package:doormster/components/loading/loading.dart';
@@ -246,13 +247,9 @@ class _Check_InState extends State<Check_In> {
           Scaffold(
             appBar: AppBar(
               title: Text('เช็คจุดตรวจ'),
-              leading: IconButton(
-                  icon: Platform.isIOS
-                      ? Icon(Icons.arrow_back_ios_new_rounded)
-                      : Icon(Icons.arrow_back),
-                  onPressed: () {
-                    Navigator.popUntil(context, (route) => route.isFirst);
-                  }),
+              leading: button_back(() {
+                Navigator.popUntil(context, (route) => route.isFirst);
+              }),
             ),
             bottomNavigationBar:
                 loading || checkpointName == null || listdata.single.verify == 0

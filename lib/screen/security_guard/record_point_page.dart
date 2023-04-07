@@ -1,4 +1,4 @@
-import 'package:doormster/components/list_logo_opacity/logo_opacity.dart';
+import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/map/map_page.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +35,7 @@ class _Record_PointState extends State<Record_Point> {
               ? Container()
               : SafeArea(
                   child: listLogs.isEmpty
-                      ? Logo_Opacity()
+                      ? Logo_Opacity(title: 'ไม่มีข้อมูลที่บันทึก')
                       : SingleChildScrollView(
                           child: Container(
                             padding: EdgeInsets.symmetric(
