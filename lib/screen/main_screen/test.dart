@@ -76,13 +76,13 @@ class _DropdownSearchWidgetState extends State<DropdownSearchWidget> {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              CustomDropdown.search(
-                borderRadius: BorderRadius.zero,
-                errorText: 'error',
-                hintText: 'Select job role',
-                items: const ['Developer', 'Designer', 'Consultant', 'Student'],
-                controller: _searchController,
-              ),
+              // CustomDropdown.search(
+              //   borderRadius: BorderRadius.zero,
+              //   errorText: 'error',
+              //   hintText: 'Select job role',
+              //   items: const ['Developer', 'Designer', 'Consultant', 'Student'],
+              //   controller: _searchController,
+              // ),
               Buttons(
                   title: 'บันทึก',
                   press: () {

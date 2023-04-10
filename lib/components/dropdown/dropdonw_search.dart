@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 class Dropdown_Search extends StatelessWidget {
   String title;
   TextEditingController controller;
-  List listItem;
+  List<String> listItem;
+  List<String> listItemSelected;
+  IconData leftIcon;
   String error;
   // final onSelected;
   // double width;
@@ -14,9 +16,11 @@ class Dropdown_Search extends StatelessWidget {
     required this.title,
     required this.controller,
     required this.listItem,
+    required this.listItemSelected,
     // required this.width,
     // required this.height,
     required this.error,
+    required this.leftIcon,
     // this.onSelected
   }) : super(key: key);
 
@@ -29,54 +33,39 @@ class Dropdown_Search extends StatelessWidget {
           elevation: 10,
           color: Colors.white,
           child: CustomDropdown.search(
+            fieldPrefixIcon: Icon(
+              leftIcon,
+              size: 25,
+            ),
             errorText: error,
+            errorStyle: TextStyle(fontSize: 15),
             hintText: title,
-            items: ['sdf', 'asda'],
-            // listItemBuilder: listItem,
+            searchText: 'ค้นหา',
+            foundText: 'ไม่พบข้อมูล',
+            hintStyle: TextStyle(color: Colors.grey.shade600),
+            items: listItem.isEmpty ? ['ไม่มีข้อมูล'] : listItem,
+            itemsSelected:
+                listItem.isEmpty ? ['ไม่มีข้อมูล'] : listItemSelected,
             controller: controller,
-          )
-          // DropdownMenu(
-          //   initialSelection: values,
-          //   textStyle: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
-          //   menuStyle: MenuStyle(
-          //       visualDensity: VisualDensity.compact,
-          //       padding: MaterialStateProperty.all(EdgeInsets.zero),
-          //       elevation: MaterialStateProperty.all(10),
-          //       backgroundColor: MaterialStateProperty.all(Colors.white)),
-          //   width: MediaQuery.of(context).size.width * 0.9,
-          //   menuHeight: height,
-          //   enableFilter: true,
-          //   enableSearch: true,
-          //   hintText: title,
-          //   selectedTrailingIcon: Text('asdasd'),
-          //   leadingIcon: Icon(leftIcon),
-          //   trailingIcon: Icon(Icons.keyboard_arrow_down_rounded, size: 30),
-          //   dropdownMenuEntries: listItem,
-          //   inputDecorationTheme: InputDecorationTheme(
-          //     hintStyle: TextStyle(fontSize: 16),
-          //     focusedBorder: OutlineInputBorder(
-          //       borderSide:
-          //           BorderSide(color: Theme.of(context).primaryColor, width: 2),
-          //       borderRadius: BorderRadius.circular(10.0),
-          //     ),
-          //     enabledBorder: OutlineInputBorder(
-          //       borderSide: BorderSide.none,
-          //       borderRadius: BorderRadius.circular(10.0),
-          //     ),
-          //     focusedErrorBorder: OutlineInputBorder(
-          //       borderSide: BorderSide(color: Colors.red, width: 2),
-          //       borderRadius: BorderRadius.circular(10.0),
-          //     ),
-          //     errorBorder: UnderlineInputBorder(
-          //       borderSide: BorderSide(color: Colors.red, width: 2),
-          //       borderRadius: BorderRadius.circular(10.0),
-          //     ),
-          //     contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 13),
-          //     errorStyle: TextStyle(fontSize: 15),
-          //   ),
-          //   onSelected: onSelected,
-          // ),
-          ),
+            contentPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 13),
+            focusedBorder: OutlineInputBorder(
+              borderSide:
+                  BorderSide(color: Theme.of(context).primaryColor, width: 2),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide.none,
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.red, width: 2),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            errorBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.red, width: 2),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+          )),
     );
   }
 }

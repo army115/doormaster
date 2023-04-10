@@ -42,6 +42,8 @@ class _Register_PageState extends State<Register_Page> {
   bool redEye = true;
   bool redEyeCon = true;
   List<DataCom> listCompany = [];
+  List<String>? companyName = [];
+  List<String>? companyId = [];
 
   Future _getCompany() async {
     try {
@@ -61,6 +63,9 @@ class _Register_PageState extends State<Register_Page> {
         getCompany company = getCompany.fromJson(response.data);
         setState(() {
           listCompany = company.data!;
+          companyName =
+              listCompany.map((e) => e.companyName.toString()).toList();
+          companyId = listCompany.map((e) => e.sId.toString()).toList();
           loading = false;
         });
       }
@@ -146,6 +151,7 @@ class _Register_PageState extends State<Register_Page> {
 
   @override
   Widget build(BuildContext context) {
+    print(companyId);
     return WillPopScope(
       onWillPop: () async {
         Navigator.of(context).pushAndRemoveUntil(
@@ -182,96 +188,99 @@ class _Register_PageState extends State<Register_Page> {
                         SizedBox(
                           height: 10,
                         ),
-                        Text_Form(
-                          controller: username,
-                          title: 'ชื่อผู้ใช้',
-                          icon: Icons.account_circle_rounded,
-                          error: 'กรุณากรอกชื่อผู้ใช้',
-                          TypeInput: TextInputType.name,
-                        ),
-                        Text_Form(
-                          controller: fname,
-                          title: 'ชื่อ',
-                          icon: Icons.person_outline_rounded,
-                          error: 'กรุณากรอกชื่อ',
-                          TypeInput: TextInputType.name,
-                        ),
-                        Text_Form(
-                          controller: lname,
-                          title: 'นามสกุล',
-                          icon: Icons.person,
-                          error: 'กรุณากรอกชื่อนามสกุล',
-                          TypeInput: TextInputType.name,
-                        ),
-                        TextForm_validator(
-                            controller: email,
-                            title: 'อีเมล',
-                            icon: Icons.email,
-                            TypeInput: TextInputType.emailAddress,
-                            error: (values) {
-                              if (values.isEmpty) {
-                                return 'กรุณากรอกอีเมล';
-                              } else if (values.isEmpty ||
-                                  !values.contains("@")) {
-                                return "รูปแบบอีเมลไม่ถูกต้อง";
-                              } else {
-                                return null;
-                              }
-                            }),
+                        // Text_Form(
+                        //   controller: username,
+                        //   title: 'ชื่อผู้ใช้',
+                        //   icon: Icons.account_circle_rounded,
+                        //   error: 'กรุณากรอกชื่อผู้ใช้',
+                        //   TypeInput: TextInputType.name,
+                        // ),
+                        // Text_Form(
+                        //   controller: fname,
+                        //   title: 'ชื่อ',
+                        //   icon: Icons.person_outline_rounded,
+                        //   error: 'กรุณากรอกชื่อ',
+                        //   TypeInput: TextInputType.name,
+                        // ),
+                        // Text_Form(
+                        //   controller: lname,
+                        //   title: 'นามสกุล',
+                        //   icon: Icons.person,
+                        //   error: 'กรุณากรอกชื่อนามสกุล',
+                        //   TypeInput: TextInputType.name,
+                        // ),
+                        // TextForm_validator(
+                        //     controller: email,
+                        //     title: 'อีเมล',
+                        //     icon: Icons.email,
+                        //     TypeInput: TextInputType.emailAddress,
+                        //     error: (values) {
+                        //       if (values.isEmpty) {
+                        //         return 'กรุณากรอกอีเมล';
+                        //       } else if (values.isEmpty ||
+                        //           !values.contains("@")) {
+                        //         return "รูปแบบอีเมลไม่ถูกต้อง";
+                        //       } else {
+                        //         return null;
+                        //       }
+                        //     }),
                         Dropdown_Search(
                           title: 'เลือกบริษัท',
                           controller: company,
-                          listItem: listCompany,
-                          error: 'เลือกบริษัท',
+                          leftIcon: Icons.home_work_rounded,
+                          listItem: companyName!,
+                          listItemSelected: companyId!,
+                          error: 'กรุณากเลือกบริษัท',
                         ),
-                        TextForm_Password(
-                          controller: password,
-                          title: 'รหัสผ่าน',
-                          iconLaft: Icons.key,
-                          error: (values) {
-                            confirmPass = values;
-                            if (values.isEmpty) {
-                              return 'กรุณากรอกรหัสผ่าน';
-                              // } else if (values.length < 8) {
-                              //   return "รหัสผ่านอย่างน้อย 8 ตัว";
-                            } else {
-                              return null;
-                            }
-                          },
-                        ),
-                        TextForm_Password(
-                          controller: passwordCon,
-                          title: 'ยืนยันรหัสผ่าน',
-                          iconLaft: Icons.key,
-                          error: (values) {
-                            if (values.isEmpty) {
-                              return 'กรุณายืนยันรหัสผ่าน';
-                            } else if (values != confirmPass) {
-                              return "รหัสผ่านไม่ตรงกัน";
-                            } else {
-                              return null;
-                            }
-                          },
-                        ),
-                        CheckBox_FormField(
-                          title: 'ยอมรับเงื่อนไขการใช้บริการ',
-                          value: Checked,
-                          validator: 'กรุณายอมรับเงื่อนไขการใช้บริการ',
-                        ),
+                        // TextForm_Password(
+                        //   controller: password,
+                        //   title: 'รหัสผ่าน',
+                        //   iconLaft: Icons.key,
+                        //   error: (values) {
+                        //     confirmPass = values;
+                        //     if (values.isEmpty) {
+                        //       return 'กรุณากรอกรหัสผ่าน';
+                        //       // } else if (values.length < 8) {
+                        //       //   return "รหัสผ่านอย่างน้อย 8 ตัว";
+                        //     } else {
+                        //       return null;
+                        //     }
+                        //   },
+                        // ),
+                        // TextForm_Password(
+                        //   controller: passwordCon,
+                        //   title: 'ยืนยันรหัสผ่าน',
+                        //   iconLaft: Icons.key,
+                        //   error: (values) {
+                        //     if (values.isEmpty) {
+                        //       return 'กรุณายืนยันรหัสผ่าน';
+                        //     } else if (values != confirmPass) {
+                        //       return "รหัสผ่านไม่ตรงกัน";
+                        //     } else {
+                        //       return null;
+                        //     }
+                        //   },
+                        // ),
+                        // CheckBox_FormField(
+                        //   title: 'ยอมรับเงื่อนไขการใช้บริการ',
+                        //   value: Checked,
+                        //   validator: 'กรุณายอมรับเงื่อนไขการใช้บริการ',
+                        // ),
                         Buttons(
                           title: 'ลงทะเบียน',
                           press: () {
                             if (_formkey.currentState!.validate()) {
                               Map<String, dynamic> valuse = Map();
-                              valuse['user_name'] = username.text;
-                              valuse['first_name'] = fname.text;
-                              valuse['sur_name'] = lname.text;
-                              valuse['email'] = email.text;
-                              valuse['role'] = "0";
-                              valuse['created_by'] = "0";
+                              // valuse['user_name'] = username.text;
+                              // valuse['first_name'] = fname.text;
+                              // valuse['sur_name'] = lname.text;
+                              // valuse['email'] = email.text;
+                              // valuse['role'] = "0";
+                              // valuse['created_by'] = "0";
                               valuse['company_id'] = company.text;
-                              valuse['user_password'] = passwordCon.text;
-                              _register(valuse);
+                              // valuse['user_password'] = passwordCon.text;
+                              // _register(valuse);
+                              print(company.text);
                             }
                           },
                         )

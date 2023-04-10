@@ -1,10 +1,16 @@
+import 'package:dio/dio.dart';
+import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/map/map_page.dart';
+import 'package:doormster/models/get_logs_all.dart';
+import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper_plus/flutter_swiper_plus.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert' as convert;
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Record_Point extends StatefulWidget {
   final listPoint;
@@ -15,9 +21,52 @@ class Record_Point extends StatefulWidget {
 }
 
 class _Record_PointState extends State<Record_Point> {
-  var companyId;
+  // var companyId;
+  List<DatalogAll> logsDate = [];
   bool loading = false;
   DateFormat formatTime = DateFormat.Hm();
+
+  Future _getLog(String id) async {
+    try {
+      setState(() {
+        loading = true;
+      });
+
+      //call api
+      var url = '${Connect_api().domain}/get/logOne/$id';
+      var response = await Dio().get(
+        url,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        getLogsAll logs = getLogsAll.fromJson(response.data);
+        setState(() {
+          logsDate = logs.data!;
+          showImages(logsDate[0].pic);
+          loading = false;
+        });
+      }
+    } catch (error) {
+      print(error);
+      await Future.delayed(Duration(milliseconds: 500));
+      dialogOnebutton_Subtitle(
+          context,
+          'พบข้อผิดพลาด',
+          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+          Icons.warning_amber_rounded,
+          Colors.orange,
+          'ตกลง', () {
+        Navigator.of(context, rootNavigator: true).pop();
+      }, false, false);
+      setState(() {
+        loading = false;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -31,182 +80,172 @@ class _Record_PointState extends State<Record_Point> {
       children: [
         Scaffold(
           appBar: AppBar(title: Text('บันทึกจุดตรวจ')),
-          body: loading
-              ? Container()
-              : SafeArea(
-                  child: listLogs.isEmpty
-                      ? Logo_Opacity(title: 'ไม่มีข้อมูลที่บันทึก')
-                      : SingleChildScrollView(
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 20),
-                            child: ListView.builder(
-                                shrinkWrap: true,
-                                primary: false,
-                                itemCount: listLogs.length,
-                                itemBuilder: (context, index) {
-                                  DateTime time = DateTime.parse(
-                                      '${listLogs[index].checktimeReal}');
-                                  final listpoint = listLogs[index].checkpoint;
-                                  final checkpoint = listpoint[0].checklist;
-                                  // final listPic = listLogs[index].pic;
-                                  return Card(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10)),
-                                    margin: EdgeInsets.symmetric(vertical: 5),
-                                    elevation: 10,
-                                    child: Container(
-                                      child: ExpansionTile(
-                                          textColor: Colors.black,
-                                          title: Text(
-                                            'จุดตรวจ :  ${listpoint[0].checkpointName}',
-                                            style: TextStyle(fontSize: 16),
-                                          ),
-                                          subtitle: Column(
+          body: SafeArea(
+              child: listLogs.isEmpty
+                  ? Logo_Opacity(title: 'ไม่มีข้อมูลที่บันทึก')
+                  : SingleChildScrollView(
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                        child: ListView.builder(
+                            shrinkWrap: true,
+                            primary: false,
+                            itemCount: listLogs.length,
+                            itemBuilder: (context, index) {
+                              DateTime time = DateTime.parse(
+                                  '${listLogs[index].checktimeReal}');
+                              final listpoint = listLogs[index].checkpoint;
+                              final checkpoint = listpoint[0].checklist;
+                              // final listPic = listLogs[index].pic;
+                              return Card(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                margin: EdgeInsets.symmetric(vertical: 5),
+                                elevation: 10,
+                                child: Container(
+                                  child: ExpansionTile(
+                                      textColor: Colors.black,
+                                      title: Text(
+                                        'จุดตรวจ :  ${listpoint[0].checkpointName}',
+                                        style: TextStyle(fontSize: 16),
+                                      ),
+                                      subtitle: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                              'เหตุการณ์ : ${listLogs[index].event}'),
+                                          Text(
+                                              'วันที่ ${listLogs[index].date} เวลา ${formatTime.format(time)}'),
+                                        ],
+                                      ),
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.only(
+                                                  bottomLeft:
+                                                      Radius.circular(10),
+                                                  bottomRight: Radius.circular(
+                                                      10)), // Set the border radius here
+                                              color: Colors.grey.shade200),
+                                          padding: EdgeInsets.fromLTRB(
+                                              10, 10, 10, 10),
+                                          child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              Text(
-                                                  'เหตุการณ์ : ${listLogs[index].event}'),
-                                              Text(
-                                                  'วันที่ ${listLogs[index].date} เวลา ${formatTime.format(time)}'),
-                                            ],
-                                          ),
-                                          children: [
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.only(
-                                                      bottomLeft:
-                                                          Radius.circular(10),
-                                                      bottomRight: Radius.circular(
-                                                          10)), // Set the border radius here
-                                                  color: Colors.grey.shade200),
-                                              padding: EdgeInsets.fromLTRB(
-                                                  10, 10, 10, 10),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                              Row(
                                                 children: [
-                                                  Row(
-                                                    children: [
-                                                      Icon(Icons.task_rounded,
-                                                          size: 25),
-                                                      SizedBox(width: 5),
-                                                      Text('รายการตรวจ'),
-                                                    ],
-                                                  ),
-                                                  ListView.builder(
-                                                    shrinkWrap: true,
-                                                    primary: false,
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 5,
-                                                            horizontal: 20),
-                                                    itemCount:
-                                                        checkpoint?.length,
-                                                    itemBuilder:
-                                                        (BuildContext context,
-                                                            int index) {
-                                                      return checkpoint?[index]
-                                                                  .checklist ==
-                                                              ''
-                                                          ? Container()
-                                                          : Text(
-                                                              '- ${checkpoint?[index].checklist}');
-                                                    },
-                                                  ),
-                                                  // listLogs[index].desciption !=
-                                                  //         ''
-                                                  //     ?
-                                                  Row(
-                                                    children: [
-                                                      Icon(
-                                                          Icons
-                                                              .description_rounded,
-                                                          size: 25),
-                                                      SizedBox(width: 5),
-                                                      Text(
-                                                          'รายละเอียดเพิ่มเติม'),
-                                                    ],
-                                                  ),
-                                                  // : Container(),
-                                                  // listLogs[index].desciption !=
-                                                  //         ''
-                                                  //     ?
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        horizontal: 20,
-                                                        vertical: 3),
-                                                    child: Text(
-                                                      '- ${listLogs[index].desciption}',
-                                                    ),
-                                                  ),
-                                                  // : Container(),
-
-                                                  Row(
-                                                    children: [
-                                                      Icon(
-                                                        Icons
-                                                            .photo_library_rounded,
-                                                        size: 30,
-                                                        color: Colors.black,
-                                                      ),
-                                                      SizedBox(width: 5),
-                                                      Expanded(
-                                                          child: Text(
-                                                              'รูปภาพการตรวจ')),
-                                                      button(
-                                                          'ดูรูปภาพ',
-                                                          Theme.of(context)
-                                                              .primaryColor,
-                                                          Icons.photo, () {
-                                                        // showImages(listPic);
-                                                      })
-                                                    ],
-                                                  ),
-                                                  SizedBox(height: 3),
-                                                  Row(
-                                                    children: [
-                                                      Icon(
-                                                        Icons.location_on_sharp,
-                                                        size: 30,
-                                                        color:
-                                                            Colors.red.shade600,
-                                                      ),
-                                                      SizedBox(width: 5),
-                                                      Expanded(
-                                                          child: Text(
-                                                              'ตำแหน่งที่ตรวจ')),
-                                                      button(
-                                                          'ดูตำแหน่ง',
-                                                          Colors.red.shade600,
-                                                          Icons.map, () {
-                                                        showMap(
-                                                            listLogs[index]
-                                                                .lat!,
-                                                            listLogs[index]
-                                                                .lng!);
-                                                      })
-                                                    ],
-                                                  ),
-                                                  // SizedBox(height: 5),
-                                                  // Map_Page(
-                                                  //   lat: listLogs[index].lat!,
-                                                  //   lng: listLogs[index].lng!,
-                                                  //   width: double.infinity,
-                                                  //   height: 200,
-                                                  // )
+                                                  Icon(Icons.task_rounded,
+                                                      size: 25),
+                                                  SizedBox(width: 5),
+                                                  Text('รายการตรวจ'),
                                                 ],
                                               ),
-                                            ),
-                                          ]),
-                                    ),
-                                  );
-                                }),
-                          ),
-                        )),
+                                              ListView.builder(
+                                                shrinkWrap: true,
+                                                primary: false,
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical: 5,
+                                                    horizontal: 20),
+                                                itemCount: checkpoint?.length,
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  return checkpoint?[index]
+                                                              .checklist ==
+                                                          ''
+                                                      ? Container()
+                                                      : Text(
+                                                          '- ${checkpoint?[index].checklist}');
+                                                },
+                                              ),
+                                              // listLogs[index].desciption !=
+                                              //         ''
+                                              //     ?
+                                              Row(
+                                                children: [
+                                                  Icon(
+                                                      Icons.description_rounded,
+                                                      size: 25),
+                                                  SizedBox(width: 5),
+                                                  Text('รายละเอียดเพิ่มเติม'),
+                                                ],
+                                              ),
+                                              // : Container(),
+                                              // listLogs[index].desciption !=
+                                              //         ''
+                                              //     ?
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 20,
+                                                        vertical: 3),
+                                                child: Text(
+                                                  '- ${listLogs[index].desciption}',
+                                                ),
+                                              ),
+                                              // : Container(),
+
+                                              Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.photo_library_rounded,
+                                                    size: 30,
+                                                    color: Colors.black,
+                                                  ),
+                                                  SizedBox(width: 5),
+                                                  Expanded(
+                                                      child: Text(
+                                                          'รูปภาพการตรวจ')),
+                                                  button(
+                                                      'ดูรูปภาพ',
+                                                      Theme.of(context)
+                                                          .primaryColor,
+                                                      Icons.photo, () {
+                                                    _getLog(
+                                                        listLogs[index].sId);
+                                                  })
+                                                ],
+                                              ),
+                                              SizedBox(height: 3),
+                                              Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.location_on_sharp,
+                                                    size: 30,
+                                                    color: Colors.red.shade600,
+                                                  ),
+                                                  SizedBox(width: 5),
+                                                  Expanded(
+                                                      child: Text(
+                                                          'ตำแหน่งที่ตรวจ')),
+                                                  button(
+                                                      'ดูตำแหน่ง',
+                                                      Colors.red.shade600,
+                                                      Icons.map, () {
+                                                    showMap(
+                                                        listLogs[index].lat!,
+                                                        listLogs[index].lng!);
+                                                  })
+                                                ],
+                                              ),
+                                              // SizedBox(height: 5),
+                                              // Map_Page(
+                                              //   lat: listLogs[index].lat!,
+                                              //   lng: listLogs[index].lng!,
+                                              //   width: double.infinity,
+                                              //   height: 200,
+                                              // )
+                                            ],
+                                          ),
+                                        ),
+                                      ]),
+                                ),
+                              );
+                            }),
+                      ),
+                    )),
         ),
         loading ? Loading() : Container()
       ],
