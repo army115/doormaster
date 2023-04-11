@@ -34,6 +34,7 @@ class _Add_CompanyState extends State<Add_Company> {
   List<Data> multiCompany = [];
   late SharedPreferences prefs;
   TextEditingController controller = TextEditingController();
+  String? onItemSelect;
 
   Future getValueShared() async {
     prefs = await SharedPreferences.getInstance();
@@ -267,7 +268,23 @@ class _Add_CompanyState extends State<Add_Company> {
                 child: Form(
                   key: _formkey,
                   child: Column(children: [
-                    // DropDownCompany(),
+                    Dropdown_Search(
+                      title: 'เลือกบริษัท',
+                      controller: controller,
+                      leftIcon: Icons.home_work_rounded,
+                      onSelected: (value) {
+                        final index = listCompany
+                            .indexWhere((item) => item.companyName == value);
+                        if (index > -1) {
+                          onItemSelect = listCompany[index].sId;
+                        }
+                        print(onItemSelect);
+                      },
+                      error: 'กรุณากเลือกบริษัท',
+                      listItem: listCompany
+                          .map((value) => value.companyName.toString())
+                          .toList(),
+                    ),
                     SizedBox(
                       height: 20,
                     ),
@@ -282,34 +299,6 @@ class _Add_CompanyState extends State<Add_Company> {
       ),
     );
   }
-
-  // var dropdownValue;
-  // Widget DropDownCompany() {
-  //   return Dropdown_Search(
-  //       title: 'เลือกบริษัท',
-  //       values: dropdownValue,
-  //       leftIcon: Icons.home_work_rounded,
-  //       height: 500,
-  //       width: 0.9,
-  //       listItem: listCompany.map((value) {
-  //         return DropdownMenuEntry(
-  //           style: ButtonStyle(
-  //               textStyle: MaterialStateProperty.all(
-  //                   TextStyle(fontWeight: FontWeight.w500))),
-  //           value: value.sId,
-  //           label: value.companyName == ""
-  //               ? 'บริษัทไม่ทราบชื่อ'
-  //               : '${value.companyName}',
-  //         );
-  //       }).toList(),
-  //       onSelected: (value) {
-  //         setState(() {
-  //           dropdownValue = value;
-  //           // controller.text = value;
-  //           print('company : ${value}');
-  //         });
-  //       });
-  // }
 
   Widget button() {
     return Row(
@@ -331,40 +320,40 @@ class _Add_CompanyState extends State<Add_Company> {
                   color: Colors.black,
                   fontWeight: FontWeight.normal)),
         ),
-        // ElevatedButton(
-        //   onPressed: () {
-        //     if (_formkey.currentState!.validate()) {
-        //       if (multiCompany
-        //           .map((item) => item.companyId)
-        //           .contains(dropdownValue)) {
-        //         dialogOnebutton_Subtitle(
-        //             context,
-        //             'ไม่สามารถเพิ่มได้',
-        //             'คุณมีบริษัทนี้อยู่แล้ว',
-        //             Icons.warning_amber_rounded,
-        //             Colors.orange,
-        //             'ตกลง', () {
-        //           Navigator.of(context).pop();
-        //         }, false, false);
-        //       } else {
-        //         Map<String, dynamic> valuse = Map();
-        //         valuse['id'] = userId;
-        //         valuse['company_id'] = dropdownValue;
-        //         // _addCompany(valuse);
-        //       }
-        //     }
-        //   },
-        //   style: styleButtons(EdgeInsets.symmetric(horizontal: 40, vertical: 8),
-        //       10.0, Theme.of(context).primaryColor, BorderRadius.circular(10)),
-        //   child: const Text(
-        //     "บันทึก",
-        //     style: TextStyle(
-        //         fontSize: 16,
-        //         letterSpacing: 1,
-        //         color: Colors.white,
-        //         fontWeight: FontWeight.normal),
-        //   ),
-        // )
+        ElevatedButton(
+          onPressed: () {
+            if (_formkey.currentState!.validate()) {
+              if (multiCompany
+                  .map((item) => item.companyId)
+                  .contains(onItemSelect)) {
+                dialogOnebutton_Subtitle(
+                    context,
+                    'ไม่สามารถเพิ่มได้',
+                    'คุณมีบริษัทนี้อยู่แล้ว',
+                    Icons.warning_amber_rounded,
+                    Colors.orange,
+                    'ตกลง', () {
+                  Navigator.of(context).pop();
+                }, false, false);
+              } else {
+                Map<String, dynamic> valuse = Map();
+                valuse['id'] = userId;
+                valuse['company_id'] = onItemSelect;
+                _addCompany(valuse);
+              }
+            }
+          },
+          style: styleButtons(EdgeInsets.symmetric(horizontal: 40, vertical: 8),
+              10.0, Theme.of(context).primaryColor, BorderRadius.circular(10)),
+          child: const Text(
+            "บันทึก",
+            style: TextStyle(
+                fontSize: 16,
+                letterSpacing: 1,
+                color: Colors.white,
+                fontWeight: FontWeight.normal),
+          ),
+        )
       ],
     );
   }
