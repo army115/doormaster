@@ -272,7 +272,7 @@ class _Add_CompanyState extends State<Add_Company> {
                       title: 'เลือกบริษัท',
                       controller: controller,
                       leftIcon: Icons.home_work_rounded,
-                      onSelected: (value) {
+                      onChanged: (value) {
                         final index = listCompany
                             .indexWhere((item) => item.companyName == value);
                         if (index > -1) {

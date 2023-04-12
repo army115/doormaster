@@ -130,8 +130,13 @@ class _Security_GuardState extends State<Security_Guard> {
                     press: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              DropdownSearchWidget(),
+                          builder: (BuildContext context) => Check_In(
+                            timeCheck: DateTime.now(),
+                            checkpointId:
+                                'd05154cb-8787-40b1-acdb-13f62303859e',
+                            lat: 13.69521967419439,
+                            lng: 100.64172377200555,
+                          ),
                         ),
                       );
                     }),

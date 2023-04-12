@@ -1,26 +1,21 @@
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class Dropdown_Search extends StatelessWidget {
   String title;
   TextEditingController controller;
-  IconData leftIcon;
-  String error;
-  final onSelected;
+  IconData? leftIcon;
+  String? error;
+  final onChanged;
   final listItem;
-  // double width;
-  // double height;
   Dropdown_Search(
       {Key? key,
       required this.title,
       required this.controller,
-      this.listItem,
-      // required this.width,
-      // required this.height,
-      required this.error,
-      required this.leftIcon,
-      this.onSelected})
+      required this.listItem,
+      this.error,
+      this.leftIcon,
+      this.onChanged})
       : super(key: key);
 
   @override
@@ -34,7 +29,7 @@ class Dropdown_Search extends StatelessWidget {
           child: CustomDropdown.search(
             excludeSelected: false,
             hideSelectedFieldWhenOpen: false,
-            onChanged: onSelected,
+            onChanged: onChanged,
             fieldPrefixIcon: Icon(
               leftIcon,
               size: 25,

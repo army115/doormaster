@@ -12,7 +12,7 @@ import 'package:doormster/components/dropdown/dropdown_noborder.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/map/map_page.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
-import 'package:doormster/components/text_form/text_form_novalidator.dart';
+import 'package:doormster/components/text_form/text_form_noborder_validator.dart';
 import 'package:doormster/models/get_checklist.dart';
 import 'package:doormster/screen/security_guard/record_check_page.dart';
 import 'package:doormster/service/connect_api.dart';
@@ -356,33 +356,33 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
     );
   }
 
-  var dropdownValue;
-  Widget DropDownType() {
-    return Dropdown_NoBorder(
-      title: 'เลือกสถานการณ์',
-      values: dropdownValue,
-      listItem: ['ปกติ', 'ไม่ปกติ'].map((value) {
-        return DropdownMenuItem(
-          value: value,
-          child: Text(
-            '${value}',
-          ),
-        );
-      }).toList(),
-      leftIcon: Icons.note_add_rounded,
-      validate: (values) {
-        if (values == null) {
-          return 'กรุณาเลือกสถานการณ์';
-        }
-        return null;
-      },
-      onChange: (value) {
-        _formkey.currentState?.validate();
+  // var dropdownValue;
+  // Widget DropDownType() {
+  //   return Dropdown_NoBorder(
+  //     title: 'เลือกสถานการณ์',
+  //     values: dropdownValue,
+  //     listItem: ['ปกติ', 'ไม่ปกติ'].map((value) {
+  //       return DropdownMenuItem(
+  //         value: value,
+  //         child: Text(
+  //           '${value}',
+  //         ),
+  //       );
+  //     }).toList(),
+  //     leftIcon: Icons.note_add_rounded,
+  //     validate: (values) {
+  //       if (values == null) {
+  //         return 'กรุณาเลือกสถานการณ์';
+  //       }
+  //       return null;
+  //     },
+  //     onChange: (value) {
+  //       _formkey.currentState?.validate();
 
-        setState(() {
-          dropdownValue = value;
-        });
-      },
-    );
-  }
+  //       setState(() {
+  //         dropdownValue = value;
+  //       });
+  //     },
+  //   );
+  // }
 }

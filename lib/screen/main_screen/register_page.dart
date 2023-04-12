@@ -223,7 +223,7 @@ class _Register_PageState extends State<Register_Page> {
                           title: 'เลือกบริษัท',
                           controller: company,
                           leftIcon: Icons.home_work_rounded,
-                          onSelected: (value) {
+                          onChanged: (value) {
                             final index = listCompany.indexWhere(
                                 (item) => item.companyName == value);
                             if (index > -1) {

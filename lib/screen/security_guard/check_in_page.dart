@@ -11,7 +11,9 @@ import 'package:doormster/components/dropdown/dropdown_noborder.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/map/map_page.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
-import 'package:doormster/components/text_form/text_form_novalidator.dart';
+import 'package:doormster/components/text_form/text_form.dart';
+import 'package:doormster/components/text_form/text_form_noborder_validator.dart';
+import 'package:doormster/components/text_form/text_form_validator.dart';
 import 'package:doormster/models/get_checklist.dart';
 import 'package:doormster/screen/security_guard/record_check_page.dart';
 import 'package:doormster/service/connect_api.dart';
@@ -41,6 +43,7 @@ class Check_In extends StatefulWidget {
 class _Check_InState extends State<Check_In> {
   final _formkey = GlobalKey<FormState>();
   TextEditingController detail = TextEditingController();
+  TextEditingController status = TextEditingController();
 
   final ImagePicker imgpicker = ImagePicker();
   // List<XFile>? listImage = [];
@@ -276,10 +279,10 @@ class _Check_InState extends State<Check_In> {
                                 valuse['uuid'] = widget.checkpointId;
                                 valuse['Round_uuid'] = roundId;
                                 valuse['Desciption'] = detail.text;
-                                valuse['EventCheck'] = dropdownValue;
+                                valuse['EventCheck'] = status.text;
                                 valuse['pic'] = listImage64;
                                 print(valuse);
-                                _checkIn(valuse);
+                                // _checkIn(valuse);
                               }
                             }),
                       ),
@@ -450,14 +453,25 @@ class _Check_InState extends State<Check_In> {
                                 Text('บันทึกเหตุการณ์'),
                               ],
                             ),
-                            DropDownType(),
-                            Text_Form_NoValidator(
+                            Dropdown_NoBorder(
+                              title: 'เลือกสถานการณ์',
+                              controller: status,
+                              leftIcon: Icons.mobile_friendly,
+                              error: 'กรุณากเลือกบริษัท',
+                              listItem: ['ปกติ', 'ไม่ปกติ'],
+                            ),
+
+                            TextForm_NoBorder_Validator(
                               typeInput: TextInputType.text,
                               controller: detail,
                               icon: Icons.description_rounded,
                               title: 'รายละเอียด',
-                              error: 'เหตุการณ์ไม่ปกติ กรุณาเพิ่มรายละเอียด',
-                              validator: dropdownValue ?? '',
+                              validator: (values) {
+                                if (status.text == 'ไม่ปกติ') {
+                                  return 'เหตุการณ์ไม่ปกติ กรุณาเพิ่มรายละเอียด';
+                                }
+                                return null;
+                              },
                             ),
                             SizedBox(height: 10),
                             ExpansionTile(
@@ -518,33 +532,34 @@ class _Check_InState extends State<Check_In> {
       ),
     );
   }
-
-  var dropdownValue;
-  Widget DropDownType() {
-    return Dropdown_NoBorder(
-      title: 'เลือกสถานการณ์',
-      values: dropdownValue,
-      listItem: ['ปกติ', 'ไม่ปกติ'].map((value) {
-        return DropdownMenuItem(
-          value: value,
-          child: Text(
-            '${value}',
-          ),
-        );
-      }).toList(),
-      leftIcon: Icons.note_add_rounded,
-      validate: (values) {
-        if (values == null) {
-          return 'กรุณาเลือกสถานการณ์';
-        }
-        return null;
-      },
-      onChange: (value) {
-        setState(() {
-          dropdownValue = value;
-          print(value);
-        });
-      },
-    );
-  }
 }
+
+//   var dropdownValue;
+//   Widget DropDownType() {
+//     return Dropdown_NoBorder(
+//       title: 'เลือกสถานการณ์',
+//       values: dropdownValue,
+//       listItem: ['ปกติ', 'ไม่ปกติ'].map((value) {
+//         return DropdownMenuItem(
+//           value: value,
+//           child: Text(
+//             '${value}',
+//           ),
+//         );
+//       }).toList(),
+//       leftIcon: Icons.note_add_rounded,
+//       validate: (values) {
+//         if (values == null) {
+//           return 'กรุณาเลือกสถานการณ์';
+//         }
+//         return null;
+//       },
+//       onChange: (value) {
+//         setState(() {
+//           dropdownValue = value;
+//           print(value);
+//         });
+//       },
+//     );
+//   }
+// }

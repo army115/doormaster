@@ -34,7 +34,9 @@ class _Visitor_PageState extends State<Visitor_Page> {
   final startDate = TextEditingController();
   final endDate = TextEditingController();
   final useCount = TextEditingController();
+  final devices = TextEditingController();
 
+  var onItemSelect;
   var userId;
   var companyId;
   var deviceId;
@@ -179,7 +181,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
                 press: () {
                   if (_kye.currentState!.validate()) {
                     Map<String, dynamic> valuse = Map();
-                    valuse['devsns'] = dropdownValue;
+                    valuse['devsns'] = onItemSelect;
                     valuse['usableCount'] = useCount.text;
                     valuse['startDate'] = startDate.text;
                     valuse['endDate'] = endDate.text;
@@ -238,7 +240,25 @@ class _Visitor_PageState extends State<Visitor_Page> {
                               },
                             ),
                             Text('สิทธ์การเข้าถึง'),
-                            DropDownSn(),
+                            Dropdown(
+                              title: deviceId == null || listDevice.length == 0
+                                  ? 'ไม่มีอุปกรณ์'
+                                  : 'เลือกอุปกรณ์',
+                              controller: devices,
+                              leftIcon: Icons.mobile_friendly,
+                              onChanged: (value) {
+                                final index = listDevice.indexWhere(
+                                    (item) => item.deviceName == value);
+                                if (index > -1) {
+                                  onItemSelect = listDevice[index].deviceDevSn;
+                                }
+                                print(onItemSelect);
+                              },
+                              error: 'กรุณากเลือกบริษัท',
+                              listItem: listDevice
+                                  .map((value) => value.deviceName.toString())
+                                  .toList(),
+                            ),
                             Text('เริ่มต้น'),
                             Date_time(
                                 controller: startDate,
@@ -276,40 +296,6 @@ class _Visitor_PageState extends State<Visitor_Page> {
         ),
         loading ? Loading() : Container()
       ],
-    );
-  }
-
-  var dropdownValue;
-  Widget DropDownSn() {
-    return Dropdown(
-      title: deviceId == null || listDevice.length == 0
-          ? 'ไม่มีอุปกรณ์'
-          : 'เลือกอุปกรณ์',
-      values: dropdownValue,
-      listItem: listDevice.map((value) {
-        return DropdownMenuItem(
-          value: value.deviceDevSn,
-          child: Text(
-            '${value.deviceName}',
-          ),
-        );
-      }).toList(),
-      leftIcon: Icons.mobile_friendly,
-      validate: (values) {
-        if (deviceId != null) {
-          if (values == null) {
-            return 'เลือกอุปกรณ์';
-          }
-          return null;
-        }
-        return 'ไม่มีอุปกรณ์';
-      },
-      onChange: (value) {
-        setState(() {
-          dropdownValue = value;
-          print('DeviceNumber : ${value}');
-        });
-      },
     );
   }
 }
