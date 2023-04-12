@@ -94,7 +94,8 @@ flutter_datetime_picker:
 flutter_icons:
     android: true
     ios: true
-    image_path: "assets/images/HIP Smart Community Icon-01.png"
+    remove_alpha_ios: true
+    image_path: "assets/images/HIP Smart Community Icon-03.png"
     min_sdk_android: 21
 
 
