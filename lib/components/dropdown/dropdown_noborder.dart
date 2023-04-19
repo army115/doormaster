@@ -39,7 +39,7 @@ class Dropdown_NoBorder extends StatelessWidget {
         hintStyle: TextStyle(color: Colors.grey.shade600),
         searchText: 'ค้นหา',
         foundText: 'ไม่พบข้อมูล',
-        borderRadiusItem: BorderRadius.circular(5),
+        // borderRadiusItem: BorderRadius.circular(5),
         contentPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 13),
       ),
     );

@@ -42,6 +42,7 @@ class Dropdown_Search extends StatelessWidget {
             hintStyle: TextStyle(color: Colors.grey.shade600),
             items: listItem,
             controller: controller,
+            borderRadiusItem: BorderRadius.circular(10),
             contentPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 13),
             focusedBorder: OutlineInputBorder(
               borderSide:

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/screen/main_screen/auth_page.dart';
@@ -34,7 +32,6 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
   final token = prefs.getString('token');
   print(token == null ? 'login : false' : 'login : true');
-  FlutterNativeSplash.remove();
   runApp(result == ConnectivityResult.none
       ? Check_Connected()
       : MyApp(
