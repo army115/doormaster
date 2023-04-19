@@ -29,12 +29,20 @@ class Check_In extends StatefulWidget {
   final checkpointId;
   final lat;
   final lng;
+  final roundId;
+  final roundName;
+  final roundStart;
+  final roundEnd;
   Check_In(
       {Key? key,
       this.checkpointId,
       this.lat,
       this.lng,
-      required this.timeCheck});
+      required this.timeCheck,
+      this.roundId,
+      this.roundName,
+      this.roundStart,
+      this.roundEnd});
 
   @override
   State<Check_In> createState() => _Check_InState();
@@ -72,7 +80,7 @@ class _Check_InState extends State<Check_In> {
 
   var companyId;
   var userId;
-  var roundId;
+  // var roundId;
   List<Data> listdata = [];
   List<Checklist> listcheck = [];
   bool loading = false;
@@ -82,7 +90,7 @@ class _Check_InState extends State<Check_In> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     companyId = prefs.getString('companyId');
     userId = prefs.getString('userId');
-    roundId = prefs.getString('roundId');
+    // roundId = prefs.getString('roundId');
     print('companyId: ${companyId}');
     print('userId: ${userId}');
     print('timeCheck: ${widget.timeCheck}');
@@ -174,21 +182,20 @@ class _Check_InState extends State<Check_In> {
             'Accept': 'application/json',
           }),
           data: values);
-      print(values);
       var _response = response.toString().split(',').first.split(':').last;
       if (_response == '200') {
         print('checkIn Success');
         print(values);
         print(response.data);
 
-        // Navigator.of(context, rootNavigator: true).push(
-        //   MaterialPageRoute(
-        //     builder: (BuildContext context) => const Record_Check(),
-        //   ),
-        // );
-        Navigator.popUntil(context, (route) => route.isFirst);
-        snackbar(context, Theme.of(context).primaryColor, 'ตรวจเช็คสำเร็จ',
-            Icons.check_circle_outline_rounded);
+        Navigator.of(context, rootNavigator: true).push(
+          MaterialPageRoute(
+            builder: (BuildContext context) => Record_Check(),
+          ),
+        );
+        // Navigator.popUntil(context, (route) => route.isFirst);
+        // snackbar(context, Theme.of(context).primaryColor, 'ตรวจเช็คสำเร็จ',
+        //     Icons.check_circle_outline_rounded);
 
         setState(() {
           loading = false;
@@ -277,12 +284,12 @@ class _Check_InState extends State<Check_In> {
                                 valuse['EmpID'] = userId;
                                 valuse['id'] = companyId;
                                 valuse['uuid'] = widget.checkpointId;
-                                valuse['Round_uuid'] = roundId;
+                                valuse['Round_uuid'] = widget.roundId;
                                 valuse['Desciption'] = detail.text;
                                 valuse['EventCheck'] = status.text;
                                 valuse['pic'] = listImage64;
                                 print(valuse);
-                                // _checkIn(valuse);
+                                _checkIn(valuse);
                               }
                             }),
                       ),
@@ -302,10 +309,34 @@ class _Check_InState extends State<Check_In> {
                           children: [
                             Row(
                               children: [
+                                Icon(Icons.edit_calendar_rounded, size: 25),
+                                SizedBox(width: 5),
+                                Expanded(
+                                  child: Text(
+                                    'วันที่ $date เวลา $time',
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 10),
+                            Row(
+                              children: [
                                 Icon(Icons.calendar_month_rounded, size: 25),
                                 SizedBox(width: 5),
                                 Expanded(
-                                  child: Text('วันที่ $date เวลา $time'),
+                                  child: Text('รอบเดิน : ${widget.roundName}'),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 10),
+                            Row(
+                              children: [
+                                Icon(Icons.access_time_rounded, size: 25),
+                                SizedBox(width: 5),
+                                Expanded(
+                                  child: Text(
+                                      'ช่วงเวลา : ${widget.roundStart} น. ถึง ${widget.roundEnd} น.'),
                                 ),
                               ],
                             ),
@@ -460,7 +491,6 @@ class _Check_InState extends State<Check_In> {
                               error: 'กรุณากเลือกบริษัท',
                               listItem: ['ปกติ', 'ไม่ปกติ'],
                             ),
-
                             TextForm_NoBorder_Validator(
                               typeInput: TextInputType.text,
                               controller: detail,
@@ -502,26 +532,6 @@ class _Check_InState extends State<Check_In> {
                                       )
                               ],
                             ),
-                            // Row(
-                            //   children: [
-                            //     Icon(
-                            //       Icons.location_on_sharp,
-                            //       size: 30,
-                            //       color: Colors.red.shade600,
-                            //     ),
-                            //     SizedBox(width: 5),
-                            //     Text('ตำแหน่งจุดตรวจ'),
-                            //   ],
-                            // ),
-                            // SizedBox(height: 10),
-                            // listdata.single.verify == 0
-                            //     ? Container()
-                            //     : Map_Page(
-                            //         lat: widget.lat,
-                            //         lng: widget.lng,
-                            //         width: double.infinity,
-                            //         height: 300,
-                            //       )
                           ],
                         )),
               ),
@@ -533,33 +543,3 @@ class _Check_InState extends State<Check_In> {
     );
   }
 }
-
-//   var dropdownValue;
-//   Widget DropDownType() {
-//     return Dropdown_NoBorder(
-//       title: 'เลือกสถานการณ์',
-//       values: dropdownValue,
-//       listItem: ['ปกติ', 'ไม่ปกติ'].map((value) {
-//         return DropdownMenuItem(
-//           value: value,
-//           child: Text(
-//             '${value}',
-//           ),
-//         );
-//       }).toList(),
-//       leftIcon: Icons.note_add_rounded,
-//       validate: (values) {
-//         if (values == null) {
-//           return 'กรุณาเลือกสถานการณ์';
-//         }
-//         return null;
-//       },
-//       onChange: (value) {
-//         setState(() {
-//           dropdownValue = value;
-//           print(value);
-//         });
-//       },
-//     );
-//   }
-// }

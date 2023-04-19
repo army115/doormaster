@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_is_empty
-
 import 'dart:developer';
 import 'dart:io';
 
@@ -17,12 +15,14 @@ import 'package:doormster/models/get_logs_all.dart';
 import 'package:doormster/screen/security_guard/record_point_page.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Record_Check extends StatefulWidget {
   final dateValue;
-  const Record_Check({Key? key, this.dateValue});
+  final type;
+  Record_Check({Key? key, this.dateValue, this.type});
 
   @override
   State<Record_Check> createState() => _Record_CheckState();
@@ -197,7 +197,11 @@ class _Record_CheckState extends State<Record_Check> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Navigator.popUntil(context, (route) => route.isFirst);
+        if (widget.type != null) {
+          Navigator.of(context).pop();
+        } else {
+          Navigator.popUntil(context, (route) => route.isFirst);
+        }
         return false;
       },
       child: Stack(
@@ -206,7 +210,11 @@ class _Record_CheckState extends State<Record_Check> {
             appBar: AppBar(
               title: Text('บันทึกรายการตรวจ'),
               leading: button_back(() {
-                Navigator.popUntil(context, (route) => route.isFirst);
+                if (widget.type != null) {
+                  Navigator.of(context).pop();
+                } else {
+                  Navigator.popUntil(context, (route) => route.isFirst);
+                }
               }),
             ),
             body: loading

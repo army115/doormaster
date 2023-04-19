@@ -121,7 +121,7 @@ class _Security_GuardState extends State<Security_Guard> {
                   title: 'ดูรายการบันทึกการตรวจ',
                   icon: Icons.event_note,
                   press: () {
-                    checkInternet(context, Record_Check(), false);
+                    checkInternet(context, Record_Check(type: 'home'), false);
                   },
                 ),
                 Grid_Menu(

@@ -9,9 +9,17 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class ScanQR_Check extends StatefulWidget {
   final name;
+  final roundId;
+  final roundName;
+  final roundStart;
+  final roundEnd;
   ScanQR_Check({
     Key? key,
     this.name,
+    this.roundId,
+    this.roundName,
+    this.roundStart,
+    this.roundEnd,
   }) : super(key: key);
 
   @override
@@ -50,7 +58,11 @@ class _ScanQR_CheckState extends State<ScanQR_Check> {
                 timeCheck: DateTime.now(),
                 checkpointId: '${result?.code}',
                 lat: position?.latitude,
-                lng: position?.longitude),
+                lng: position?.longitude,
+                roundId: widget.roundName,
+                roundName: widget.roundName,
+                roundStart: widget.roundStart,
+                roundEnd: widget.roundEnd),
           ),
         );
       } else if (widget.name == 'add') {

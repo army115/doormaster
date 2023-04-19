@@ -96,15 +96,20 @@ class _Round_CheckState extends State<Round_Check> {
     }
   }
 
-  Future<void> requestLocationPermission(String name, String roundId) async {
+  Future<void> requestLocationPermission(String name, String roundId,
+      String roundName, String roundStart, String roundEnd) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final permission = await Permission.location.request();
     if (permission.isGranted) {
-      await prefs.setString('roundId', roundId);
+      // await prefs.setString('roundId', roundId);
       checkInternet(
           context,
           ScanQR_Check(
             name: name,
+            roundId: roundId,
+            roundName: roundName,
+            roundStart: roundStart,
+            roundEnd: roundEnd,
           ),
           true);
     } else {
@@ -236,7 +241,13 @@ class _Round_CheckState extends State<Round_Check> {
                                                           ? requestLocationPermission(
                                                               'check',
                                                               listdata[index]
-                                                                  .roundUuid!)
+                                                                  .roundUuid!,
+                                                              listdata[index]
+                                                                  .roundName!,
+                                                              listdata[index]
+                                                                  .roundStart!,
+                                                              listdata[index]
+                                                                  .roundEnd!)
                                                           : dialogOnebutton_Subtitle(
                                                               context,
                                                               'ไม่สามารถตรวจได้',
