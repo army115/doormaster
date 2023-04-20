@@ -33,7 +33,7 @@ class _Record_PointState extends State<Record_Point> {
       });
 
       //call api
-      var url = '${Connect_api().domain}/get/logOne/$id';
+      var url = '${Connect_api().domain}/get/logOne/$id'; // get log show image
       var response = await Dio().get(
         url,
         options: Options(headers: {

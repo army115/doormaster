@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_twobutton_subtext.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/screen/security_guard/add_checkpoint_page.dart';
@@ -52,19 +53,31 @@ class _ScanQR_CheckState extends State<ScanQR_Check> {
         controller.pauseCamera();
       });
       if (widget.name == 'check') {
-        Navigator.of(context).push(
-          MaterialPageRoute<void>(
-            builder: (BuildContext context) => Check_In(
-                timeCheck: DateTime.now(),
-                checkpointId: '${result?.code}',
-                lat: position?.latitude,
-                lng: position?.longitude,
-                roundId: widget.roundName,
-                roundName: widget.roundName,
-                roundStart: widget.roundStart,
-                roundEnd: widget.roundEnd),
-          ),
-        );
+        if (widget.roundId == null) {
+          dialogOnebutton_Subtitle(
+              context,
+              'พบข้อผิดพลาด',
+              'ยังไม่ถึงรอบเดินตรวจ โปรดลองอีกครั้ง',
+              Icons.warning_amber_rounded,
+              Colors.orange,
+              'ตกลง', () {
+            Navigator.popUntil(context, (route) => route.isFirst);
+          }, false, false);
+        } else {
+          Navigator.of(context).push(
+            MaterialPageRoute<void>(
+              builder: (BuildContext context) => Check_In(
+                  timeCheck: DateTime.now(),
+                  checkpointId: '${result?.code}',
+                  lat: position?.latitude,
+                  lng: position?.longitude,
+                  roundId: widget.roundName,
+                  roundName: widget.roundName,
+                  roundStart: widget.roundStart,
+                  roundEnd: widget.roundEnd),
+            ),
+          );
+        }
       } else if (widget.name == 'add') {
         Navigator.of(context).push(
           MaterialPageRoute<void>(

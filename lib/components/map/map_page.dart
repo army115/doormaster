@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -94,7 +95,9 @@ class _Map_PageState extends State<Map_Page> {
                       // scrollGesturesEnabled: false,
                       mapType: maptype,
                       markers: _markers,
-                      // myLocationButtonEnabled: true,
+                      zoomControlsEnabled: true,
+                      myLocationButtonEnabled: false,
+
                       // myLocationEnabled: true,
                       initialCameraPosition: CameraPosition(
                         target: LatLng(widget.lat, widget.lng),
@@ -104,53 +107,9 @@ class _Map_PageState extends State<Map_Page> {
                         _mapController = controller;
                       }),
                 ),
-                Positioned(
-                  right: 10,
-                  top: 10,
-                  child: Opacity(
-                    opacity: 0.7,
-                    child: Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(2)),
-                        color: Colors.white,
-                        child: InkWell(
-                          onTap: () => setState(() {
-                            _mapController?.animateCamera(
-                              CameraUpdate.newLatLngZoom(
-                                  LatLng(widget.lat, widget.lng), 20),
-                            );
-                          }),
-                          child: Padding(
-                            padding: const EdgeInsets.all(5.0),
-                            child: Icon(Icons.my_location_rounded,
-                                size: 30, color: Colors.grey[800]),
-                          ),
-                        )),
-                  ),
-                ),
-                Positioned(
-                  left: 10,
-                  top: 10,
-                  child: Opacity(
-                    opacity: 0.7,
-                    child: Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(2)),
-                        color: Colors.white,
-                        child: InkWell(
-                          onTap: () => setState(() {
-                            maptype = (maptype == MapType.normal)
-                                ? MapType.hybrid
-                                : MapType.normal;
-                          }),
-                          child: Padding(
-                            padding: const EdgeInsets.all(5.0),
-                            child: Icon(Icons.map,
-                                size: 30, color: Colors.grey[800]),
-                          ),
-                        )),
-                  ),
-                ),
+                zoomControl(),
+                mapStyle(),
+                pinLocation()
                 // Positioned(
                 //   left: 10,
                 //   top: 60,
@@ -179,6 +138,107 @@ class _Map_PageState extends State<Map_Page> {
                 // )
               ],
             ),
+    );
+  }
+
+  Widget zoomControl() {
+    return Platform.isIOS
+        ? Positioned(
+            right: 10,
+            bottom: 10,
+            child: Opacity(
+              opacity: 0.7,
+              child: Column(
+                children: [
+                  Card(
+                      margin: EdgeInsets.zero,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(2)),
+                      color: Colors.white,
+                      child: InkWell(
+                        onTap: () => setState(() {
+                          _mapController?.animateCamera(
+                            CameraUpdate.zoomIn(),
+                          );
+                        }),
+                        child: Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Icon(Icons.add,
+                              size: 30, color: Colors.grey[800]),
+                        ),
+                      )),
+                  Card(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(2)),
+                      color: Colors.white,
+                      child: InkWell(
+                        onTap: () => setState(() {
+                          _mapController?.animateCamera(
+                            CameraUpdate.zoomOut(),
+                          );
+                        }),
+                        child: Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Icon(Icons.remove,
+                              size: 30, color: Colors.grey[800]),
+                        ),
+                      ))
+                ],
+              ),
+            ),
+          )
+        : Container();
+  }
+
+  Widget mapStyle() {
+    return Positioned(
+      left: 10,
+      top: 10,
+      child: Opacity(
+        opacity: 0.7,
+        child: Card(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
+            color: Colors.white,
+            child: InkWell(
+              onTap: () => setState(() {
+                maptype = (maptype == MapType.normal)
+                    ? MapType.hybrid
+                    : MapType.normal;
+              }),
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Icon(Icons.map, size: 30, color: Colors.grey[800]),
+              ),
+            )),
+      ),
+    );
+  }
+
+  Widget pinLocation() {
+    return Positioned(
+      right: 10,
+      top: 10,
+      child: Opacity(
+        opacity: 0.7,
+        child: Card(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
+            color: Colors.white,
+            child: InkWell(
+              onTap: () => setState(() {
+                _mapController?.animateCamera(
+                  CameraUpdate.newLatLngZoom(
+                      LatLng(widget.lat, widget.lng), 20),
+                );
+              }),
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Icon(Icons.my_location_rounded,
+                    size: 30, color: Colors.grey[800]),
+              ),
+            )),
+      ),
     );
   }
 
