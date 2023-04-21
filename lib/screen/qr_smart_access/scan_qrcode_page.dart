@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class Scanner extends StatefulWidget {
@@ -106,7 +107,7 @@ class _ScannerState extends State<Scanner> {
             Positioned(
               bottom: 100,
               child: (result != null)
-                  ? Text(
+                  ? SelectableText(
                       '${result!.code}',
                       style: TextStyle(color: Colors.white),
                     )

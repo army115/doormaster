@@ -59,7 +59,7 @@ android {
         applicationId "com.hip.community"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 11
+        versionCode 12
         versionName '1.2.4'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

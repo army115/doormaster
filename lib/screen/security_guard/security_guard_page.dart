@@ -24,18 +24,18 @@ class Security_Guard extends StatefulWidget {
 class _Security_GuardState extends State<Security_Guard> {
   bool loading = false;
 
-  var mobileRole;
-  Future _getRole() async {
-    setState(() {
-      loading = true;
-    });
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    mobileRole = await prefs.getInt('role') ?? "";
-    print('mobileRole: ${mobileRole}');
-    setState(() {
-      loading = false;
-    });
-  }
+  // var mobileRole;
+  // Future _getRole() async {
+  //   setState(() {
+  //     loading = true;
+  //   });
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   mobileRole = await prefs.getInt('role') ?? "";
+  //   print('mobileRole: ${mobileRole}');
+  //   setState(() {
+  //     loading = false;
+  //   });
+  // }
 
   Future<void> requestLocationPermission(String name) async {
     final permission = await Permission.location.request();
@@ -60,11 +60,11 @@ class _Security_GuardState extends State<Security_Guard> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _getRole();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _getRole();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -124,22 +124,22 @@ class _Security_GuardState extends State<Security_Guard> {
                     checkInternet(context, Record_Check(type: 'home'), false);
                   },
                 ),
-                Grid_Menu(
-                    title: 'บันทึกการตรวจนอกรอบ',
-                    icon: Icons.assignment_outlined,
-                    press: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => Check_In(
-                            timeCheck: DateTime.now(),
-                            checkpointId:
-                                'd05154cb-8787-40b1-acdb-13f62303859e',
-                            lat: 13.69521967419439,
-                            lng: 100.64172377200555,
-                          ),
-                        ),
-                      );
-                    }),
+                // Grid_Menu(
+                //     title: 'บันทึกการตรวจนอกรอบ',
+                //     icon: Icons.assignment_outlined,
+                //     press: () {
+                //       Navigator.of(context).push(
+                //         MaterialPageRoute(
+                //           builder: (BuildContext context) => Check_In(
+                //             timeCheck: DateTime.now(),
+                //             checkpointId:
+                //                 'd05154cb-8787-40b1-acdb-13f62303859e',
+                //             lat: 13.69521967419439,
+                //             lng: 100.64172377200555,
+                //           ),
+                //         ),
+                //       );
+                //     }),
               ],
             ),
           ]),

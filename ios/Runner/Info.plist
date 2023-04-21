@@ -39,6 +39,10 @@
 	<key>NSCameraUsageDescription</key>
 	<string>camera</string>
 	<key>NSContactsUsageDescription</key>
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>This app needs camera access to scan QR codes</string>
 	<string>contacts</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Always and when in use!</string>

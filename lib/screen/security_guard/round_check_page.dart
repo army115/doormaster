@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
@@ -8,6 +10,7 @@ import 'package:doormster/screen/security_guard/scan_qr_check_page.dart';
 import 'package:doormster/service/check_connected.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,8 +31,8 @@ class _Round_CheckState extends State<Round_Check> {
   Color? textColor;
   Color? line;
   DateTime now = DateTime.now();
-  List<DateTime> timeStart = [];
-  List<DateTime> timeEnd = [];
+  // List<DateTime> timeStart = [];
+  // List<DateTime> timeEnd = [];
   DateTime? timeStartCheck;
   DateTime? timeEndCheck;
 
@@ -45,10 +48,10 @@ class _Round_CheckState extends State<Round_Check> {
     }
   }
 
-  Future _setTime(DateTime _start, DateTime _end) async {
-    timeStart.add(_start);
-    timeEnd.add(_end);
-  }
+  // Future _setTime(DateTime _start, DateTime _end) async {
+  //   timeStart.add(_start);
+  //   timeEnd.add(_end);
+  // }
 
   Future _getCheckRound() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -140,24 +143,6 @@ class _Round_CheckState extends State<Round_Check> {
       children: [
         Scaffold(
           appBar: AppBar(title: Text('รายการรอบเดินตรวจ')),
-          // floatingActionButton: FloatingActionButton(
-          //   elevation: 10,
-          //   backgroundColor: Theme.of(context).primaryColor,
-          //   child: Icon(Icons.qr_code_scanner_rounded, size: 30),
-          //   onPressed: () {
-          //     now.isAfter(timeStartCheck!) && now.isBefore(timeEndCheck!)
-          //         ? requestLocationPermission('check')
-          //         : dialogOnebutton_Subtitle(
-          //             context,
-          //             'ไม่สามารถตรวจได้',
-          //             'เลยเวลาเดินตรวจรอบนี้แล้ว',
-          //             Icons.warning_amber_rounded,
-          //             Colors.orange,
-          //             'ตกลง', () {
-          //             Navigator.popUntil(context, (route) => route.isFirst);
-          //           }, false, false);
-          //   },
-          // ),
           body: loading
               ? Container()
               : SafeArea(
@@ -177,8 +162,8 @@ class _Round_CheckState extends State<Round_Check> {
                                   DateTime timeEnd = DateTime.parse(
                                       '$date ${listdata[index].roundEnd}');
                                   timeStartCheck = timeStart;
-                                  timeEndCheck = timeEndCheck;
-                                  _setTime(timeStart, timeEnd);
+                                  timeEndCheck = timeEnd;
+                                  // _setTime(timeStart, timeEnd);
                                   _setColor(now, timeStart, timeEnd);
 
                                   return Card(

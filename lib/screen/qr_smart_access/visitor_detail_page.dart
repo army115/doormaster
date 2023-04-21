@@ -270,7 +270,7 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
                           SizedBox(
                             height: 10,
                           ),
-                          Text(
+                          SelectableText(
                             'รหัสผ่าน : ${widget.QRcodeData[1]}',
                             style: TextStyle(color: Colors.white, fontSize: 18),
                           ),

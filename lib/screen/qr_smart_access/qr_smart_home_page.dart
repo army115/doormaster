@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, prefer_const_constructors
+
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/drawer/drawer.dart';
 import 'package:doormster/components/girdManu/grid_menu.dart';
@@ -9,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:permission_handler/permission_handler.dart';
-// import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class QRSmart_HomePage extends StatefulWidget {
   QRSmart_HomePage({
@@ -137,8 +139,9 @@ class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
                           title: 'Emergency Call',
                           icon: Icons.phone_forwarded_rounded,
                           press: () async {
-                            await FlutterPhoneDirectCaller.callNumber(
-                                '0123456789');
+                            launch("tel:02-748-2191");
+                            // await FlutterPhoneDirectCaller.callNumber(
+                            //     '02-748-2191');
                           }),
                     ],
                   ),

@@ -92,8 +92,8 @@ class _Login_StaffState extends State<Login_Staff> {
             await Future.delayed(const Duration(milliseconds: 600));
             print(jsonRes.data);
             print('username หรือ password ไม่ถูกต้อง');
-            // snackbar(context, Colors.red, 'ชื่อผู้ใช้ หรือ รหัสผ่าน ไม่ถูกต้อง',
-            //     Icons.highlight_off_rounded);
+            snackbar(context, Colors.red, 'ชื่อผู้ใช้ หรือ รหัสผ่าน ไม่ถูกต้อง',
+                Icons.highlight_off_rounded);
             setState(() {
               loading = false;
             });
@@ -165,8 +165,7 @@ class _Login_StaffState extends State<Login_Staff> {
       onWillPop: () async => _onBackButtonDoubleClicked(),
       child: Scaffold(
           // backgroundColor: Theme.of(context).primaryColor,
-          body: SafeArea(
-              child: SingleChildScrollView(
+          body: SingleChildScrollView(
         child: Form(
           key: _formkey,
           child: Stack(
@@ -177,11 +176,11 @@ class _Login_StaffState extends State<Login_Staff> {
                 color: Theme.of(context).primaryColor,
                 child: Container(
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height * 0.5,
+                  height: MediaQuery.of(context).size.height * 0.55,
                 ),
               ),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 50),
                 child: Column(
                   // mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -308,7 +307,7 @@ class _Login_StaffState extends State<Login_Staff> {
             ],
           ),
         ),
-      ))),
+      )),
     );
   }
 
