@@ -11,9 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:restart_app/restart_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:doormster/screen/parcel_service/parcel_service_page.dart';
@@ -21,9 +19,24 @@ import 'package:doormster/screen/qr_smart_access/qr_smart_home_page.dart';
 import 'package:doormster/screen/security_guard/security_guard_page.dart';
 import 'package:doormster/screen/visitor_service/visitor_service_page.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-void main() async {
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  AndroidInitializationSettings initializationSettingsAndroid =
+      const AndroidInitializationSettings('@mipmap/ic_launcher');
+  DarwinInitializationSettings initializationSettingsIOS =
+      const DarwinInitializationSettings();
+  final InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+    iOS: initializationSettingsIOS,
+  );
+  await flutterLocalNotificationsPlugin.initialize(
+    initializationSettings,
+  );
+
   // FlutterNativeSplash.preserve(
   //     widgetsBinding: WidgetsFlutterBinding.ensureInitialized());
   final result = await Connectivity().checkConnectivity();

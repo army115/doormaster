@@ -4,7 +4,7 @@ import 'dart:async';
 import 'package:doormster/components/drawer/drawer.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/routes/menu/home_menu.dart';
-import 'package:doormster/routes/menu/message_menu.dart';
+import 'package:doormster/routes/menu/notification_menu.dart';
 import 'package:doormster/routes/menu/profile_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,7 +28,7 @@ class BottomBar extends StatefulWidget {
 class _BottomBarState extends State<BottomBar> {
   final buildBody = [
     Home_Menu(navigatorKey: homeKey),
-    Message_Menu(navigatorKey: messageKey),
+    Notification_Menu(navigatorKey: messageKey),
     Profile_Menu(navigatorKey: profileKey),
   ];
 
@@ -121,8 +121,10 @@ class _BottomBarState extends State<BottomBar> {
               label: 'หน้าหลัก',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.message_rounded),
-              label: 'ข้อความ',
+              icon: Icon(Icons.notifications_rounded),
+              label: 'แจ้งเตือน',
+              // icon: Icon(Icons.message_rounded),
+              // label: 'ข้อความ',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.account_circle_rounded),
