@@ -56,7 +56,7 @@
             "name": "pixel3",
             "request": "launch",
             "type": "dart",
-            "deviceId": "emulator-5556"
+            "deviceId": "emulator-5557"
         },
         {
             "name": "pixel4",

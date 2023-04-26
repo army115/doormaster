@@ -24,7 +24,6 @@ class _Notification_PageState extends State<Notification_Page> {
       importance: Importance.max,
       priority: Priority.high,
       ticker: 'ticker',
-      styleInformation: DefaultStyleInformation(true, true),
     );
 
     DarwinNotificationDetails iosDetails = DarwinNotificationDetails(
@@ -40,7 +39,6 @@ class _Notification_PageState extends State<Notification_Page> {
       'ทดสอบ',
       'การแจ้งเตือน',
       generalNotificationDetails,
-      payload: 'Test Payload',
     );
   }
 

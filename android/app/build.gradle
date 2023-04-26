@@ -37,7 +37,7 @@ android {
 
     compileOptions {
         // Flag to enable support for the new language APIs
-        coreLibraryDesugaringEnabled true
+        // coreLibraryDesugaringEnabled true
         // Sets Java compatibility to Java 8   
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -60,12 +60,12 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.hip.community"
-        multiDexEnabled true
+        // multiDexEnabled true
         minSdkVersion 21
         targetSdkVersion 33
         versionCode 12
         versionName '1.2.4'
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        // testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     // buildTypes {
@@ -104,6 +104,7 @@ dependencies {
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
     implementation 'androidx.window:window:1.0.0'
     implementation 'androidx.window:window-java:1.0.0'
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
-    implementation 'androidx.work:work-runtime-ktx:2.7.1'
+    implementation "androidx.core:core-splashscreen:1.0.0"
+    // coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+    // implementation 'androidx.work:work-runtime-ktx:2.7.1'
 }

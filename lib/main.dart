@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 import 'package:restart_app/restart_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,7 +27,7 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   AndroidInitializationSettings initializationSettingsAndroid =
-      const AndroidInitializationSettings('@mipmap/ic_launcher');
+      const AndroidInitializationSettings("@mipmap/ic_launcher");
   DarwinInitializationSettings initializationSettingsIOS =
       const DarwinInitializationSettings();
   final InitializationSettings initializationSettings = InitializationSettings(
@@ -36,9 +37,9 @@ Future<void> main() async {
   await flutterLocalNotificationsPlugin.initialize(
     initializationSettings,
   );
-
-  // FlutterNativeSplash.preserve(
-  //     widgetsBinding: WidgetsFlutterBinding.ensureInitialized());
+  FlutterNativeSplash.preserve(
+      widgetsBinding: WidgetsFlutterBinding.ensureInitialized());
+  // FlutterNativeSplash.remove();
   final result = await Connectivity().checkConnectivity();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);

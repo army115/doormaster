@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/button/button_animation.dart';
+import 'package:doormster/components/snackbar/back_double.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/components/text_form/text_form.dart';
 import 'package:doormster/components/text_form/text_form_password.dart';
@@ -136,23 +137,7 @@ class _Login_StaffState extends State<Login_Staff> {
       SystemNavigator.pop(animated: true);
       return true;
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Theme.of(context).primaryColor,
-          content: Text(
-            "กดอีกครั้งเพื่อออก",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16, fontFamily: 'Kanit'),
-          ),
-          width: MediaQuery.of(context).size.width * 0.45,
-          padding: EdgeInsets.symmetric(vertical: 10),
-          duration: const Duration(milliseconds: 1500),
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25),
-          ),
-        ),
-      );
+      backDouble(context);
       return false;
     }
   }

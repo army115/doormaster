@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'package:doormster/components/drawer/drawer.dart';
 import 'package:doormster/components/loading/loading.dart';
+import 'package:doormster/components/snackbar/back_double.dart';
 import 'package:doormster/routes/menu/home_menu.dart';
 import 'package:doormster/routes/menu/notification_menu.dart';
 import 'package:doormster/routes/menu/profile_menu.dart';
@@ -60,24 +61,7 @@ class _BottomBarState extends State<BottomBar> {
           if (difference < 1500) {
             SystemNavigator.pop(animated: true);
           } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                dismissDirection: DismissDirection.none,
-                backgroundColor: Theme.of(context).primaryColor,
-                content: Text(
-                  "กดอีกครั้งเพื่อออก",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 16, fontFamily: 'Kanit'),
-                ),
-                width: 170,
-                padding: EdgeInsets.symmetric(vertical: 10),
-                duration: const Duration(milliseconds: 1500),
-                behavior: SnackBarBehavior.floating,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25),
-                ),
-              ),
-            );
+            backDouble(context);
           }
         }
       }

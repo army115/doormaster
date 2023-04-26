@@ -1,4 +1,5 @@
 import 'package:doormster/components/girdManu/grid_menu.dart';
+import 'package:doormster/components/snackbar/back_double.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -20,23 +21,7 @@ class _Auth_PageState extends State<Auth_Page> {
       SystemNavigator.pop(animated: true);
       return true;
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.black87,
-          content: Text(
-            "กดอีกครั้งเพื่อออก",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16, fontFamily: 'Kanit'),
-          ),
-          width: MediaQuery.of(context).size.width * 0.45,
-          padding: EdgeInsets.symmetric(vertical: 10),
-          duration: const Duration(milliseconds: 1500),
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25),
-          ),
-        ),
-      );
+      backDouble(context);
       return false;
     }
   }

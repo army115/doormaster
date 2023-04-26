@@ -47,6 +47,7 @@ flutter_native_splash:
     icon_background_color: "#0B4D9C"
     image_dark: assets/images/HIP Smart Community Icon-a12.png
     icon_background_color_dark: "#0B4D9C"
+    # branding: assets/images/banner.png
   # android_12:
     # The image parameter sets the splash screen icon image.  If this parameter is not specified,
     # the app's launcher icon will be used instead.
@@ -76,8 +77,8 @@ flutter_native_splash:
   # The android, ios and web parameters can be used to disable generating a splash screen on a given
   # platform.
   # android: false
-  #ios: false
-  #web: false
+  ios: false
+  web: false
 
   # Platform specific images can be specified with the following parameters, which will override
   # the respective parameter.  You may specify all, selected, or none of these parameters:
@@ -133,7 +134,7 @@ flutter_native_splash:
   #       To show the notification bar, add the following code to your Flutter app:
   #       WidgetsFlutterBinding.ensureInitialized();
   #       SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom, SystemUiOverlay.top]);
-  # fullscreen: true
+  fullscreen: true
 
   # If you have changed the name(s) of your info.plist file(s), you can specify the filename(s)
   # with the info_plist_files parameter.  Remove only the # characters in the three lines below,
