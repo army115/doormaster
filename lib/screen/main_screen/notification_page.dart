@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:ffi';
 import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
 import 'package:doormster/main.dart';
+import 'package:doormster/service/notifi_service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 import 'package:doormster/components/drawer/drawer.dart';
@@ -17,31 +18,6 @@ class Notification_Page extends StatefulWidget {
 }
 
 class _Notification_PageState extends State<Notification_Page> {
-  Future<void> _showNotification() async {
-    AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
-      'test_01',
-      'แจ้งเตือนปกติ',
-      importance: Importance.max,
-      priority: Priority.high,
-      ticker: 'ticker',
-    );
-
-    DarwinNotificationDetails iosDetails = DarwinNotificationDetails(
-        badgeNumber: 1, subtitle: 'test notification ios');
-
-    NotificationDetails generalNotificationDetails = NotificationDetails(
-      android: androidDetails,
-      iOS: iosDetails,
-    );
-
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      'ทดสอบ',
-      'การแจ้งเตือน',
-      generalNotificationDetails,
-    );
-  }
-
   final TextEditingController _textController = TextEditingController();
   final List<String> _messages = [];
 
@@ -58,7 +34,7 @@ class _Notification_PageState extends State<Notification_Page> {
     return Scaffold(
       drawer: MyDrawer(),
       appBar: AppBar(
-        title: Text('Massages'),
+        title: Text('การแจ้งเตือน'),
         leading: IconButton(
             icon: Icon(Icons.menu),
             onPressed: () {
@@ -68,12 +44,12 @@ class _Notification_PageState extends State<Notification_Page> {
       body: Center(
         child: ElevatedButton(
           onPressed: () {
-            _showNotification();
+            NotificationService().showNotification();
           },
           child: Text('Show Notification'),
         ),
       ),
-      // Logo_Opacity(title: 'ไม่มีแจ้งเตือน')
+      // Logo_Opacity(title: 'ไม่มีการแจ้งเตือน')
       // Column(
       //   children: [
       //     Expanded(

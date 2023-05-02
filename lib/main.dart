@@ -5,8 +5,10 @@ import 'package:doormster/screen/main_screen/home_page.dart';
 import 'package:doormster/screen/main_screen/login_page.dart';
 import 'package:doormster/screen/main_screen/change_password_page.dart';
 import 'package:doormster/screen/main_screen/login_staff_page.dart';
+import 'package:doormster/screen/main_screen/settings_page.dart';
 import 'package:doormster/screen/management_service/management_service_page.dart';
 import 'package:doormster/screen/style/theme.dart';
+import 'package:doormster/service/notifi_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -20,26 +22,13 @@ import 'package:doormster/screen/qr_smart_access/qr_smart_home_page.dart';
 import 'package:doormster/screen/security_guard/security_guard_page.dart';
 import 'package:doormster/screen/visitor_service/visitor_service_page.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
-Future<void> main() async {
+Future<void> main(context) async {
   WidgetsFlutterBinding.ensureInitialized();
-  AndroidInitializationSettings initializationSettingsAndroid =
-      const AndroidInitializationSettings("@mipmap/ic_launcher");
-  DarwinInitializationSettings initializationSettingsIOS =
-      const DarwinInitializationSettings();
-  final InitializationSettings initializationSettings = InitializationSettings(
-    android: initializationSettingsAndroid,
-    iOS: initializationSettingsIOS,
-  );
-  await flutterLocalNotificationsPlugin.initialize(
-    initializationSettings,
-  );
-  FlutterNativeSplash.preserve(
-      widgetsBinding: WidgetsFlutterBinding.ensureInitialized());
-  // FlutterNativeSplash.remove();
+  NotificationService().notification();
+  // FlutterNativeSplash.preserve(
+  //     widgetsBinding: WidgetsFlutterBinding.ensureInitialized());
+  FlutterNativeSplash.remove();
   final result = await Connectivity().checkConnectivity();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
@@ -94,6 +83,7 @@ class MyApp extends StatelessWidget {
         '/security': (context) => Security_Guard(),
         '/visitor': (context) => Visitor_Service(),
         '/password': (context) => Password_Page(),
+        '/setting': (context) => Settings_Page(),
       },
     );
   }

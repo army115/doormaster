@@ -1,3 +1,5 @@
+// ignore_for_file: sort_child_properties_last, prefer_const_constructors
+
 import 'package:doormster/screen/style/styleButton/ButtonStyle.dart';
 import 'package:flutter/material.dart';
 
@@ -54,41 +56,45 @@ void dialogTwobutton_Subtitle(
                       Container(
                         // width: MediaQuery.of(context).size.width,
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            ElevatedButton(
-                              style: styleButtons(
-                                  EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 35),
-                                  10.0,
-                                  Theme.of(context).primaryColor,
-                                  BorderRadius.circular(5)),
-                              child: Text(
-                                button1,
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    letterSpacing: 1,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
+                            SizedBox(
+                              width: 90,
+                              child: ElevatedButton(
+                                style: styleButtons(
+                                    EdgeInsets.symmetric(vertical: 5),
+                                    10.0,
+                                    Theme.of(context).primaryColor,
+                                    BorderRadius.circular(5)),
+                                child: Text(
+                                  button1,
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      letterSpacing: 1,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                onPressed: press1,
                               ),
-                              onPressed: press1,
                             ),
-                            ElevatedButton(
-                              style: styleButtons(
-                                  EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 25),
-                                  10.0,
-                                  Theme.of(context).primaryColor,
-                                  BorderRadius.circular(5)),
-                              child: Text(
-                                button2,
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    letterSpacing: 1,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
+                            SizedBox(
+                              width: 90,
+                              child: ElevatedButton(
+                                style: styleButtons(
+                                    EdgeInsets.symmetric(vertical: 5),
+                                    10.0,
+                                    Theme.of(context).primaryColor,
+                                    BorderRadius.circular(5)),
+                                child: Text(
+                                  button2,
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      letterSpacing: 1,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                onPressed: press2,
                               ),
-                              onPressed: press2,
                             ),
                           ],
                         ),

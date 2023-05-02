@@ -67,7 +67,7 @@ dependencies:
   easy_loading_button: ^0.3.0
   calendar_date_picker2: ^0.4.9
   animated_custom_dropdown: ^1.5.0
-  flutter_local_notifications: ^13.0.0
+  flutter_local_notifications: ^14.0.0+1
   # flutter_typeahead: ^4.3.7
   # dropdown_search: ^5.0.6
   # buddhist_datetime_dateformat_sns: ^1.0.7

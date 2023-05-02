@@ -53,6 +53,12 @@
             "deviceId": "25940670-35F3-4BA6-BDA7-8842855E6C9C"
         },
         {
+            "name": "iPhone 7",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "f9de6af2285bf78f84d47077a438018572f131af"
+        },
+        {
             "name": "pixel3",
             "request": "launch",
             "type": "dart",
@@ -74,6 +80,7 @@
                 "redmi 9t",
                 "LD Player",
                 "iPhone 14 Pro",
+                "iPhone 7",
                 "pixel3",
                 "pixel4",
             ],

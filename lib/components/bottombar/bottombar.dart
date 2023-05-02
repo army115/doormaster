@@ -15,7 +15,7 @@ GlobalKey<NavigatorState> homeKey = GlobalKey<NavigatorState>();
 GlobalKey<NavigatorState> messageKey = GlobalKey<NavigatorState>();
 GlobalKey<NavigatorState> profileKey = GlobalKey<NavigatorState>();
 final NavbarNotifier _navbarNotifier = NavbarNotifier();
-int _selectedIndex = 0;
+int _selectedIndex = NavbarNotifier().selectedIndex;
 
 class BottomBar extends StatefulWidget {
   BottomBar({
@@ -69,12 +69,6 @@ class _BottomBarState extends State<BottomBar> {
     return false;
   }
 
-  Future stateHome() async {
-    setState(() {
-      _selectedIndex = 0;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -89,7 +83,6 @@ class _BottomBarState extends State<BottomBar> {
             });
             Navigator.of(context).pop();
           },
-          // selectCompany: stateHome()
         ),
         body: IndexedStack(
           index: _selectedIndex,
@@ -132,6 +125,7 @@ class _BottomBarState extends State<BottomBar> {
 
 class NavbarNotifier extends ChangeNotifier {
   int _index = 0;
+  int selectedIndex = 0;
 
   FutureOr<bool> onBackButtonPressed(int index) async {
     bool exitingApp = true;

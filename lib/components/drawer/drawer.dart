@@ -109,7 +109,7 @@ class _MyDrawerState extends State<MyDrawer> {
     }
   }
 
-  Future _selectCompany(context, uId, comId) async {
+  Future _selectCompany(uId, comId) async {
     prefs.clear();
     try {
       setState(() {
@@ -289,7 +289,7 @@ class _MyDrawerState extends State<MyDrawer> {
                     height: 0,
                   ),
                   Expanded(
-                    child: ListView(
+                    child: Column(
                       children: [
                         ListTile(
                           onTap: widget.pressProfile,
@@ -309,15 +309,15 @@ class _MyDrawerState extends State<MyDrawer> {
                         ),
                         ListTile(
                           onTap: () {
-                            Navigator.of(context).popAndPushNamed('/password');
+                            Navigator.of(context).popAndPushNamed('/setting');
                           },
                           leading: Icon(
-                            Icons.key_sharp,
+                            Icons.settings,
                             size: 30,
                             color: Colors.white,
                           ),
                           title: Text(
-                            'เปลี่ยนรหัสผ่าน',
+                            'การตั้งค่า',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 letterSpacing: 0.5,
@@ -396,6 +396,7 @@ class _MyDrawerState extends State<MyDrawer> {
                     title: Container(
                       width: double.infinity,
                       child: SingleChildScrollView(
+                          physics: AlwaysScrollableScrollPhysics(),
                           primary: false,
                           controller: scrollController,
                           child: Column(
@@ -472,7 +473,6 @@ class _MyDrawerState extends State<MyDrawer> {
                                           }
                                         : () {
                                             _selectCompany(
-                                              context,
                                               multiCompany[index].sId,
                                               multiCompany[index].companyId,
                                             );

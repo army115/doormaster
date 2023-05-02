@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors_in_immutables, avoid_single_cascade_in_expression_statements
+// ignore_for_file: prefer_const_constructors_in_immutables, avoid_single_cascade_in_expression_statements, avoid_print, use_build_context_synchronously
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
@@ -35,6 +35,7 @@ class _Login_StaffState extends State<Login_Staff> {
   Future doLogin() async {
     if (_formkey.currentState!.validate()) {
       try {
+        await Future.delayed(const Duration(milliseconds: 600));
         setState(() {
           loading = true;
         });
@@ -57,7 +58,6 @@ class _Login_StaffState extends State<Login_Staff> {
           print('error ${jsonRes.status}');
           print('body ${body}');
           if (jsonRes.status == 200) {
-            await Future.delayed(const Duration(milliseconds: 600));
             var token = jsonRes.accessToken;
             List<User> data = jsonRes.user!; //ตัวแปร List จาก model
 
@@ -66,31 +66,43 @@ class _Login_StaffState extends State<Login_Staff> {
             print('login success');
             print('token: ${token}');
 
-            // ส่งค่าตัวแปร
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            await prefs.setString('token', token!);
-            await prefs.setString('username', data.single.userName!);
-            await prefs.setString('fname', data.single.firstName!);
-            await prefs.setString('lname', data.single.surName!);
-            await prefs.setString('userId', data.single.sId!);
-            await prefs.setString('companyId', data.single.companyId!);
-            await prefs.setString('uuId', data.single.userUuid!);
-            await prefs.setBool('security', data.single.isSecurity!);
-            if (data.single.image != null) {
-              await prefs.setString('image', data.single.image!);
+            if (data.single.block == 0) {
+              // ส่งค่าตัวแปร
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              await prefs.setString('token', token!);
+              await prefs.setString('username', data.single.userName!);
+              await prefs.setString('fname', data.single.firstName!);
+              await prefs.setString('lname', data.single.surName!);
+              await prefs.setString('userId', data.single.sId!);
+              await prefs.setString('companyId', data.single.companyId!);
+              await prefs.setString('uuId', data.single.userUuid!);
+              await prefs.setBool('security', data.single.isSecurity!);
+              if (data.single.image != null) {
+                await prefs.setString('image', data.single.image!);
+              }
+              print(data.single.isSecurity);
+
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => BottomBar()));
+              snackbar(context, Theme.of(context).primaryColor,
+                  'เข้าสู่ระบบสำเร็จ', Icons.check_circle_outline_rounded);
+
+              // setState(() {
+              //   loading = false;
+              // });
+            } else {
+              print(jsonRes.data);
+              print('username หรือ password ไม่ถูกต้อง');
+              snackbar(
+                  context,
+                  Colors.red,
+                  'ชื่อผู้ใช้ หรือ รหัสผ่าน ไม่ถูกต้อง',
+                  Icons.highlight_off_rounded);
+              setState(() {
+                loading = false;
+              });
             }
-            print(data.single.isSecurity);
-
-            Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => BottomBar()));
-            snackbar(context, Theme.of(context).primaryColor,
-                'เข้าสู่ระบบสำเร็จ', Icons.check_circle_outline_rounded);
-
-            // setState(() {
-            //   loading = false;
-            // });
           } else {
-            await Future.delayed(const Duration(milliseconds: 600));
             print(jsonRes.data);
             print('username หรือ password ไม่ถูกต้อง');
             snackbar(context, Colors.red, 'ชื่อผู้ใช้ หรือ รหัสผ่าน ไม่ถูกต้อง',
@@ -100,7 +112,6 @@ class _Login_StaffState extends State<Login_Staff> {
             });
           }
         } else {
-          await Future.delayed(const Duration(milliseconds: 600));
           print(response.statusCode);
           print('Connection Fail');
           snackbar(context, Colors.red, 'เข้าสู่ระบบไม่สำเร็จ',
@@ -110,7 +121,6 @@ class _Login_StaffState extends State<Login_Staff> {
           });
         }
       } catch (error) {
-        await Future.delayed(const Duration(milliseconds: 600));
         print(error);
         dialogOnebutton_Subtitle(
             context,
