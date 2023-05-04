@@ -9,6 +9,7 @@ import 'package:doormster/models/get_round.dart';
 import 'package:doormster/screen/security_guard/scan_qr_check_page.dart';
 import 'package:doormster/service/check_connected.dart';
 import 'package:doormster/service/connect_api.dart';
+import 'package:doormster/service/permission/permission_camera.dart';
 import 'package:doormster/service/permission/permission_location.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -96,36 +97,6 @@ class _Round_CheckState extends State<Round_Check> {
       setState(() {
         loading = false;
       });
-    }
-  }
-
-  Future<void> requestLocationPermission(String name, String roundId,
-      String roundName, String roundStart, String roundEnd) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final permission = await Permission.location.request();
-    if (permission.isGranted) {
-      // await prefs.setString('roundId', roundId);
-      checkInternet(
-          context,
-          ScanQR_Check(
-            name: name,
-            roundId: roundId,
-            roundName: roundName,
-            roundStart: roundStart,
-            roundEnd: roundEnd,
-          ),
-          true);
-    } else {
-      dialogOnebutton_Subtitle(
-          context,
-          'อนุญาตการเข้าถึง',
-          'จำเป็นต้องเข้าถึงตำแหน่งอุปกรณ์ของคุณ',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง', () {
-        openAppSettings();
-        Navigator.of(context, rootNavigator: true).pop();
-      }, true, true);
     }
   }
 
@@ -223,36 +194,24 @@ class _Round_CheckState extends State<Round_Check> {
                                                       now.isAfter(timeStart) &&
                                                               now.isBefore(
                                                                   timeEnd)
-                                                          ? permissionLocation(
+                                                          ? permissionCamere(
                                                               context,
-                                                              checkInternet(
+                                                              () => permissionLocation(
                                                                   context,
-                                                                  ScanQR_Check(
-                                                                      name:
-                                                                          'check',
-                                                                      roundId: listdata[
-                                                                              index]
-                                                                          .roundUuid!,
-                                                                      roundName:
-                                                                          listdata[index]
+                                                                  () => checkInternet(
+                                                                      context,
+                                                                      ScanQR_Check(
+                                                                          name:
+                                                                              'check',
+                                                                          roundId: listdata[index]
+                                                                              .roundUuid!,
+                                                                          roundName: listdata[index]
                                                                               .roundName!,
-                                                                      roundStart:
-                                                                          listdata[index]
+                                                                          roundStart: listdata[index]
                                                                               .roundStart!,
-                                                                      roundEnd:
-                                                                          listdata[index]
+                                                                          roundEnd: listdata[index]
                                                                               .roundEnd!),
-                                                                  true))
-                                                          // requestLocationPermission(
-                                                          //     'check',
-                                                          //     listdata[index]
-                                                          //         .roundUuid!,
-                                                          //     listdata[index]
-                                                          //         .roundName!,
-                                                          //     listdata[index]
-                                                          //         .roundStart!,
-                                                          //     listdata[index]
-                                                          //         .roundEnd!)
+                                                                      true)))
                                                           : dialogOnebutton_Subtitle(
                                                               context,
                                                               'ไม่สามารถตรวจได้',
