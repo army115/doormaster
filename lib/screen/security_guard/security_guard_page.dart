@@ -1,4 +1,5 @@
-import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:doormster/components/drawer/drawer.dart';
 import 'package:doormster/components/girdManu/grid_menu.dart';
 import 'package:doormster/screen/main_screen/test.dart';
@@ -8,8 +9,9 @@ import 'package:doormster/screen/security_guard/record_check_page.dart';
 import 'package:doormster/screen/security_guard/round_check_page.dart';
 import 'package:doormster/screen/security_guard/scan_qr_check_page.dart';
 import 'package:doormster/service/check_connected.dart';
+import 'package:doormster/service/permission/permission_camera.dart';
+import 'package:doormster/service/permission/permission_location.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -36,29 +38,6 @@ class _Security_GuardState extends State<Security_Guard> {
   //     loading = false;
   //   });
   // }
-
-  Future<void> requestLocationPermission(String name) async {
-    final permission = await Permission.location.request();
-    if (permission.isGranted) {
-      checkInternet(
-          context,
-          ScanQR_Check(
-            name: name,
-          ),
-          true);
-    } else {
-      dialogOnebutton_Subtitle(
-          context,
-          'อนุญาตการเข้าถึง',
-          'จำเป็นต้องเข้าถึงตำแหน่งอุปกรณ์ของคุณ',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง', () {
-        openAppSettings();
-        Navigator.of(context, rootNavigator: true).pop();
-      }, false, true);
-    }
-  }
 
   // @override
   // void initState() {
@@ -95,14 +74,32 @@ class _Security_GuardState extends State<Security_Guard> {
                   title: 'บันทึกจุดตรวจ',
                   icon: Icons.qr_code_scanner_rounded,
                   press: () {
-                    requestLocationPermission('check');
+                    permissionCamere(
+                        context,
+                        () => permissionLocation(
+                            context,
+                            () => checkInternet(
+                                context,
+                                ScanQR_Check(
+                                  name: 'check',
+                                ),
+                                true)));
                   },
                 ),
                 Grid_Menu(
                   title: 'ลงทะเบียนจุดตรวจ',
                   icon: Icons.pin_drop_outlined,
                   press: () {
-                    requestLocationPermission('add');
+                    permissionCamere(
+                        context,
+                        () => permissionLocation(
+                            context,
+                            () => checkInternet(
+                                context,
+                                ScanQR_Check(
+                                  name: 'add',
+                                ),
+                                true)));
                   },
                 ),
                 Grid_Menu(
@@ -124,22 +121,22 @@ class _Security_GuardState extends State<Security_Guard> {
                     checkInternet(context, Record_Check(type: 'home'), false);
                   },
                 ),
-                // Grid_Menu(
-                //     title: 'บันทึกการตรวจนอกรอบ',
-                //     icon: Icons.assignment_outlined,
-                //     press: () {
-                //       Navigator.of(context).push(
-                //         MaterialPageRoute(
-                //           builder: (BuildContext context) => Check_In(
-                //             timeCheck: DateTime.now(),
-                //             checkpointId:
-                //                 'd05154cb-8787-40b1-acdb-13f62303859e',
-                //             lat: 13.69521967419439,
-                //             lng: 100.64172377200555,
-                //           ),
-                //         ),
-                //       );
-                //     }),
+                Grid_Menu(
+                    title: 'บันทึกการตรวจนอกรอบ',
+                    icon: Icons.assignment_outlined,
+                    press: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => Check_In(
+                            timeCheck: DateTime.now(),
+                            checkpointId:
+                                'd05154cb-8787-40b1-acdb-13f62303859e',
+                            lat: 13.69521967419439,
+                            lng: 100.64172377200555,
+                          ),
+                        ),
+                      );
+                    }),
               ],
             ),
           ]),

@@ -7,6 +7,7 @@ import 'package:doormster/screen/qr_smart_access/opendoor_page.dart';
 import 'package:doormster/screen/qr_smart_access/scan_qrcode_page.dart';
 import 'package:doormster/screen/qr_smart_access/visitor_page.dart';
 import 'package:doormster/service/check_connected.dart';
+import 'package:doormster/service/permission/permission_camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -124,7 +125,10 @@ class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
                         title: 'สแกน',
                         icon: Icons.qr_code_scanner_rounded,
                         press: () {
-                          checkInternet(context, Scanner(), true);
+                          permissionCamere(
+                            context,
+                            () => checkInternet(context, Scanner(), true),
+                          );
                         },
                       ),
                       Grid_Menu(

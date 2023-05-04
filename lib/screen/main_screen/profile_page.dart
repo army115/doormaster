@@ -1,6 +1,7 @@
-// ignore_for_file: unrelated_type_equality_checks, prefer_const_constructors
+// ignore_for_file: unrelated_type_equality_checks, prefer_const_constructors, use_build_context_synchronously
 
 import 'dart:io';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
@@ -11,6 +12,8 @@ import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/components/text_form/text_form_noborder.dart';
 import 'package:doormster/models/profile_model.dart';
 import 'package:doormster/service/connect_api.dart';
+import 'package:doormster/service/permission/permission_camera.dart';
+import 'package:doormster/service/permission/permission_photos.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -168,7 +171,7 @@ class _Profile_PageState extends State<Profile_Page> {
   final ImagePicker imgpicker = ImagePicker();
   String? image;
 
-  openImages(ImageSource TypeImage) async {
+  Future<void> openImages(ImageSource TypeImage) async {
     try {
       // var pickedfiles = await imgpicker.pickMultiImage();
       final XFile? photo = await imgpicker.pickImage(
@@ -364,14 +367,18 @@ class _Profile_PageState extends State<Profile_Page> {
               title: Text('ถ่ายรูป',
                   style: TextStyle(fontSize: 15, letterSpacing: 0.5)),
               onTap: () {
-                openImages(ImageSource.camera);
+                permissionCamere(context, () => openImages(ImageSource.camera));
                 Navigator.of(context, rootNavigator: true).pop();
               }),
           ListTile(
             title: Text('เลือกรูปภาพ',
                 style: TextStyle(fontSize: 15, letterSpacing: 0.5)),
             onTap: () {
-              openImages(ImageSource.gallery);
+              if (Platform.isIOS) {
+                permissionPhotos(context, openImages(ImageSource.gallery));
+              } else {
+                openImages(ImageSource.gallery);
+              }
               Navigator.of(context, rootNavigator: true).pop();
             },
           ),

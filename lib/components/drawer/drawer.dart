@@ -396,7 +396,7 @@ class _MyDrawerState extends State<MyDrawer> {
                     title: Container(
                       width: double.infinity,
                       child: SingleChildScrollView(
-                          physics: AlwaysScrollableScrollPhysics(),
+                          physics: ClampingScrollPhysics(),
                           primary: false,
                           controller: scrollController,
                           child: Column(

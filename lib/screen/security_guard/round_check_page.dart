@@ -9,8 +9,8 @@ import 'package:doormster/models/get_round.dart';
 import 'package:doormster/screen/security_guard/scan_qr_check_page.dart';
 import 'package:doormster/service/check_connected.dart';
 import 'package:doormster/service/connect_api.dart';
+import 'package:doormster/service/permission/permission_location.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -125,7 +125,7 @@ class _Round_CheckState extends State<Round_Check> {
           'ตกลง', () {
         openAppSettings();
         Navigator.of(context, rootNavigator: true).pop();
-      }, false, true);
+      }, true, true);
     }
   }
 
@@ -223,16 +223,36 @@ class _Round_CheckState extends State<Round_Check> {
                                                       now.isAfter(timeStart) &&
                                                               now.isBefore(
                                                                   timeEnd)
-                                                          ? requestLocationPermission(
-                                                              'check',
-                                                              listdata[index]
-                                                                  .roundUuid!,
-                                                              listdata[index]
-                                                                  .roundName!,
-                                                              listdata[index]
-                                                                  .roundStart!,
-                                                              listdata[index]
-                                                                  .roundEnd!)
+                                                          ? permissionLocation(
+                                                              context,
+                                                              checkInternet(
+                                                                  context,
+                                                                  ScanQR_Check(
+                                                                      name:
+                                                                          'check',
+                                                                      roundId: listdata[
+                                                                              index]
+                                                                          .roundUuid!,
+                                                                      roundName:
+                                                                          listdata[index]
+                                                                              .roundName!,
+                                                                      roundStart:
+                                                                          listdata[index]
+                                                                              .roundStart!,
+                                                                      roundEnd:
+                                                                          listdata[index]
+                                                                              .roundEnd!),
+                                                                  true))
+                                                          // requestLocationPermission(
+                                                          //     'check',
+                                                          //     listdata[index]
+                                                          //         .roundUuid!,
+                                                          //     listdata[index]
+                                                          //         .roundName!,
+                                                          //     listdata[index]
+                                                          //         .roundStart!,
+                                                          //     listdata[index]
+                                                          //         .roundEnd!)
                                                           : dialogOnebutton_Subtitle(
                                                               context,
                                                               'ไม่สามารถตรวจได้',

@@ -1,6 +1,6 @@
-import 'dart:io';
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class Scanner extends StatefulWidget {
@@ -46,75 +46,73 @@ class _ScannerState extends State<Scanner> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            QRView(
-              key: qrKey,
-              onQRViewCreated: _onQRViewCreated,
-              overlay: QrScannerOverlayShape(
-                borderColor: Colors.red,
-                borderRadius: 10,
-                borderLength: 30,
-                borderWidth: 10,
-              ),
+      body: Stack(
+        alignment: Alignment.center,
+        children: [
+          QRView(
+            key: qrKey,
+            onQRViewCreated: _onQRViewCreated,
+            overlay: QrScannerOverlayShape(
+              borderColor: Colors.red,
+              borderRadius: 10,
+              borderLength: 30,
+              borderWidth: 10,
             ),
-            Positioned(
-                top: 20,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  child: Text(
-                    'สแกน QR Code',
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                  ),
-                )),
-            Positioned(
-              left: 10,
-              top: 20,
-              child: Container(
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle, color: Colors.white30),
-                child: IconButton(
-                    color: Colors.white,
-                    iconSize: 30,
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: Icon(Icons.arrow_back_ios_new_rounded)),
-              ),
-            ),
-            Positioned(
-                right: 15,
-                top: 15,
-                child: IconButton(
-                  onPressed: () async {
-                    await controller?.toggleFlash();
-                    setState(() {
-                      open = !open;
-                    });
+          ),
+          Positioned(
+              top: 35,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                child: Text(
+                  'สแกน QR Code',
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+              )),
+          Positioned(
+            left: 10,
+            top: 35,
+            child: Container(
+              decoration:
+                  BoxDecoration(shape: BoxShape.circle, color: Colors.white30),
+              child: IconButton(
+                  color: Colors.white,
+                  iconSize: 30,
+                  onPressed: () {
+                    Navigator.pop(context);
                   },
-                  icon: open
-                      ? Icon(Icons.flash_off_rounded,
-                          color: Colors.grey, size: 40)
-                      : Icon(
-                          Icons.flash_on_rounded,
-                          color: Colors.white,
-                          size: 40,
-                        ),
-                )),
-            Positioned(
-              bottom: 100,
-              child: (result != null)
-                  ? SelectableText(
-                      '${result!.code}',
-                      style: TextStyle(color: Colors.white),
-                    )
-                  : Container(),
+                  icon: Icon(Icons.arrow_back_ios_new_rounded)),
             ),
-          ],
-        ),
+          ),
+          Positioned(
+              right: 15,
+              top: 25,
+              child: IconButton(
+                onPressed: () async {
+                  await controller?.toggleFlash();
+                  setState(() {
+                    open = !open;
+                  });
+                },
+                icon: open
+                    ? Icon(Icons.flash_off_rounded,
+                        color: Colors.grey, size: 40)
+                    : Icon(
+                        Icons.flash_on_rounded,
+                        color: Colors.white,
+                        size: 40,
+                      ),
+              )),
+          Positioned(
+            bottom: 100,
+            child: (result != null)
+                ? SelectableText(
+                    '${result!.code}',
+                    style: TextStyle(color: Colors.white),
+                  )
+                : Container(),
+          ),
+        ],
       ),
     );
   }

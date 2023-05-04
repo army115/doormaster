@@ -54,8 +54,9 @@ dependencies:
   flutter_native_splash: ^2.2.19
   # flutter_blue: ^0.8.0
   geolocator: ^9.0.2
-  flutter_phone_direct_caller: ^2.1.1
   # location: ^4.4.0
+  app_settings: ^4.2.0
+  flutter_phone_direct_caller: ^2.1.1
   permission_handler: ^10.2.0
   image_picker: ^0.8.6+1
   flutter_swiper_plus: ^2.0.4
