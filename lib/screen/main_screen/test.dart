@@ -164,3 +164,50 @@ class MyBottomNavigationBar extends StatelessWidget {
     );
   }
 }
+
+class Main extends StatefulWidget {
+  const Main({Key? key}) : super(key: key);
+
+  @override
+  State<Main> createState() => _MainState();
+}
+
+class _MainState extends State<Main> {
+  Future<void> _onBack() async {
+    Navigator.pop(context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+class Home extends StatefulWidget {
+  const Home({Key? key}) : super(key: key);
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  GlobalKey<_MainState> _mainKey = GlobalKey<_MainState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Home"),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            // เรียกใช้ Future จากคลาส Main
+            _mainKey.currentState!._onBack();
+          },
+          child: Text("Go back"),
+        ),
+      ),
+    );
+  }
+}

@@ -392,9 +392,9 @@ class _MyDrawerState extends State<MyDrawer> {
       builder: (context) {
         return DraggableScrollableSheet(
             expand: false,
-            initialChildSize: multiCompany.length == 0 ? 0.2 : 0.3,
-            minChildSize: multiCompany.length == 0 ? 0.2 : 0.3,
-            maxChildSize: 0.5,
+            initialChildSize: multiCompany.length == 0 ? 0.25 : 0.5,
+            minChildSize: multiCompany.length == 0 ? 0.25 : 0.5,
+            maxChildSize: 0.7,
             builder: (context, scrollController) => Scaffold(
                   appBar: AppBar(
                     backgroundColor: Colors.transparent,
@@ -440,7 +440,7 @@ class _MyDrawerState extends State<MyDrawer> {
                             itemBuilder: (context, index) => InkWell(
                                 child: Container(
                                   padding:
-                                      const EdgeInsets.symmetric(vertical: 5),
+                                      const EdgeInsets.symmetric(vertical: 10),
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -484,23 +484,7 @@ class _MyDrawerState extends State<MyDrawer> {
                                               multiCompany[index].sId,
                                               multiCompany[index].companyId,
                                             );
-                                            // widget.selectCompany;
-                                          }
-                                // () {
-                                //   if (companyId ==
-                                //       multiCompany[index].companyId) {
-                                //     // Navigator.of(context).pop();
-                                //     // Navigator.of(context).pop();
-                                //     ontap;
-                                //   } else {
-                                //     _selectCompany(
-                                //         context,
-                                //         multiCompany[index].sId,
-                                //         multiCompany[index].companyId,
-                                //         widget.pressProfile);
-                                //   }
-                                // },
-                                ),
+                                          }),
                           ),
                   ),
                   bottomNavigationBar: Padding(
