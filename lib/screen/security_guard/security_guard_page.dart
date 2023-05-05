@@ -128,11 +128,11 @@ class _Security_GuardState extends State<Security_Guard> {
                     press: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                            builder: (BuildContext context) => Scaffold(
-                                  appBar: AppBar(
-                                    title: Text('บันทึกการตรวจนอกรอบ'),
-                                  ),
-                                  body: Logo_Opacity(title: 'ไม่มีข้อมูล'),
+                            builder: (BuildContext context) => HomeScreen(
+                                // appBar: AppBar(
+                                //   title: Text('บันทึกการตรวจนอกรอบ'),
+                                // ),
+                                // body: Logo_Opacity(title: 'ไม่มีข้อมูล'),
                                 )
                             // Check_In(
                             //   timeCheck: DateTime.now(),

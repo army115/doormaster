@@ -72,7 +72,6 @@ class _Profile_PageState extends State<Profile_Page> {
       );
 
       if (response.statusCode == 200) {
-        await Future.delayed(Duration(milliseconds: 400));
         GetProfile getInfo = GetProfile.fromJson(response.data);
         setState(() {
           profileInfo = getInfo.data!;

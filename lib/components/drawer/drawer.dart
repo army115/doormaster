@@ -17,9 +17,8 @@ import 'dart:convert' as convert;
 // import 'package:http/http.dart' as http;
 
 class MyDrawer extends StatefulWidget {
-  final pressProfile;
-  final selectCompany;
-  MyDrawer({Key? key, this.pressProfile, this.selectCompany});
+  final ontapItem;
+  MyDrawer({Key? key, this.ontapItem});
 
   @override
   State<MyDrawer> createState() => _MyDrawerState();
@@ -157,9 +156,10 @@ class _MyDrawerState extends State<MyDrawer> {
         Navigator.of(context).pop();
         Navigator.of(context).pop();
 
+        homeKey.currentState?.popAndPushNamed('/');
+        widget.ontapItem(0);
+
         setState(() {
-          homeKey.currentState?.popAndPushNamed('/');
-          widget.selectCompany;
           loading = false;
         });
 
@@ -224,7 +224,11 @@ class _MyDrawerState extends State<MyDrawer> {
                           children: [
                             InkWell(
                               borderRadius: BorderRadius.circular(30),
-                              onTap: widget.pressProfile,
+                              onTap: () {
+                                Navigator.pop(context);
+                                widget.ontapItem(2);
+                                profileKey.currentState?.popAndPushNamed('/');
+                              },
                               child: CircleAvatar(
                                 radius: 33,
                                 backgroundColor: Colors.white,
@@ -292,7 +296,11 @@ class _MyDrawerState extends State<MyDrawer> {
                     child: Column(
                       children: [
                         ListTile(
-                          onTap: widget.pressProfile,
+                          onTap: () {
+                            Navigator.pop(context);
+                            widget.ontapItem(2);
+                            profileKey.currentState?.popAndPushNamed('/');
+                          },
                           leading: Icon(
                             Icons.person,
                             size: 25,

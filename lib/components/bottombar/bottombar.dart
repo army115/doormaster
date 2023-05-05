@@ -40,6 +40,15 @@ class _BottomBarState extends State<BottomBar> {
     // _selectedIndex = widget.page == null ? _selectedIndex : widget.page;
   }
 
+  void _ontapItem(int value) {
+    if (_navbarNotifier._index == value) {
+      _navbarNotifier.popAllRoutes(value);
+    } else {
+      _navbarNotifier._index = value;
+    }
+    setState(() => _selectedIndex = value);
+  }
+
   DateTime PressTime = DateTime.now();
 
   Future<bool> _onBackButtonDoubleClicked() async {
@@ -76,12 +85,10 @@ class _BottomBarState extends State<BottomBar> {
       child: Scaffold(
         key: _scaffoldKey,
         drawer: MyDrawer(
-          pressProfile: () {
+          ontapItem: (int index) {
             setState(() {
-              profileKey.currentState?.popAndPushNamed('/');
-              _selectedIndex = 2;
+              _selectedIndex = index;
             });
-            Navigator.of(context).pop();
           },
         ),
         body: IndexedStack(
@@ -109,14 +116,7 @@ class _BottomBarState extends State<BottomBar> {
             ),
           ],
           currentIndex: _selectedIndex,
-          onTap: (value) {
-            if (_navbarNotifier._index == value) {
-              _navbarNotifier.popAllRoutes(value);
-            } else {
-              _navbarNotifier._index = value;
-            }
-            setState(() => _selectedIndex = value);
-          },
+          onTap: _ontapItem,
         ),
       ),
     );
