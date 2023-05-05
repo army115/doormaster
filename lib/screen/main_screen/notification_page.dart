@@ -32,130 +32,131 @@ class _Notification_PageState extends State<Notification_Page> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: MyDrawer(),
-      appBar: AppBar(
-        title: Text('การแจ้งเตือน'),
-        leading: IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            }),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            NotificationService().showNotification();
-          },
-          child: Text('Show Notification'),
+        drawer: MyDrawer(),
+        appBar: AppBar(
+          title: Text('การแจ้งเตือน'),
+          leading: IconButton(
+              icon: Icon(Icons.menu),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              }),
         ),
-      ),
-      // Logo_Opacity(title: 'ไม่มีการแจ้งเตือน')
-      // Column(
-      //   children: [
-      //     Expanded(
-      //       child: Container(
-      //         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      //         child: ListView.builder(
-      //           shrinkWrap: true,
-      //           reverse: true,
-      //           itemCount: _messages.length,
-      //           itemBuilder: (context, index) {
-      //             return Column(
-      //               mainAxisAlignment: MainAxisAlignment.end,
-      //               crossAxisAlignment:
-      //                   // current
-      //                   //     ?
-      //                   CrossAxisAlignment.end,
-      //               // : CrossAxisAlignment.start,
-      //               children: [
-      //                 Container(
-      //                   margin: EdgeInsets.symmetric(vertical: 5),
-      //                   // constraints: BoxConstraints(
-      //                   //   minHeight: 40,
-      //                   //   maxHeight: 250,
-      //                   //   maxWidth: MediaQuery.of(context).size.width * 0.7,
-      //                   //   minWidth: MediaQuery.of(context).size.width * 0.1,
-      //                   // ),
-      //                   decoration: BoxDecoration(
-      //                       color:
-      //                           // current
-      //                           // ?
-      //                           Theme.of(context).primaryColor,
-      //                       //     :
-      //                       // Theme.of(context).primaryColorLight,
-      //                       borderRadius:
-      //                           // current
-      //                           //     ?
-      //                           BorderRadius.only(
-      //                         topLeft: Radius.circular(12),
-      //                         bottomLeft: Radius.circular(12),
-      //                         topRight: Radius.circular(12),
-      //                       )
-      //                       //     :
-      //                       //   BorderRadius.only(
-      //                       // topLeft: Radius.circular(20),
-      //                       // bottomRight: Radius.circular(20),
-      //                       // topRight: Radius.circular(20),
-      //                       // ),
-      //                       ),
-      //                   child: Container(
-      //                     padding: const EdgeInsets.symmetric(
-      //                         vertical: 5, horizontal: 10),
-      //                     child: Text('${_messages[index]}',
-      //                         style: TextStyle(color: Colors.white)),
-      //                   ),
-      //                 ),
-      //               ],
-      //             );
-      //           },
-      //         ),
-      //       ),
-      //     ),
-      //     Container(
-      //       padding: EdgeInsets.symmetric(vertical: 10),
-      //       decoration: const BoxDecoration(
-      //         color: Colors.white,
-      //       ),
-      //       child: Row(
-      //         children: [
-      //           IconButton(
-      //             highlightColor: Colors.transparent,
-      //             splashColor: Colors.transparent,
-      //             icon:
-      //                 Icon(Icons.image, color: Theme.of(context).primaryColor),
-      //             iconSize: 30,
-      //             onPressed: () {},
-      //           ),
-      //           Expanded(
-      //             child: TextFormField(
-      //               minLines: 1,
-      //               maxLines: 5,
-      //               controller: _textController,
-      //               decoration: InputDecoration(
-      //                 contentPadding:
-      //                     EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      //                 hintText: 'Enter message',
-      //                 border: OutlineInputBorder(
-      //                   borderRadius: BorderRadius.circular(20),
-      //                 ),
-      //               ),
-      //             ),
-      //           ),
-      //           IconButton(
-      //             highlightColor: Colors.transparent,
-      //             splashColor: Colors.transparent,
-      //             icon: Icon(Icons.send, color: Theme.of(context).primaryColor),
-      //             iconSize: 30,
-      //             onPressed: () {
-      //               _handleSubmitted(_textController.text);
-      //               // sendMessageToOpenAI(_textController.text);
-      //             },
-      //           ),
-      //         ],
-      //       ),
-      //     ),
-      //   ],
-      // ),
-    );
+        body:
+            // Center(
+            //   child: ElevatedButton(
+            //     onPressed: () {
+            //       NotificationService().showNotification();
+            //     },
+            //     child: Text('Show Notification'),
+            //   ),
+            // ),
+            Logo_Opacity(title: 'ไม่มีการแจ้งเตือน')
+        // Column(
+        //   children: [
+        //     Expanded(
+        //       child: Container(
+        //         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        //         child: ListView.builder(
+        //           shrinkWrap: true,
+        //           reverse: true,
+        //           itemCount: _messages.length,
+        //           itemBuilder: (context, index) {
+        //             return Column(
+        //               mainAxisAlignment: MainAxisAlignment.end,
+        //               crossAxisAlignment:
+        //                   // current
+        //                   //     ?
+        //                   CrossAxisAlignment.end,
+        //               // : CrossAxisAlignment.start,
+        //               children: [
+        //                 Container(
+        //                   margin: EdgeInsets.symmetric(vertical: 5),
+        //                   // constraints: BoxConstraints(
+        //                   //   minHeight: 40,
+        //                   //   maxHeight: 250,
+        //                   //   maxWidth: MediaQuery.of(context).size.width * 0.7,
+        //                   //   minWidth: MediaQuery.of(context).size.width * 0.1,
+        //                   // ),
+        //                   decoration: BoxDecoration(
+        //                       color:
+        //                           // current
+        //                           // ?
+        //                           Theme.of(context).primaryColor,
+        //                       //     :
+        //                       // Theme.of(context).primaryColorLight,
+        //                       borderRadius:
+        //                           // current
+        //                           //     ?
+        //                           BorderRadius.only(
+        //                         topLeft: Radius.circular(12),
+        //                         bottomLeft: Radius.circular(12),
+        //                         topRight: Radius.circular(12),
+        //                       )
+        //                       //     :
+        //                       //   BorderRadius.only(
+        //                       // topLeft: Radius.circular(20),
+        //                       // bottomRight: Radius.circular(20),
+        //                       // topRight: Radius.circular(20),
+        //                       // ),
+        //                       ),
+        //                   child: Container(
+        //                     padding: const EdgeInsets.symmetric(
+        //                         vertical: 5, horizontal: 10),
+        //                     child: Text('${_messages[index]}',
+        //                         style: TextStyle(color: Colors.white)),
+        //                   ),
+        //                 ),
+        //               ],
+        //             );
+        //           },
+        //         ),
+        //       ),
+        //     ),
+        //     Container(
+        //       padding: EdgeInsets.symmetric(vertical: 10),
+        //       decoration: const BoxDecoration(
+        //         color: Colors.white,
+        //       ),
+        //       child: Row(
+        //         children: [
+        //           IconButton(
+        //             highlightColor: Colors.transparent,
+        //             splashColor: Colors.transparent,
+        //             icon:
+        //                 Icon(Icons.image, color: Theme.of(context).primaryColor),
+        //             iconSize: 30,
+        //             onPressed: () {},
+        //           ),
+        //           Expanded(
+        //             child: TextFormField(
+        //               minLines: 1,
+        //               maxLines: 5,
+        //               controller: _textController,
+        //               decoration: InputDecoration(
+        //                 contentPadding:
+        //                     EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        //                 hintText: 'Enter message',
+        //                 border: OutlineInputBorder(
+        //                   borderRadius: BorderRadius.circular(20),
+        //                 ),
+        //               ),
+        //             ),
+        //           ),
+        //           IconButton(
+        //             highlightColor: Colors.transparent,
+        //             splashColor: Colors.transparent,
+        //             icon: Icon(Icons.send, color: Theme.of(context).primaryColor),
+        //             iconSize: 30,
+        //             onPressed: () {
+        //               _handleSubmitted(_textController.text);
+        //               // sendMessageToOpenAI(_textController.text);
+        //             },
+        //           ),
+        //         ],
+        //       ),
+        //     ),
+        //   ],
+        // ),
+        );
   }
 }

@@ -100,6 +100,12 @@ class _Round_CheckState extends State<Round_Check> {
     }
   }
 
+  Future onGoBack(dynamic value) async {
+    setState(() {
+      _getCheckRound();
+    });
+  }
+
   @override
   void initState() {
     super.initState();

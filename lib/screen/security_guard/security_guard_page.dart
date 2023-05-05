@@ -2,6 +2,7 @@
 
 import 'package:doormster/components/drawer/drawer.dart';
 import 'package:doormster/components/girdManu/grid_menu.dart';
+import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
 import 'package:doormster/screen/main_screen/test.dart';
 import 'package:doormster/screen/security_guard/check_in_page.dart';
 import 'package:doormster/screen/security_guard/check_point_page.dart';
@@ -127,14 +128,20 @@ class _Security_GuardState extends State<Security_Guard> {
                     press: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (BuildContext context) => Check_In(
-                            timeCheck: DateTime.now(),
-                            checkpointId:
-                                'd05154cb-8787-40b1-acdb-13f62303859e',
-                            lat: 13.69521967419439,
-                            lng: 100.64172377200555,
-                          ),
-                        ),
+                            builder: (BuildContext context) => Scaffold(
+                                  appBar: AppBar(
+                                    title: Text('บันทึกการตรวจนอกรอบ'),
+                                  ),
+                                  body: Logo_Opacity(title: 'ไม่มีข้อมูล'),
+                                )
+                            // Check_In(
+                            //   timeCheck: DateTime.now(),
+                            //   checkpointId:
+                            //       'd05154cb-8787-40b1-acdb-13f62303859e',
+                            //   lat: 13.69521967419439,
+                            //   lng: 100.64172377200555,
+                            // ),
+                            ),
                       );
                     }),
               ],
