@@ -14,7 +14,7 @@ GlobalKey<NavigatorState> homeKey = GlobalKey<NavigatorState>();
 GlobalKey<NavigatorState> messageKey = GlobalKey<NavigatorState>();
 GlobalKey<NavigatorState> profileKey = GlobalKey<NavigatorState>();
 final NavbarNotifier _navbarNotifier = NavbarNotifier();
-int _selectedIndex = NavbarNotifier().selectedIndex;
+int _selectedIndex = NavbarNotifier()._tabController.index;
 
 class BottomBar extends StatefulWidget {
   BottomBar({
@@ -25,7 +25,10 @@ class BottomBar extends StatefulWidget {
   State<BottomBar> createState() => _BottomBarState();
 }
 
-class _BottomBarState extends State<BottomBar> {
+class _BottomBarState extends State<BottomBar>
+    with SingleTickerProviderStateMixin {
+  TabController _tabController = NavbarNotifier()._tabController;
+
   final buildBody = [
     Home_Menu(navigatorKey: homeKey),
     Notification_Menu(navigatorKey: messageKey),
@@ -36,7 +39,14 @@ class _BottomBarState extends State<BottomBar> {
   void initState() {
     super.initState();
     _selectedIndex = 0;
-    // _selectedIndex = widget.page == null ? _selectedIndex : widget.page;
+    _tabController = TabController(
+        length: 3, vsync: this, animationDuration: Duration(seconds: 0));
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   void _ontapItem(int value) {
@@ -45,7 +55,10 @@ class _BottomBarState extends State<BottomBar> {
     } else {
       _navbarNotifier._index = value;
     }
-    setState(() => _selectedIndex = value);
+    setState(() {
+      _tabController.animateTo(value);
+      _selectedIndex = value;
+    });
   }
 
   DateTime PressTime = DateTime.now();
@@ -82,6 +95,7 @@ class _BottomBarState extends State<BottomBar> {
     return WillPopScope(
       onWillPop: () => _onBackButtonDoubleClicked(),
       child: Scaffold(
+        drawerEnableOpenDragGesture: false,
         key: _scaffoldKey,
         drawer: MyDrawer(
           ontapItem: (int index) {
@@ -90,14 +104,21 @@ class _BottomBarState extends State<BottomBar> {
             });
           },
         ),
-        body: IndexedStack(
-          index: _selectedIndex,
+        body: TabBarView(
+          physics: NeverScrollableScrollPhysics(),
+          controller: _tabController,
           children: buildBody,
         ),
+        // IndexedStack(
+        //   index: _selectedIndex,
+        //   children: buildBody,
+        // ),
         // buildBody[
         //     _selectedIndex], //จะไม่ค้างอยู่หน้าปัจจุบัน เวลากดปุ่มเมนูกลับมา
 
         bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _selectedIndex,
+          onTap: _ontapItem,
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.home_rounded),
@@ -114,8 +135,6 @@ class _BottomBarState extends State<BottomBar> {
               label: 'โปรไฟล์',
             ),
           ],
-          currentIndex: _selectedIndex,
-          onTap: _ontapItem,
         ),
       ),
     );
@@ -125,6 +144,7 @@ class _BottomBarState extends State<BottomBar> {
 class NavbarNotifier extends ChangeNotifier {
   int _index = 0;
   int selectedIndex = 0;
+  late TabController _tabController;
 
   FutureOr<bool> onBackButtonPressed(int index) async {
     bool exitingApp = true;

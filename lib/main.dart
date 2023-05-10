@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/screen/main_screen/auth_page.dart';
@@ -127,8 +129,12 @@ class Check_Connected extends StatelessWidget {
                       'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
                       Icons.warning_amber_rounded,
                       Colors.orange,
-                      'ตกลง', () {
-                    Restart.restartApp();
+                      'ตกลง', () async {
+                    if (Platform.isAndroid) {
+                      Restart.restartApp();
+                    } else if (Platform.isIOS) {
+                      exit(0);
+                    }
                   }),
                 ),
               ],

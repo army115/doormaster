@@ -62,13 +62,14 @@ dependencies:
   flutter_swiper_plus: ^2.0.4
   dio: ^5.0.0
   get: ^4.6.5
-  restart_app: ^1.1.0
+  restart_app: ^1.1.2
   flutter_easyloading: ^3.0.5
   google_maps_flutter: ^2.2.3
   easy_loading_button: ^0.3.0
   calendar_date_picker2: ^0.4.9
   animated_custom_dropdown: ^1.5.0
   flutter_local_notifications: ^14.0.0+1
+  flutter_phoenix: ^1.1.1
   # flutter_typeahead: ^4.3.7
   # dropdown_search: ^5.0.6
   # buddhist_datetime_dateformat_sns: ^1.0.7

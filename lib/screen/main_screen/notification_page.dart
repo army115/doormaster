@@ -17,7 +17,8 @@ class Notification_Page extends StatefulWidget {
   State<Notification_Page> createState() => _Notification_PageState();
 }
 
-class _Notification_PageState extends State<Notification_Page> {
+class _Notification_PageState extends State<Notification_Page>
+    with AutomaticKeepAliveClientMixin {
   final TextEditingController _textController = TextEditingController();
   final List<String> _messages = [];
 
@@ -30,9 +31,12 @@ class _Notification_PageState extends State<Notification_Page> {
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
-        drawer: MyDrawer(),
         appBar: AppBar(
           title: Text('การแจ้งเตือน'),
           leading: IconButton(

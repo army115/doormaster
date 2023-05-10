@@ -115,7 +115,6 @@ class _Round_CheckState extends State<Round_Check> {
   @override
   Widget build(BuildContext context) {
     String date = DateFormat('y-MM-dd').format(now);
-
     return Stack(
       children: [
         Scaffold(

@@ -128,7 +128,8 @@ class _Security_GuardState extends State<Security_Guard> {
                     press: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                            builder: (BuildContext context) => HomeScreen(
+                            builder: (BuildContext context) => MyHomePage(
+
                                 // appBar: AppBar(
                                 //   title: Text('บันทึกการตรวจนอกรอบ'),
                                 // ),

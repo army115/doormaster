@@ -29,7 +29,8 @@ class Profile_Page extends StatefulWidget {
   State<Profile_Page> createState() => _Profile_PageState();
 }
 
-class _Profile_PageState extends State<Profile_Page> {
+class _Profile_PageState extends State<Profile_Page>
+    with AutomaticKeepAliveClientMixin {
   final _formkey = GlobalKey<FormState>();
   TextEditingController fname = TextEditingController();
   TextEditingController lname = TextEditingController();
@@ -190,6 +191,9 @@ class _Profile_PageState extends State<Profile_Page> {
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   void initState() {
     _getInfo();
     super.initState();
@@ -197,10 +201,10 @@ class _Profile_PageState extends State<Profile_Page> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Stack(
       children: [
         Scaffold(
-          drawer: MyDrawer(),
           appBar: AppBar(
             title: Text('ข้อมูลส่วนตัว'),
             leading: IconButton(

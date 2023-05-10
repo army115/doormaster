@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 import 'dart:async';
 import 'dart:developer';
 import 'package:dio/dio.dart';
@@ -26,7 +26,8 @@ class Home_Page extends StatefulWidget {
   State<Home_Page> createState() => _Home_PageState();
 }
 
-class _Home_PageState extends State<Home_Page> {
+class _Home_PageState extends State<Home_Page>
+    with AutomaticKeepAliveClientMixin {
   var mobileRole;
   var companyId;
   var security;
@@ -77,6 +78,7 @@ class _Home_PageState extends State<Home_Page> {
 
         getAdsCompany asdcompany = getAdsCompany.fromJson(responseAds.data);
         setState(() {
+          checkInternet();
           listMenu = menuHome.data!;
           listads = asdcompany.data!;
           loading = false;
@@ -109,6 +111,9 @@ class _Home_PageState extends State<Home_Page> {
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   void initState() {
     super.initState();
     checkInternet();
@@ -133,14 +138,15 @@ class _Home_PageState extends State<Home_Page> {
     // });
   }
 
-  @override
-  void dispose() {
-    _subscription?.cancel();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _subscription?.cancel();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Stack(
       children: [
         Scaffold(

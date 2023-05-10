@@ -1,212 +1,206 @@
-import 'package:doormster/components/button/button.dart';
-import 'package:flutter/material.dart';
-import 'package:animated_custom_dropdown/custom_dropdown.dart';
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, overridden_fields
 
-class HomeScreen extends StatefulWidget {
+import 'package:doormster/components/loading/loading.dart';
+import 'package:flutter/material.dart';
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key}) : super(key: key);
+
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
+class _MyHomePageState extends State<MyHomePage>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
 
-  void _onItemTapped(int index) {
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(
+        length: 3, vsync: this, animationDuration: Duration(seconds: 0));
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  void _ontapItem(int value) {
     setState(() {
-      _selectedIndex = index;
+      _tabController.animateTo(value);
+      // _selectedIndex = value;
+    });
+  }
+
+  final buildBody = [
+    const PageOne(),
+    const PageTwo(),
+    const PageThree(),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: TabBarView(
+        physics: NeverScrollableScrollPhysics(),
+        controller: _tabController,
+        children: buildBody,
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _tabController.index,
+        onTap: _ontapItem,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Page One',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.business),
+            label: 'Page Two',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.school),
+            label: 'Page Three',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class PageOne extends StatefulWidget {
+  const PageOne({Key? key}) : super(key: key);
+
+  @override
+  _PageOneState createState() => _PageOneState();
+}
+
+class _PageOneState extends State<PageOne> with AutomaticKeepAliveClientMixin {
+  bool load = false;
+
+  @override
+  bool get wantKeepAlive => true;
+
+  Future _getInfo() async {
+    setState(() {
+      load = true;
+    });
+    await Future.delayed(Duration(milliseconds: 300));
+    print('1111');
+    setState(() {
+      load = false;
     });
   }
 
   @override
+  void initState() {
+    _getInfo();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // super.build(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('My App'),
+        title: const Text('111111'),
       ),
-      drawer: MyDrawer(
-        selectedIndex: _selectedIndex,
-        onItemTapped: (int index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-      ),
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: [
-          Text(
-            'Index 0: Home',
-            // style: optionStyle,
-          ),
-          Text(
-            'Index 1: Business',
-            // style: optionStyle,
-          ),
-          Text(
-            'Index 2: School',
-            // style: optionStyle,
-          ),
-          Text(
-            'Index 2: test',
-            // style: optionStyle,
-          ),
-        ],
-      ),
-      bottomNavigationBar: MyBottomNavigationBar(
-        selectedIndex: _selectedIndex,
-        onItemTapped: _onItemTapped,
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: load ? Loading() : TextField(),
       ),
     );
   }
 }
 
-class MyDrawer extends StatelessWidget {
-  final int selectedIndex;
-  final Function(int) onItemTapped;
+class PageTwo extends StatefulWidget {
+  const PageTwo({Key? key}) : super(key: key);
 
-  const MyDrawer(
-      {Key? key, required this.selectedIndex, required this.onItemTapped})
-      : super(key: key);
+  @override
+  _PageTwoState createState() => _PageTwoState();
+}
 
-  Future<void> itemTab() async {
-    onItemTapped(0);
+class _PageTwoState extends State<PageTwo> with AutomaticKeepAliveClientMixin {
+  bool load = false;
+
+  @override
+  bool get wantKeepAlive => true;
+
+  Future _getInfo() async {
+    setState(() {
+      load = true;
+    });
+    await Future.delayed(Duration(milliseconds: 300));
+    print('22222');
+    setState(() {
+      load = false;
+    });
+  }
+
+  @override
+  void initState() {
+    _getInfo();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          DrawerHeader(
-            child: Text('Menu'),
-            decoration: BoxDecoration(
-              color: Colors.blue,
-            ),
-          ),
-          ListTile(
-            title: Text('First Item'),
-            onTap: () {
-              itemTab();
-              // onItemTapped(0);
-            },
-            // selected: selectedIndex == 0,
-          ),
-          ListTile(
-            title: Text('Second Item'),
-            onTap: () {
-              onItemTapped(1);
-            },
-            // selected: selectedIndex == 1,
-          ),
-          ListTile(
-            title: Text('Third Item'),
-            onTap: () {
-              onItemTapped(2);
-            },
-            // selected: selectedIndex == 2,
-          ),
-          ListTile(
-            title: Text('Fourth Item'),
-            onTap: () {
-              onItemTapped(3);
-            },
-            // selected: selectedIndex == 3,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class MyBottomNavigationBar extends StatelessWidget {
-  final int selectedIndex;
-  final Function(int) onItemTapped;
-
-  const MyBottomNavigationBar(
-      {Key? key, required this.selectedIndex, required this.onItemTapped})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      currentIndex: selectedIndex,
-      onTap: onItemTapped,
-      items: [
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.home,
-            color: Colors.amber,
-          ),
-          label: 'First',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.business,
-            color: Colors.amber,
-          ),
-          label: 'Second',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.school,
-            color: Colors.amber,
-          ),
-          label: 'Third',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.settings,
-            color: Colors.amber,
-          ),
-          label: 'Fourth',
-        ),
-      ],
-    );
-  }
-}
-
-class Main extends StatefulWidget {
-  const Main({Key? key}) : super(key: key);
-
-  @override
-  State<Main> createState() => _MainState();
-}
-
-class _MainState extends State<Main> {
-  Future<void> _onBack() async {
-    Navigator.pop(context);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
-
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
-
-  @override
-  State<Home> createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  GlobalKey<_MainState> _mainKey = GlobalKey<_MainState>();
-
-  @override
-  Widget build(BuildContext context) {
+    // super.build(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Home"),
+        title: const Text('2222'),
       ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            // เรียกใช้ Future จากคลาส Main
-            _mainKey.currentState!._onBack();
-          },
-          child: Text("Go back"),
-        ),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: load ? Loading() : TextField(),
+      ),
+    );
+  }
+}
+
+class PageThree extends StatefulWidget {
+  const PageThree({Key? key}) : super(key: key);
+
+  @override
+  _PageThreeState createState() => _PageThreeState();
+}
+
+class _PageThreeState extends State<PageThree>
+    with AutomaticKeepAliveClientMixin {
+  bool load = false;
+
+  @override
+  bool get wantKeepAlive => true;
+
+  Future _getInfo() async {
+    setState(() {
+      load = true;
+    });
+    await Future.delayed(Duration(milliseconds: 300));
+    print('3333');
+    setState(() {
+      load = false;
+    });
+  }
+
+  @override
+  void initState() {
+    _getInfo();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('33333'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: load ? Loading() : TextField(),
       ),
     );
   }
