@@ -41,10 +41,12 @@ class _Home_PageState extends State<Home_Page>
 
   Future _getMenu() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    mobileRole = prefs.getInt('role') ?? "";
+    mobileRole = prefs.getInt('role') ?? 0;
     companyId = prefs.getString('companyId');
     security = prefs.getBool('security');
+    checkNet = await Connectivity().checkConnectivity();
 
+    log('net $checkNet');
     print('mobileRole: ${mobileRole}');
     print('companyId: ${companyId}');
     print('security: ${security}');
@@ -78,7 +80,6 @@ class _Home_PageState extends State<Home_Page>
 
         getAdsCompany asdcompany = getAdsCompany.fromJson(responseAds.data);
         setState(() {
-          checkInternet();
           listMenu = menuHome.data!;
           listads = asdcompany.data!;
           loading = false;
@@ -116,7 +117,6 @@ class _Home_PageState extends State<Home_Page>
   @override
   void initState() {
     super.initState();
-    checkInternet();
     _getMenu();
     // _subscription =
     //     _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
@@ -159,7 +159,9 @@ class _Home_PageState extends State<Home_Page>
                   }),
             ),
             body: SafeArea(
-              child: checkNet == ConnectivityResult.none || loading
+              child: checkNet == ConnectivityResult.none ||
+                      loading ||
+                      mobileRole == null
                   ? Container()
                   : security == true
                       ? Security()
@@ -179,46 +181,45 @@ class _Home_PageState extends State<Home_Page>
               child: Column(
                 children: [
                   Container(
-                    height: MediaQuery.of(context).size.width * 0.6,
-                    width: double.infinity,
-                    child: listads.length > 0
-                        ? Swiper(
-                            autoplay: true,
-                            loop: true,
-                            pagination: SwiperPagination(
-                                builder: DotSwiperPaginationBuilder(
-                                    size: 8,
-                                    activeSize: 8,
-                                    color: Colors.grey,
-                                    activeColor: Colors.white)),
-                            itemCount: listads.length,
-                            itemBuilder: (context, index) {
-                              var _Images = convert.base64Decode(
-                                  ('${listads[index].adsversitingPic}')
-                                      .split(',')
-                                      .last);
-                              return InkWell(
-                                  // onTap: () {
-                                  //   launchUrlString('https://hipglobal.co.th/');
-                                  // },
-                                  child: Image.memory(
-                                _Images,
-                                fit: BoxFit.cover,
-                              ));
-                            },
-                          )
-                        : Swiper(
-                            autoplay: true,
-                            loop: true,
-                            itemCount: 1,
-                            itemBuilder: (context, index) {
-                              return Image.asset(
-                                'assets/images/ads.png',
-                                fit: BoxFit.cover,
-                              );
-                            },
-                          ),
-                  ),
+                      height: MediaQuery.of(context).size.width * 0.6,
+                      width: double.infinity,
+                      child: listads.isEmpty
+                          ? Swiper(
+                              autoplay: true,
+                              loop: true,
+                              itemCount: 1,
+                              itemBuilder: (context, index) {
+                                return Image.asset(
+                                  'assets/images/ads.png',
+                                  fit: BoxFit.cover,
+                                );
+                              },
+                            )
+                          : Swiper(
+                              autoplay: true,
+                              loop: true,
+                              pagination: SwiperPagination(
+                                  builder: DotSwiperPaginationBuilder(
+                                      size: 8,
+                                      activeSize: 8,
+                                      color: Colors.grey,
+                                      activeColor: Colors.white)),
+                              itemCount: listads.length,
+                              itemBuilder: (context, index) {
+                                var _Images = convert.base64Decode(
+                                    ('${listads[index].adsversitingPic}')
+                                        .split(',')
+                                        .last);
+                                return InkWell(
+                                    // onTap: () {
+                                    //   launchUrlString('https://hipglobal.co.th/');
+                                    // },
+                                    child: Image.memory(
+                                  _Images,
+                                  fit: BoxFit.cover,
+                                ));
+                              },
+                            )),
                   listMenu.isEmpty
                       ? Padding(
                           padding: EdgeInsets.symmetric(
@@ -266,7 +267,7 @@ class _Home_PageState extends State<Home_Page>
             Container(
               height: MediaQuery.of(context).size.width * 0.6,
               width: double.infinity,
-              child: listads.length > 0
+              child: listads.isNotEmpty
                   ? Swiper(
                       autoplay: true,
                       loop: true,

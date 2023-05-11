@@ -37,12 +37,14 @@ Future<void> main(context) async {
   final prefs = await SharedPreferences.getInstance();
   final token = prefs.getString('token');
   print(token == null ? 'login : false' : 'login : true');
-  runApp(result == ConnectivityResult.none
-      ? Check_Connected()
-      : MyApp(
-          // token: null,
-          token: token,
-        ));
+  runApp(
+      // result == ConnectivityResult.none
+      //   ? Check_Connected()
+      //   :
+      MyApp(
+    // token: null,
+    token: token,
+  ));
 }
 
 class MyApp extends StatelessWidget {

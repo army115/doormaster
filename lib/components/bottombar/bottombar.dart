@@ -6,6 +6,9 @@ import 'package:doormster/components/snackbar/back_double.dart';
 import 'package:doormster/routes/menu/home_menu.dart';
 import 'package:doormster/routes/menu/notification_menu.dart';
 import 'package:doormster/routes/menu/profile_menu.dart';
+import 'package:doormster/screen/main_screen/home_page.dart';
+import 'package:doormster/screen/main_screen/notification_page.dart';
+import 'package:doormster/screen/main_screen/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -14,7 +17,8 @@ GlobalKey<NavigatorState> homeKey = GlobalKey<NavigatorState>();
 GlobalKey<NavigatorState> messageKey = GlobalKey<NavigatorState>();
 GlobalKey<NavigatorState> profileKey = GlobalKey<NavigatorState>();
 final NavbarNotifier _navbarNotifier = NavbarNotifier();
-int _selectedIndex = NavbarNotifier()._tabController.index;
+late TabController _tabController;
+int _selectedIndex = _tabController.index;
 
 class BottomBar extends StatefulWidget {
   BottomBar({
@@ -27,8 +31,6 @@ class BottomBar extends StatefulWidget {
 
 class _BottomBarState extends State<BottomBar>
     with SingleTickerProviderStateMixin {
-  TabController _tabController = NavbarNotifier()._tabController;
-
   final buildBody = [
     Home_Menu(navigatorKey: homeKey),
     Notification_Menu(navigatorKey: messageKey),
@@ -38,9 +40,14 @@ class _BottomBarState extends State<BottomBar>
   @override
   void initState() {
     super.initState();
-    _selectedIndex = 0;
+    // _selectedIndex = 0;
     _tabController = TabController(
-        length: 3, vsync: this, animationDuration: Duration(seconds: 0));
+      length: 3,
+      vsync: this,
+      animationDuration: Duration(
+        seconds: 0,
+      ),
+    );
   }
 
   @override
@@ -49,15 +56,15 @@ class _BottomBarState extends State<BottomBar>
     super.dispose();
   }
 
-  void _ontapItem(int value) {
-    if (_navbarNotifier._index == value) {
-      _navbarNotifier.popAllRoutes(value);
+  void _ontapItem(int index) {
+    if (_navbarNotifier._index == index) {
+      _navbarNotifier.popAllRoutes(index);
     } else {
-      _navbarNotifier._index = value;
+      _navbarNotifier._index = index;
     }
     setState(() {
-      _tabController.animateTo(value);
-      _selectedIndex = value;
+      _tabController.animateTo(index);
+      _selectedIndex = index;
     });
   }
 
@@ -73,6 +80,7 @@ class _BottomBarState extends State<BottomBar>
       if (isExitingApp) {
         if (_selectedIndex != 0) {
           setState(() {
+            _tabController.animateTo(0);
             _selectedIndex = 0;
           });
         } else {
@@ -100,6 +108,7 @@ class _BottomBarState extends State<BottomBar>
         drawer: MyDrawer(
           ontapItem: (int index) {
             setState(() {
+              _tabController.animateTo(index);
               _selectedIndex = index;
             });
           },
@@ -143,8 +152,6 @@ class _BottomBarState extends State<BottomBar>
 
 class NavbarNotifier extends ChangeNotifier {
   int _index = 0;
-  int selectedIndex = 0;
-  late TabController _tabController;
 
   FutureOr<bool> onBackButtonPressed(int index) async {
     bool exitingApp = true;
@@ -185,7 +192,14 @@ class NavbarNotifier extends ChangeNotifier {
         if (homeKey.currentState != null && homeKey.currentState!.canPop()) {
           homeKey.currentState?.popUntil((route) => route.isFirst);
         } else if (_selectedIndex == 0) {
-          homeKey.currentState?.popAndPushNamed('/');
+          homeKey.currentState?.pushReplacement(PageRouteBuilder(
+            pageBuilder: (BuildContext context, Animation<double> animation,
+                Animation<double> animation2) {
+              return Home_Page();
+            },
+            // transitionDuration: Duration.zero,
+            // reverseTransitionDuration: Duration.zero,
+          ));
         }
         return;
       case 1:
@@ -194,7 +208,14 @@ class NavbarNotifier extends ChangeNotifier {
           messageKey.currentState!.popUntil((route) => route.isFirst);
         }
         if (_selectedIndex == 1) {
-          messageKey.currentState?.popAndPushNamed('/');
+          messageKey.currentState?.pushReplacement(PageRouteBuilder(
+            pageBuilder: (BuildContext context, Animation<double> animation,
+                Animation<double> animation2) {
+              return Notification_Page();
+            },
+            // transitionDuration: Duration.zero,
+            // reverseTransitionDuration: Duration.zero,
+          ));
         }
         return;
       case 2:
@@ -202,7 +223,14 @@ class NavbarNotifier extends ChangeNotifier {
             profileKey.currentState!.canPop()) {
           profileKey.currentState!.popUntil((route) => route.isFirst);
         } else if (_selectedIndex == 2) {
-          profileKey.currentState?.popAndPushNamed('/');
+          profileKey.currentState?.pushReplacement(PageRouteBuilder(
+            pageBuilder: (BuildContext context, Animation<double> animation,
+                Animation<double> animation2) {
+              return Profile_Page();
+            },
+            // transitionDuration: Duration.zero,
+            // reverseTransitionDuration: Duration.zero,
+          ));
         }
         return;
       default:

@@ -63,6 +63,7 @@ class _Profile_PageState extends State<Profile_Page>
       setState(() {
         loading = true;
       });
+      await Future.delayed(Duration(milliseconds: 300));
       var url = '${Connect_api().domain}/get/profile/$userId';
       var response = await Dio().get(
         url,

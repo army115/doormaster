@@ -85,11 +85,13 @@ class _Date_timeState extends State<Date_time> {
                 cancelStyle: TextStyle(
                     color: Colors.white,
                     fontSize: 17,
-                    fontWeight: FontWeight.bold),
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Prompt'),
                 doneStyle: TextStyle(
                     color: Colors.white,
                     fontSize: 17,
-                    fontWeight: FontWeight.bold),
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Prompt'),
                 backgroundColor: Colors.grey.shade200,
                 itemHeight: 40,
                 itemStyle: TextStyle(
