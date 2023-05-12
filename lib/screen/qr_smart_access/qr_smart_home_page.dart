@@ -143,7 +143,7 @@ class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
                           title: 'Emergency Call',
                           icon: Icons.phone_forwarded_rounded,
                           press: () async {
-                            launch("tel:02-748-2191");
+                            await launch("tel:02-748-2191");
                             // await FlutterPhoneDirectCaller.callNumber(
                             //     '02-748-2191');
                           }),
