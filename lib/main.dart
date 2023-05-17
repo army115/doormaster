@@ -37,6 +37,7 @@ Future<void> main(context) async {
   final prefs = await SharedPreferences.getInstance();
   final token = prefs.getString('token');
   print(token == null ? 'login : false' : 'login : true');
+  HttpOverrides.global = MyHttpOverrides();
   runApp(result == ConnectivityResult.none
       ? Check_Connected()
       : MyApp(
@@ -52,13 +53,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       builder: EasyLoading.init(
-        builder: (context, child) => MediaQuery(
-          data: MediaQuery.of(context).copyWith(
-            textScaleFactor: 1.25,
-          ),
-          child: child!,
-        ),
-      ),
+          builder: (context, child) => myTextScale(context, child
+              // myScrollScreen(
+              //   context,
+              //   child,
+              // )
+              )),
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -143,5 +143,14 @@ class Check_Connected extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }

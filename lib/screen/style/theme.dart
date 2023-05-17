@@ -1,6 +1,7 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'dart:io';
 
 ThemeData mytheme() {
   Map<int, Color> color = {
@@ -16,6 +17,13 @@ ThemeData mytheme() {
     900: Color.fromRGBO(11, 77, 156, 1),
   };
   return ThemeData(
+    //animetion การเปลี่ยนหน้า
+    pageTransitionsTheme: PageTransitionsTheme(
+      builders: {
+        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+        TargetPlatform.android: FadeUpwardsPageTransitionsBuilder()
+      },
+    ),
     primarySwatch: MaterialColor(0xFF0b4d9c, color),
     primaryColor: Color(0xFF0B4D9C),
     // accentColor: Colors.transparent, //? Scroll Colors
@@ -53,5 +61,26 @@ ThemeData mytheme() {
           letterSpacing: 1,
         )),
     fontFamily: 'Prompt',
+  );
+}
+
+Widget myTextScale(BuildContext context, Widget? child) {
+  return MediaQuery(
+      // fix ขนาดตัวอักษรของแอพ
+      data: MediaQuery.of(context).copyWith(
+        textScaleFactor: 1.2,
+      ),
+      child: child!);
+}
+
+Widget myScrollScreen(BuildContext context, Widget? child) {
+  return ScrollConfiguration(
+    // scroll listview screen การเลื่อนไลด์หน้าแอพ
+    behavior: ScrollBehavior().copyWith(
+      // Set the default scroll physics here
+      physics:
+          Platform.isIOS ? BouncingScrollPhysics() : ClampingScrollPhysics(),
+    ),
+    child: child!,
   );
 }

@@ -35,7 +35,7 @@ class NotificationService {
       ticker: 'ticker',
       icon: "icon_app",
       channelShowBadge: true,
-      largeIcon: DrawableResourceAndroidBitmap('circle_icon'),
+      // largeIcon: DrawableResourceAndroidBitmap('circle_icon'),
     );
 
     DarwinNotificationDetails iosDetails = const DarwinNotificationDetails(

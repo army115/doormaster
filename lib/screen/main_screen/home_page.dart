@@ -318,8 +318,8 @@ class _Home_PageState extends State<Home_Page>
                 children: [
                   Menu_Security(
                       title: 'security', press: '/security', icon: Icons.man),
-                  // Menu_Security(
-                  //     title: 'visitor', press: '/visitor', icon: Icons.boy)
+                  Menu_Security(
+                      title: 'visitor', press: '/visitor', icon: Icons.boy)
                 ],
               ),
             )

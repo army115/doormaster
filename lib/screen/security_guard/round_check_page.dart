@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, prefer_const_constructors
 
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
@@ -31,30 +31,55 @@ class _Round_CheckState extends State<Round_Check> {
   Color? containerColor;
   Color? textColor;
   Color? line;
-  DateTime now = DateTime.now();
-  // List<DateTime> timeStart = [];
-  // List<DateTime> timeEnd = [];
+  DateTime now = DateTime.parse('2023-05-15 20:27:00.001');
+  List<DateTime> timeStart = [];
+  List<DateTime> timeEnd = [];
   DateTime? timeStartCheck;
   DateTime? timeEndCheck;
 
   Future _setColor(now, timeStart, timeEnd) async {
-    if (now.isAfter(timeStart) && now.isBefore(timeEnd)) {
-      containerColor = Theme.of(context).primaryColor;
-      textColor = Colors.white;
-      line = Colors.white;
+    if (timeEnd.isBefore(timeStart)) {
+      if (now.isAfter(timeStart) && now.isBefore(timeEnd)) {
+        containerColor = Theme.of(context).primaryColor;
+        textColor = Colors.yellow;
+        line = Colors.yellow;
+        print('หลัง');
+      } else {
+        containerColor = Colors.white;
+        textColor = Colors.black;
+        line = Colors.grey;
+      }
     } else {
-      containerColor = Colors.white;
-      textColor = Colors.black;
-      line = Colors.grey;
+      if (now.isAfter(timeStart) && now.isBefore(timeEnd)) {
+        containerColor = Theme.of(context).primaryColor;
+        textColor = Colors.white;
+        line = Colors.white;
+        print('ก่อน');
+      } else {
+        containerColor = Colors.white;
+        textColor = Colors.black;
+        line = Colors.grey;
+      }
     }
+    // if (now.isAfter(timeStart) && now.isBefore(timeEnd)) {
+    //   containerColor = Theme.of(context).primaryColor;
+    //   textColor = Colors.white;
+    //   line = Colors.white;
+    // } else {
+    // containerColor = Colors.white;
+    // textColor = Colors.black;
+    // line = Colors.grey;
+    // }
   }
 
-  // Future _setTime(DateTime _start, DateTime _end) async {
-  //   timeStart.add(_start);
-  //   timeEnd.add(_end);
-  // }
+  Future _setTime(DateTime _start, DateTime _end) async {
+    timeStart.add(_start);
+    timeEnd.add(_end);
+    // print(timeStart);
+    // print(timeEnd);
+  }
 
-  Future _getCheckRound() async {
+  Future _getCheckRound(loadingTime) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     companyId = prefs.getString('companyId');
     print('companyId: ${companyId}');
@@ -64,8 +89,10 @@ class _Round_CheckState extends State<Round_Check> {
         loading = true;
       });
 
+      await Future.delayed(Duration(milliseconds: loadingTime));
+
       //call api
-      var url = '${Connect_api().domain}/get/round/${companyId}';
+      var url = '${Connect_api().domain}/get/round/$companyId';
       var response = await Dio().get(
         url,
         options: Options(headers: {
@@ -102,14 +129,14 @@ class _Round_CheckState extends State<Round_Check> {
 
   Future onGoBack(dynamic value) async {
     setState(() {
-      _getCheckRound();
+      _getCheckRound(0);
     });
   }
 
   @override
   void initState() {
     super.initState();
-    _getCheckRound();
+    _getCheckRound(300);
   }
 
   @override
@@ -124,149 +151,156 @@ class _Round_CheckState extends State<Round_Check> {
               : SafeArea(
                   child: listdata.isEmpty
                       ? Logo_Opacity(title: 'ไม่มีข้อมูลที่บันทึก')
-                      : SingleChildScrollView(
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 20),
-                            child: ListView.builder(
-                                shrinkWrap: true,
-                                primary: false,
-                                itemCount: listdata.length,
-                                itemBuilder: (context, index) {
-                                  DateTime timeStart = DateTime.parse(
-                                      '$date ${listdata[index].roundStart}');
-                                  DateTime timeEnd = DateTime.parse(
-                                      '$date ${listdata[index].roundEnd}');
-                                  timeStartCheck = timeStart;
-                                  timeEndCheck = timeEnd;
-                                  // _setTime(timeStart, timeEnd);
-                                  _setColor(now, timeStart, timeEnd);
+                      : RefreshIndicator(
+                          onRefresh: () async {
+                            _getCheckRound(500);
+                          },
+                          child: ListView.builder(
+                              physics: BouncingScrollPhysics(),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 20),
+                              shrinkWrap: true,
+                              primary: false,
+                              itemCount: listdata.length,
+                              itemBuilder: (context, index) {
+                                DateTime timeStart = DateTime.parse(
+                                    '$date ${listdata[index].roundStart}');
+                                DateTime timeEnd = DateTime.parse(
+                                    '$date ${listdata[index].roundEnd}');
+                                timeStartCheck = timeStart;
+                                timeEndCheck = timeEnd;
 
-                                  return Card(
-                                    shape: RoundedRectangleBorder(
+                                _setTime(timeStart, timeEnd);
+                                _setColor(now, timeStart, timeEnd);
+
+                                return Card(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)),
+                                  margin: EdgeInsets.symmetric(vertical: 5),
+                                  elevation: 10,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: containerColor,
                                         borderRadius:
                                             BorderRadius.circular(10)),
-                                    margin: EdgeInsets.symmetric(vertical: 5),
-                                    elevation: 10,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          color: containerColor,
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      padding: EdgeInsets.all(10),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          now.isAfter(timeStart) &&
-                                                  now.isBefore(timeEnd)
-                                              ? Column(
-                                                  children: [
-                                                    Text(
-                                                      'รอบที่ต้องเดินตรวจ',
-                                                      style: TextStyle(
-                                                          color: textColor),
-                                                    ),
-                                                    Divider(
-                                                        height: 15,
-                                                        thickness: 1.5,
-                                                        color: line),
-                                                  ],
-                                                )
-                                              : Container(),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Expanded(
-                                                child: Text(
-                                                  'รอบเดิน : ${listdata[index].roundName}',
-                                                  maxLines: now.isAfter(
-                                                              timeStart) &&
-                                                          now.isBefore(timeEnd)
-                                                      ? 2
-                                                      : 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                      color: textColor),
-                                                ),
+                                    padding: EdgeInsets.all(10),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        now.isAfter(timeStart) &&
+                                                now.isBefore(timeEnd)
+                                            ? Column(
+                                                children: [
+                                                  Text(
+                                                    'รอบที่ต้องเดินตรวจ',
+                                                    style: TextStyle(
+                                                        color: textColor),
+                                                  ),
+                                                  Divider(
+                                                      height: 15,
+                                                      thickness: 1.5,
+                                                      color: line),
+                                                ],
+                                              )
+                                            : Container(),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                'รอบเดิน : ${listdata[index].roundName}',
+                                                maxLines: now.isAfter(
+                                                            timeStart) &&
+                                                        now.isBefore(timeEnd)
+                                                    ? 2
+                                                    : 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style:
+                                                    TextStyle(color: textColor),
                                               ),
-                                              now.isAfter(timeStart) &&
-                                                      now.isBefore(timeEnd)
-                                                  ? button('เช็คจุดตรวจ',
-                                                      Colors.white, () {
-                                                      now.isAfter(timeStart) &&
-                                                              now.isBefore(
-                                                                  timeEnd)
-                                                          ? permissionCamere(
-                                                              context,
-                                                              () => permissionLocation(
-                                                                  context,
-                                                                  () => checkInternet(
-                                                                      context,
-                                                                      ScanQR_Check(
-                                                                          name:
-                                                                              'check',
-                                                                          roundId: listdata[index]
-                                                                              .roundUuid!,
-                                                                          roundName: listdata[index]
-                                                                              .roundName!,
-                                                                          roundStart: listdata[index]
-                                                                              .roundStart!,
-                                                                          roundEnd: listdata[index]
-                                                                              .roundEnd!),
-                                                                      true)))
-                                                          : dialogOnebutton_Subtitle(
-                                                              context,
-                                                              'ไม่สามารถตรวจได้',
-                                                              'เลยเวลาเดินตรวจรอบนี้แล้ว',
-                                                              Icons
-                                                                  .warning_amber_rounded,
-                                                              Colors.orange,
-                                                              'ตกลง', () {
-                                                              Navigator.popUntil(
-                                                                  context,
-                                                                  (route) => route
-                                                                      .isFirst);
-                                                            }, false, false);
-                                                    })
-                                                  : Container()
+                                            ),
+                                            now.isAfter(timeStart) &&
+                                                    now.isBefore(timeEnd)
+                                                ? button(
+                                                    'เช็คจุดตรวจ', Colors.white,
+                                                    () {
+                                                    now.isAfter(timeStart) &&
+                                                            now.isBefore(
+                                                                timeEnd)
+                                                        ? permissionCamere(
+                                                            context,
+                                                            () => permissionLocation(
+                                                                context,
+                                                                () => checkInternet(
+                                                                    context,
+                                                                    ScanQR_Check(
+                                                                        name:
+                                                                            'check',
+                                                                        roundId:
+                                                                            listdata[index]
+                                                                                .roundUuid!,
+                                                                        roundName:
+                                                                            listdata[index]
+                                                                                .roundName!,
+                                                                        roundStart:
+                                                                            listdata[index]
+                                                                                .roundStart!,
+                                                                        roundEnd:
+                                                                            listdata[index]
+                                                                                .roundEnd!),
+                                                                    true)))
+                                                        : dialogOnebutton_Subtitle(
+                                                            context,
+                                                            'ไม่สามารถตรวจได้',
+                                                            'เลยเวลาเดินตรวจรอบนี้แล้ว',
+                                                            Icons
+                                                                .warning_amber_rounded,
+                                                            Colors.orange,
+                                                            'ตกลง', () {
+                                                            Navigator.popUntil(
+                                                                context,
+                                                                (route) => route
+                                                                    .isFirst);
+                                                          }, false, false);
+                                                  })
+                                                : Container()
+                                          ],
+                                        ),
+                                        Divider(
+                                            height: 15,
+                                            thickness: 1.5,
+                                            color: line),
+                                        IntrinsicHeight(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: [
+                                              Text(
+                                                'เริ่มต้น : ${listdata[index].roundStart} น.',
+                                                style:
+                                                    TextStyle(color: textColor),
+                                              ),
+                                              VerticalDivider(
+                                                  thickness: 1.5,
+                                                  color: line,
+                                                  width: 1),
+                                              Text(
+                                                'สิ้นสุด : ${listdata[index].roundEnd} น.',
+                                                style:
+                                                    TextStyle(color: textColor),
+                                              ),
                                             ],
                                           ),
-                                          Divider(
-                                              height: 15,
-                                              thickness: 1.5,
-                                              color: line),
-                                          IntrinsicHeight(
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceAround,
-                                              children: [
-                                                Text(
-                                                  'เริ่มต้น : ${listdata[index].roundStart} น.',
-                                                  style: TextStyle(
-                                                      color: textColor),
-                                                ),
-                                                VerticalDivider(
-                                                    thickness: 1.5,
-                                                    color: line,
-                                                    width: 1),
-                                                Text(
-                                                  'สิ้นสุด : ${listdata[index].roundEnd} น.',
-                                                  style: TextStyle(
-                                                      color: textColor),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
+                                        )
+                                      ],
                                     ),
-                                  );
-                                }),
-                          ),
-                        )),
+                                  ),
+                                );
+                              }),
+                        ),
+                ),
         ),
         loading ? Loading() : Container()
       ],

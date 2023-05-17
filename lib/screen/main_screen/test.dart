@@ -1,5 +1,9 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, overridden_fields
 
+import 'dart:developer';
+
+import 'package:dio/dio.dart';
+import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:flutter/material.dart';
 
@@ -103,13 +107,35 @@ class _PageOneState extends State<PageOne> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     // super.build(context);
+
+    Future _getLogs() async {
+      try {
+        //call api
+        var url = 'https://192.168.9.124:7082/api/User/admin/admin';
+        var response = await Dio().get(
+          url,
+          options: Options(headers: {'accept': 'text/plain'}),
+        );
+        log('uri : ${url}');
+        log("print : ${response.data}");
+      } catch (error) {
+        log("$error");
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('111111'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: load ? Loading() : TextField(),
+        child: load
+            ? Loading()
+            : Buttons(
+                title: 'test',
+                press: () {
+                  _getLogs();
+                }),
       ),
     );
   }
