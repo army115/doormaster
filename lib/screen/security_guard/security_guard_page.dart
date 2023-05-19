@@ -1,8 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:dio/dio.dart';
 import 'package:doormster/components/drawer/drawer.dart';
 import 'package:doormster/components/girdManu/grid_menu.dart';
 import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
+import 'package:doormster/models/get_round.dart';
 import 'package:doormster/screen/main_screen/test.dart';
 import 'package:doormster/screen/security_guard/check_in_page.dart';
 import 'package:doormster/screen/security_guard/check_point_page.dart';
@@ -10,9 +12,11 @@ import 'package:doormster/screen/security_guard/record_check_page.dart';
 import 'package:doormster/screen/security_guard/round_check_page.dart';
 import 'package:doormster/screen/security_guard/scan_qr_check_page.dart';
 import 'package:doormster/service/check_connected.dart';
+import 'package:doormster/service/connect_api.dart';
 import 'package:doormster/service/permission/permission_camera.dart';
 import 'package:doormster/service/permission/permission_location.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -26,25 +30,64 @@ class Security_Guard extends StatefulWidget {
 
 class _Security_GuardState extends State<Security_Guard> {
   bool loading = false;
+  String? companyId;
+  List<Data> listdata = [];
+  DateTime now = DateTime.now();
+  DateFormat format = DateFormat("HH:mm");
 
-  // var mobileRole;
-  // Future _getRole() async {
-  //   setState(() {
-  //     loading = true;
-  //   });
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   mobileRole = await prefs.getInt('role') ?? "";
-  //   print('mobileRole: ${mobileRole}');
-  //   setState(() {
-  //     loading = false;
-  //   });
-  // }
+  Future _getRoundNow() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    companyId = prefs.getString('companyId');
+    now = DateTime.now();
+    print('companyId: ${companyId}');
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _getRole();
-  // }
+    try {
+      setState(() {
+        loading = true;
+      });
+
+      //call api
+      var url = '${Connect_api().domain}/getRoundNow/$companyId';
+      var response = await Dio().get(
+        url,
+        options: Options(headers: {
+          'Connect-type': 'application/json',
+          'Accept': 'application/json',
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        getRound checklist = getRound.fromJson(response.data);
+        setState(() {
+          print(response.data);
+          listdata = checklist.data!;
+          loading = false;
+        });
+      }
+    } catch (error) {
+      print(error);
+      // await Future.delayed(Duration(milliseconds: 500));
+      // dialogOnebutton_Subtitle(
+      //     context,
+      //     'พบข้อผิดพลาด',
+      //     'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+      //     Icons.warning_amber_rounded,
+      //     Colors.orange,
+      //     'ตกลง', () {
+      //   homeKey.currentState?.popUntil(ModalRoute.withName('/security'));
+      //   Navigator.of(context, rootNavigator: true).pop();
+      // }, false, false);
+      setState(() {
+        loading = false;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getRoundNow();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +126,10 @@ class _Security_GuardState extends State<Security_Guard> {
                                 context,
                                 ScanQR_Check(
                                   name: 'check',
+                                  roundName: listdata[0].roundName,
+                                  roundId: listdata[0].roundUuid,
+                                  roundStart: listdata[0].roundStart,
+                                  roundEnd: listdata[0].roundEnd,
                                 ),
                                 true)));
                   },

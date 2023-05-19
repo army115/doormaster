@@ -382,11 +382,30 @@ class _Check_InState extends State<Check_In> {
                             Container(
                               margin: EdgeInsets.symmetric(vertical: 10),
                               height: 200,
+                              width: MediaQuery.of(context).size.width,
                               child: ListView(
                                   primary: false,
                                   shrinkWrap: true,
                                   scrollDirection: Axis.horizontal,
                                   children: [
+                                    listImage64?.length == 4
+                                        ? Container()
+                                        : Card(
+                                            elevation: 5,
+                                            child: InkWell(
+                                                onTap: () {
+                                                  selectedImages(
+                                                      ImageSource.gallery);
+                                                },
+                                                child: Container(
+                                                  width: 200,
+                                                  height: 200,
+                                                  child: const Icon(
+                                                    Icons.add_a_photo,
+                                                    size: 60,
+                                                  ),
+                                                )),
+                                          ),
                                     listImage64 != null
                                         ? ListView.builder(
                                             shrinkWrap: true,
@@ -457,24 +476,6 @@ class _Check_InState extends State<Check_In> {
                                               );
                                             }))
                                         : Container(),
-                                    listImage64?.length == 4
-                                        ? Container()
-                                        : Card(
-                                            elevation: 5,
-                                            child: InkWell(
-                                                onTap: () {
-                                                  selectedImages(
-                                                      ImageSource.gallery);
-                                                },
-                                                child: Container(
-                                                  width: 200,
-                                                  height: 200,
-                                                  child: const Icon(
-                                                    Icons.add_a_photo,
-                                                    size: 60,
-                                                  ),
-                                                )),
-                                          ),
                                   ]),
                             ),
                             Row(
@@ -497,7 +498,8 @@ class _Check_InState extends State<Check_In> {
                               icon: Icons.description_rounded,
                               title: 'รายละเอียด',
                               validator: (values) {
-                                if (status.text == 'ไม่ปกติ') {
+                                if (status.text == 'ไม่ปกติ' &&
+                                    values.isEmpty) {
                                   return 'เหตุการณ์ไม่ปกติ กรุณาเพิ่มรายละเอียด';
                                 }
                                 return null;

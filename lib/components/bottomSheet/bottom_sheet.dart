@@ -1,7 +1,7 @@
 // ignore_for_file: sort_child_properties_last, prefer_const_constructors
 
 import 'package:doormster/components/drawer/drawer.dart';
-import 'package:doormster/components/button/button_ontline.dart';
+import 'package:doormster/components/button/button_outline.dart';
 import 'package:doormster/screen/main_screen/add_company_page.dart';
 import 'package:flutter/material.dart';
 

@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_twobutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
-import 'package:doormster/components/button/button_ontline.dart';
+import 'package:doormster/components/button/button_outline.dart';
 import 'package:doormster/models/get_multi_company.dart';
 import 'package:doormster/models/login_model.dart';
 import 'package:doormster/screen/main_screen/add_company_page.dart';

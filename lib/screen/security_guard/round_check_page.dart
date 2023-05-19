@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, prefer_const_constructors
 
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
@@ -12,6 +14,7 @@ import 'package:doormster/service/connect_api.dart';
 import 'package:doormster/service/permission/permission_camera.dart';
 import 'package:doormster/service/permission/permission_location.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,61 +30,50 @@ class _Round_CheckState extends State<Round_Check> {
   var companyId;
   List<Data> listdata = [];
   bool loading = false;
-
   Color? containerColor;
   Color? textColor;
   Color? line;
-  DateTime now = DateTime.parse('2023-05-15 20:27:00.001');
-  List<DateTime> timeStart = [];
-  List<DateTime> timeEnd = [];
-  DateTime? timeStartCheck;
-  DateTime? timeEndCheck;
+  DateTime now = DateTime.now();
+  int round = 0;
+  DateFormat format = DateFormat("HH:mm");
 
   Future _setColor(now, timeStart, timeEnd) async {
     if (timeEnd.isBefore(timeStart)) {
-      if (now.isAfter(timeStart) && now.isBefore(timeEnd)) {
+      if (now.isAfter(timeStart) ||
+          now.isBefore(timeEnd) ||
+          now.isAtSameMomentAs(timeStart) ||
+          now.isAtSameMomentAs(timeEnd)) {
         containerColor = Theme.of(context).primaryColor;
         textColor = Colors.yellow;
         line = Colors.yellow;
-        print('หลัง');
+        round = 1;
       } else {
+        round = 0;
         containerColor = Colors.white;
         textColor = Colors.black;
         line = Colors.grey;
       }
     } else {
-      if (now.isAfter(timeStart) && now.isBefore(timeEnd)) {
+      if (now.isAfter(timeStart) && now.isBefore(timeEnd) ||
+          now.isAtSameMomentAs(timeStart) ||
+          now.isAtSameMomentAs(timeEnd)) {
         containerColor = Theme.of(context).primaryColor;
         textColor = Colors.white;
         line = Colors.white;
-        print('ก่อน');
+        round = 1;
       } else {
+        round = 0;
         containerColor = Colors.white;
         textColor = Colors.black;
         line = Colors.grey;
       }
     }
-    // if (now.isAfter(timeStart) && now.isBefore(timeEnd)) {
-    //   containerColor = Theme.of(context).primaryColor;
-    //   textColor = Colors.white;
-    //   line = Colors.white;
-    // } else {
-    // containerColor = Colors.white;
-    // textColor = Colors.black;
-    // line = Colors.grey;
-    // }
-  }
-
-  Future _setTime(DateTime _start, DateTime _end) async {
-    timeStart.add(_start);
-    timeEnd.add(_end);
-    // print(timeStart);
-    // print(timeEnd);
   }
 
   Future _getCheckRound(loadingTime) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     companyId = prefs.getString('companyId');
+    now = DateTime.now();
     print('companyId: ${companyId}');
 
     try {
@@ -156,7 +148,7 @@ class _Round_CheckState extends State<Round_Check> {
                             _getCheckRound(500);
                           },
                           child: ListView.builder(
-                              physics: BouncingScrollPhysics(),
+                              physics: AlwaysScrollableScrollPhysics(),
                               padding: EdgeInsets.symmetric(
                                   horizontal: 20, vertical: 20),
                               shrinkWrap: true,
@@ -167,10 +159,6 @@ class _Round_CheckState extends State<Round_Check> {
                                     '$date ${listdata[index].roundStart}');
                                 DateTime timeEnd = DateTime.parse(
                                     '$date ${listdata[index].roundEnd}');
-                                timeStartCheck = timeStart;
-                                timeEndCheck = timeEnd;
-
-                                _setTime(timeStart, timeEnd);
                                 _setColor(now, timeStart, timeEnd);
 
                                 return Card(
@@ -188,8 +176,7 @@ class _Round_CheckState extends State<Round_Check> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: [
-                                        now.isAfter(timeStart) &&
-                                                now.isBefore(timeEnd)
+                                        round == 1
                                             ? Column(
                                                 children: [
                                                   Text(
@@ -211,24 +198,17 @@ class _Round_CheckState extends State<Round_Check> {
                                             Expanded(
                                               child: Text(
                                                 'รอบเดิน : ${listdata[index].roundName}',
-                                                maxLines: now.isAfter(
-                                                            timeStart) &&
-                                                        now.isBefore(timeEnd)
-                                                    ? 2
-                                                    : 1,
+                                                maxLines: round == 1 ? 2 : 1,
                                                 overflow: TextOverflow.ellipsis,
                                                 style:
                                                     TextStyle(color: textColor),
                                               ),
                                             ),
-                                            now.isAfter(timeStart) &&
-                                                    now.isBefore(timeEnd)
+                                            round == 1
                                                 ? button(
                                                     'เช็คจุดตรวจ', Colors.white,
                                                     () {
-                                                    now.isAfter(timeStart) &&
-                                                            now.isBefore(
-                                                                timeEnd)
+                                                    round != 1
                                                         ? permissionCamere(
                                                             context,
                                                             () => permissionLocation(
@@ -259,10 +239,16 @@ class _Round_CheckState extends State<Round_Check> {
                                                                 .warning_amber_rounded,
                                                             Colors.orange,
                                                             'ตกลง', () {
-                                                            Navigator.popUntil(
-                                                                context,
-                                                                (route) => route
-                                                                    .isFirst);
+                                                            Navigator.of(
+                                                                    context,
+                                                                    rootNavigator:
+                                                                        true)
+                                                                .pop();
+
+                                                            // Navigator.popUntil(
+                                                            //     context,
+                                                            //     (route) => route
+                                                            //         .isFirst);
                                                           }, false, false);
                                                   })
                                                 : Container()

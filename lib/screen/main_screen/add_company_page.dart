@@ -5,7 +5,7 @@ import 'package:doormster/components/dropdown/dropdonw_search.dart';
 import 'package:doormster/components/dropdown/dropdown.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
-import 'package:doormster/screen/style/styleButton/ButtonStyle.dart';
+import 'package:doormster/style/styleButton/ButtonStyle.dart';
 import 'package:doormster/models/create_company_model.dart';
 import 'package:doormster/models/get_company.dart';
 import 'package:doormster/models/get_multi_company.dart';

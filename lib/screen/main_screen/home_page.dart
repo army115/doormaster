@@ -185,8 +185,8 @@ class _Home_PageState extends State<Home_Page>
                       width: double.infinity,
                       child: listads.isEmpty
                           ? Swiper(
-                              autoplay: true,
-                              loop: true,
+                              autoplay: false,
+                              loop: false,
                               itemCount: 1,
                               itemBuilder: (context, index) {
                                 return Image.asset(
@@ -196,8 +196,8 @@ class _Home_PageState extends State<Home_Page>
                               },
                             )
                           : Swiper(
-                              autoplay: true,
-                              loop: true,
+                              autoplay: listads.length == 1 ? false : true,
+                              loop: listads.length == 1 ? false : true,
                               pagination: SwiperPagination(
                                   builder: DotSwiperPaginationBuilder(
                                       size: 8,

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/screen/main_screen/auth_page.dart';
@@ -9,7 +8,7 @@ import 'package:doormster/screen/main_screen/change_password_page.dart';
 import 'package:doormster/screen/main_screen/login_staff_page.dart';
 import 'package:doormster/screen/main_screen/settings_page.dart';
 import 'package:doormster/screen/management_service/management_service_page.dart';
-import 'package:doormster/screen/style/theme.dart';
+import 'package:doormster/style/theme.dart';
 import 'package:doormster/service/notifi_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -37,7 +36,6 @@ Future<void> main(context) async {
   final prefs = await SharedPreferences.getInstance();
   final token = prefs.getString('token');
   print(token == null ? 'login : false' : 'login : true');
-  HttpOverrides.global = MyHttpOverrides();
   runApp(result == ConnectivityResult.none
       ? Check_Connected()
       : MyApp(
@@ -53,12 +51,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       builder: EasyLoading.init(
-          builder: (context, child) => myTextScale(context, child
-              // myScrollScreen(
-              //   context,
-              //   child,
-              // )
-              )),
+          builder: (context, child) => myTextScale(
+              context,
+              myScrollScreen(
+                context,
+                child,
+              ))),
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -143,14 +141,5 @@ class Check_Connected extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class MyHttpOverrides extends HttpOverrides {
-  @override
-  HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)
-      ..badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
   }
 }

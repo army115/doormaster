@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
-import 'package:doormster/screen/style/styleButton/ButtonStyle.dart';
+import 'package:doormster/style/styleButton/ButtonStyle.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';

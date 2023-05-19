@@ -278,6 +278,7 @@ class _Record_PointState extends State<Record_Point> {
                           ]),
                     )
                   : Swiper(
+                      loop: false,
                       pagination: const SwiperPagination(
                           builder: DotSwiperPaginationBuilder(
                               size: 8,

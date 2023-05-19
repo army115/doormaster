@@ -1,4 +1,5 @@
 import 'package:doormster/components/drawer/drawer.dart';
+import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
 import 'package:flutter/material.dart';
 
 class Visitor_Service extends StatefulWidget {
@@ -22,7 +23,7 @@ class _Visitor_ServiceState extends State<Visitor_Service> {
         //       Scaffold.of(context).openDrawer();
         //     }),
       ),
-      body: Center(child: Text('Visitor')),
+      body: Logo_Opacity(title: 'ไม่มีข้อมูล'),
     );
   }
 }

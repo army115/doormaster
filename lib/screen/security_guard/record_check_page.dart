@@ -31,63 +31,11 @@ class Record_Check extends StatefulWidget {
 class _Record_CheckState extends State<Record_Check> {
   String? companyId;
   TextEditingController fieldText = TextEditingController();
-  List<DatalogAll> listlogs = [];
-  List<DatalogAll> listdata = [];
   List<DataLog> listLog = [];
-  int? listLength = 0;
   bool loading = false;
-  DateFormat formatTime = DateFormat.Hm();
   DateFormat formatDate = DateFormat('y-MM-dd');
   DateTime now = DateTime.now();
   String? dateNow;
-
-  Future _getLogs() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    companyId = prefs.getString('companyId');
-    print('companyId: ${companyId}');
-
-    try {
-      setState(() {
-        loading = true;
-      });
-
-      //call api
-      var url = '${Connect_api().domain}/get/logshow/${companyId}';
-      var response = await Dio().get(
-        url,
-        options: Options(headers: {
-          'Connect-type': 'application/json',
-          'Accept': 'application/json',
-        }),
-      );
-
-      if (response.statusCode == 200) {
-        getLogsAll logslist = getLogsAll.fromJson(response.data);
-        setState(() {
-          listlogs = logslist.data!;
-          listdata = listlogs;
-          _searchData('$dateNow');
-          loading = false;
-        });
-      }
-    } catch (error) {
-      print(error);
-      await Future.delayed(Duration(milliseconds: 500));
-      dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง', () {
-        homeKey.currentState?.popUntil(ModalRoute.withName('/security'));
-        Navigator.of(context, rootNavigator: true).pop();
-      }, false, false);
-      setState(() {
-        loading = false;
-      });
-    }
-  }
 
   Future _getLog(String dateStart, String dateEnd, int loadingTime) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -143,15 +91,6 @@ class _Record_CheckState extends State<Record_Check> {
     _endDateText = dateNow;
   }
 
-  void _searchData(String text) {
-    setState(() {
-      listlogs = listdata.where((item) {
-        var date = item.date!.toLowerCase();
-        return date.contains(text);
-      }).toList();
-    });
-  }
-
   Future onGoBack(dynamic value) async {
     setState(() {
       _getLog(_startDateText!, _endDateText!, 0);
@@ -162,8 +101,6 @@ class _Record_CheckState extends State<Record_Check> {
   void initState() {
     super.initState();
     dateNowAll();
-    // _getLogs();
-    // _getCheckPoint();
     _getLog(_startDateText!, _endDateText!, 300);
   }
 
@@ -204,17 +141,6 @@ class _Record_CheckState extends State<Record_Check> {
                           ontap: () {
                             calendar(context);
                           },
-                          // changed: (value) {
-                          //   _getLog(_startDateText!, _endDateText!);
-                          // _searchData(value);
-                          // },
-                          // clear: () {
-                          //   setState(() {
-                          //     fieldText.text == '';
-                          //   });
-                          //   fieldText.clear();
-                          //   _getLogs();
-                          // }
                         ),
                       ),
                       Expanded(
@@ -226,7 +152,7 @@ class _Record_CheckState extends State<Record_Check> {
                                   _getLog(_startDateText!, _endDateText!, 500);
                                 },
                                 child: ListView.builder(
-                                    physics: BouncingScrollPhysics(),
+                                    physics: AlwaysScrollableScrollPhysics(),
                                     padding: EdgeInsets.fromLTRB(20, 0, 20, 5),
                                     // shrinkWrap: true,
                                     // primary: false,

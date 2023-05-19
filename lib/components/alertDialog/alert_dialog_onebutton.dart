@@ -1,4 +1,4 @@
-import 'package:doormster/screen/style/styleButton/ButtonStyle.dart';
+import 'package:doormster/style/styleButton/ButtonStyle.dart';
 import 'package:flutter/material.dart';
 
 void dialogOnebutton(

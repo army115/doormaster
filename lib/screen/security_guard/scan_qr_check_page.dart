@@ -69,7 +69,7 @@ class _ScanQR_CheckState extends State<ScanQR_Check> {
                   checkpointId: '${result?.code}',
                   lat: position?.latitude,
                   lng: position?.longitude,
-                  roundId: widget.roundName,
+                  roundId: widget.roundId,
                   roundName: widget.roundName,
                   roundStart: widget.roundStart,
                   roundEnd: widget.roundEnd),

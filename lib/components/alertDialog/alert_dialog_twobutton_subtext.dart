@@ -1,6 +1,6 @@
 // ignore_for_file: sort_child_properties_last, prefer_const_constructors
 
-import 'package:doormster/screen/style/styleButton/ButtonStyle.dart';
+import 'package:doormster/style/styleButton/ButtonStyle.dart';
 import 'package:flutter/material.dart';
 
 void dialogTwobutton_Subtitle(
