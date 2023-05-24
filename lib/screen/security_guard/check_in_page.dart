@@ -1,7 +1,6 @@
-// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, use_build_context_synchronously
+// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, use_build_context_synchronously, prefer_const_literals_to_create_immutables, avoid_print
 
-import 'dart:io';
-
+import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/button/button.dart';
@@ -11,22 +10,20 @@ import 'package:doormster/components/dropdown/dropdown_noborder.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/map/map_page.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
-import 'package:doormster/components/text_form/text_form.dart';
 import 'package:doormster/components/text_form/text_form_noborder_validator.dart';
-import 'package:doormster/components/text_form/text_form_validator.dart';
 import 'package:doormster/models/get_checklist.dart';
 import 'package:doormster/screen/security_guard/record_check_page.dart';
 import 'package:doormster/service/connect_api.dart';
+import 'package:doormster/service/permission/permission_camera.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert' as convert;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Check_In extends StatefulWidget {
   DateTime timeCheck;
-  final checkpointId;
+  final String checkpointId;
   final lat;
   final lng;
   final roundId;
@@ -35,9 +32,9 @@ class Check_In extends StatefulWidget {
   final roundEnd;
   Check_In(
       {Key? key,
-      this.checkpointId,
-      this.lat,
-      this.lng,
+      required this.checkpointId,
+      required this.lat,
+      required this.lng,
       required this.timeCheck,
       this.roundId,
       this.roundName,
@@ -68,7 +65,7 @@ class _Check_InState extends State<Check_In> {
         setState(() {
           // listImage?.add(pickedImages);
           listImage64?.add("data:image/png;base64,$ImagesBase64");
-          print('image64: ${ImagesBase64}');
+          print('image64: $ImagesBase64');
         });
       } else {
         print("No image is selected.");
@@ -84,19 +81,29 @@ class _Check_InState extends State<Check_In> {
   List<Data> listdata = [];
   List<Checklist> listcheck = [];
   bool loading = false;
-  String? checkpointName;
+  String? checkpointName = null;
+  int? verify = 1;
 
   Future _getChecklist() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     companyId = prefs.getString('companyId');
     userId = prefs.getString('userId');
     // roundId = prefs.getString('roundId');
-    print('companyId: ${companyId}');
-    print('userId: ${userId}');
+    print('companyId: $companyId');
+    print('userId: $userId');
     print('timeCheck: ${widget.timeCheck}');
-    print('idCheck: ${widget.checkpointId}');
     print('lat: ${widget.lat}');
     print('lng: ${widget.lng}');
+
+    String checkpointId;
+    print('idCheck: ${widget.checkpointId}');
+
+    if (widget.checkpointId.contains('http')) {
+      checkpointId = 'error';
+      log('idCheck: error');
+    } else {
+      checkpointId = widget.checkpointId;
+    }
 
     if (widget.lat != null) {
       try {
@@ -105,8 +112,7 @@ class _Check_InState extends State<Check_In> {
         });
 
         //call api
-        var url =
-            '${Connect_api().domain}/get/checkpointdetail/${widget.checkpointId}';
+        var url = '${Connect_api().domain}/get/checkpointdetail/$checkpointId';
         var response = await Dio().get(
           url,
           options: Options(headers: {
@@ -122,13 +128,17 @@ class _Check_InState extends State<Check_In> {
             loading = false;
           });
 
-          checkpointName = listdata.single.checkpointName;
-
-          for (int i = 0; i < listdata.length; i++) {
-            listcheck.addAll(listdata[i].checklist!);
-          }
-
-          if (listdata.single.verify == 0) {
+          if (listdata.isEmpty) {
+            dialogOnebutton_Subtitle(
+                context,
+                'พบข้อผิดพลาด',
+                'QR Code ไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง',
+                Icons.warning_amber_rounded,
+                Colors.orange,
+                'ตกลง', () {
+              Navigator.popUntil(context, (route) => route.isFirst);
+            }, false, false);
+          } else if (listdata[0].verify == 0) {
             dialogOnebutton_Subtitle(
                 context,
                 'ไม่พบจุดตรวจ',
@@ -138,6 +148,13 @@ class _Check_InState extends State<Check_In> {
                 'ตกลง', () {
               Navigator.popUntil(context, (route) => route.isFirst);
             }, false, false);
+          } else {
+            checkpointName = listdata[0].checkpointName;
+            verify = listdata[0].verify;
+          }
+
+          for (int i = 0; i < listdata.length; i++) {
+            listcheck.addAll(listdata[i].checklist!);
           }
         }
       } catch (error) {
@@ -146,7 +163,7 @@ class _Check_InState extends State<Check_In> {
         dialogOnebutton_Subtitle(
             context,
             'พบข้อผิดพลาด',
-            'โปรดตรวจสอบการเชื่อมต่อ และ QR Cord ให้ถูกต้อง',
+            'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
             Icons.warning_amber_rounded,
             Colors.orange,
             'ตกลง', () {
@@ -194,8 +211,8 @@ class _Check_InState extends State<Check_In> {
           ),
         );
         // Navigator.popUntil(context, (route) => route.isFirst);
-        // snackbar(context, Theme.of(context).primaryColor, 'ตรวจเช็คสำเร็จ',
-        //     Icons.check_circle_outline_rounded);
+        snackbar(context, Theme.of(context).primaryColor, 'ตรวจเช็คสำเร็จ',
+            Icons.check_circle_outline_rounded);
 
         setState(() {
           loading = false;
@@ -203,12 +220,12 @@ class _Check_InState extends State<Check_In> {
       } else {
         dialogOnebutton_Subtitle(
             context,
-            'ตรวจเช็คไม่สำเร็จ',
-            'ตำแหน่งไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง',
+            'ตำแหน่งไม่ถูกต้อง',
+            'ตำแหน่งปัจจุบันไม่ตรงจุดตรวจ กรุณาลองใหม่อีกครั้ง',
             Icons.highlight_off_rounded,
             Colors.red,
             'ตกลง', () {
-          Navigator.of(context).pop();
+          Navigator.popUntil(context, (route) => route.isFirst);
         }, false, false);
         print('checkIn not Success!!');
         print(response.data);
@@ -262,7 +279,7 @@ class _Check_InState extends State<Check_In> {
               }),
             ),
             bottomNavigationBar:
-                loading || checkpointName == null || listdata.single.verify == 0
+                loading || checkpointName == null || verify == 0
                     ? null
                     : Padding(
                         padding:
@@ -297,9 +314,7 @@ class _Check_InState extends State<Check_In> {
                 child: SingleChildScrollView(
               child: Form(
                 key: _formkey,
-                child: loading ||
-                        checkpointName == null ||
-                        listdata.single.verify == 0
+                child: loading || checkpointName == null || verify == 0
                     ? Container()
                     : Container(
                         padding: const EdgeInsets.symmetric(
@@ -394,8 +409,10 @@ class _Check_InState extends State<Check_In> {
                                             elevation: 5,
                                             child: InkWell(
                                                 onTap: () {
-                                                  selectedImages(
-                                                      ImageSource.gallery);
+                                                  permissionCamere(
+                                                      context,
+                                                      () => selectedImages(
+                                                          ImageSource.camera));
                                                 },
                                                 child: Container(
                                                   width: 200,
@@ -463,7 +480,7 @@ class _Check_InState extends State<Check_In> {
                                                                   listImage64![
                                                                       index]);
                                                               print(
-                                                                  'Image :  ${index}');
+                                                                  'Image :  $index');
                                                             });
                                                           },
                                                           iconSize: 18,
@@ -524,7 +541,7 @@ class _Check_InState extends State<Check_In> {
                                 ],
                               ),
                               children: [
-                                listdata.single.verify == 0
+                                verify == 0
                                     ? Container()
                                     : Map_Page(
                                         lat: widget.lat,

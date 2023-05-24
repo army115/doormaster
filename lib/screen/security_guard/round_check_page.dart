@@ -20,7 +20,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Round_Check extends StatefulWidget {
-  Round_Check({Key? key}) : super(key: key);
+  final checkpointId;
+  Round_Check({Key? key, this.checkpointId}) : super(key: key);
 
   @override
   State<Round_Check> createState() => _Round_CheckState();
@@ -213,7 +214,7 @@ class _Round_CheckState extends State<Round_Check> {
                                                             context,
                                                             () => permissionLocation(
                                                                 context,
-                                                                () => checkInternet(
+                                                                () => checkInternetOnGoBack(
                                                                     context,
                                                                     ScanQR_Check(
                                                                         name:
@@ -229,8 +230,12 @@ class _Round_CheckState extends State<Round_Check> {
                                                                                 .roundStart!,
                                                                         roundEnd:
                                                                             listdata[index]
-                                                                                .roundEnd!),
-                                                                    true)))
+                                                                                .roundEnd!,
+                                                                        checkpointId:
+                                                                            widget
+                                                                                .checkpointId),
+                                                                    true,
+                                                                    onGoBack)))
                                                         : dialogOnebutton_Subtitle(
                                                             context,
                                                             'ไม่สามารถตรวจได้',

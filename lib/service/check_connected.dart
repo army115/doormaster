@@ -10,8 +10,21 @@ Future<void> checkInternet(context, page, rootNavi) async {
         Icons.warning_amber_rounded);
     print('not connected');
   } else {
-    Navigator.of(context, rootNavigator: rootNavi).push(MaterialPageRoute(
-      builder: (context) => page,
-    ));
+    Navigator.of(context, rootNavigator: rootNavi)
+        .push(MaterialPageRoute(builder: (context) => page));
+  }
+}
+
+Future<void> checkInternetOnGoBack(context, page, rootNavi, onGoBack) async {
+  var result = await Connectivity().checkConnectivity();
+  print(result);
+  if (result == ConnectivityResult.none) {
+    snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
+        Icons.warning_amber_rounded);
+    print('not connected');
+  } else {
+    Navigator.of(context, rootNavigator: rootNavi)
+        .push(MaterialPageRoute(builder: (context) => page))
+        .then((onGoBack));
   }
 }

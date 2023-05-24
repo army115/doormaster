@@ -1,5 +1,8 @@
+// ignore_for_file: prefer_const_constructors, prefer_typing_uninitialized_variables
+
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/loading/loading.dart';
+import 'package:doormster/models/get_log.dart';
 import 'package:doormster/screen/security_guard/add_checkpoint_page.dart';
 import 'package:doormster/screen/security_guard/check_in_page.dart';
 import 'package:flutter/material.dart';
@@ -12,14 +15,16 @@ class ScanQR_Check extends StatefulWidget {
   final roundName;
   final roundStart;
   final roundEnd;
-  ScanQR_Check({
-    Key? key,
-    this.name,
-    this.roundId,
-    this.roundName,
-    this.roundStart,
-    this.roundEnd,
-  }) : super(key: key);
+  final checkpointId;
+  ScanQR_Check(
+      {Key? key,
+      this.name,
+      this.roundId,
+      this.roundName,
+      this.roundStart,
+      this.roundEnd,
+      this.checkpointId})
+      : super(key: key);
 
   @override
   State<ScanQR_Check> createState() => _ScanQR_CheckState();
@@ -55,7 +60,17 @@ class _ScanQR_CheckState extends State<ScanQR_Check> {
           dialogOnebutton_Subtitle(
               context,
               'พบข้อผิดพลาด',
-              'ยังไม่ถึงรอบเดินตรวจ โปรดลองอีกครั้ง',
+              'ยังไม่ถึงรอบเดินตรวจ โปรดลองใหม่ในภายหลัง',
+              Icons.highlight_off_rounded,
+              Colors.red,
+              'ตกลง', () {
+            Navigator.popUntil(context, (route) => route.isFirst);
+          }, false, false);
+        } else if (widget.checkpointId.contains(result?.code)) {
+          dialogOnebutton_Subtitle(
+              context,
+              'ตรวจจุดซ้ำ',
+              'จุดตรวจนี้ ถูกบันทึกข้อมูลแล้ว',
               Icons.warning_amber_rounded,
               Colors.orange,
               'ตกลง', () {
@@ -136,7 +151,7 @@ class _ScanQR_CheckState extends State<ScanQR_Check> {
                   ),
                 ),
                 Positioned(
-                    top: 35,
+                    top: MediaQuery.of(context).size.height * 0.05,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 5),
@@ -147,7 +162,7 @@ class _ScanQR_CheckState extends State<ScanQR_Check> {
                     )),
                 Positioned(
                   left: 10,
-                  top: 35,
+                  top: MediaQuery.of(context).size.height * 0.05,
                   child: Container(
                     decoration: BoxDecoration(
                         shape: BoxShape.circle, color: Colors.white30),
@@ -162,7 +177,7 @@ class _ScanQR_CheckState extends State<ScanQR_Check> {
                 ),
                 Positioned(
                     right: 15,
-                    top: 25,
+                    top: MediaQuery.of(context).size.height * 0.04,
                     child: IconButton(
                       onPressed: () async {
                         await controller?.toggleFlash();

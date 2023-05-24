@@ -1,10 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:dio/dio.dart';
+import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/drawer/drawer.dart';
 import 'package:doormster/components/girdManu/grid_menu.dart';
 import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
-import 'package:doormster/models/get_round.dart';
+import 'package:doormster/models/get_round_now.dart';
 import 'package:doormster/screen/main_screen/test.dart';
 import 'package:doormster/screen/security_guard/check_in_page.dart';
 import 'package:doormster/screen/security_guard/check_point_page.dart';
@@ -32,6 +33,8 @@ class _Security_GuardState extends State<Security_Guard> {
   bool loading = false;
   String? companyId;
   List<Data> listdata = [];
+  List<LogsList> logsList = [];
+  List<String> listCheckpoint = [];
   DateTime now = DateTime.now();
   DateFormat format = DateFormat("HH:mm");
 
@@ -57,12 +60,17 @@ class _Security_GuardState extends State<Security_Guard> {
       );
 
       if (response.statusCode == 200) {
-        getRound checklist = getRound.fromJson(response.data);
+        getRoundNow roundlist = getRoundNow.fromJson(response.data);
         setState(() {
-          print(response.data);
-          listdata = checklist.data!;
+          listdata = roundlist.data!;
+          logsList = listdata[0].logsList!;
           loading = false;
+          listCheckpoint = [];
         });
+
+        for (int i = 0; i < logsList.length; i++) {
+          listCheckpoint.add(logsList[i].chekpointUUid!);
+        }
       }
     } catch (error) {
       print(error);
@@ -81,6 +89,12 @@ class _Security_GuardState extends State<Security_Guard> {
         loading = false;
       });
     }
+  }
+
+  Future onGoBack(dynamic value) async {
+    setState(() {
+      _getRoundNow();
+    });
   }
 
   @override
@@ -117,21 +131,37 @@ class _Security_GuardState extends State<Security_Guard> {
                 Grid_Menu(
                   title: 'บันทึกจุดตรวจ',
                   icon: Icons.qr_code_scanner_rounded,
-                  press: () {
-                    permissionCamere(
+                  press: () async {
+                    setState(() {
+                      _getRoundNow();
+                    });
+                    await permissionCamere(
                         context,
                         () => permissionLocation(
                             context,
-                            () => checkInternet(
-                                context,
-                                ScanQR_Check(
-                                  name: 'check',
-                                  roundName: listdata[0].roundName,
-                                  roundId: listdata[0].roundUuid,
-                                  roundStart: listdata[0].roundStart,
-                                  roundEnd: listdata[0].roundEnd,
-                                ),
-                                true)));
+                            () => listdata.isEmpty
+                                ? dialogOnebutton_Subtitle(
+                                    context,
+                                    'พบข้อผิดพลาด',
+                                    'ยังไม่ถึงรอบเดินตรวจ โปรดลองใหม่ในภายหลัง',
+                                    Icons.warning_amber_rounded,
+                                    Colors.orange,
+                                    'ตกลง', () {
+                                    Navigator.of(context, rootNavigator: true)
+                                        .pop();
+                                  }, true, true)
+                                : checkInternetOnGoBack(
+                                    context,
+                                    ScanQR_Check(
+                                      name: 'check',
+                                      roundName: listdata[0].roundName,
+                                      roundId: listdata[0].roundUuid,
+                                      roundStart: listdata[0].roundStart,
+                                      roundEnd: listdata[0].roundEnd,
+                                      checkpointId: listCheckpoint,
+                                    ),
+                                    true,
+                                    onGoBack)));
                   },
                 ),
                 Grid_Menu(
@@ -142,31 +172,38 @@ class _Security_GuardState extends State<Security_Guard> {
                         context,
                         () => permissionLocation(
                             context,
-                            () => checkInternet(
+                            () => checkInternetOnGoBack(
                                 context,
                                 ScanQR_Check(
                                   name: 'add',
                                 ),
-                                true)));
+                                true,
+                                onGoBack)));
                   },
                 ),
                 Grid_Menu(
                     title: 'รอบเดินตรวจ',
                     icon: Icons.edit_calendar_rounded,
                     press: () {
-                      checkInternet(context, Round_Check(), false);
+                      checkInternetOnGoBack(
+                          context,
+                          Round_Check(checkpointId: listCheckpoint),
+                          false,
+                          onGoBack);
                     }),
                 Grid_Menu(
                     title: 'จุดเดินตรวจ',
                     icon: Icons.share_location_outlined,
                     press: () {
-                      checkInternet(context, Check_Point(), false);
+                      checkInternetOnGoBack(
+                          context, Check_Point(), false, onGoBack);
                     }),
                 Grid_Menu(
                   title: 'ดูรายการบันทึกการตรวจ',
                   icon: Icons.event_note,
                   press: () {
-                    checkInternet(context, Record_Check(type: 'home'), false);
+                    checkInternetOnGoBack(
+                        context, Record_Check(type: 'home'), false, onGoBack);
                   },
                 ),
                 Grid_Menu(

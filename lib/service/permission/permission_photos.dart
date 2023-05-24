@@ -17,6 +17,6 @@ Future<void> permissionPhotos(context, action) async {
         'ตกลง', () {
       Navigator.of(context, rootNavigator: true).pop();
       openAppSettings();
-    }, false, true);
+    }, true, true);
   }
 }

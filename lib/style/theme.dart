@@ -77,10 +77,10 @@ Widget myScrollScreen(BuildContext context, Widget? child) {
   return ScrollConfiguration(
     // scroll listview screen การเลื่อนไลด์หน้าแอพ
     behavior: ScrollBehavior().copyWith(
-      // Set the default scroll physics here
-      physics:
-          Platform.isIOS ? BouncingScrollPhysics() : ClampingScrollPhysics(),
-    ),
+        // Set the default scroll physics here
+        physics: BouncingScrollPhysics()
+        // Platform.isIOS ? BouncingScrollPhysics() : ClampingScrollPhysics(),
+        ),
     child: child!,
   );
 }

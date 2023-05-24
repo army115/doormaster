@@ -12,7 +12,7 @@ Future<void> permissionLocation(context, action) async {
   print("location : $location");
 
   if (Platform.isAndroid) {
-    print('android');
+    print('divices : android');
     if (permission.isGranted) {
       await action();
     } else {
@@ -29,7 +29,7 @@ Future<void> permissionLocation(context, action) async {
       }, true, true);
     }
   } else if (Platform.isIOS) {
-    print("apple");
+    print("divices : apple");
     if (permission.isGranted && location) {
       await action();
     } else if (!location) {

@@ -1,36 +1,31 @@
-// ignore_for_file: use_key_in_widget_constructors
+// ignore_for_file: use_key_in_widget_constructors, use_build_context_synchronously, prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print
 
-import 'dart:io';
-
+import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/button/buttonback_appbar.dart';
-import 'package:doormster/components/checkBox/checkbox_formfield.dart';
-import 'package:doormster/components/dropdown/dropdown_noborder.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/map/map_page.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
-import 'package:doormster/components/text_form/text_form_noborder_validator.dart';
 import 'package:doormster/models/get_checklist.dart';
-import 'package:doormster/screen/security_guard/record_check_page.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'dart:convert' as convert;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Add_CheckPoint extends StatefulWidget {
   final timeCheck;
-  final checkpointId;
+  final String checkpointId;
   final lat;
   final lng;
   const Add_CheckPoint(
-      {Key? key, this.checkpointId, this.lat, this.lng, this.timeCheck});
+      {Key? key,
+      required this.checkpointId,
+      required this.lat,
+      required this.lng,
+      required this.timeCheck});
 
   @override
   State<Add_CheckPoint> createState() => _Add_CheckPointState();
@@ -45,19 +40,29 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
   List<Data> listdata = [];
   List<Checklist> listcheck = [];
   bool loading = false;
-  String? checkpointName;
+  String? checkpointName = null;
+  int? verify = 0;
   // var timeCheck = DateTime.now();
 
   Future _getChecklist() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     companyId = prefs.getString('companyId');
     userId = prefs.getString('userId');
-    print('companyId: ${companyId}');
-    print('userId: ${userId}');
+    print('companyId: $companyId');
+    print('userId: $userId');
     print('timeCheck: ${widget.timeCheck}');
-    print('idCheck: ${widget.checkpointId}');
     print('lat: ${widget.lat}');
     print('lng: ${widget.lng}');
+
+    String checkpointId;
+    print('idCheck: ${widget.checkpointId}');
+
+    if (widget.checkpointId.contains('http')) {
+      checkpointId = 'error';
+      log('idCheck: error');
+    } else {
+      checkpointId = widget.checkpointId;
+    }
 
     if (widget.lat != null) {
       try {
@@ -66,8 +71,7 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
         });
 
         //call api
-        var url =
-            '${Connect_api().domain}/get/checkpointdetail/${widget.checkpointId}';
+        var url = '${Connect_api().domain}/get/checkpointdetail/$checkpointId';
         var response = await Dio().get(
           url,
           options: Options(headers: {
@@ -84,17 +88,28 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
             loading = false;
           });
 
-          checkpointName = listdata.single.checkpointName;
-
-          for (int i = 0; i < listdata.length; i++) {
-            listcheck.addAll(listdata[i].checklist!);
-          }
-
-          if (listdata.single.verify == 1) {
+          if (listdata.isEmpty) {
+            dialogOnebutton_Subtitle(
+                context,
+                'พบข้อผิดพลาด',
+                'QR Code ไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง',
+                Icons.highlight_off_rounded,
+                Colors.red,
+                'ตกลง', () {
+              Navigator.popUntil(context, (route) => route.isFirst);
+            }, false, false);
+          } else if (listdata[0].verify == 1) {
             dialogOnebutton(context, 'จุดตรวจนี้ลงทะเบียนแล้ว',
                 Icons.warning_amber_rounded, Colors.orange, 'ตกลง', () {
               Navigator.popUntil(context, (route) => route.isFirst);
             }, false, false);
+          } else {
+            checkpointName = listdata[0].checkpointName;
+            verify = listdata[0].verify;
+          }
+
+          for (int i = 0; i < listdata.length; i++) {
+            listcheck.addAll(listdata[i].checklist!);
           }
         }
       } catch (error) {
@@ -103,7 +118,7 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
         dialogOnebutton_Subtitle(
             context,
             'พบข้อผิดพลาด',
-            'โปรดตรวจสอบการเชื่อมต่อ และ QR Cord ให้ถูกต้อง',
+            'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
             Icons.warning_amber_rounded,
             Colors.orange,
             'ตกลง', () {
@@ -203,7 +218,7 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
     var date = DateFormat('y-MM-dd').format(widget.timeCheck);
     var time = DateFormat('HH:mm:ss').format(widget.timeCheck);
     var Datetime = DateFormat('y-MM-dd HH:mm:ss').format(widget.timeCheck);
-    print('time : ${Datetime}}');
+    print('time : $Datetime}');
 
     return WillPopScope(
       onWillPop: () async {
@@ -220,7 +235,7 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
               }),
             ),
             bottomNavigationBar:
-                loading || checkpointName == null || listdata.single.verify == 1
+                loading || checkpointName == null || verify == 1
                     ? null
                     : Padding(
                         padding:
@@ -241,9 +256,7 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
                 child: SingleChildScrollView(
               child: Form(
                 key: _formkey,
-                child: loading ||
-                        checkpointName == null ||
-                        listdata.single.verify == 1
+                child: loading || checkpointName == null || verify == 1
                     ? Container()
                     : Container(
                         padding: const EdgeInsets.symmetric(
@@ -266,7 +279,7 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
                                 Icon(Icons.maps_home_work_rounded, size: 25),
                                 SizedBox(width: 5),
                                 Expanded(
-                                  child: Text('จุดตรวจ : $checkpointName'),
+                                  child: Text('จุดตรวจ : '),
                                 ),
                               ],
                             ),
@@ -315,7 +328,7 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
                                 ],
                               ),
                               children: [
-                                listdata.single.verify == 1
+                                verify == 1
                                     ? Container()
                                     : Map_Page(
                                         lat: widget.lat,
@@ -325,26 +338,6 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
                                       )
                               ],
                             ),
-                            // Row(
-                            //   children: [
-                            //     Icon(
-                            //       Icons.location_on_sharp,
-                            //       size: 30,
-                            //       color: Colors.red.shade600,
-                            //     ),
-                            //     SizedBox(width: 5),
-                            //     Text('ตำแหน่งจุดตรวจ'),
-                            //   ],
-                            // ),
-                            // SizedBox(height: 10),
-                            // listdata.single.verify == 1
-                            //     ? Container()
-                            //     : Map_Page(
-                            //         lat: widget.lat,
-                            //         lng: widget.lng,
-                            //         width: double.infinity,
-                            //         height: 300,
-                            //       )
                           ],
                         )),
               ),
@@ -355,34 +348,4 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
       ),
     );
   }
-
-  // var dropdownValue;
-  // Widget DropDownType() {
-  //   return Dropdown_NoBorder(
-  //     title: 'เลือกสถานการณ์',
-  //     values: dropdownValue,
-  //     listItem: ['ปกติ', 'ไม่ปกติ'].map((value) {
-  //       return DropdownMenuItem(
-  //         value: value,
-  //         child: Text(
-  //           '${value}',
-  //         ),
-  //       );
-  //     }).toList(),
-  //     leftIcon: Icons.note_add_rounded,
-  //     validate: (values) {
-  //       if (values == null) {
-  //         return 'กรุณาเลือกสถานการณ์';
-  //       }
-  //       return null;
-  //     },
-  //     onChange: (value) {
-  //       _formkey.currentState?.validate();
-
-  //       setState(() {
-  //         dropdownValue = value;
-  //       });
-  //     },
-  //   );
-  // }
 }

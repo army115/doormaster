@@ -179,7 +179,7 @@ class _Record_CheckState extends State<Record_Check> {
                                                               listLog[index]
                                                                   .fileList,
                                                         )))
-                                                .then((onGoBack));
+                                                .then(onGoBack);
                                           },
                                           child: Container(
                                             // decoration: BoxDecoration(
