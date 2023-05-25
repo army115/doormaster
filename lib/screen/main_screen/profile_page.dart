@@ -1,4 +1,4 @@
-// ignore_for_file: unrelated_type_equality_checks, prefer_const_constructors, use_build_context_synchronously
+// ignore_for_file: unrelated_type_equality_checks, prefer_const_constructors, use_build_context_synchronously, unused_import
 
 import 'dart:io';
 
@@ -179,7 +179,7 @@ class _Profile_PageState extends State<Profile_Page>
           source: TypeImage, maxHeight: 1080, maxWidth: 1080);
       List<int> imageBytes = await photo!.readAsBytes();
       var ImagesBase64 = convert.base64Encode(imageBytes);
-      if (photo != null) {
+      if (photo != (null)) {
         setState(() {
           image = ImagesBase64;
         });

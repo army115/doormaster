@@ -1,8 +1,6 @@
-import 'package:doormster/components/girdManu/grid_menu.dart';
 import 'package:doormster/components/snackbar/back_double.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 
 class Auth_Page extends StatefulWidget {
   Auth_Page({Key? key});

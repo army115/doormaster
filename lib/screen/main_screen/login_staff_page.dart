@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors_in_immutables, avoid_single_cascade_in_expression_statements, avoid_print, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors_in_immutables, avoid_single_cascade_in_expression_statements, avoid_print, use_build_context_synchronously, unused_local_variable
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';

@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_declarations, unused_local_variable, prefer_const_constructors
+// ignore_for_file: prefer_const_declarations, unused_local_variable, prefer_const_constructors, unused_import
 
 import 'dart:convert';
 import 'dart:ffi';

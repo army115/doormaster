@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, overridden_fields
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, overridden_fields, must_call_super
 
 import 'dart:developer';
 

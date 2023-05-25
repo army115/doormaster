@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, prefer_const_constructors
+
 import 'package:flutter/material.dart';
 
 class Icon_Opacity extends StatelessWidget {
@@ -11,14 +13,14 @@ class Icon_Opacity extends StatelessWidget {
         opacity: 0.5,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
-          children: const [
+          children: [
             Icon(
               Icons.warning_amber_rounded,
               color: Colors.orange,
               size: 100,
             ),
             Text(
-              'ไม่มีเมนูที่คุณใช้งานได้\nโปรดติดต่อผู้ดูแล',
+              title,
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 20),
             ),

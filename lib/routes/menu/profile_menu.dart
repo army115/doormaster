@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_unnecessary_containers, must_be_immutable, unused_import
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/screen/main_screen/profile_page.dart';
 import 'package:flutter/material.dart';

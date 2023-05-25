@@ -34,7 +34,7 @@ class Data {
   String? companyId;
   String? createdBy;
   String? roundUuid;
-  Null? checked;
+  Null checked;
   String? createdAt;
 
   Data(

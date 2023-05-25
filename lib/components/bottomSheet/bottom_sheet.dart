@@ -1,4 +1,4 @@
-// ignore_for_file: sort_child_properties_last, prefer_const_constructors
+// ignore_for_file: sort_child_properties_last, prefer_const_constructors, unused_import
 
 import 'package:doormster/components/drawer/drawer.dart';
 import 'package:doormster/components/button/button_outline.dart';

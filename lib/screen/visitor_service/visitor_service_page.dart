@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_unnecessary_containers, must_be_immutable, unused_import
 import 'package:doormster/components/drawer/drawer.dart';
 import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
 import 'package:flutter/material.dart';

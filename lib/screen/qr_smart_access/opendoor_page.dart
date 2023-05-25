@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import, use_build_context_synchronously
+
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
@@ -153,8 +155,6 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
       if (response.statusCode == 200) {
         var jsonRes = openDoorsModel.fromJson(response.data);
         if (jsonRes.data!.code == 0) {
-          var visitorData;
-          var QRcodeData;
 
           print('DeviceNumber : ${devSn}');
           print('OpenDoor Success');

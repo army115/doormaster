@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, unused_field
 import 'dart:async';
 import 'dart:developer';
 import 'package:dio/dio.dart';

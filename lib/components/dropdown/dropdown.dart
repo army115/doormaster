@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 
@@ -27,7 +29,7 @@ class Dropdown extends StatelessWidget {
           elevation: 10,
           color: Colors.white,
           child: CustomDropdown(
-            excludeSelected: controller.text == null ? false : true,
+            excludeSelected: controller.text == (null) ? false : true,
             hideSelectedFieldWhenOpen: false,
             onChanged: onChanged,
             items: listItem,

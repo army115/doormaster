@@ -43,10 +43,8 @@ dependencies:
   # http_parser: ^4.0.0
   shared_preferences: ^2.1.0
   url_launcher: ^6.1.10
-  intl: ^0.17.0
   # flutter_rounded_date_picker: ^2.0.2
   checkbox_formfield: ^0.2.0
-  flutter_datetime_picker: ^1.5.1
   share_files_and_screenshot_widgets: ^1.0.6
   image_gallery_saver: ^1.7.1
   connectivity_plus: ^3.0.4
@@ -60,6 +58,7 @@ dependencies:
   permission_handler: ^10.2.0
   image_picker: ^0.8.6+1
   flutter_swiper_plus: ^2.0.4
+  intl: ^0.18.0
   dio: ^5.0.0
   get: ^4.6.5
   restart_app: ^1.1.2
@@ -70,6 +69,7 @@ dependencies:
   animated_custom_dropdown: ^1.5.0
   flutter_local_notifications: ^14.0.0+1
   flutter_phoenix: ^1.1.1
+  flutter_datetime_picker_bdaya: ^3.0.1
   # flutter_typeahead: ^4.3.7
   # dropdown_search: ^5.0.6
   # buddhist_datetime_dateformat_sns: ^1.0.7

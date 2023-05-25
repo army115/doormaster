@@ -34,7 +34,7 @@ class DataLog {
   String? companyId;
   String? createdBy;
   String? roundUuid;
-  Null? checked;
+  Null checked;
   String? createdAt;
   List<FileList>? fileList;
 

@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_typing_uninitialized_variables
+// ignore_for_file: prefer_const_constructors, prefer_typing_uninitialized_variables, unused_import
 
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/loading/loading.dart';

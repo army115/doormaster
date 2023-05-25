@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_datetime_picker_bdaya/flutter_datetime_picker_bdaya.dart';
 
 class Date_time extends StatefulWidget {
   final controller;
@@ -66,7 +66,7 @@ class _Date_timeState extends State<Date_time> {
             }
           },
           onTap: () {
-            DatePicker.showDateTimePicker(
+            DatePickerBdaya.showDateTimePicker(
               context,
               showTitleActions: true,
               onConfirm: (date) {
@@ -79,7 +79,7 @@ class _Date_timeState extends State<Date_time> {
               },
               currentTime: dateSelect == null ? DateTime.now() : dateSelect!,
               locale: LocaleType.th,
-              theme: DatePickerTheme(
+              theme: DatePickerThemeBdaya(
                 titleHeight: 45,
                 headerColor: Theme.of(context).primaryColor,
                 cancelStyle: TextStyle(

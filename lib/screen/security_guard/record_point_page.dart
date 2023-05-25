@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
