@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_datetime_picker_bdaya/flutter_datetime_picker_bdaya.dart';
@@ -97,6 +99,7 @@ class _Date_timeState extends State<Date_time> {
                 itemStyle: TextStyle(
                     color: Colors.black,
                     fontSize: 17,
+                    letterSpacing: 0.5,
                     fontWeight: FontWeight.normal,
                     fontFamily: 'Prompt'),
                 containerHeight: MediaQuery.of(context).size.height * 0.4,

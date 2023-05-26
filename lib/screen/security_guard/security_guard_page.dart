@@ -68,15 +68,15 @@ class _Security_GuardState extends State<Security_Guard> {
           listCheckpoint = [];
         });
 
-        for (int i = 0; i < logsList.length; i++) {
-          listCheckpoint.add(logsList[i].chekpointUUid!);
-        }
+        //loop add list []
+        logsList.forEach((value) => listCheckpoint.add(value.chekpointUUid!));
+        print(listCheckpoint);
       }
     } catch (error) {
       print(error);
       // await Future.delayed(Duration(milliseconds: 500));
       // dialogOnebutton_Subtitle(
-      //     context,
+      //     context
       //     'พบข้อผิดพลาด',
       //     'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
       //     Icons.warning_amber_rounded,
@@ -132,9 +132,9 @@ class _Security_GuardState extends State<Security_Guard> {
                   title: 'บันทึกจุดตรวจ',
                   icon: Icons.qr_code_scanner_rounded,
                   press: () async {
-                    setState(() {
-                      _getRoundNow();
-                    });
+                    // setState(() {
+                    _getRoundNow();
+                    // });
                     await permissionCamere(
                         context,
                         () => permissionLocation(
@@ -158,7 +158,7 @@ class _Security_GuardState extends State<Security_Guard> {
                                       roundId: listdata[0].roundUuid,
                                       roundStart: listdata[0].roundStart,
                                       roundEnd: listdata[0].roundEnd,
-                                      checkpointId: listCheckpoint,
+                                      checkpointId: listdata[0].logsList,
                                     ),
                                     true,
                                     onGoBack)));

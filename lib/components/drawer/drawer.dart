@@ -392,8 +392,8 @@ class _MyDrawerState extends State<MyDrawer> {
       builder: (context) {
         return DraggableScrollableSheet(
             expand: false,
-            initialChildSize: multiCompany.length == 0 ? 0.25 : 0.5,
-            minChildSize: multiCompany.length == 0 ? 0.25 : 0.5,
+            initialChildSize: multiCompany.isEmpty ? 0.25 : 0.5,
+            minChildSize: multiCompany.isEmpty ? 0.25 : 0.5,
             maxChildSize: 0.7,
             builder: (context, scrollController) => Scaffold(
                   appBar: AppBar(
@@ -428,7 +428,7 @@ class _MyDrawerState extends State<MyDrawer> {
                   backgroundColor: Colors.transparent,
                   body: Container(
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                    child: multiCompany.length == 0
+                    child: multiCompany.isEmpty
                         ? Center(
                             child: Text('โปรดตรวจสอบการเชื่อมต่อ',
                                 style: TextStyle(color: Colors.white)),

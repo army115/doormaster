@@ -322,9 +322,11 @@ class _Add_CompanyState extends State<Add_Company> {
         ElevatedButton(
           onPressed: () {
             if (_formkey.currentState!.validate()) {
-              if (multiCompany
-                  .map((item) => item.companyId)
-                  .contains(onItemSelect)) {
+              if (
+                  //เช็คว่า companyId(onItemSelect) ที่เลือก มีอยู่ใน list multiCompany.companyId รึป่าว??
+                  multiCompany
+                      .map((item) => item.companyId)
+                      .contains(onItemSelect)) {
                 dialogOnebutton_Subtitle(
                     context,
                     'ไม่สามารถเพิ่มได้',

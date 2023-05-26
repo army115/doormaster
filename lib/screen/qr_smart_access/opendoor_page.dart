@@ -114,8 +114,8 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
       } else {
         DoorsDeviece deviceDoors = DoorsDeviece.fromJson(res.data);
         setState(() {
-          devicelidt = listDevice;
           listDevice = deviceDoors.lists!;
+          devicelidt = listDevice;
           loading = false;
         });
       }
@@ -155,7 +155,6 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
       if (response.statusCode == 200) {
         var jsonRes = openDoorsModel.fromJson(response.data);
         if (jsonRes.data!.code == 0) {
-
           print('DeviceNumber : ${devSn}');
           print('OpenDoor Success');
           print('Status : ${jsonRes.data!.code}');
@@ -329,85 +328,93 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
                           Expanded(
                             child: listDevice.isEmpty && listdet!.isEmpty
                                 ? Logo_Opacity(title: 'ไม่พบประตูที่ใช้ได้')
-                                : SingleChildScrollView(
-                                    padding: EdgeInsets.fromLTRB(20, 0, 20, 5),
-                                    child: Column(
-                                      children: [
-                                        ListView.builder(
-                                          shrinkWrap: true,
-                                          primary: false,
-                                          itemCount: listDevice.length,
-                                          itemBuilder: (context, index) {
-                                            return Card(
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(
-                                                        10)),
-                                                margin: EdgeInsets.symmetric(
-                                                    vertical: 5),
-                                                elevation: 10,
-                                                child: listDevice[index]
-                                                            .connectionStatus ==
-                                                        1
-                                                    ? doorsButton(
-                                                        '${listDevice[index].name}',
-                                                        'เปิดประตู',
-                                                        Icons
-                                                            .meeting_room_rounded,
-                                                        Theme.of(context)
-                                                            .primaryColor,
-                                                        () => _openDoors(
-                                                            listDevice[index]
-                                                                .devSn))
-                                                    // DoorOnline(
-                                                    //     name: listDevice[index].name!,
-                                                    //     press: () {
-                                                    //       _openDoors(listDevice[index].devSn);
-                                                    //     },
-                                                    //     devSn: listDevice[index].devSn!,
-                                                    //     devMac: listDevice[index].devMac!,
-                                                    //     appKey: listDevice[index].appEkey!,
-                                                    //     valueDoor:
-                                                    //         listDevice[index].screenType!,
-                                                    //   )
-                                                    : doorsButton(
-                                                        '${listDevice[index].name}',
-                                                        'ประตูออฟไลน์',
-                                                        Icons
-                                                            .no_meeting_room_rounded,
-                                                        Colors.red,
-                                                        () => snackbar(
-                                                            context,
-                                                            Colors.red,
-                                                            'ประตูออฟไลน์อยู่',
-                                                            Icons.highlight_off_rounded)));
-                                          },
-                                        ),
-                                        ListView.builder(
-                                          shrinkWrap: true,
-                                          primary: false,
-                                          itemCount: listdet?.length,
-                                          itemBuilder: (context, index) {
-                                            return Card(
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10)),
-                                                margin: EdgeInsets.symmetric(
-                                                    vertical: 5),
-                                                elevation: 5,
-                                                child: doorsButton(
-                                                    '${listdet?[index].doorName}',
-                                                    'เปิดประตู',
-                                                    Icons.meeting_room_rounded,
-                                                    Theme.of(context)
-                                                        .primaryColor,
-                                                    () => _openDoorsWeigan(
-                                                        listdet?[index].doorId,
-                                                        listdet?[index]
-                                                            .doorNum)));
-                                          },
-                                        ),
-                                      ],
+                                : RefreshIndicator(
+                                    onRefresh: () async {
+                                      getValueShared();
+                                    },
+                                    child: SingleChildScrollView(
+                                      padding:
+                                          EdgeInsets.fromLTRB(20, 0, 20, 5),
+                                      child: Column(
+                                        children: [
+                                          ListView.builder(
+                                            shrinkWrap: true,
+                                            primary: false,
+                                            itemCount: listDevice.length,
+                                            itemBuilder: (context, index) {
+                                              return Card(
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(
+                                                          10)),
+                                                  margin: EdgeInsets.symmetric(
+                                                      vertical: 5),
+                                                  elevation: 10,
+                                                  child: listDevice[index]
+                                                              .connectionStatus ==
+                                                          1
+                                                      ? doorsButton(
+                                                          '${listDevice[index].name}',
+                                                          'เปิดประตู',
+                                                          Icons
+                                                              .meeting_room_rounded,
+                                                          Theme.of(context)
+                                                              .primaryColor,
+                                                          () => _openDoors(
+                                                              listDevice[index]
+                                                                  .devSn))
+                                                      // DoorOnline(
+                                                      //     name: listDevice[index].name!,
+                                                      //     press: () {
+                                                      //       _openDoors(listDevice[index].devSn);
+                                                      //     },
+                                                      //     devSn: listDevice[index].devSn!,
+                                                      //     devMac: listDevice[index].devMac!,
+                                                      //     appKey: listDevice[index].appEkey!,
+                                                      //     valueDoor:
+                                                      //         listDevice[index].screenType!,
+                                                      //   )
+                                                      : doorsButton(
+                                                          '${listDevice[index].name}',
+                                                          'ประตูออฟไลน์',
+                                                          Icons
+                                                              .no_meeting_room_rounded,
+                                                          Colors.red,
+                                                          () => snackbar(
+                                                              context,
+                                                              Colors.red,
+                                                              'ประตูออฟไลน์อยู่',
+                                                              Icons.highlight_off_rounded)));
+                                            },
+                                          ),
+                                          ListView.builder(
+                                            shrinkWrap: true,
+                                            primary: false,
+                                            itemCount: listdet?.length,
+                                            itemBuilder: (context, index) {
+                                              return Card(
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10)),
+                                                  margin: EdgeInsets.symmetric(
+                                                      vertical: 5),
+                                                  elevation: 5,
+                                                  child: doorsButton(
+                                                      '${listdet?[index].doorName}',
+                                                      'เปิดประตู',
+                                                      Icons
+                                                          .meeting_room_rounded,
+                                                      Theme.of(context)
+                                                          .primaryColor,
+                                                      () => _openDoorsWeigan(
+                                                          listdet?[index]
+                                                              .doorId,
+                                                          listdet?[index]
+                                                              .doorNum)));
+                                            },
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                           ),

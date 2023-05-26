@@ -175,7 +175,7 @@ class _Record_CheckState extends State<Record_Check> {
                                                 .push(MaterialPageRoute(
                                                     builder: (context) =>
                                                         Record_Point(
-                                                          listPoint:
+                                                          fileList:
                                                               listLog[index]
                                                                   .fileList,
                                                         )))

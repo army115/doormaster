@@ -37,13 +37,16 @@ class _Round_CheckState extends State<Round_Check> {
   DateTime now = DateTime.now();
   int round = 0;
   DateFormat format = DateFormat("HH:mm");
+  DateTime? timeStart;
+  DateTime? timeEnd;
 
-  Future _setColor(now, timeStart, timeEnd) async {
-    if (timeEnd.isBefore(timeStart)) {
-      if (now.isAfter(timeStart) ||
-          now.isBefore(timeEnd) ||
-          now.isAtSameMomentAs(timeStart) ||
-          now.isAtSameMomentAs(timeEnd)) {
+  Future _setColor() async {
+    if (timeEnd!.isBefore(timeStart!)) {
+      if (now.isAfter(timeStart!) ||
+              now.isBefore(timeEnd!) ||
+              now.isAtSameMomentAs(timeStart!)
+          //  ||now.isAtSameMomentAs(timeEnd!)
+          ) {
         containerColor = Theme.of(context).primaryColor;
         textColor = Colors.yellow;
         line = Colors.yellow;
@@ -55,9 +58,10 @@ class _Round_CheckState extends State<Round_Check> {
         line = Colors.grey;
       }
     } else {
-      if (now.isAfter(timeStart) && now.isBefore(timeEnd) ||
-          now.isAtSameMomentAs(timeStart) ||
-          now.isAtSameMomentAs(timeEnd)) {
+      if (now.isAfter(timeStart!) && now.isBefore(timeEnd!) ||
+              now.isAtSameMomentAs(timeStart!)
+          // || now.isAtSameMomentAs(timeEnd!)
+          ) {
         containerColor = Theme.of(context).primaryColor;
         textColor = Colors.white;
         line = Colors.white;
@@ -156,12 +160,11 @@ class _Round_CheckState extends State<Round_Check> {
                               primary: false,
                               itemCount: listdata.length,
                               itemBuilder: (context, index) {
-                                DateTime timeStart = DateTime.parse(
+                                timeStart = DateTime.parse(
                                     '$date ${listdata[index].roundStart}');
-                                DateTime timeEnd = DateTime.parse(
+                                timeEnd = DateTime.parse(
                                     '$date ${listdata[index].roundEnd}');
-                                _setColor(now, timeStart, timeEnd);
-
+                                _setColor();
                                 return Card(
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10)),
@@ -209,52 +212,46 @@ class _Round_CheckState extends State<Round_Check> {
                                                 ? button(
                                                     'เช็คจุดตรวจ', Colors.white,
                                                     () {
-                                                    round != 1
-                                                        ? permissionCamere(
+                                                    permissionCamere(
+                                                        context,
+                                                        () => permissionLocation(
                                                             context,
-                                                            () => permissionLocation(
+                                                            () => checkInternetOnGoBack(
                                                                 context,
-                                                                () => checkInternetOnGoBack(
-                                                                    context,
-                                                                    ScanQR_Check(
-                                                                        name:
-                                                                            'check',
-                                                                        roundId:
-                                                                            listdata[index]
-                                                                                .roundUuid!,
-                                                                        roundName:
-                                                                            listdata[index]
-                                                                                .roundName!,
-                                                                        roundStart:
-                                                                            listdata[index]
-                                                                                .roundStart!,
-                                                                        roundEnd:
-                                                                            listdata[index]
-                                                                                .roundEnd!,
-                                                                        checkpointId:
-                                                                            widget
-                                                                                .checkpointId),
-                                                                    true,
-                                                                    onGoBack)))
-                                                        : dialogOnebutton_Subtitle(
-                                                            context,
-                                                            'ไม่สามารถตรวจได้',
-                                                            'เลยเวลาเดินตรวจรอบนี้แล้ว',
-                                                            Icons
-                                                                .warning_amber_rounded,
-                                                            Colors.orange,
-                                                            'ตกลง', () {
-                                                            Navigator.of(
-                                                                    context,
-                                                                    rootNavigator:
-                                                                        true)
-                                                                .pop();
-
-                                                            // Navigator.popUntil(
-                                                            //     context,
-                                                            //     (route) => route
-                                                            //         .isFirst);
-                                                          }, false, false);
+                                                                ScanQR_Check(
+                                                                    name:
+                                                                        'check',
+                                                                    roundId: listdata[
+                                                                            index]
+                                                                        .roundUuid!,
+                                                                    roundName: listdata[
+                                                                            index]
+                                                                        .roundName!,
+                                                                    roundStart:
+                                                                        listdata[index]
+                                                                            .roundStart!,
+                                                                    roundEnd: listdata[
+                                                                            index]
+                                                                        .roundEnd!,
+                                                                    checkpointId:
+                                                                        widget
+                                                                            .checkpointId),
+                                                                true,
+                                                                onGoBack)));
+                                                    // : dialogOnebutton_Subtitle(
+                                                    //     context,
+                                                    //     'ไม่สามารถตรวจได้',
+                                                    //     'เลยเวลาเดินตรวจรอบนี้แล้ว',
+                                                    //     Icons
+                                                    //         .warning_amber_rounded,
+                                                    //     Colors.orange,
+                                                    //     'ตกลง', () {
+                                                    //     Navigator.of(
+                                                    //             context,
+                                                    //             rootNavigator:
+                                                    //                 true)
+                                                    //         .pop();
+                                                    //   }, false, false);
                                                   })
                                                 : Container()
                                           ],

@@ -236,7 +236,7 @@ class _Check_PointState extends State<Check_Point> {
         context: context,
         builder: (_) => Dialog(
               backgroundColor: Colors.transparent,
-              insetPadding: EdgeInsets.symmetric(vertical: 180, horizontal: 30),
+              insetPadding: EdgeInsets.symmetric(vertical: 150, horizontal: 20),
               child: Map_Page(
                 width: double.infinity,
                 height: double.infinity,

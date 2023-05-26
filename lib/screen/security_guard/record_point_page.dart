@@ -1,10 +1,12 @@
-// ignore_for_file: unused_import
+// ignore_for_file: unused_import, use_build_context_synchronously, sort_child_properties_last
 
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/map/map_page.dart';
+import 'package:doormster/components/searchbar/search_from.dart';
+import 'package:doormster/models/get_log.dart';
 import 'package:doormster/models/get_logs_all.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
@@ -15,18 +17,22 @@ import 'dart:convert' as convert;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Record_Point extends StatefulWidget {
-  final listPoint;
-  Record_Point({Key? key, this.listPoint}) : super(key: key);
+  final fileList;
+  Record_Point({Key? key, this.fileList}) : super(key: key);
 
   @override
   State<Record_Point> createState() => _Record_PointState();
 }
 
 class _Record_PointState extends State<Record_Point> {
-  // var companyId;
   List<DatalogAll> logsDate = [];
+  List<FileList> fileList = [];
+  List<FileList> logsList = [];
+  List<Checkpoint> checkpoint = [];
   bool loading = false;
-  DateFormat formatTime = DateFormat.Hm();
+  DateFormat formatTime = DateFormat('HH:mm');
+  TextEditingController fieldText = TextEditingController();
+  DateTime? time;
 
   Future _getLog(String id) async {
     try {
@@ -54,7 +60,7 @@ class _Record_PointState extends State<Record_Point> {
       }
     } catch (error) {
       print(error);
-      await Future.delayed(Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
       dialogOnebutton_Subtitle(
           context,
           'พบข้อผิดพลาด',
@@ -70,73 +76,105 @@ class _Record_PointState extends State<Record_Point> {
     }
   }
 
+  void _searchData(String text) {
+    setState(() {
+      fileList = logsList.where((item) {
+        var name = item.checkpoint![0].checkpointName!.toLowerCase();
+        var date = item.date!.toLowerCase();
+        var times = formatTime.format(time!);
+        var event = item.event!.toLowerCase();
+        return name.contains(text) ||
+            date.contains(text) ||
+            times.contains(text) ||
+            event.contains(text);
+      }).toList();
+    });
+  }
+
   @override
   void initState() {
+    fileList = widget.fileList;
+    logsList = fileList;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final listLogs = widget.listPoint;
     return Stack(
       children: [
         Scaffold(
-          appBar: AppBar(title: Text('บันทึกจุดตรวจ')),
-          body: SafeArea(
-              child: listLogs.isEmpty
-                  ? Logo_Opacity(title: 'ไม่มีข้อมูลที่บันทึก')
-                  : SingleChildScrollView(
-                      child: Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                        child: ListView.builder(
-                            shrinkWrap: true,
-                            primary: false,
-                            itemCount: listLogs.length,
-                            itemBuilder: (context, index) {
-                              DateTime time = DateTime.parse(
-                                  '${listLogs[index].checktimeReal}');
-                              final listpoint = listLogs[index].checkpoint;
-                              final checkpoint = listpoint[0].checklist;
-                              // final listPic = listLogs[index].pic;
-                              return Card(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                                margin: EdgeInsets.symmetric(vertical: 5),
-                                elevation: 10,
-                                child: Container(
+            appBar: AppBar(title: const Text('บันทึกจุดตรวจ')),
+            body: SafeArea(
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                child: Column(
+                  children: [
+                    Search_From(
+                      title: 'ค้นหาข้อมูล',
+                      fieldText: fieldText,
+                      clear: () {
+                        setState(() {
+                          fieldText.clear();
+                          fileList = logsList;
+                        });
+                      },
+                      changed: (value) {
+                        _searchData(value);
+                      },
+                    ),
+                    const SizedBox(height: 10),
+                    Expanded(
+                      child: fileList.isEmpty
+                          ? Logo_Opacity(title: 'ไม่มีข้อมูลที่บันทึก')
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              primary: false,
+                              itemCount: fileList.length,
+                              itemBuilder: (context, index) {
+                                time = DateTime.parse(
+                                    '${fileList[index].checktimeReal}');
+                                checkpoint = fileList[index].checkpoint!;
+                                final checklist = checkpoint[0].checklist;
+                                return Card(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)),
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 5),
+                                  elevation: 10,
                                   child: ExpansionTile(
                                       textColor: Colors.black,
                                       title: Text(
-                                        'จุดตรวจ :  ${listpoint[0].checkpointName}',
-                                        style: TextStyle(fontSize: 16),
+                                        'จุดตรวจ :  ${checkpoint[0].checkpointName}',
+                                        style: const TextStyle(fontSize: 16),
                                       ),
                                       subtitle: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                              'เหตุการณ์ : ${listLogs[index].event}'),
+                                              'เหตุการณ์ : ${fileList[index].event}'),
                                           Text(
-                                              'วันที่ ${listLogs[index].date} เวลา ${formatTime.format(time)}'),
+                                              'วันที่ ${fileList[index].date} เวลา ${formatTime.format(time!)}'),
                                         ],
                                       ),
                                       children: [
                                         Container(
                                           decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.only(
+                                              borderRadius: const BorderRadius
+                                                      .only(
                                                   bottomLeft:
                                                       Radius.circular(10),
                                                   bottomRight: Radius.circular(
                                                       10)), // Set the border radius here
                                               color: Colors.grey.shade200),
-                                          padding: EdgeInsets.fromLTRB(
+                                          padding: const EdgeInsets.fromLTRB(
                                               10, 10, 10, 10),
                                           child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              Row(
+                                              const Row(
                                                 children: [
                                                   Icon(Icons.task_rounded,
                                                       size: 25),
@@ -147,25 +185,26 @@ class _Record_PointState extends State<Record_Point> {
                                               ListView.builder(
                                                 shrinkWrap: true,
                                                 primary: false,
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 5,
-                                                    horizontal: 20),
-                                                itemCount: checkpoint?.length,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 5,
+                                                        horizontal: 20),
+                                                itemCount: checklist!.length,
                                                 itemBuilder:
                                                     (BuildContext context,
                                                         int index) {
-                                                  return checkpoint?[index]
+                                                  return checklist[index]
                                                               .checklist ==
                                                           ''
                                                       ? Container()
                                                       : Text(
-                                                          '- ${checkpoint?[index].checklist}');
+                                                          '- ${checklist[index].checklist}');
                                                 },
                                               ),
                                               // listLogs[index].desciption !=
                                               //         ''
                                               //     ?
-                                              Row(
+                                              const Row(
                                                 children: [
                                                   Icon(
                                                       Icons.description_rounded,
@@ -175,7 +214,7 @@ class _Record_PointState extends State<Record_Point> {
                                                 ],
                                               ),
                                               // : Container(),
-                                              // listLogs[index].desciption !=
+                                              // fileList[index].desciption !=
                                               //         ''
                                               //     ?
                                               Padding(
@@ -184,20 +223,20 @@ class _Record_PointState extends State<Record_Point> {
                                                         horizontal: 20,
                                                         vertical: 3),
                                                 child: Text(
-                                                  '- ${listLogs[index].desciption}',
+                                                  '- ${fileList[index].desciption}',
                                                 ),
                                               ),
                                               // : Container(),
 
                                               Row(
                                                 children: [
-                                                  Icon(
+                                                  const Icon(
                                                     Icons.photo_library_rounded,
                                                     size: 30,
                                                     color: Colors.black,
                                                   ),
-                                                  SizedBox(width: 5),
-                                                  Expanded(
+                                                  const SizedBox(width: 5),
+                                                  const Expanded(
                                                       child: Text(
                                                           'รูปภาพการตรวจ')),
                                                   button(
@@ -206,11 +245,11 @@ class _Record_PointState extends State<Record_Point> {
                                                           .primaryColor,
                                                       Icons.photo, () {
                                                     _getLog(
-                                                        listLogs[index].sId);
+                                                        fileList[index].sId!);
                                                   })
                                                 ],
                                               ),
-                                              SizedBox(height: 3),
+                                              const SizedBox(height: 3),
                                               Row(
                                                 children: [
                                                   Icon(
@@ -218,8 +257,8 @@ class _Record_PointState extends State<Record_Point> {
                                                     size: 30,
                                                     color: Colors.red.shade600,
                                                   ),
-                                                  SizedBox(width: 5),
-                                                  Expanded(
+                                                  const SizedBox(width: 5),
+                                                  const Expanded(
                                                       child: Text(
                                                           'ตำแหน่งที่ตรวจ')),
                                                   button(
@@ -227,8 +266,8 @@ class _Record_PointState extends State<Record_Point> {
                                                       Colors.red.shade600,
                                                       Icons.map, () {
                                                     showMap(
-                                                        listLogs[index].lat!,
-                                                        listLogs[index].lng!);
+                                                        fileList[index].lat!,
+                                                        fileList[index].lng!);
                                                   })
                                                 ],
                                               ),
@@ -243,12 +282,13 @@ class _Record_PointState extends State<Record_Point> {
                                           ),
                                         ),
                                       ]),
-                                ),
-                              );
-                            }),
-                      ),
-                    )),
-        ),
+                                );
+                              }),
+                    ),
+                  ],
+                ),
+              ),
+            )),
         loading ? Loading() : Container()
       ],
     );
@@ -262,14 +302,15 @@ class _Record_PointState extends State<Record_Point> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
               backgroundColor: Colors.transparent,
-              insetPadding: EdgeInsets.symmetric(vertical: 180, horizontal: 30),
+              insetPadding:
+                  const EdgeInsets.symmetric(vertical: 150, horizontal: 20),
               child: listImages.isEmpty
                   ? Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         color: Colors.white,
                       ),
-                      child: Column(
+                      child: const Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
@@ -316,7 +357,8 @@ class _Record_PointState extends State<Record_Point> {
         context: context,
         builder: (_) => Dialog(
               backgroundColor: Colors.transparent,
-              insetPadding: EdgeInsets.symmetric(vertical: 180, horizontal: 30),
+              insetPadding:
+                  const EdgeInsets.symmetric(vertical: 180, horizontal: 30),
               child: Map_Page(
                 width: double.infinity,
                 height: double.infinity,
@@ -332,15 +374,15 @@ class _Record_PointState extends State<Record_Point> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         elevation: 10,
         backgroundColor: color,
-        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
       ),
       child: Row(
         children: [
           Icon(icon),
-          SizedBox(width: 3),
+          const SizedBox(width: 3),
           Text(
             name,
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
+            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
           ),
         ],
       ),

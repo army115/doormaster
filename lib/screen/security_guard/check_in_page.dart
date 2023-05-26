@@ -153,6 +153,7 @@ class _Check_InState extends State<Check_In> {
             verify = listdata[0].verify;
           }
 
+          //loop add list []
           for (int i = 0; i < listdata.length; i++) {
             listcheck.addAll(listdata[i].checklist!);
           }
