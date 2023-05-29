@@ -9,7 +9,7 @@ import 'package:doormster/models/get_round_now.dart';
 import 'package:doormster/screen/main_screen/test.dart';
 import 'package:doormster/screen/security_guard/check_in_page.dart';
 import 'package:doormster/screen/security_guard/check_point_page.dart';
-import 'package:doormster/screen/security_guard/record_check_page.dart';
+import 'package:doormster/screen/security_guard/report_logs_page.dart';
 import 'package:doormster/screen/security_guard/round_check_page.dart';
 import 'package:doormster/screen/security_guard/scan_qr_check_page.dart';
 import 'package:doormster/service/check_connected.dart';
@@ -70,7 +70,6 @@ class _Security_GuardState extends State<Security_Guard> {
 
         //loop add list []
         logsList.forEach((value) => listCheckpoint.add(value.chekpointUUid!));
-        print(listCheckpoint);
       }
     } catch (error) {
       print(error);
@@ -131,11 +130,8 @@ class _Security_GuardState extends State<Security_Guard> {
                 Grid_Menu(
                   title: 'บันทึกจุดตรวจ',
                   icon: Icons.qr_code_scanner_rounded,
-                  press: () async {
-                    // setState(() {
-                    _getRoundNow();
-                    // });
-                    await permissionCamere(
+                  press: () {
+                    permissionCamere(
                         context,
                         () => permissionLocation(
                             context,
@@ -203,7 +199,7 @@ class _Security_GuardState extends State<Security_Guard> {
                   icon: Icons.event_note,
                   press: () {
                     checkInternetOnGoBack(
-                        context, Record_Check(type: 'home'), false, onGoBack);
+                        context, Report_Logs(type: 'home'), false, onGoBack);
                   },
                 ),
                 Grid_Menu(

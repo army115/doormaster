@@ -26,7 +26,11 @@ class Search_Calendar extends StatelessWidget {
       child: TextField(
           readOnly: true,
           controller: fieldText,
-          style: TextStyle(fontSize: 15),
+          style: TextStyle(
+              fontSize: 15,
+              color: fieldText.text.contains('ค้นหา')
+                  ? Colors.grey
+                  : Colors.black),
           // cursorColor: Colors.cyan,
           decoration: InputDecoration(
             hintText: title,

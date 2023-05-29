@@ -12,7 +12,7 @@ import 'package:doormster/components/map/map_page.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/components/text_form/text_form_noborder_validator.dart';
 import 'package:doormster/models/get_checklist.dart';
-import 'package:doormster/screen/security_guard/record_check_page.dart';
+import 'package:doormster/screen/security_guard/report_logs_page.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:doormster/service/permission/permission_camera.dart';
 import 'package:flutter/material.dart';
@@ -208,7 +208,7 @@ class _Check_InState extends State<Check_In> {
 
         Navigator.of(context, rootNavigator: true).push(
           MaterialPageRoute(
-            builder: (BuildContext context) => Record_Check(),
+            builder: (BuildContext context) => Report_Logs(),
           ),
         );
         // Navigator.popUntil(context, (route) => route.isFirst);

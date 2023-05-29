@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, must_be_immutable, unused_import
 
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
-import 'package:doormster/screen/security_guard/record_check_page.dart';
+import 'package:doormster/screen/security_guard/report_logs_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
