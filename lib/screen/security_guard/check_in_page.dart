@@ -279,38 +279,36 @@ class _Check_InState extends State<Check_In> {
                 Navigator.popUntil(context, (route) => route.isFirst);
               }),
             ),
-            bottomNavigationBar:
-                loading || checkpointName == null || verify == 0
-                    ? null
-                    : Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 100, vertical: 10),
-                        child: Buttons(
-                            title: 'บันทึก',
-                            press: () {
-                              if (_formkey.currentState!.validate()) {
-                                Map<String, dynamic> valuse = Map();
-                                // valuse['time'] = '${DateTime.now()}';
-                                valuse['time'] = widget.timeCheck
-                                    .add(Duration(hours: 7))
-                                    .toString();
-                                // .toUtc() //todo ค่าเวลากลาง Utc + 0 ได้ค่ามี Z ต่อท้ายเวลา 2023-03-15 14:05:58.075406Z
-                                //todo time zone + 7 ชม.
-                                // .toIso8601String(); //todo ได้ค่ามี T ท้ายวันที่ 2023-03-15T14:45:36.325350
-                                valuse['lat'] = widget.lat;
-                                valuse['lng'] = widget.lng;
-                                valuse['EmpID'] = userId;
-                                valuse['id'] = companyId;
-                                valuse['uuid'] = widget.checkpointId;
-                                valuse['Round_uuid'] = widget.roundId;
-                                valuse['Desciption'] = detail.text;
-                                valuse['EventCheck'] = status.text;
-                                valuse['pic'] = listImage64;
-                                print(valuse);
-                                _checkIn(valuse);
-                              }
-                            }),
-                      ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+            floatingActionButton: loading ||
+                    checkpointName == null ||
+                    verify == 0
+                ? Container()
+                : Buttons(
+                    title: 'บันทึก',
+                    press: () {
+                      if (_formkey.currentState!.validate()) {
+                        Map<String, dynamic> valuse = Map();
+                        // valuse['time'] = '${DateTime.now()}';
+                        valuse['time'] =
+                            widget.timeCheck.add(Duration(hours: 7)).toString();
+                        // .toUtc() //todo ค่าเวลากลาง Utc + 0 ได้ค่ามี Z ต่อท้ายเวลา 2023-03-15 14:05:58.075406Z
+                        //todo time zone + 7 ชม.
+                        // .toIso8601String(); //todo ได้ค่ามี T ท้ายวันที่ 2023-03-15T14:45:36.325350
+                        valuse['lat'] = widget.lat;
+                        valuse['lng'] = widget.lng;
+                        valuse['EmpID'] = userId;
+                        valuse['id'] = companyId;
+                        valuse['uuid'] = widget.checkpointId;
+                        valuse['Round_uuid'] = widget.roundId;
+                        valuse['Desciption'] = detail.text;
+                        valuse['EventCheck'] = status.text;
+                        valuse['pic'] = listImage64;
+                        print(valuse);
+                        _checkIn(valuse);
+                      }
+                    }),
             body: SafeArea(
                 child: SingleChildScrollView(
               child: Form(

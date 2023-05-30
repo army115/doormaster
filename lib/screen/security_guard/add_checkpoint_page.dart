@@ -234,24 +234,22 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
                 Navigator.popUntil(context, (route) => route.isFirst);
               }),
             ),
-            bottomNavigationBar:
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+            floatingActionButton:
                 loading || checkpointName == null || verify == 1
-                    ? null
-                    : Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 100, vertical: 10),
-                        child: Buttons(
-                            title: 'ลงทะเบียน',
-                            press: () {
-                              if (_formkey.currentState!.validate()) {
-                                Map<String, dynamic> valuse = Map();
-                                valuse['id'] = widget.checkpointId;
-                                valuse['checkpoint_lat'] = widget.lat;
-                                valuse['checkpoint_lng'] = widget.lng;
-                                _AddcheckPoint(valuse);
-                              }
-                            }),
-                      ),
+                    ? Container()
+                    : Buttons(
+                        title: 'ลงทะเบียน',
+                        press: () {
+                          if (_formkey.currentState!.validate()) {
+                            Map<String, dynamic> valuse = Map();
+                            valuse['id'] = widget.checkpointId;
+                            valuse['checkpoint_lat'] = widget.lat;
+                            valuse['checkpoint_lng'] = widget.lng;
+                            _AddcheckPoint(valuse);
+                          }
+                        }),
             body: SafeArea(
                 child: SingleChildScrollView(
               child: Form(

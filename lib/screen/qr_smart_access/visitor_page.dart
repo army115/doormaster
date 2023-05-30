@@ -170,30 +170,28 @@ class _Visitor_PageState extends State<Visitor_Page> {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      alignment: Alignment.center,
       children: [
         Scaffold(
           appBar: AppBar(title: Text('ลงทะเบียนผู้มาติดต่อ')),
-          bottomNavigationBar: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 80, vertical: 10),
-            child: Buttons(
-                title: 'สร้าง QRCode',
-                press: () {
-                  if (_kye.currentState!.validate()) {
-                    Map<String, dynamic> valuse = Map();
-                    valuse['devsns'] = onItemSelect;
-                    valuse['usableCount'] = useCount.text;
-                    valuse['startDate'] = startDate.text;
-                    valuse['endDate'] = endDate.text;
-                    valuse['visitor_name'] = visitName.text;
-                    valuse['tel_visitor'] = phone.text;
-                    valuse['visipeople'] = visitPeople.text;
-                    valuse['created_by'] = userId;
-                    _craateVisitor(valuse);
-                    print(valuse);
-                  }
-                }),
-          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerFloat,
+          floatingActionButton: Buttons(
+              title: 'สร้าง QRCode',
+              press: () {
+                if (_kye.currentState!.validate()) {
+                  Map<String, dynamic> valuse = Map();
+                  valuse['devsns'] = onItemSelect;
+                  valuse['usableCount'] = useCount.text;
+                  valuse['startDate'] = startDate.text;
+                  valuse['endDate'] = endDate.text;
+                  valuse['visitor_name'] = visitName.text;
+                  valuse['tel_visitor'] = phone.text;
+                  valuse['visipeople'] = visitPeople.text;
+                  valuse['created_by'] = userId;
+                  _craateVisitor(valuse);
+                  print(valuse);
+                }
+              }),
           body: SafeArea(
             child: SingleChildScrollView(
               child: Form(

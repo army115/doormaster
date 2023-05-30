@@ -61,6 +61,7 @@ class _Logs_AllState extends State<Logs_All>
 
       if (response.statusCode == 200) {
         getLog logslist = getLog.fromJson(response.data);
+        log(response.data.toString());
         setState(() {
           listLog = logslist.data!;
           loading = false;
@@ -131,7 +132,6 @@ class _Logs_AllState extends State<Logs_All>
                     ),
                     Expanded(
                       child: listLog.isEmpty
-                          //?listlogs.isEmpty
                           ? Logo_Opacity(title: 'ไม่มีข้อมูลที่บันทึก')
                           : RefreshIndicator(
                               onRefresh: () async {
@@ -143,7 +143,7 @@ class _Logs_AllState extends State<Logs_All>
                                   // shrinkWrap: true,
                                   // primary: false,
                                   // reverse: true
-                                  itemCount: listLog.length, //?listlogs.length
+                                  itemCount: listLog.length,
                                   itemBuilder: ((context, index) {
                                     return Card(
                                       shape: RoundedRectangleBorder(
@@ -160,6 +160,16 @@ class _Logs_AllState extends State<Logs_All>
                                                       Record_Point(
                                                         fileList: listLog[index]
                                                             .fileList,
+                                                        roundName:
+                                                            listLog[index]
+                                                                .roundName,
+                                                        roundStart:
+                                                            listLog[index]
+                                                                .roundStart,
+                                                        roundEnd: listLog[index]
+                                                            .roundEnd,
+                                                        dateTime:
+                                                            fieldText.text,
                                                       )))
                                               .then(onGoBack);
                                         },

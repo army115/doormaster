@@ -169,6 +169,25 @@ class _Register_PageState extends State<Register_Page> {
               }),
               title: Text('ลงทะเบียน'),
             ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+            floatingActionButton: Buttons(
+              title: 'ลงทะเบียน',
+              press: () {
+                if (_formkey.currentState!.validate()) {
+                  Map<String, dynamic> valuse = Map();
+                  valuse['user_name'] = username.text;
+                  valuse['first_name'] = fname.text;
+                  valuse['sur_name'] = lname.text;
+                  valuse['email'] = email.text;
+                  valuse['role'] = "0";
+                  valuse['created_by'] = "0";
+                  valuse['company_id'] = onItemSelect;
+                  valuse['user_password'] = passwordCon.text;
+                  _register(valuse);
+                }
+              },
+            ),
             body: SafeArea(
                 child: SingleChildScrollView(
               child: Container(
@@ -272,23 +291,6 @@ class _Register_PageState extends State<Register_Page> {
                           value: Checked,
                           validator: 'กรุณายอมรับเงื่อนไขการใช้บริการ',
                         ),
-                        Buttons(
-                          title: 'ลงทะเบียน',
-                          press: () {
-                            if (_formkey.currentState!.validate()) {
-                              Map<String, dynamic> valuse = Map();
-                              valuse['user_name'] = username.text;
-                              valuse['first_name'] = fname.text;
-                              valuse['sur_name'] = lname.text;
-                              valuse['email'] = email.text;
-                              valuse['role'] = "0";
-                              valuse['created_by'] = "0";
-                              valuse['company_id'] = onItemSelect;
-                              valuse['user_password'] = passwordCon.text;
-                              _register(valuse);
-                            }
-                          },
-                        )
                       ]),
                 ),
               ),

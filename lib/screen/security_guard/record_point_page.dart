@@ -18,7 +18,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Record_Point extends StatefulWidget {
   final fileList;
-  Record_Point({Key? key, this.fileList}) : super(key: key);
+  final roundName;
+  final roundStart;
+  final roundEnd;
+  final dateTime;
+  Record_Point(
+      {Key? key,
+      this.fileList,
+      this.roundName,
+      this.roundStart,
+      this.roundEnd,
+      this.dateTime})
+      : super(key: key);
 
   @override
   State<Record_Point> createState() => _Record_PointState();
@@ -41,7 +52,8 @@ class _Record_PointState extends State<Record_Point> {
       });
 
       //call api
-      var url = '${Connect_api().domain}/get/logOne/$id'; // get log show image
+      var url =
+          '${Connect_api().domain}/get/logImages/$id'; // get log show image
       var response = await Dio().get(
         url,
         options: Options(headers: {
@@ -110,6 +122,67 @@ class _Record_PointState extends State<Record_Point> {
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 child: Column(
                   children: [
+                    Container(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                width: 2.5,
+                                color: Theme.of(context).primaryColor),
+                            color: Colors.white,
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10))),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 10),
+                          child: Column(
+                            children: [
+                              Text.rich(
+                                TextSpan(
+                                  children: [
+                                    WidgetSpan(
+                                        child: Padding(
+                                      padding: const EdgeInsets.only(right: 5),
+                                      child: Icon(
+                                        Icons.calendar_month_rounded,
+                                        color: Theme.of(context).primaryColor,
+                                        size: 25,
+                                      ),
+                                    )),
+                                    TextSpan(
+                                        text:
+                                            'รายงานวันที่ : ${widget.dateTime}'),
+                                  ],
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.map_rounded,
+                                    color: Theme.of(context).primaryColor,
+                                    size: 30,
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Text('รอบเดิน : ${widget.roundName}'),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.access_time_rounded,
+                                    color: Theme.of(context).primaryColor,
+                                    size: 30,
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Text(
+                                      'ช่วงเวลา : ${widget.roundStart}น. ถึง ${widget.roundEnd}น.'),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                     Search_From(
                       title: 'ค้นหาข้อมูล',
                       fieldText: fieldText,
@@ -187,7 +260,7 @@ class _Record_PointState extends State<Record_Point> {
                                                 primary: false,
                                                 padding:
                                                     const EdgeInsets.symmetric(
-                                                        vertical: 5,
+                                                        vertical: 3,
                                                         horizontal: 20),
                                                 itemCount: checklist!.length,
                                                 itemBuilder:
@@ -201,33 +274,37 @@ class _Record_PointState extends State<Record_Point> {
                                                           '- ${checklist[index].checklist}');
                                                 },
                                               ),
-                                              // listLogs[index].desciption !=
-                                              //         ''
-                                              //     ?
-                                              const Row(
-                                                children: [
-                                                  Icon(
-                                                      Icons.description_rounded,
-                                                      size: 25),
-                                                  SizedBox(width: 5),
-                                                  Text('รายละเอียดเพิ่มเติม'),
-                                                ],
-                                              ),
-                                              // : Container(),
-                                              // fileList[index].desciption !=
-                                              //         ''
-                                              //     ?
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 20,
-                                                        vertical: 3),
-                                                child: Text(
-                                                  '- ${fileList[index].desciption}',
-                                                ),
-                                              ),
-                                              // : Container(),
-
+                                              fileList[index].desciption != ''
+                                                  ? Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        const Row(
+                                                          children: [
+                                                            Icon(
+                                                                Icons
+                                                                    .description_rounded,
+                                                                size: 25),
+                                                            SizedBox(width: 5),
+                                                            Text(
+                                                                'รายละเอียดเพิ่มเติม'),
+                                                          ],
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      20,
+                                                                  vertical: 3),
+                                                          child: Text(
+                                                            '- ${fileList[index].desciption}',
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  : Container(),
                                               Row(
                                                 children: [
                                                   const Icon(
@@ -271,13 +348,6 @@ class _Record_PointState extends State<Record_Point> {
                                                   })
                                                 ],
                                               ),
-                                              // SizedBox(height: 5),
-                                              // Map_Page(
-                                              //   lat: listLogs[index].lat!,
-                                              //   lng: listLogs[index].lng!,
-                                              //   width: double.infinity,
-                                              //   height: 200,
-                                              // )
                                             ],
                                           ),
                                         ),
