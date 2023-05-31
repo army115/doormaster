@@ -5,6 +5,8 @@ import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
 import 'package:doormster/components/loading/loading.dart';
+import 'package:doormster/components/text/text_icon.dart';
+import 'package:doormster/models/get_checklist.dart';
 import 'package:doormster/models/get_log.dart';
 import 'package:doormster/screen/security_guard/logs_point_page.dart';
 import 'package:doormster/service/connect_api.dart';
@@ -23,6 +25,7 @@ class _Logs_TodayState extends State<Logs_Today>
     with AutomaticKeepAliveClientMixin {
   var companyId;
   List<DataLog> listdata = [];
+  List<Data> listPoint = [];
   bool loading = false;
   DateTime now = DateTime.now();
 
@@ -39,7 +42,7 @@ class _Logs_TodayState extends State<Logs_Today>
 
       await Future.delayed(Duration(milliseconds: loadingTime));
 
-      //call api
+      //call api get RoundNoPic
       var url = '${Connect_api().domain}/get/getRoundNoPic';
       var response = await Dio().post(url,
           options: Options(headers: {
@@ -48,10 +51,22 @@ class _Logs_TodayState extends State<Logs_Today>
           }),
           data: {"id": companyId, "from": date, "to": date});
 
-      if (response.statusCode == 200) {
+      //call api get checkpoint
+      var urlPoint = '${Connect_api().domain}/get/checkpoint/${companyId}';
+      var resPoint = await Dio().get(
+        urlPoint,
+        options: Options(headers: {
+          'Connect-type': 'application/json',
+          'Accept': 'application/json',
+        }),
+      );
+
+      if (response.statusCode == 200 && resPoint.statusCode == 200) {
         getLog logslist = getLog.fromJson(response.data);
+        getChecklist checklist = getChecklist.fromJson(response.data);
         setState(() {
           listdata = logslist.data!;
+          listPoint = checklist.data!;
           loading = false;
         });
       }
@@ -95,166 +110,140 @@ class _Logs_TodayState extends State<Logs_Today>
     final dateNow = DateFormat('dd-MM-y').format(now);
     return Stack(
       children: [
-        Stack(
-          children: [
-            Scaffold(
-              body: loading
-                  ? Container()
-                  : SafeArea(
-                      child: listdata.isEmpty
-                          //?listlogs.isEmpty
-                          ? Logo_Opacity(title: 'ไม่มีข้อมูลที่บันทึก')
-                          : Column(
-                              children: [
-                                Container(
-                                  height: 80,
-                                  padding:
-                                      const EdgeInsets.fromLTRB(20, 20, 20, 10),
-                                  child: Material(
-                                    color: Colors.white,
-                                    elevation: 10,
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(10)),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.event_note,
-                                          color: Theme.of(context).primaryColor,
-                                          size: 30,
-                                        ),
-                                        SizedBox(width: 5),
-                                        Text('รายงานวันที่ : $dateNow'),
-                                      ],
+        Scaffold(
+          body: loading
+              ? Container()
+              : listdata.isEmpty
+                  ? Logo_Opacity(title: 'ไม่มีข้อมูลที่บันทึก')
+                  : Column(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(20, 15, 20, 10),
+                          child: Material(
+                              color: Colors.white,
+                              elevation: 10,
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10)),
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    textIcon(
+                                      'รายงานวันที่ : $dateNow',
+                                      Icon(
+                                        Icons.event_note,
+                                        color: Theme.of(context).primaryColor,
+                                        size: 30,
+                                      ),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                                Expanded(
-                                  child: RefreshIndicator(
-                                      onRefresh: () async {
-                                        _getLog(500);
-                                      },
-                                      child: ListView.builder(
-                                          physics:
-                                              const AlwaysScrollableScrollPhysics(),
-                                          padding: const EdgeInsets.fromLTRB(
-                                              20, 0, 20, 5),
-                                          // shrinkWrap: true,
-                                          // primary: false,
-                                          // reverse: true
-                                          itemCount: listdata
-                                              .length, //?listlogs.length
-                                          itemBuilder: ((context, index) {
-                                            return Card(
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
-                                              margin:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 5),
-                                              elevation: 10,
-                                              child: InkWell(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                onTap: () {
-                                                  Navigator.of(context)
-                                                      .push(MaterialPageRoute(
-                                                          builder:
-                                                              (context) =>
-                                                                  Logs_Point(
-                                                                    // fileList: listdata[
-                                                                    //         index]
-                                                                    // .fileList,
-                                                                    roundId: listdata[
-                                                                            index]
-                                                                        .roundUuid,
-                                                                    roundName: listdata[
-                                                                            index]
-                                                                        .roundName,
-                                                                    roundStart:
-                                                                        listdata[index]
-                                                                            .roundStart,
-                                                                    roundEnd: listdata[
-                                                                            index]
-                                                                        .roundEnd,
-                                                                  )))
-                                                      .then(onGoBack);
-                                                },
-                                                child: Container(
-                                                  padding:
-                                                      const EdgeInsets.all(10),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: [
-                                                          Expanded(
-                                                            child: Text(
-                                                              'รอบเดิน : ${listdata[index].roundName}',
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                            ),
-                                                          ),
-                                                          const Icon(Icons
-                                                              .arrow_forward_ios_rounded)
-                                                        ],
-                                                      ),
-                                                      IntrinsicHeight(
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            Text(
-                                                                'เริ่มต้น : ${listdata[index].roundStart} น.'),
-                                                            const VerticalDivider(
-                                                                thickness: 1.5,
-                                                                color: Colors
-                                                                    .black,
-                                                                width: 1),
-                                                            Text(
-                                                              'สิ้นสุด : ${listdata[index].roundEnd} น.',
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      listdata[index]
-                                                                  .fileList!
-                                                                  .length >
-                                                              0
-                                                          ? Text(
-                                                              'มีบันทึก ${listdata[index].fileList?.length} รายการ',
-                                                              style: const TextStyle(
-                                                                  color: Colors
-                                                                      .blue),
-                                                            )
-                                                          : const Text(
-                                                              'ไม่มีบันทึกรายการตรวจ',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .red),
-                                                            )
-                                                    ],
-                                                  ),
+                              )),
+                        ),
+                        Expanded(
+                            child: RefreshIndicator(
+                          onRefresh: () async {
+                            _getLog(500);
+                          },
+                          child: ListView.builder(
+                              padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+                              itemCount: listdata.length,
+                              itemBuilder: ((context, index) {
+                                final logsPoint =
+                                    listdata[index].fileList!.length;
+                                final checkPoint = listPoint.length;
+                                return Card(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)),
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 5),
+                                  elevation: 10,
+                                  child: InkWell(
+                                    borderRadius: BorderRadius.circular(10),
+                                    onTap: () {
+                                      Navigator.of(context)
+                                          .push(MaterialPageRoute(
+                                              builder: (context) => Logs_Point(
+                                                    roundId: listdata[index]
+                                                        .roundUuid,
+                                                    roundName: listdata[index]
+                                                        .roundName,
+                                                    roundStart: listdata[index]
+                                                        .roundStart,
+                                                    roundEnd: listdata[index]
+                                                        .roundEnd,
+                                                  )))
+                                          .then(onGoBack);
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.all(10),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  'รอบเดิน : ${listdata[index].roundName}',
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                 ),
                                               ),
-                                            );
-                                          }))),
-                                ),
-                              ],
-                            ),
+                                              const Icon(Icons
+                                                  .arrow_forward_ios_rounded)
+                                            ],
+                                          ),
+                                          IntrinsicHeight(
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                    'เริ่มต้น : ${listdata[index].roundStart} น.'),
+                                                const VerticalDivider(
+                                                    thickness: 1.5,
+                                                    color: Colors.black,
+                                                    width: 1),
+                                                Text(
+                                                  'สิ้นสุด : ${listdata[index].roundEnd} น.',
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          logsPoint <= 0
+                                              ? Text(
+                                                  'ยังไม่ตรวจ ($logsPoint/$checkPoint)',
+                                                  style: const TextStyle(
+                                                      color: Colors.red),
+                                                )
+                                              : logsPoint >= checkPoint
+                                                  ? Text(
+                                                      'ตรวจครบแล้ว ($logsPoint/$checkPoint)',
+                                                      style: TextStyle(
+                                                          color: Theme.of(
+                                                                  context)
+                                                              .primaryColor),
+                                                    )
+                                                  : Text(
+                                                      'ตรวจไม่ครบ ($logsPoint/$checkPoint)',
+                                                      style: const TextStyle(
+                                                          color: Colors.orange),
+                                                    )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              })),
+                        )),
+                      ],
                     ),
-            ),
-            loading ? Loading() : Container()
-          ],
         ),
         loading ? Loading() : Container()
       ],

@@ -130,7 +130,6 @@ class LogsToday {
   String? roundUuid;
   String? empID;
   String? checkTime;
-  List<String>? pic;
   double? lat;
   double? lng;
   String? status;
@@ -147,7 +146,6 @@ class LogsToday {
       this.roundUuid,
       this.empID,
       this.checkTime,
-      this.pic,
       this.lat,
       this.lng,
       this.status,
@@ -164,7 +162,6 @@ class LogsToday {
     roundUuid = json['Round_uuid'];
     empID = json['EmpID'];
     checkTime = json['CheckTime'];
-    pic = json['pic'].cast<String>();
     lat = json['lat'];
     lng = json['lng'];
     status = json['Status'];
@@ -183,7 +180,6 @@ class LogsToday {
     data['Round_uuid'] = this.roundUuid;
     data['EmpID'] = this.empID;
     data['CheckTime'] = this.checkTime;
-    data['pic'] = this.pic;
     data['lat'] = this.lat;
     data['lng'] = this.lng;
     data['Status'] = this.status;

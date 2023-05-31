@@ -7,6 +7,7 @@ import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
 import 'package:doormster/components/loading/loading.dart';
+import 'package:doormster/components/searchbar/search_from.dart';
 import 'package:doormster/models/get_round.dart';
 import 'package:doormster/screen/security_guard/scan_qr_check_page.dart';
 import 'package:doormster/service/check_connected.dart';
@@ -28,8 +29,10 @@ class Round_Check extends StatefulWidget {
 }
 
 class _Round_CheckState extends State<Round_Check> {
+  TextEditingController fieldText = TextEditingController();
   var companyId;
   List<Data> listdata = [];
+  List<Data> listRound = [];
   bool loading = false;
   Color? containerColor;
   Color? textColor;
@@ -130,6 +133,15 @@ class _Round_CheckState extends State<Round_Check> {
     });
   }
 
+  void _searchData(String text) {
+    setState(() {
+      listdata = listRound.where((item) {
+        var name = item.roundName!.toLowerCase();
+        return name.contains(text);
+      }).toList();
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -145,149 +157,173 @@ class _Round_CheckState extends State<Round_Check> {
           appBar: AppBar(title: Text('รายการรอบเดินตรวจ')),
           body: loading
               ? Container()
-              : SafeArea(
-                  child: listdata.isEmpty
-                      ? Logo_Opacity(title: 'ไม่มีข้อมูลที่บันทึก')
-                      : RefreshIndicator(
-                          onRefresh: () async {
-                            _getCheckRound(500);
-                          },
-                          child: ListView.builder(
-                              physics: AlwaysScrollableScrollPhysics(),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 20),
-                              shrinkWrap: true,
-                              primary: false,
-                              itemCount: listdata.length,
-                              itemBuilder: (context, index) {
-                                timeStart = DateTime.parse(
-                                    '$date ${listdata[index].roundStart}');
-                                timeEnd = DateTime.parse(
-                                    '$date ${listdata[index].roundEnd}');
-                                _setColor();
-                                return Card(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10)),
-                                  margin: EdgeInsets.symmetric(vertical: 5),
-                                  elevation: 10,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        color: containerColor,
-                                        borderRadius:
-                                            BorderRadius.circular(10)),
-                                    padding: EdgeInsets.all(10),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        round == 1
-                                            ? Column(
-                                                children: [
-                                                  Text(
-                                                    'รอบที่ต้องเดินตรวจ',
+              : Column(
+                  children: [
+                    listdata.length > 5
+                        ? Container(
+                            padding: const EdgeInsets.fromLTRB(20, 15, 20, 10),
+                            child: Search_From(
+                              title: 'ค้นหารอบเดิน',
+                              fieldText: fieldText,
+                              clear: () {
+                                setState(() {
+                                  fieldText.clear();
+                                  listdata = listRound;
+                                });
+                              },
+                              changed: (value) {
+                                _searchData(value);
+                              },
+                            ),
+                          )
+                        : Container(),
+                    Expanded(
+                      child: listdata.isEmpty
+                          ? Logo_Opacity(title: 'ไม่มีข้อมูลที่บันทึก')
+                          : RefreshIndicator(
+                              onRefresh: () async {
+                                _getCheckRound(500);
+                              },
+                              child: ListView.builder(
+                                  padding: listdata.length > 5
+                                      ? const EdgeInsets.fromLTRB(20, 0, 20, 10)
+                                      : const EdgeInsets.symmetric(
+                                          vertical: 10, horizontal: 20),
+                                  itemCount: listdata.length,
+                                  itemBuilder: (context, index) {
+                                    timeStart = DateTime.parse(
+                                        '$date ${listdata[index].roundStart}');
+                                    timeEnd = DateTime.parse(
+                                        '$date ${listdata[index].roundEnd}');
+                                    _setColor();
+                                    return Card(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                      margin: EdgeInsets.symmetric(vertical: 5),
+                                      elevation: 10,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: containerColor,
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        padding: EdgeInsets.all(10),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            round == 1
+                                                ? Column(
+                                                    children: [
+                                                      Text(
+                                                        'รอบที่ต้องเดินตรวจ',
+                                                        style: TextStyle(
+                                                            color: textColor),
+                                                      ),
+                                                      Divider(
+                                                          height: 15,
+                                                          thickness: 1.5,
+                                                          color: line),
+                                                    ],
+                                                  )
+                                                : Container(),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Expanded(
+                                                  child: Text(
+                                                    'รอบเดิน : ${listdata[index].roundName}',
+                                                    maxLines:
+                                                        round == 1 ? 2 : 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                     style: TextStyle(
                                                         color: textColor),
                                                   ),
-                                                  Divider(
-                                                      height: 15,
-                                                      thickness: 1.5,
-                                                      color: line),
-                                                ],
-                                              )
-                                            : Container(),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                'รอบเดิน : ${listdata[index].roundName}',
-                                                maxLines: round == 1 ? 2 : 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style:
-                                                    TextStyle(color: textColor),
-                                              ),
-                                            ),
-                                            round == 1
-                                                ? button(
-                                                    'เช็คจุดตรวจ', Colors.white,
-                                                    () {
-                                                    permissionCamere(
-                                                        context,
-                                                        () => permissionLocation(
+                                                ),
+                                                round == 1
+                                                    ? button('เช็คจุดตรวจ',
+                                                        Colors.white, () {
+                                                        permissionCamere(
                                                             context,
-                                                            () => checkInternetOnGoBack(
+                                                            () => permissionLocation(
                                                                 context,
-                                                                ScanQR_Check(
-                                                                    name:
-                                                                        'check',
-                                                                    roundId: listdata[
-                                                                            index]
-                                                                        .roundUuid!,
-                                                                    roundName: listdata[
-                                                                            index]
-                                                                        .roundName!,
-                                                                    roundStart:
-                                                                        listdata[index]
-                                                                            .roundStart!,
-                                                                    roundEnd: listdata[
-                                                                            index]
-                                                                        .roundEnd!,
-                                                                    checkpointId:
-                                                                        widget
-                                                                            .checkpointId),
-                                                                true,
-                                                                onGoBack)));
-                                                    // : dialogOnebutton_Subtitle(
-                                                    //     context,
-                                                    //     'ไม่สามารถตรวจได้',
-                                                    //     'เลยเวลาเดินตรวจรอบนี้แล้ว',
-                                                    //     Icons
-                                                    //         .warning_amber_rounded,
-                                                    //     Colors.orange,
-                                                    //     'ตกลง', () {
-                                                    //     Navigator.of(
-                                                    //             context,
-                                                    //             rootNavigator:
-                                                    //                 true)
-                                                    //         .pop();
-                                                    //   }, false, false);
-                                                  })
-                                                : Container()
+                                                                () => checkInternetOnGoBack(
+                                                                    context,
+                                                                    ScanQR_Check(
+                                                                        name:
+                                                                            'check',
+                                                                        roundId:
+                                                                            listdata[index]
+                                                                                .roundUuid!,
+                                                                        roundName:
+                                                                            listdata[index]
+                                                                                .roundName!,
+                                                                        roundStart:
+                                                                            listdata[index]
+                                                                                .roundStart!,
+                                                                        roundEnd:
+                                                                            listdata[index]
+                                                                                .roundEnd!,
+                                                                        checkpointId:
+                                                                            widget.checkpointId),
+                                                                    true,
+                                                                    onGoBack)));
+                                                        // : dialogOnebutton_Subtitle(
+                                                        //     context,
+                                                        //     'ไม่สามารถตรวจได้',
+                                                        //     'เลยเวลาเดินตรวจรอบนี้แล้ว',
+                                                        //     Icons
+                                                        //         .warning_amber_rounded,
+                                                        //     Colors.orange,
+                                                        //     'ตกลง', () {
+                                                        //     Navigator.of(
+                                                        //             context,
+                                                        //             rootNavigator:
+                                                        //                 true)
+                                                        //         .pop();
+                                                        //   }, false, false);
+                                                      })
+                                                    : Container()
+                                              ],
+                                            ),
+                                            Divider(
+                                                height: 15,
+                                                thickness: 1.5,
+                                                color: line),
+                                            IntrinsicHeight(
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceAround,
+                                                children: [
+                                                  Text(
+                                                    'เริ่มต้น : ${listdata[index].roundStart} น.',
+                                                    style: TextStyle(
+                                                        color: textColor),
+                                                  ),
+                                                  VerticalDivider(
+                                                      thickness: 1.5,
+                                                      color: line,
+                                                      width: 1),
+                                                  Text(
+                                                    'สิ้นสุด : ${listdata[index].roundEnd} น.',
+                                                    style: TextStyle(
+                                                        color: textColor),
+                                                  ),
+                                                ],
+                                              ),
+                                            )
                                           ],
                                         ),
-                                        Divider(
-                                            height: 15,
-                                            thickness: 1.5,
-                                            color: line),
-                                        IntrinsicHeight(
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceAround,
-                                            children: [
-                                              Text(
-                                                'เริ่มต้น : ${listdata[index].roundStart} น.',
-                                                style:
-                                                    TextStyle(color: textColor),
-                                              ),
-                                              VerticalDivider(
-                                                  thickness: 1.5,
-                                                  color: line,
-                                                  width: 1),
-                                              Text(
-                                                'สิ้นสุด : ${listdata[index].roundEnd} น.',
-                                                style:
-                                                    TextStyle(color: textColor),
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              }),
-                        ),
+                                      ),
+                                    );
+                                  }),
+                            ),
+                    ),
+                  ],
                 ),
         ),
         loading ? Loading() : Container()

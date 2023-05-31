@@ -6,6 +6,7 @@ import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/map/map_page.dart';
 import 'package:doormster/components/searchbar/search_from.dart';
+import 'package:doormster/components/text/text_icon.dart';
 import 'package:doormster/models/get_log.dart';
 import 'package:doormster/models/get_logs_all.dart';
 import 'package:doormster/service/connect_api.dart';
@@ -115,250 +116,209 @@ class _Record_PointState extends State<Record_Point> {
     return Stack(
       children: [
         Scaffold(
-            appBar: AppBar(title: const Text('บันทึกจุดตรวจ')),
-            body: SafeArea(
-              child: Container(
+          appBar: AppBar(title: const Text('บันทึกจุดตรวจ')),
+          body: Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.fromLTRB(20, 15, 20, 10),
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                decoration: BoxDecoration(
+                    border: Border.all(
+                        width: 2.5, color: Theme.of(context).primaryColor),
+                    color: Colors.white,
+                    borderRadius: const BorderRadius.all(Radius.circular(10))),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                width: 2.5,
-                                color: Theme.of(context).primaryColor),
-                            color: Colors.white,
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(10))),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          child: Column(
-                            children: [
-                              Text.rich(
-                                TextSpan(
-                                  children: [
-                                    WidgetSpan(
-                                        child: Padding(
-                                      padding: const EdgeInsets.only(right: 5),
-                                      child: Icon(
-                                        Icons.calendar_month_rounded,
-                                        color: Theme.of(context).primaryColor,
-                                        size: 25,
-                                      ),
-                                    )),
-                                    TextSpan(
-                                        text:
-                                            'รายงานวันที่ : ${widget.dateTime}'),
-                                  ],
-                                ),
-                              ),
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.map_rounded,
-                                    color: Theme.of(context).primaryColor,
-                                    size: 30,
-                                  ),
-                                  const SizedBox(width: 5),
-                                  Text('รอบเดิน : ${widget.roundName}'),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.access_time_rounded,
-                                    color: Theme.of(context).primaryColor,
-                                    size: 30,
-                                  ),
-                                  const SizedBox(width: 5),
-                                  Text(
-                                      'ช่วงเวลา : ${widget.roundStart}น. ถึง ${widget.roundEnd}น.'),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
+                    textIcon(
+                      'รายงานวันที่ : ${widget.dateTime}',
+                      Icon(
+                        Icons.calendar_month_rounded,
+                        color: Theme.of(context).primaryColor,
+                        size: 25,
                       ),
                     ),
-                    Search_From(
-                      title: 'ค้นหาข้อมูล',
-                      fieldText: fieldText,
-                      clear: () {
-                        setState(() {
-                          fieldText.clear();
-                          fileList = logsList;
-                        });
-                      },
-                      changed: (value) {
-                        _searchData(value);
-                      },
+                    textIcon(
+                      'รอบเดิน : ${widget.roundName}',
+                      Icon(
+                        Icons.map_rounded,
+                        color: Theme.of(context).primaryColor,
+                        size: 25,
+                      ),
                     ),
-                    const SizedBox(height: 10),
-                    Expanded(
-                      child: fileList.isEmpty
-                          ? Logo_Opacity(title: 'ไม่มีข้อมูลที่บันทึก')
-                          : ListView.builder(
-                              shrinkWrap: true,
-                              primary: false,
-                              itemCount: fileList.length,
-                              itemBuilder: (context, index) {
-                                time = DateTime.parse(
-                                    '${fileList[index].checktimeReal}');
-                                checkpoint = fileList[index].checkpoint!;
-                                final checklist = checkpoint[0].checklist;
-                                return Card(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10)),
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 5),
-                                  elevation: 10,
-                                  child: ExpansionTile(
-                                      textColor: Colors.black,
-                                      title: Text(
-                                        'จุดตรวจ :  ${checkpoint[0].checkpointName}',
-                                        style: const TextStyle(fontSize: 16),
-                                      ),
-                                      subtitle: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                              'เหตุการณ์ : ${fileList[index].event}'),
-                                          Text(
-                                              'วันที่ ${fileList[index].date} เวลา ${formatTime.format(time!)}'),
-                                        ],
-                                      ),
-                                      children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                              borderRadius: const BorderRadius
-                                                      .only(
-                                                  bottomLeft:
-                                                      Radius.circular(10),
-                                                  bottomRight: Radius.circular(
-                                                      10)), // Set the border radius here
-                                              color: Colors.grey.shade200),
-                                          padding: const EdgeInsets.fromLTRB(
-                                              10, 10, 10, 10),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              const Row(
-                                                children: [
-                                                  Icon(Icons.task_rounded,
-                                                      size: 25),
-                                                  SizedBox(width: 5),
-                                                  Text('รายการตรวจ'),
-                                                ],
-                                              ),
-                                              ListView.builder(
-                                                shrinkWrap: true,
-                                                primary: false,
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 3,
-                                                        horizontal: 20),
-                                                itemCount: checklist!.length,
-                                                itemBuilder:
-                                                    (BuildContext context,
-                                                        int index) {
-                                                  return checklist[index]
-                                                              .checklist ==
-                                                          ''
-                                                      ? Container()
-                                                      : Text(
-                                                          '- ${checklist[index].checklist}');
-                                                },
-                                              ),
-                                              fileList[index].desciption != ''
-                                                  ? Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        const Row(
-                                                          children: [
-                                                            Icon(
-                                                                Icons
-                                                                    .description_rounded,
-                                                                size: 25),
-                                                            SizedBox(width: 5),
-                                                            Text(
-                                                                'รายละเอียดเพิ่มเติม'),
-                                                          ],
-                                                        ),
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .symmetric(
-                                                                  horizontal:
-                                                                      20,
-                                                                  vertical: 3),
-                                                          child: Text(
-                                                            '- ${fileList[index].desciption}',
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    )
-                                                  : Container(),
-                                              Row(
-                                                children: [
-                                                  const Icon(
-                                                    Icons.photo_library_rounded,
-                                                    size: 30,
-                                                    color: Colors.black,
-                                                  ),
-                                                  const SizedBox(width: 5),
-                                                  const Expanded(
-                                                      child: Text(
-                                                          'รูปภาพการตรวจ')),
-                                                  button(
-                                                      'ดูรูปภาพ',
-                                                      Theme.of(context)
-                                                          .primaryColor,
-                                                      Icons.photo, () {
-                                                    _getLog(
-                                                        fileList[index].sId!);
-                                                  })
-                                                ],
-                                              ),
-                                              const SizedBox(height: 3),
-                                              Row(
-                                                children: [
-                                                  Icon(
-                                                    Icons.location_on_sharp,
-                                                    size: 30,
-                                                    color: Colors.red.shade600,
-                                                  ),
-                                                  const SizedBox(width: 5),
-                                                  const Expanded(
-                                                      child: Text(
-                                                          'ตำแหน่งที่ตรวจ')),
-                                                  button(
-                                                      'ดูตำแหน่ง',
-                                                      Colors.red.shade600,
-                                                      Icons.map, () {
-                                                    showMap(
-                                                        fileList[index].lat!,
-                                                        fileList[index].lng!);
-                                                  })
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ]),
-                                );
-                              }),
+                    textIcon(
+                      'ช่วงเวลา : ${widget.roundStart}น. ถึง ${widget.roundEnd}น.',
+                      Icon(
+                        Icons.access_time_rounded,
+                        color: Theme.of(context).primaryColor,
+                        size: 25,
+                      ),
                     ),
                   ],
                 ),
               ),
-            )),
+              logsList.length > 5
+                  ? Container(
+                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+                      child: Search_From(
+                        title: 'ค้นหาข้อมูล',
+                        fieldText: fieldText,
+                        clear: () {
+                          setState(() {
+                            fieldText.clear();
+                            fileList = logsList;
+                          });
+                        },
+                        changed: (value) {
+                          _searchData(value);
+                        },
+                      ),
+                    )
+                  : Container(),
+              Expanded(
+                child: fileList.isEmpty
+                    ? Logo_Opacity(title: 'ไม่มีข้อมูลที่บันทึก')
+                    : ListView.builder(
+                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+                        itemCount: fileList.length,
+                        itemBuilder: (context, index) {
+                          time = DateTime.parse(
+                              '${fileList[index].checktimeReal}');
+                          checkpoint = fileList[index].checkpoint!;
+                          final checklist = checkpoint[0].checklist;
+                          return Card(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            margin: const EdgeInsets.symmetric(vertical: 5),
+                            elevation: 10,
+                            child: ExpansionTile(
+                                textColor: Colors.black,
+                                title: Text(
+                                  'จุดตรวจ :  ${checkpoint[0].checkpointName}',
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                        'เหตุการณ์ : ${fileList[index].event}'),
+                                    Text(
+                                        'วันที่ ${fileList[index].date} เวลา ${formatTime.format(time!)}'),
+                                  ],
+                                ),
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.only(
+                                            bottomLeft: Radius.circular(10),
+                                            bottomRight: Radius.circular(
+                                                10)), // Set the border radius here
+                                        color: Colors.grey.shade200),
+                                    padding: const EdgeInsets.fromLTRB(
+                                        10, 10, 10, 10),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Row(
+                                          children: [
+                                            Icon(Icons.task_rounded, size: 25),
+                                            SizedBox(width: 5),
+                                            Text('รายการตรวจ'),
+                                          ],
+                                        ),
+                                        ListView.builder(
+                                          shrinkWrap: true,
+                                          primary: false,
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 3, horizontal: 20),
+                                          itemCount: checklist!.length,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return checklist[index].checklist ==
+                                                    ''
+                                                ? Container()
+                                                : Text(
+                                                    '- ${checklist[index].checklist}');
+                                          },
+                                        ),
+                                        fileList[index].desciption != ''
+                                            ? Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  const Row(
+                                                    children: [
+                                                      Icon(
+                                                          Icons
+                                                              .description_rounded,
+                                                          size: 25),
+                                                      SizedBox(width: 5),
+                                                      Text(
+                                                          'รายละเอียดเพิ่มเติม'),
+                                                    ],
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        horizontal: 20,
+                                                        vertical: 3),
+                                                    child: Text(
+                                                      '- ${fileList[index].desciption}',
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                            : Container(),
+                                        Row(
+                                          children: [
+                                            const Icon(
+                                              Icons.photo_library_rounded,
+                                              size: 30,
+                                              color: Colors.black,
+                                            ),
+                                            const SizedBox(width: 5),
+                                            const Expanded(
+                                                child: Text('รูปภาพการตรวจ')),
+                                            button(
+                                                'ดูรูปภาพ',
+                                                Theme.of(context).primaryColor,
+                                                Icons.photo, () {
+                                              _getLog(fileList[index].sId!);
+                                            })
+                                          ],
+                                        ),
+                                        const SizedBox(height: 3),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.location_on_sharp,
+                                              size: 30,
+                                              color: Colors.red.shade600,
+                                            ),
+                                            const SizedBox(width: 5),
+                                            const Expanded(
+                                                child: Text('ตำแหน่งที่ตรวจ')),
+                                            button(
+                                                'ดูตำแหน่ง',
+                                                Colors.red.shade600,
+                                                Icons.map, () {
+                                              showMap(fileList[index].lat!,
+                                                  fileList[index].lng!);
+                                            })
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ]),
+                          );
+                        }),
+              ),
+            ],
+          ),
+        ),
         loading ? Loading() : Container()
       ],
     );

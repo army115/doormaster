@@ -9,6 +9,8 @@ import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/map/map_page.dart';
 import 'package:doormster/components/searchbar/search_from.dart';
+import 'package:doormster/components/text/text_double_colors.dart';
+import 'package:doormster/components/text/text_icon.dart';
 import 'package:doormster/models/get_log.dart';
 import 'package:doormster/models/get_logs_all.dart';
 import 'package:doormster/models/get_logs_today.dart';
@@ -35,16 +37,15 @@ class Logs_Point extends StatefulWidget {
 
 class _Logs_PointState extends State<Logs_Point> {
   List<DatalogAll> logsDate = [];
-  // List<FileList> fileList = [];
-  // List<Checkpoint> checkpoint = [];
   List<Data> listdata = [];
+  List<Data> listlogs = [];
   bool loading = false;
+  bool load = false;
   DateFormat formatTime = DateFormat('HH:mm');
   TextEditingController fieldText = TextEditingController();
-  DateTime? time;
   DateTime now = DateTime.now();
 
-  Future _getCheckPoint() async {
+  Future _getCheckPoint(loadingTime) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var companyId = prefs.getString('companyId');
     print('companyId: ${companyId}');
@@ -54,6 +55,8 @@ class _Logs_PointState extends State<Logs_Point> {
       setState(() {
         loading = true;
       });
+
+      await Future.delayed(Duration(milliseconds: loadingTime));
 
       //call api
       var url =
@@ -95,7 +98,7 @@ class _Logs_PointState extends State<Logs_Point> {
   Future _getLogImages(String id) async {
     try {
       setState(() {
-        loading = true;
+        load = true;
       });
 
       //call api
@@ -114,7 +117,7 @@ class _Logs_PointState extends State<Logs_Point> {
         setState(() {
           logsDate = logs.data!;
           showImages(logsDate[0].pic);
-          loading = false;
+          load = false;
         });
       }
     } catch (error) {
@@ -130,14 +133,23 @@ class _Logs_PointState extends State<Logs_Point> {
         Navigator.of(context, rootNavigator: true).pop();
       }, false, false);
       setState(() {
-        loading = false;
+        load = false;
       });
     }
   }
 
+  void _searchData(String text) {
+    setState(() {
+      listdata = listlogs.where((item) {
+        var name = item.checkpointName!.toLowerCase();
+        return name.contains(text);
+      }).toList();
+    });
+  }
+
   @override
   void initState() {
-    _getCheckPoint();
+    _getCheckPoint(280);
     super.initState();
   }
 
@@ -147,82 +159,82 @@ class _Logs_PointState extends State<Logs_Point> {
     return Stack(
       children: [
         Scaffold(
-            appBar: AppBar(title: const Text('บันทึกจุดตรวจ')),
-            body: SafeArea(
-              child: Container(
-                child: Column(
+          appBar: AppBar(title: const Text('บันทึกจุดตรวจ')),
+          body: loading
+              ? Container()
+              : Column(
                   children: [
                     Container(
-                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                width: 2.5,
-                                color: Theme.of(context).primaryColor),
-                            color: Colors.white,
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(10))),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.calendar_month_rounded,
-                                    color: Theme.of(context).primaryColor,
-                                    size: 30,
-                                  ),
-                                  const SizedBox(width: 5),
-                                  Text('รายงานวันที่ : $dateNow'),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.map_rounded,
-                                    color: Theme.of(context).primaryColor,
-                                    size: 30,
-                                  ),
-                                  const SizedBox(width: 5),
-                                  Text('รอบเดิน : ${widget.roundName}'),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.access_time_rounded,
-                                    color: Theme.of(context).primaryColor,
-                                    size: 30,
-                                  ),
-                                  const SizedBox(width: 5),
-                                  Text(
-                                      'ช่วงเวลา : ${widget.roundStart}น. ถึง ${widget.roundEnd}น.'),
-                                ],
-                              ),
-                            ],
+                      margin: const EdgeInsets.fromLTRB(20, 15, 20, 10),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 10),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              width: 2.5,
+                              color: Theme.of(context).primaryColor),
+                          color: Colors.white,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10))),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          textIcon(
+                            'รายงานวันที่ : $dateNow',
+                            Icon(
+                              Icons.calendar_month_rounded,
+                              color: Theme.of(context).primaryColor,
+                              size: 28,
+                            ),
                           ),
-                        ),
+                          textIcon(
+                            'รอบเดิน : ${widget.roundName}',
+                            Icon(
+                              Icons.map_rounded,
+                              color: Theme.of(context).primaryColor,
+                              size: 28,
+                            ),
+                          ),
+                          textIcon(
+                            'ช่วงเวลา : ${widget.roundStart}น. ถึง ${widget.roundEnd}น.',
+                            Icon(
+                              Icons.access_time_rounded,
+                              color: Theme.of(context).primaryColor,
+                              size: 28,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
+                    listlogs.length > 8
+                        ? Container(
+                            padding: const EdgeInsets.fromLTRB(20, 15, 20, 10),
+                            child: Search_From(
+                              title: 'ค้นหาข้อมูล',
+                              fieldText: fieldText,
+                              clear: () {
+                                setState(() {
+                                  fieldText.clear();
+                                  listdata = listlogs;
+                                });
+                              },
+                              changed: (value) {
+                                _searchData(value);
+                              },
+                            ),
+                          )
+                        : Container(),
                     Expanded(
                       child: listdata.isEmpty
                           ? Logo_Opacity(title: 'ไม่มีข้อมูลที่บันทึก')
                           : RefreshIndicator(
                               onRefresh: () async {
-                                _getCheckPoint();
+                                _getCheckPoint(500);
                               },
                               child: ListView.builder(
-                                  physics: AlwaysScrollableScrollPhysics(),
                                   padding:
-                                      const EdgeInsets.fromLTRB(20, 0, 20, 5),
-                                  shrinkWrap: true,
-                                  primary: false,
+                                      const EdgeInsets.fromLTRB(20, 0, 20, 10),
                                   itemCount: listdata.length,
                                   itemBuilder: (context, index) {
-                                    // time = DateTime.parse(
-                                    //     '${fileList[index].checktimeReal}');
                                     final fileList = listdata[index].logsToday!;
                                     final checklist = listdata[index].checklist;
                                     return Card(
@@ -237,46 +249,29 @@ class _Logs_PointState extends State<Logs_Point> {
                                               textColor: Colors.black,
                                               title: Text(
                                                 'จุดตรวจ :  ${listdata[index].checkpointName}',
-                                                style: const TextStyle(
-                                                    fontSize: 16),
                                               ),
-                                              subtitle: const Row(
-                                                children: [
-                                                  Text(
-                                                    'สถานะ : ',
-                                                    style:
-                                                        TextStyle(fontSize: 16),
-                                                  ),
-                                                  Text(
-                                                    'ยังไม่ตรวจ',
-                                                    style: TextStyle(
-                                                        fontSize: 16,
-                                                        color: Colors.red),
-                                                  ),
-                                                ],
-                                              ),
-                                            )
+                                              subtitle: textDoubleColors(
+                                                  'สถานะ : ',
+                                                  Colors.black,
+                                                  'ยังไม่ตรวจ',
+                                                  Colors.red))
                                           : ExpansionTile(
                                               textColor: Colors.black,
                                               title: Text(
                                                 'จุดตรวจ :  ${listdata[index].checkpointName}',
-                                                style: const TextStyle(
-                                                    fontSize: 16),
                                               ),
-                                              subtitle: Row(
+                                              subtitle: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
-                                                  const Text(
-                                                    'สถานะ : ',
-                                                    style:
-                                                        TextStyle(fontSize: 16),
-                                                  ),
                                                   Text(
-                                                    'ตรวจแล้ว',
-                                                    style: TextStyle(
-                                                        fontSize: 16,
-                                                        color: Theme.of(context)
-                                                            .primaryColor),
-                                                  ),
+                                                      "เวลาบันทึก : ${formatTime.format(DateTime.parse(fileList[0].checktimeReal!))} น."),
+                                                  textDoubleColors(
+                                                      'สถานะ : ',
+                                                      Colors.black,
+                                                      'ตรวจแล้ว',
+                                                      Theme.of(context)
+                                                          .primaryColor),
                                                 ],
                                               ),
                                               children: [
@@ -300,15 +295,12 @@ class _Logs_PointState extends State<Logs_Point> {
                                                           CrossAxisAlignment
                                                               .start,
                                                       children: [
-                                                        const Row(
-                                                          children: [
-                                                            Icon(
-                                                                Icons
-                                                                    .edit_document,
-                                                                size: 25),
-                                                            SizedBox(width: 5),
-                                                            Text('เหตุการณ์'),
-                                                          ],
+                                                        textIcon(
+                                                          'เหตุการณ์',
+                                                          const Icon(
+                                                            Icons.edit_document,
+                                                            size: 28,
+                                                          ),
                                                         ),
                                                         Padding(
                                                           padding:
@@ -320,15 +312,12 @@ class _Logs_PointState extends State<Logs_Point> {
                                                           child: Text(
                                                               '- ${fileList[0].event}'),
                                                         ),
-                                                        const Row(
-                                                          children: [
-                                                            Icon(
-                                                                Icons
-                                                                    .task_rounded,
-                                                                size: 25),
-                                                            SizedBox(width: 5),
-                                                            Text('รายการตรวจ'),
-                                                          ],
+                                                        textIcon(
+                                                          'รายการตรวจ',
+                                                          const Icon(
+                                                            Icons.task_rounded,
+                                                            size: 28,
+                                                          ),
                                                         ),
                                                         ListView.builder(
                                                           shrinkWrap: true,
@@ -361,19 +350,13 @@ class _Logs_PointState extends State<Logs_Point> {
                                                                     CrossAxisAlignment
                                                                         .start,
                                                                 children: [
-                                                                  const Row(
-                                                                    children: [
-                                                                      Icon(
-                                                                          Icons
-                                                                              .description_rounded,
-                                                                          size:
-                                                                              25),
-                                                                      SizedBox(
-                                                                          width:
-                                                                              5),
-                                                                      Text(
-                                                                          'รายละเอียดเพิ่มเติม'),
-                                                                    ],
+                                                                  textIcon(
+                                                                    'รายละเอียดเพิ่มเติม',
+                                                                    const Icon(
+                                                                      Icons
+                                                                          .description_rounded,
+                                                                      size: 28,
+                                                                    ),
                                                                   ),
                                                                   Padding(
                                                                     padding: const EdgeInsets
@@ -391,18 +374,16 @@ class _Logs_PointState extends State<Logs_Point> {
                                                             : Container(),
                                                         Row(
                                                           children: [
-                                                            const Icon(
-                                                              Icons
-                                                                  .photo_library_rounded,
-                                                              size: 30,
-                                                              color:
-                                                                  Colors.black,
+                                                            Expanded(
+                                                              child: textIcon(
+                                                                'รูปภาพการตรวจ',
+                                                                const Icon(
+                                                                  Icons
+                                                                      .photo_library_rounded,
+                                                                  size: 28,
+                                                                ),
+                                                              ),
                                                             ),
-                                                            const SizedBox(
-                                                                width: 5),
-                                                            const Expanded(
-                                                                child: Text(
-                                                                    'รูปภาพการตรวจ')),
                                                             button(
                                                                 'ดูรูปภาพ',
                                                                 Theme.of(
@@ -420,18 +401,19 @@ class _Logs_PointState extends State<Logs_Point> {
                                                             height: 3),
                                                         Row(
                                                           children: [
-                                                            Icon(
-                                                              Icons
-                                                                  .location_on_sharp,
-                                                              size: 30,
-                                                              color: Colors
-                                                                  .red.shade600,
+                                                            Expanded(
+                                                              child: textIcon(
+                                                                'ตำแหน่งที่ตรวจ',
+                                                                Icon(
+                                                                  Icons
+                                                                      .location_on_sharp,
+                                                                  color: Colors
+                                                                      .red
+                                                                      .shade600,
+                                                                  size: 28,
+                                                                ),
+                                                              ),
                                                             ),
-                                                            const SizedBox(
-                                                                width: 5),
-                                                            const Expanded(
-                                                                child: Text(
-                                                                    'ตำแหน่งที่ตรวจ')),
                                                             button(
                                                                 'ดูตำแหน่ง',
                                                                 Colors.red
@@ -457,9 +439,8 @@ class _Logs_PointState extends State<Logs_Point> {
                     ),
                   ],
                 ),
-              ),
-            )),
-        loading ? Loading() : Container()
+        ),
+        loading || load ? Loading() : Container()
       ],
     );
   }
@@ -528,7 +509,7 @@ class _Logs_PointState extends State<Logs_Point> {
         builder: (_) => Dialog(
               backgroundColor: Colors.transparent,
               insetPadding:
-                  const EdgeInsets.symmetric(vertical: 180, horizontal: 30),
+                  const EdgeInsets.symmetric(vertical: 180, horizontal: 28),
               child: Map_Page(
                 width: double.infinity,
                 height: double.infinity,

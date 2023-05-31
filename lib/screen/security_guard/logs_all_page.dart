@@ -61,7 +61,6 @@ class _Logs_AllState extends State<Logs_All>
 
       if (response.statusCode == 200) {
         getLog logslist = getLog.fromJson(response.data);
-        log(response.data.toString());
         setState(() {
           listLog = logslist.data!;
           loading = false;
@@ -115,132 +114,138 @@ class _Logs_AllState extends State<Logs_All>
     return Stack(
       children: [
         Scaffold(
-          body: loading
-              ? Container()
-              : SafeArea(
-                  child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
-                      child: Search_Calendar(
-                        title: 'ค้นหา',
-                        fieldText: fieldText,
-                        ontap: () {
-                          calendar(context);
-                        },
+            body: loading
+                ? Container()
+                : Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(20, 15, 20, 10),
+                        child: Search_Calendar(
+                          title: 'ค้นหา',
+                          fieldText: fieldText,
+                          ontap: () {
+                            calendar(context);
+                          },
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      child: listLog.isEmpty
-                          ? Logo_Opacity(title: 'ไม่มีข้อมูลที่บันทึก')
-                          : RefreshIndicator(
-                              onRefresh: () async {
-                                _getLog(_startDateText!, _endDateText!, 500);
-                              },
-                              child: ListView.builder(
-                                  physics: AlwaysScrollableScrollPhysics(),
-                                  padding: EdgeInsets.fromLTRB(20, 0, 20, 5),
-                                  // shrinkWrap: true,
-                                  // primary: false,
-                                  // reverse: true
-                                  itemCount: listLog.length,
-                                  itemBuilder: ((context, index) {
-                                    return Card(
-                                      shape: RoundedRectangleBorder(
+                      Expanded(
+                        child: listLog.isEmpty
+                            ? Logo_Opacity(title: 'ไม่มีข้อมูลที่บันทึก')
+                            : RefreshIndicator(
+                                onRefresh: () async {
+                                  _getLog(_startDateText!, _endDateText!, 500);
+                                },
+                                child: ListView.builder(
+                                    padding: EdgeInsets.fromLTRB(20, 0, 20, 5),
+                                    itemCount: listLog.length,
+                                    itemBuilder: ((context, index) {
+                                      return Card(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        margin:
+                                            EdgeInsets.symmetric(vertical: 5),
+                                        elevation: 10,
+                                        child: InkWell(
                                           borderRadius:
-                                              BorderRadius.circular(10)),
-                                      margin: EdgeInsets.symmetric(vertical: 5),
-                                      elevation: 10,
-                                      child: InkWell(
-                                        borderRadius: BorderRadius.circular(10),
-                                        onTap: () {
-                                          Navigator.of(context)
-                                              .push(MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      Record_Point(
-                                                        fileList: listLog[index]
-                                                            .fileList,
-                                                        roundName:
-                                                            listLog[index]
-                                                                .roundName,
-                                                        roundStart:
-                                                            listLog[index]
-                                                                .roundStart,
-                                                        roundEnd: listLog[index]
-                                                            .roundEnd,
-                                                        dateTime:
-                                                            fieldText.text,
-                                                      )))
-                                              .then(onGoBack);
-                                        },
-                                        child: Container(
-                                          // decoration: BoxDecoration(
-                                          //     color: containerColor,
-                                          //     borderRadius: BorderRadius.circular(10)),
-                                          padding: EdgeInsets.all(10),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Expanded(
-                                                    child: Text(
-                                                      'รอบเดิน : ${listLog[index].roundName}',
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                  ),
-                                                  Icon(Icons
-                                                      .arrow_forward_ios_rounded)
-                                                ],
-                                              ),
-                                              // Text(
-                                              //     'วันที่ : ${fieldText.text}'),
-                                              IntrinsicHeight(
-                                                child: Row(
+                                              BorderRadius.circular(10),
+                                          onTap: () {
+                                            Navigator.of(context)
+                                                .push(MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        Record_Point(
+                                                          fileList:
+                                                              listLog[index]
+                                                                  .fileList,
+                                                          roundName:
+                                                              listLog[index]
+                                                                  .roundName,
+                                                          roundStart:
+                                                              listLog[index]
+                                                                  .roundStart,
+                                                          roundEnd:
+                                                              listLog[index]
+                                                                  .roundEnd,
+                                                          dateTime: fieldText
+                                                                  .text
+                                                                  .contains(
+                                                                      'ค้นหา')
+                                                              ? dateNow
+                                                              : fieldText.text,
+                                                        )))
+                                                .then(onGoBack);
+                                          },
+                                          child: Container(
+                                            // decoration: BoxDecoration(
+                                            //     color: containerColor,
+                                            //     borderRadius: BorderRadius.circular(10)),
+                                            padding: EdgeInsets.all(10),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment
                                                           .spaceBetween,
                                                   children: [
-                                                    Text(
-                                                        'เริ่มต้น : ${listLog[index].roundStart} น.'),
-                                                    VerticalDivider(
-                                                        thickness: 1.5,
-                                                        color: Colors.black,
-                                                        width: 1),
-                                                    Text(
-                                                      'สิ้นสุด : ${listLog[index].roundEnd} น.',
+                                                    Expanded(
+                                                      child: Text(
+                                                        'รอบเดิน : ${listLog[index].roundName}',
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
                                                     ),
+                                                    Icon(Icons
+                                                        .arrow_forward_ios_rounded)
                                                   ],
                                                 ),
-                                              ),
-                                              listLog[index].fileList!.length >
-                                                      0
-                                                  ? Text(
-                                                      'มีบันทึก ${listLog[index].fileList?.length} รายการ',
-                                                      style: TextStyle(
-                                                          color: Colors.blue),
-                                                    )
-                                                  : Text(
-                                                      'ไม่มีบันทึกรายการตรวจ',
-                                                      style: TextStyle(
-                                                          color: Colors.red),
-                                                    )
-                                            ],
+                                                // Text(
+                                                //     'วันที่ : ${fieldText.text}'),
+                                                IntrinsicHeight(
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Text(
+                                                          'เริ่มต้น : ${listLog[index].roundStart} น.'),
+                                                      VerticalDivider(
+                                                          thickness: 1.5,
+                                                          color: Colors.black,
+                                                          width: 1),
+                                                      Text(
+                                                        'สิ้นสุด : ${listLog[index].roundEnd} น.',
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                listLog[index]
+                                                            .fileList!
+                                                            .length >
+                                                        0
+                                                    ? Text(
+                                                        'มีบันทึก ${listLog[index].fileList?.length} รายการ',
+                                                        style: TextStyle(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .primaryColor),
+                                                      )
+                                                    : Text(
+                                                        'ไม่มีบันทึกรายการตรวจ',
+                                                        style: TextStyle(
+                                                            color: Colors.red),
+                                                      )
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    );
-                                  })),
-                            ),
-                    ),
-                  ],
-                )),
-        ),
+                                      );
+                                    })),
+                              ),
+                      ),
+                    ],
+                  )),
         loading ? Loading() : Container()
       ],
     );
