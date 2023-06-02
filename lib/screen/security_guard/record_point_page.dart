@@ -95,11 +95,11 @@ class _Record_PointState extends State<Record_Point> {
     setState(() {
       fileList = logsList.where((item) {
         var name = item.checkpoint![0].checkpointName!.toLowerCase();
-        var date = item.date!.toLowerCase();
+        var dates = formatdate.format(date!);
         var times = formatTime.format(time!);
         var event = item.event!.toLowerCase();
         return name.contains(text) ||
-            date.contains(text) ||
+            dates.contains(text) ||
             times.contains(text) ||
             event.contains(text);
       }).toList();
