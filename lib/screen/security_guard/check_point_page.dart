@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, use_build_context_synchronously
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, use_build_context_synchronously, sort_child_properties_last
 
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
@@ -174,15 +174,19 @@ class _Check_PointState extends State<Check_Point> {
                                                     10, 10, 10, 10),
                                                 child:
                                                     listdata[index].verify == 0
-                                                        ? textIcon(
-                                                            'ยังไม่ลงทะเบียนจุดตรวจนี้',
-                                                            const Icon(
-                                                              Icons
-                                                                  .warning_rounded,
-                                                              size: 30,
-                                                              color:
-                                                                  Colors.orange,
-                                                            ),
+                                                        ? Row(
+                                                            children: [
+                                                              textIcon(
+                                                                'ยังไม่ลงทะเบียนจุดตรวจนี้',
+                                                                const Icon(
+                                                                  Icons
+                                                                      .warning_rounded,
+                                                                  size: 25,
+                                                                  color: Colors
+                                                                      .orange,
+                                                                ),
+                                                              ),
+                                                            ],
                                                           )
                                                         : Column(
                                                             crossAxisAlignment:
@@ -194,7 +198,7 @@ class _Check_PointState extends State<Check_Point> {
                                                                 const Icon(
                                                                     Icons
                                                                         .task_rounded,
-                                                                    size: 28),
+                                                                    size: 25),
                                                               ),
                                                               ListView.builder(
                                                                 shrinkWrap:
@@ -233,7 +237,7 @@ class _Check_PointState extends State<Check_Point> {
                                                                             'ตำแหน่งจุดตรวจ',
                                                                             const Icon(Icons.location_on_sharp,
                                                                                 color: Colors.red,
-                                                                                size: 28),
+                                                                                size: 25),
                                                                           ),
                                                                         ),
                                                                         button(

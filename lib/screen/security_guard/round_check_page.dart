@@ -105,6 +105,7 @@ class _Round_CheckState extends State<Round_Check> {
         getRound checklist = getRound.fromJson(response.data);
         setState(() {
           listdata = checklist.data!;
+          listRound = listdata;
           loading = false;
         });
       }
@@ -159,7 +160,7 @@ class _Round_CheckState extends State<Round_Check> {
               ? Container()
               : Column(
                   children: [
-                    listdata.length > 5
+                    listRound.length > 5
                         ? Container(
                             padding: const EdgeInsets.fromLTRB(20, 15, 20, 10),
                             child: Search_From(

@@ -1,4 +1,4 @@
-// ignore_for_file: unused_field
+// ignore_for_file: unused_field, use_build_context_synchronously
 
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
@@ -8,6 +8,7 @@ import 'package:doormster/screen/main_screen/login_page.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class Settings_Page extends StatefulWidget {
   const Settings_Page({super.key});
@@ -28,11 +29,16 @@ class _Settings_PageState extends State<Settings_Page> {
   late SharedPreferences prefs;
   var uuId;
   bool loading = false;
+  PackageInfo? packageInfo;
 
   Future getValueShared() async {
+    final info = await PackageInfo.fromPlatform();
     prefs = await SharedPreferences.getInstance();
     uuId = prefs.getString('uuId');
     print('uuId: ${uuId}');
+    setState(() {
+      packageInfo = info;
+    });
   }
 
   Future _Logout() async {
@@ -133,7 +139,12 @@ class _Settings_PageState extends State<Settings_Page> {
             },
             true,
             true);
-      }, Colors.red)
+      }, Colors.red),
+      menuItem(
+          Icons.app_settings_alt_rounded,
+          'เวอร์ชันปัจจุบัน ${packageInfo?.version}',
+          () {},
+          Colors.grey.shade600)
     ];
     return Scaffold(
       appBar: AppBar(title: Text('การตั้งค่า')),

@@ -60,6 +60,7 @@ class _Report_LogsState extends State<Report_Logs>
         if (widget.type != null) {
           Navigator.of(context).pop();
         } else {
+          homeKey.currentState?.popUntil(ModalRoute.withName('/security'));
           Navigator.popUntil(context, (route) => route.isFirst);
         }
         return false;
@@ -72,6 +73,8 @@ class _Report_LogsState extends State<Report_Logs>
               if (widget.type != null) {
                 Navigator.of(context).pop();
               } else {
+                homeKey.currentState
+                    ?.popUntil(ModalRoute.withName('/security'));
                 Navigator.popUntil(context, (route) => route.isFirst);
               }
             }),

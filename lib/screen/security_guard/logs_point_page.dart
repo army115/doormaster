@@ -86,8 +86,8 @@ class _Logs_PointState extends State<Logs_Point> {
           Icons.warning_amber_rounded,
           Colors.orange,
           'ตกลง', () {
-        homeKey.currentState?.popUntil(ModalRoute.withName('/security'));
         Navigator.of(context, rootNavigator: true).pop();
+        Navigator.pop(context);
       }, false, false);
       setState(() {
         loading = false;
@@ -165,6 +165,7 @@ class _Logs_PointState extends State<Logs_Point> {
               : Column(
                   children: [
                     Container(
+                      width: double.infinity,
                       margin: const EdgeInsets.fromLTRB(20, 15, 20, 10),
                       padding: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 10),
@@ -183,7 +184,7 @@ class _Logs_PointState extends State<Logs_Point> {
                             Icon(
                               Icons.calendar_month_rounded,
                               color: Theme.of(context).primaryColor,
-                              size: 28,
+                              size: 25,
                             ),
                           ),
                           textIcon(
@@ -191,7 +192,7 @@ class _Logs_PointState extends State<Logs_Point> {
                             Icon(
                               Icons.map_rounded,
                               color: Theme.of(context).primaryColor,
-                              size: 28,
+                              size: 25,
                             ),
                           ),
                           textIcon(
@@ -199,7 +200,7 @@ class _Logs_PointState extends State<Logs_Point> {
                             Icon(
                               Icons.access_time_rounded,
                               color: Theme.of(context).primaryColor,
-                              size: 28,
+                              size: 25,
                             ),
                           ),
                         ],
@@ -299,7 +300,7 @@ class _Logs_PointState extends State<Logs_Point> {
                                                           'เหตุการณ์',
                                                           const Icon(
                                                             Icons.edit_document,
-                                                            size: 28,
+                                                            size: 25,
                                                           ),
                                                         ),
                                                         Padding(
@@ -316,7 +317,7 @@ class _Logs_PointState extends State<Logs_Point> {
                                                           'รายการตรวจ',
                                                           const Icon(
                                                             Icons.task_rounded,
-                                                            size: 28,
+                                                            size: 25,
                                                           ),
                                                         ),
                                                         ListView.builder(
@@ -355,7 +356,7 @@ class _Logs_PointState extends State<Logs_Point> {
                                                                     const Icon(
                                                                       Icons
                                                                           .description_rounded,
-                                                                      size: 28,
+                                                                      size: 25,
                                                                     ),
                                                                   ),
                                                                   Padding(
@@ -380,7 +381,7 @@ class _Logs_PointState extends State<Logs_Point> {
                                                                 const Icon(
                                                                   Icons
                                                                       .photo_library_rounded,
-                                                                  size: 28,
+                                                                  size: 25,
                                                                 ),
                                                               ),
                                                             ),
@@ -410,7 +411,7 @@ class _Logs_PointState extends State<Logs_Point> {
                                                                   color: Colors
                                                                       .red
                                                                       .shade600,
-                                                                  size: 28,
+                                                                  size: 25,
                                                                 ),
                                                               ),
                                                             ),

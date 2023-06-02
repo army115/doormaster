@@ -43,8 +43,10 @@ class _Record_PointState extends State<Record_Point> {
   List<Checkpoint> checkpoint = [];
   bool loading = false;
   DateFormat formatTime = DateFormat('HH:mm');
+  DateFormat formatdate = DateFormat('dd-MM-y');
   TextEditingController fieldText = TextEditingController();
   DateTime? time;
+  DateTime? date;
 
   Future _getLog(String id) async {
     try {
@@ -120,6 +122,7 @@ class _Record_PointState extends State<Record_Point> {
           body: Column(
             children: [
               Container(
+                width: double.infinity,
                 margin: const EdgeInsets.fromLTRB(20, 15, 20, 10),
                 padding:
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -186,6 +189,8 @@ class _Record_PointState extends State<Record_Point> {
                           time = DateTime.parse(
                               '${fileList[index].checktimeReal}');
                           checkpoint = fileList[index].checkpoint!;
+                          date = DateTime.parse('${fileList[index].date}');
+                          checkpoint = fileList[index].checkpoint!;
                           final checklist = checkpoint[0].checklist;
                           return Card(
                             shape: RoundedRectangleBorder(
@@ -204,7 +209,7 @@ class _Record_PointState extends State<Record_Point> {
                                     Text(
                                         'เหตุการณ์ : ${fileList[index].event}'),
                                     Text(
-                                        'วันที่ ${fileList[index].date} เวลา ${formatTime.format(time!)}'),
+                                        'วันที่ ${formatdate.format(date!)} เวลา ${formatTime.format(time!)}'),
                                   ],
                                 ),
                                 children: [
@@ -221,13 +226,13 @@ class _Record_PointState extends State<Record_Point> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        const Row(
-                                          children: [
-                                            Icon(Icons.task_rounded, size: 25),
-                                            SizedBox(width: 5),
-                                            Text('รายการตรวจ'),
-                                          ],
-                                        ),
+                                        textIcon(
+                                            'รายการตรวจ',
+                                            const Icon(
+                                              Icons.task_rounded,
+                                              size: 25,
+                                              color: Colors.black,
+                                            )),
                                         ListView.builder(
                                           shrinkWrap: true,
                                           primary: false,
@@ -248,17 +253,14 @@ class _Record_PointState extends State<Record_Point> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  const Row(
-                                                    children: [
-                                                      Icon(
-                                                          Icons
-                                                              .description_rounded,
-                                                          size: 25),
-                                                      SizedBox(width: 5),
-                                                      Text(
-                                                          'รายละเอียดเพิ่มเติม'),
-                                                    ],
-                                                  ),
+                                                  textIcon(
+                                                      'รายละเอียดเพิ่มเติม',
+                                                      const Icon(
+                                                        Icons
+                                                            .description_rounded,
+                                                        size: 25,
+                                                        color: Colors.black,
+                                                      )),
                                                   Padding(
                                                     padding: const EdgeInsets
                                                             .symmetric(
@@ -273,14 +275,15 @@ class _Record_PointState extends State<Record_Point> {
                                             : Container(),
                                         Row(
                                           children: [
-                                            const Icon(
-                                              Icons.photo_library_rounded,
-                                              size: 30,
-                                              color: Colors.black,
-                                            ),
-                                            const SizedBox(width: 5),
-                                            const Expanded(
-                                                child: Text('รูปภาพการตรวจ')),
+                                            Expanded(
+                                                child: textIcon(
+                                                    'รูปภาพการตรวจ',
+                                                    const Icon(
+                                                      Icons
+                                                          .photo_library_rounded,
+                                                      size: 25,
+                                                      color: Colors.black,
+                                                    ))),
                                             button(
                                                 'ดูรูปภาพ',
                                                 Theme.of(context).primaryColor,
@@ -292,14 +295,15 @@ class _Record_PointState extends State<Record_Point> {
                                         const SizedBox(height: 3),
                                         Row(
                                           children: [
-                                            Icon(
-                                              Icons.location_on_sharp,
-                                              size: 30,
-                                              color: Colors.red.shade600,
-                                            ),
-                                            const SizedBox(width: 5),
-                                            const Expanded(
-                                                child: Text('ตำแหน่งที่ตรวจ')),
+                                            Expanded(
+                                                child: textIcon(
+                                              'ตำแหน่งที่ตรวจ',
+                                              Icon(
+                                                Icons.location_on_sharp,
+                                                size: 25,
+                                                color: Colors.red.shade600,
+                                              ),
+                                            )),
                                             button(
                                                 'ดูตำแหน่ง',
                                                 Colors.red.shade600,

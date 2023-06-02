@@ -116,136 +116,129 @@ class _Logs_AllState extends State<Logs_All>
         Scaffold(
             body: loading
                 ? Container()
-                : Column(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(20, 15, 20, 10),
-                        child: Search_Calendar(
-                          title: 'ค้นหา',
-                          fieldText: fieldText,
-                          ontap: () {
-                            calendar(context);
-                          },
-                        ),
-                      ),
-                      Expanded(
-                        child: listLog.isEmpty
-                            ? Logo_Opacity(title: 'ไม่มีข้อมูลที่บันทึก')
-                            : RefreshIndicator(
-                                onRefresh: () async {
-                                  _getLog(_startDateText!, _endDateText!, 500);
-                                },
-                                child: ListView.builder(
-                                    padding: EdgeInsets.fromLTRB(20, 0, 20, 5),
-                                    itemCount: listLog.length,
-                                    itemBuilder: ((context, index) {
-                                      return Card(
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        margin:
-                                            EdgeInsets.symmetric(vertical: 5),
-                                        elevation: 10,
-                                        child: InkWell(
+                : listLog.isEmpty
+                    ? Logo_Opacity(title: 'ไม่มีข้อมูลที่บันทึก')
+                    : Column(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.fromLTRB(20, 15, 20, 10),
+                            child: Search_Calendar(
+                              title: 'ค้นหา',
+                              fieldText: fieldText,
+                              ontap: () {
+                                calendar(context);
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            child: RefreshIndicator(
+                              onRefresh: () async {
+                                _getLog(_startDateText!, _endDateText!, 500);
+                              },
+                              child: ListView.builder(
+                                  padding: EdgeInsets.fromLTRB(20, 0, 20, 5),
+                                  itemCount: listLog.length,
+                                  itemBuilder: ((context, index) {
+                                    return Card(
+                                      shape: RoundedRectangleBorder(
                                           borderRadius:
-                                              BorderRadius.circular(10),
-                                          onTap: () {
-                                            Navigator.of(context)
-                                                .push(MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        Record_Point(
-                                                          fileList:
-                                                              listLog[index]
-                                                                  .fileList,
-                                                          roundName:
-                                                              listLog[index]
-                                                                  .roundName,
-                                                          roundStart:
-                                                              listLog[index]
-                                                                  .roundStart,
-                                                          roundEnd:
-                                                              listLog[index]
-                                                                  .roundEnd,
-                                                          dateTime: fieldText
-                                                                  .text
-                                                                  .contains(
-                                                                      'ค้นหา')
-                                                              ? dateNow
-                                                              : fieldText.text,
-                                                        )))
-                                                .then(onGoBack);
-                                          },
-                                          child: Container(
-                                            // decoration: BoxDecoration(
-                                            //     color: containerColor,
-                                            //     borderRadius: BorderRadius.circular(10)),
-                                            padding: EdgeInsets.all(10),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Row(
+                                              BorderRadius.circular(10)),
+                                      margin: EdgeInsets.symmetric(vertical: 5),
+                                      elevation: 10,
+                                      child: InkWell(
+                                        borderRadius: BorderRadius.circular(10),
+                                        onTap: () {
+                                          Navigator.of(context)
+                                              .push(MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      Record_Point(
+                                                        fileList: listLog[index]
+                                                            .fileList,
+                                                        roundName:
+                                                            listLog[index]
+                                                                .roundName,
+                                                        roundStart:
+                                                            listLog[index]
+                                                                .roundStart,
+                                                        roundEnd: listLog[index]
+                                                            .roundEnd,
+                                                        dateTime: fieldText.text
+                                                                .contains(
+                                                                    'ค้นหา')
+                                                            ? dateNow
+                                                            : fieldText.text,
+                                                      )))
+                                              .then(onGoBack);
+                                        },
+                                        child: Container(
+                                          // decoration: BoxDecoration(
+                                          //     color: containerColor,
+                                          //     borderRadius: BorderRadius.circular(10)),
+                                          padding: EdgeInsets.all(10),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(
+                                                      'รอบเดิน : ${listLog[index].roundName}',
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                  Icon(Icons
+                                                      .arrow_forward_ios_rounded)
+                                                ],
+                                              ),
+                                              // Text(
+                                              //     'วันที่ : ${fieldText.text}'),
+                                              IntrinsicHeight(
+                                                child: Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment
                                                           .spaceBetween,
                                                   children: [
-                                                    Expanded(
-                                                      child: Text(
-                                                        'รอบเดิน : ${listLog[index].roundName}',
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                      ),
+                                                    Text(
+                                                        'เริ่มต้น : ${listLog[index].roundStart} น.'),
+                                                    VerticalDivider(
+                                                        thickness: 1.5,
+                                                        color: Colors.black,
+                                                        width: 1),
+                                                    Text(
+                                                      'สิ้นสุด : ${listLog[index].roundEnd} น.',
                                                     ),
-                                                    Icon(Icons
-                                                        .arrow_forward_ios_rounded)
                                                   ],
                                                 ),
-                                                // Text(
-                                                //     'วันที่ : ${fieldText.text}'),
-                                                IntrinsicHeight(
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Text(
-                                                          'เริ่มต้น : ${listLog[index].roundStart} น.'),
-                                                      VerticalDivider(
-                                                          thickness: 1.5,
-                                                          color: Colors.black,
-                                                          width: 1),
-                                                      Text(
-                                                        'สิ้นสุด : ${listLog[index].roundEnd} น.',
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                listLog[index]
-                                                            .fileList!
-                                                            .length >
-                                                        0
-                                                    ? Text(
-                                                        'มีบันทึก ${listLog[index].fileList?.length} รายการ',
-                                                        style: TextStyle(
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .primaryColor),
-                                                      )
-                                                    : Text(
-                                                        'ไม่มีบันทึกรายการตรวจ',
-                                                        style: TextStyle(
-                                                            color: Colors.red),
-                                                      )
-                                              ],
-                                            ),
+                                              ),
+                                              listLog[index].fileList!.length >
+                                                      0
+                                                  ? Text(
+                                                      'มีบันทึก ${listLog[index].fileList?.length} รายการ',
+                                                      style: TextStyle(
+                                                          color: Theme.of(
+                                                                  context)
+                                                              .primaryColor),
+                                                    )
+                                                  : Text(
+                                                      'ไม่มีบันทึกรายการตรวจ',
+                                                      style: TextStyle(
+                                                          color: Colors.red),
+                                                    )
+                                            ],
                                           ),
                                         ),
-                                      );
-                                    })),
-                              ),
-                      ),
-                    ],
-                  )),
+                                      ),
+                                    );
+                                  })),
+                            ),
+                          ),
+                        ],
+                      )),
         loading ? Loading() : Container()
       ],
     );
@@ -290,6 +283,7 @@ class _Logs_AllState extends State<Logs_All>
     );
 
     if (datePicker != null) {
+      //เลือก 2 วันที่
       if (datePicker.length == 2 && datePicker[0] != datePicker[1]) {
         setState(() {
           //date ที่ได้จากการเลือกในปฏิทิน
@@ -304,13 +298,15 @@ class _Logs_AllState extends State<Logs_All>
           _getLog(_startDateText!, _endDateText!, 300);
 
           //date ส่งไปแสดงหน้าแอพ
-          _startDateText = dateShow.format(_startDate!);
-          _endDateText = dateShow.format(_endDate!);
+          var _ShowStartDate = dateShow.format(_startDate!);
+          var _ShowEndDateText = dateShow.format(_endDate!);
 
           //fieldText Controller
-          dateDifferent = "${_startDateText} ถึง ${_endDateText}";
+          dateDifferent = "${_ShowStartDate} ถึง ${_ShowEndDateText}";
           fieldText.text = dateDifferent!;
         });
+
+        //เลือก 1 วันที่
       } else if (datePicker.length == 1) {
         setState(() {
           //date ที่ได้จากการเลือกในปฏิทิน
@@ -325,11 +321,10 @@ class _Logs_AllState extends State<Logs_All>
           _getLog(_startDateText!, _endDateText!, 300);
 
           //date ส่งไปแสดงหน้าแอพ
-          _startDateText = dateShow.format(_startDate!);
-          _endDateText = dateShow.format(_endDate!);
+          var _ShowStartDate = dateShow.format(_startDate!);
 
           //fieldText Controller
-          fieldText.text = _startDateText!;
+          fieldText.text = _ShowStartDate;
         });
       }
       setState(() {

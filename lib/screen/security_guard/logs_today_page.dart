@@ -135,7 +135,7 @@ class _Logs_TodayState extends State<Logs_Today>
                                       Icon(
                                         Icons.event_note,
                                         color: Theme.of(context).primaryColor,
-                                        size: 30,
+                                        size: 25,
                                       ),
                                     ),
                                   ],
