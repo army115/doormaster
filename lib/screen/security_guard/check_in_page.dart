@@ -316,8 +316,7 @@ class _Check_InState extends State<Check_In> {
                 child: loading || checkpointName == null || verify == 0
                     ? Container()
                     : Container(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 20, horizontal: 20),
+                        padding: EdgeInsets.fromLTRB(20, 20, 20, 80),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [

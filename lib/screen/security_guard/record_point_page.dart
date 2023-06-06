@@ -1,5 +1,7 @@
 // ignore_for_file: unused_import, use_build_context_synchronously, sort_child_properties_last
 
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
@@ -45,8 +47,8 @@ class _Record_PointState extends State<Record_Point> {
   DateFormat formatTime = DateFormat('HH:mm');
   DateFormat formatdate = DateFormat('dd-MM-y');
   TextEditingController fieldText = TextEditingController();
-  DateTime? time;
-  DateTime? date;
+  // DateTime? time;
+  // DateTime? date;
 
   Future _getLog(String id) async {
     try {
@@ -94,10 +96,10 @@ class _Record_PointState extends State<Record_Point> {
   void _searchData(String text) {
     setState(() {
       fileList = logsList.where((item) {
-        var name = item.checkpoint![0].checkpointName!.toLowerCase();
-        var dates = formatdate.format(date!);
-        var times = formatTime.format(time!);
-        var event = item.event!.toLowerCase();
+        String name = item.checkpoint![0].checkpointName!.toLowerCase();
+        String dates = formatdate.format(DateTime.parse(item.date!));
+        String times = formatTime.format(DateTime.parse(item.checktimeReal!));
+        String event = item.event!.toLowerCase();
         return name.contains(text) ||
             dates.contains(text) ||
             times.contains(text) ||
@@ -186,12 +188,14 @@ class _Record_PointState extends State<Record_Point> {
                         padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
                         itemCount: fileList.length,
                         itemBuilder: (context, index) {
-                          time = DateTime.parse(
+                          final time = DateTime.parse(
                               '${fileList[index].checktimeReal}');
                           checkpoint = fileList[index].checkpoint!;
-                          date = DateTime.parse('${fileList[index].date}');
+                          final date =
+                              DateTime.parse('${fileList[index].date}');
                           checkpoint = fileList[index].checkpoint!;
                           final checklist = checkpoint[0].checklist;
+
                           return Card(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)),
@@ -209,7 +213,7 @@ class _Record_PointState extends State<Record_Point> {
                                     Text(
                                         'เหตุการณ์ : ${fileList[index].event}'),
                                     Text(
-                                        'วันที่ ${formatdate.format(date!)} เวลา ${formatTime.format(time!)}'),
+                                        'วันที่ ${formatdate.format(date)} เวลา ${formatTime.format(time)}'),
                                   ],
                                 ),
                                 children: [

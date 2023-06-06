@@ -257,8 +257,7 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
                 child: loading || checkpointName == null || verify == 1
                     ? Container()
                     : Container(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 20, horizontal: 20),
+                        padding: EdgeInsets.fromLTRB(20, 20, 20, 80),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [

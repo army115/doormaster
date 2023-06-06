@@ -248,7 +248,7 @@ class _Profile_PageState extends State<Profile_Page>
                 child: Form(
                   key: _formkey,
                   child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 20, horizontal: 25),
+                    padding: EdgeInsets.fromLTRB(20, 20, 20, 80),
                     child: Column(children: [
                       Stack(
                         children: [

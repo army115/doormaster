@@ -210,21 +210,20 @@ class _Security_GuardState extends State<Security_Guard> {
                     press: () {
                       Navigator.of(context, rootNavigator: true).push(
                         MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              // Scaffold(
-                              //       appBar: AppBar(
-                              //         title: Text('บันทึกการตรวจนอกรอบ'),
-                              //       ),
-                              //       body: Logo_Opacity(title: 'ไม่มีข้อมูล'),
-                              //     )
-                              Add_CheckPoint(
-                            timeCheck: DateTime.now(),
-                            checkpointId:
-                                'bf83c999-6ce0-4083-9b55-6f6b35c315e2',
-                            lat: 13.69521967419439,
-                            lng: 100.64172377200555,
-                          ),
-                        ),
+                            builder: (BuildContext context) => Scaffold(
+                                  appBar: AppBar(
+                                    title: Text('บันทึกการตรวจนอกรอบ'),
+                                  ),
+                                  body: Logo_Opacity(title: 'ไม่มีข้อมูล'),
+                                )
+                            //     Add_CheckPoint(
+                            //   timeCheck: DateTime.now(),
+                            //   checkpointId:
+                            //       'bf83c999-6ce0-4083-9b55-6f6b35c315e2',
+                            //   lat: 13.69521967419439,
+                            //   lng: 100.64172377200555,
+                            // ),
+                            ),
                       );
                     }),
               ],
