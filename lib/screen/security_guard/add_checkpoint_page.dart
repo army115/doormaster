@@ -163,7 +163,7 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
 
         dialogOnebutton(context, 'ลงทะเบียนสำเร็จ',
             Icons.check_circle_outline_rounded, Colors.green, 'ตกลง', () {
-          Navigator.of(context).popUntil(((route) => route.isFirst));
+          Navigator.of(context).popUntil((route) => route.isFirst);
         }, false, false);
 
         // snackbar(context, Theme.of(context).primaryColor, 'ลงทะเบียนสำเร็จ',

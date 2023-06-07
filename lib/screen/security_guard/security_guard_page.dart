@@ -1,7 +1,8 @@
-// ignore_for_file: use_build_context_synchronously, unused_import
+// ignore_for_file: use_build_context_synchronously, unused_import, avoid_function_literals_in_foreach_calls
 
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
+import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/drawer/drawer.dart';
 import 'package:doormster/components/girdManu/grid_menu.dart';
 import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
@@ -64,7 +65,7 @@ class _Security_GuardState extends State<Security_Guard> {
         getRoundNow roundlist = getRoundNow.fromJson(response.data);
         setState(() {
           listdata = roundlist.data!;
-          logsList = listdata[0].logsList!;
+          logsList = listdata.isNotEmpty ? listdata[0].logsList! : [];
           loading = false;
           listCheckpoint = [];
         });
@@ -75,17 +76,18 @@ class _Security_GuardState extends State<Security_Guard> {
       }
     } catch (error) {
       print(error);
-      // await Future.delayed(Duration(milliseconds: 500));
-      // dialogOnebutton_Subtitle(
-      //     context
-      //     'พบข้อผิดพลาด',
-      //     'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-      //     Icons.warning_amber_rounded,
-      //     Colors.orange,
-      //     'ตกลง', () {
-      //   homeKey.currentState?.popUntil(ModalRoute.withName('/security'));
-      //   Navigator.of(context, rootNavigator: true).pop();
-      // }, false, false);
+      dialogOnebutton_Subtitle(
+          context,
+          'พบข้อผิดพลาด',
+          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+          Icons.warning_amber_rounded,
+          Colors.orange,
+          'ตกลง', () {
+        homeKey.currentState?.popUntil(
+          (route) => route.isFirst,
+        );
+        Navigator.of(context, rootNavigator: true).pop();
+      }, false, false);
       setState(() {
         loading = false;
       });

@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, must_be_immutable
 
+import 'package:doormster/service/check_connected.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -29,7 +30,7 @@ class Menu_Security extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             splashColor: Colors.black12,
             highlightColor: Colors.transparent,
-            onTap: () => Navigator.pushNamed(context, press),
+            onTap: () => checkInternetName(context, press, false),
             child: Padding(
               padding: const EdgeInsets.all(5),
               child: Icon(icon, size: 45, color: Colors.white),
