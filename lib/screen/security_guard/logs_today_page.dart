@@ -5,6 +5,7 @@ import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
 import 'package:doormster/components/loading/loading.dart';
+import 'package:doormster/components/searchbar/search_from.dart';
 import 'package:doormster/components/text/text_icon.dart';
 import 'package:doormster/models/get_checklist.dart';
 import 'package:doormster/models/get_log.dart';
@@ -23,15 +24,16 @@ class Logs_Today extends StatefulWidget {
 
 class _Logs_TodayState extends State<Logs_Today>
     with AutomaticKeepAliveClientMixin {
-  var companyId;
   List<DataLog> listdata = [];
+  List<DataLog> listlogs = [];
   List<Data> listPoint = [];
+  TextEditingController fieldText = TextEditingController();
   bool loading = false;
   DateTime now = DateTime.now();
 
   Future _getLog(int loadingTime) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    companyId = prefs.getString('companyId');
+    String? companyId = prefs.getString('companyId');
     print('companyId: ${companyId}');
     String date = DateFormat('y-MM-dd').format(now);
 
@@ -66,6 +68,7 @@ class _Logs_TodayState extends State<Logs_Today>
         getChecklist checklist = getChecklist.fromJson(response.data);
         setState(() {
           listdata = logslist.data!;
+          listlogs = listdata;
           listPoint = checklist.data!;
           loading = false;
         });
@@ -95,6 +98,15 @@ class _Logs_TodayState extends State<Logs_Today>
     });
   }
 
+  void _searchData(String text) {
+    setState(() {
+      listdata = listlogs.where((item) {
+        var name = item.roundName!.toLowerCase();
+        return name.contains(text);
+      }).toList();
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -113,137 +125,170 @@ class _Logs_TodayState extends State<Logs_Today>
         Scaffold(
           body: loading
               ? Container()
-              : listdata.isEmpty
-                  ? Logo_Opacity(title: 'ไม่มีข้อมูลที่บันทึก')
-                  : Column(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.fromLTRB(20, 15, 20, 10),
-                          child: Material(
-                              color: Colors.white,
-                              elevation: 10,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(10)),
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    textIcon(
-                                      'รายงานวันที่ : $dateNow',
-                                      Icon(
-                                        Icons.event_note,
-                                        color: Theme.of(context).primaryColor,
-                                        size: 25,
-                                      ),
+              : Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(20, 15, 20, 10),
+                      // decoration: const BoxDecoration(
+                      //     color: Colors.white,
+                      //     borderRadius: BorderRadius.all(Radius.circular(10))),
+                      child: Column(
+                        children: [
+                          Material(
+                            color: Colors.white,
+                            elevation: 10,
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 10),
+                              child: Row(
+                                children: [
+                                  textIcon(
+                                    'รายงานวันที่ : $dateNow',
+                                    Icon(
+                                      Icons.event_note,
+                                      color: Theme.of(context).primaryColor,
+                                      size: 25,
                                     ),
-                                  ],
-                                ),
-                              )),
-                        ),
-                        Expanded(
-                            child: RefreshIndicator(
-                          onRefresh: () async {
-                            _getLog(500);
-                          },
-                          child: ListView.builder(
-                              padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
-                              itemCount: listdata.length,
-                              itemBuilder: ((context, index) {
-                                final logsPoint =
-                                    listdata[index].fileList!.length;
-                                final checkPoint = listPoint.length;
-                                return Card(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10)),
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 5),
-                                  elevation: 10,
-                                  child: InkWell(
-                                    borderRadius: BorderRadius.circular(10),
-                                    onTap: () {
-                                      Navigator.of(context)
-                                          .push(MaterialPageRoute(
-                                              builder: (context) => Logs_Point(
-                                                    roundId: listdata[index]
-                                                        .roundUuid,
-                                                    roundName: listdata[index]
-                                                        .roundName,
-                                                    roundStart: listdata[index]
-                                                        .roundStart,
-                                                    roundEnd: listdata[index]
-                                                        .roundEnd,
-                                                  )))
-                                          .then(onGoBack);
-                                    },
-                                    child: Container(
-                                      padding: const EdgeInsets.all(10),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Expanded(
-                                                child: Text(
-                                                  'รอบเดิน : ${listdata[index].roundName}',
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                              ),
-                                              const Icon(Icons
-                                                  .arrow_forward_ios_rounded)
-                                            ],
-                                          ),
-                                          IntrinsicHeight(
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          listlogs.length > 10
+                              ? Search_From(
+                                  title: 'ค้นหารอบเดิน',
+                                  fieldText: fieldText,
+                                  clear: () {
+                                    setState(() {
+                                      fieldText.clear();
+                                      listdata = listlogs;
+                                    });
+                                  },
+                                  changed: (value) {
+                                    _searchData(value);
+                                  },
+                                )
+                              : Container(),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                        child: listdata.isEmpty
+                            ? Logo_Opacity(title: 'ไม่มีข้อมูลที่บันทึก')
+                            : RefreshIndicator(
+                                onRefresh: () async {
+                                  _getLog(500);
+                                },
+                                child: ListView.builder(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        20, 0, 20, 10),
+                                    itemCount: listdata.length,
+                                    itemBuilder: ((context, index) {
+                                      final logsPoint =
+                                          listdata[index].fileList!.length;
+                                      final checkPoint = listPoint.length;
+                                      return Card(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 5),
+                                        elevation: 10,
+                                        child: InkWell(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          onTap: () {
+                                            Navigator.of(context)
+                                                .push(MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        Logs_Point(
+                                                          roundId:
+                                                              listdata[index]
+                                                                  .roundUuid,
+                                                          roundName:
+                                                              listdata[index]
+                                                                  .roundName,
+                                                          roundStart:
+                                                              listdata[index]
+                                                                  .roundStart,
+                                                          roundEnd:
+                                                              listdata[index]
+                                                                  .roundEnd,
+                                                        )))
+                                                .then(onGoBack);
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.all(10),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                Text(
-                                                    'เริ่มต้น : ${listdata[index].roundStart} น.'),
-                                                const VerticalDivider(
-                                                    thickness: 1.5,
-                                                    color: Colors.black,
-                                                    width: 1),
-                                                Text(
-                                                  'สิ้นสุด : ${listdata[index].roundEnd} น.',
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Expanded(
+                                                      child: Text(
+                                                        'รอบเดิน : ${listdata[index].roundName}',
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                    ),
+                                                    const Icon(Icons
+                                                        .arrow_forward_ios_rounded)
+                                                  ],
                                                 ),
+                                                IntrinsicHeight(
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Text(
+                                                          'เริ่มต้น : ${listdata[index].roundStart} น.'),
+                                                      const VerticalDivider(
+                                                          thickness: 1.5,
+                                                          color: Colors.black,
+                                                          width: 1),
+                                                      Text(
+                                                        'สิ้นสุด : ${listdata[index].roundEnd} น.',
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                logsPoint <= 0
+                                                    ? Text(
+                                                        'ยังไม่ตรวจ ($logsPoint/$checkPoint)',
+                                                        style: const TextStyle(
+                                                            color: Colors.red),
+                                                      )
+                                                    : logsPoint >= checkPoint
+                                                        ? Text(
+                                                            'ตรวจครบแล้ว ($logsPoint/$checkPoint)',
+                                                            style: TextStyle(
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .primaryColor),
+                                                          )
+                                                        : Text(
+                                                            'ตรวจไม่ครบ ($logsPoint/$checkPoint)',
+                                                            style:
+                                                                const TextStyle(
+                                                                    color: Colors
+                                                                        .orange),
+                                                          )
                                               ],
                                             ),
                                           ),
-                                          logsPoint <= 0
-                                              ? Text(
-                                                  'ยังไม่ตรวจ ($logsPoint/$checkPoint)',
-                                                  style: const TextStyle(
-                                                      color: Colors.red),
-                                                )
-                                              : logsPoint >= checkPoint
-                                                  ? Text(
-                                                      'ตรวจครบแล้ว ($logsPoint/$checkPoint)',
-                                                      style: TextStyle(
-                                                          color: Theme.of(
-                                                                  context)
-                                                              .primaryColor),
-                                                    )
-                                                  : Text(
-                                                      'ตรวจไม่ครบ ($logsPoint/$checkPoint)',
-                                                      style: const TextStyle(
-                                                          color: Colors.orange),
-                                                    )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              })),
-                        )),
-                      ],
-                    ),
+                                        ),
+                                      );
+                                    })),
+                              )),
+                  ],
+                ),
         ),
         loading ? Loading() : Container()
       ],

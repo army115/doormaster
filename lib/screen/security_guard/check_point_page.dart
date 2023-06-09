@@ -102,7 +102,7 @@ class _Check_PointState extends State<Check_Point> {
               ? Container()
               : Column(
                   children: [
-                    listPoint.length > 8
+                    listPoint.length > 10
                         ? Container(
                             padding: const EdgeInsets.fromLTRB(20, 15, 20, 10),
                             child: Search_From(
@@ -128,7 +128,7 @@ class _Check_PointState extends State<Check_Point> {
                                 _getCheckPoint(500);
                               },
                               child: ListView.builder(
-                                  padding: listdata.length > 8
+                                  padding: listdata.length > 10
                                       ? const EdgeInsets.fromLTRB(20, 0, 20, 10)
                                       : const EdgeInsets.symmetric(
                                           vertical: 10, horizontal: 20),

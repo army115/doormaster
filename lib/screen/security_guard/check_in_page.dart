@@ -77,18 +77,16 @@ class _Check_InState extends State<Check_In> {
 
   var companyId;
   var userId;
-  // var roundId;
   List<Data> listdata = [];
   List<Checklist> listcheck = [];
   bool loading = false;
-  String? checkpointName = null;
+  String? checkpointName;
   int? verify = 1;
 
   Future _getChecklist() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     companyId = prefs.getString('companyId');
     userId = prefs.getString('userId');
-    // roundId = prefs.getString('roundId');
     print('companyId: $companyId');
     print('userId: $userId');
     print('timeCheck: ${widget.timeCheck}');

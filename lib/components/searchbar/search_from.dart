@@ -28,7 +28,6 @@ class Search_From extends StatelessWidget {
       child: TextField(
           controller: fieldText,
           style: TextStyle(fontSize: 15),
-          // cursorColor: Colors.cyan,
           decoration: InputDecoration(
             hintText: title,
             hintStyle: TextStyle(color: Colors.black38, fontSize: 16),
@@ -42,21 +41,9 @@ class Search_From extends StatelessWidget {
                     onPressed: clear,
                     icon: Icon(
                       Icons.close,
+                      size: 30,
                     ))
                 : null,
-            // suffixIcon: Icon(
-            //   Icons.event_note,
-            //   color: Theme.of(context).primaryColor,
-            //   size: 30,
-            // ),
-            //     IconButton(
-            //         onPressed: () => calenda(),
-            //     Icon(
-            //   Icons.event_note,
-            //   color: Theme.of(context).primaryColor,
-            //   size: 30,
-            // )
-            // ),
             border: InputBorder.none,
           ),
           onChanged: changed),

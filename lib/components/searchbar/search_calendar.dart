@@ -28,7 +28,7 @@ class Search_Calendar extends StatelessWidget {
           controller: fieldText,
           style: TextStyle(
               fontSize: 15,
-              color: fieldText.text.contains('ค้นหา')
+              color: fieldText.text.contains('วันที่')
                   ? Colors.grey
                   : Colors.black),
           // cursorColor: Colors.cyan,
@@ -36,26 +36,20 @@ class Search_Calendar extends StatelessWidget {
             hintText: title,
             hintStyle: TextStyle(color: Colors.black38, fontSize: 16),
             prefixIcon: Icon(
-              Icons.search,
-              color: Theme.of(context).primaryColor,
-              size: 30,
-            ),
-            suffixIcon: Icon(
               Icons.event_note,
               color: Theme.of(context).primaryColor,
               size: 30,
             ),
-            //     IconButton(
-            //         onPressed: () => calenda(),
-            //     Icon(
-            //   Icons.event_note,
-            //   color: Theme.of(context).primaryColor,
-            //   size: 30,
-            // )
-            // ),
+            suffixIcon: fieldText.text.contains('วันที่')
+                ? null
+                : IconButton(
+                    onPressed: clear,
+                    icon: Icon(
+                      Icons.close,
+                      size: 30,
+                      color: Theme.of(context).primaryColor,
+                    )),
             border: InputBorder.none,
-            // contentPadding:
-            //     EdgeInsets.symmetric(horizontal: 25, vertical: 13)
           ),
           onTap: ontap,
           onChanged: changed),

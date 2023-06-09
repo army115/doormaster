@@ -73,6 +73,7 @@ class _Logs_PointState extends State<Logs_Point> {
         getLogsToday logtoday = getLogsToday.fromJson(response.data);
         setState(() {
           listdata = logtoday.data!;
+          listlogs = listdata;
           loading = false;
         });
       }
@@ -206,9 +207,9 @@ class _Logs_PointState extends State<Logs_Point> {
                         ],
                       ),
                     ),
-                    listlogs.length > 8
+                    listlogs.length > 10
                         ? Container(
-                            padding: const EdgeInsets.fromLTRB(20, 15, 20, 10),
+                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
                             child: Search_From(
                               title: 'ค้นหาข้อมูล',
                               fieldText: fieldText,

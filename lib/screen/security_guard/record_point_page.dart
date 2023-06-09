@@ -163,7 +163,7 @@ class _Record_PointState extends State<Record_Point> {
                   ],
                 ),
               ),
-              logsList.length > 5
+              logsList.length > 10
                   ? Container(
                       padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
                       child: Search_From(
