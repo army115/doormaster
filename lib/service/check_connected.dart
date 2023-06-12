@@ -15,6 +15,20 @@ Future<void> checkInternet(context, page, rootNavi) async {
   }
 }
 
+Future<void> checkInternetOnGoBack(context, page, rootNavi, onGoBack) async {
+  var result = await Connectivity().checkConnectivity();
+  print(result);
+  if (result == ConnectivityResult.none) {
+    snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
+        Icons.warning_amber_rounded);
+    print('not connected');
+  } else {
+    Navigator.of(context, rootNavigator: rootNavi)
+        .push(MaterialPageRoute(builder: (context) => page))
+        .then((onGoBack));
+  }
+}
+
 Future<void> checkInternetName(context, page, rootNavi) async {
   var result = await Connectivity().checkConnectivity();
   print(result);
@@ -27,7 +41,8 @@ Future<void> checkInternetName(context, page, rootNavi) async {
   }
 }
 
-Future<void> checkInternetOnGoBack(context, page, rootNavi, onGoBack) async {
+Future<void> checkInternetNameOnGoBack(
+    context, page, rootNavi, onGoBack) async {
   var result = await Connectivity().checkConnectivity();
   print(result);
   if (result == ConnectivityResult.none) {
@@ -36,7 +51,7 @@ Future<void> checkInternetOnGoBack(context, page, rootNavi, onGoBack) async {
     print('not connected');
   } else {
     Navigator.of(context, rootNavigator: rootNavi)
-        .push(MaterialPageRoute(builder: (context) => page))
+        .pushNamed(page)
         .then((onGoBack));
   }
 }

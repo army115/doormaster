@@ -10,6 +10,7 @@ import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/models/get_ads_company.dart';
 import 'package:doormster/models/get_menu.dart';
+import 'package:doormster/models/profile_model.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper_plus/flutter_swiper_plus.dart';
@@ -32,7 +33,7 @@ class _Home_PageState extends State<Home_Page>
   var companyId;
   var security;
   List<DataMenu> listMenu = [];
-  List<Data> listads = [];
+  List<DataAds> listads = [];
   bool loading = false;
   var checkNet;
   final Connectivity _connectivity = Connectivity();
@@ -77,7 +78,6 @@ class _Home_PageState extends State<Home_Page>
 
       if (response.statusCode == 200 && responseAds.statusCode == 200) {
         getMenu menuHome = getMenu.fromJson(response.data);
-
         getAdsCompany asdcompany = getAdsCompany.fromJson(responseAds.data);
         setState(() {
           listMenu = menuHome.data!;
@@ -106,6 +106,67 @@ class _Home_PageState extends State<Home_Page>
     }
   }
 
+  Future _getInfo() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var userId = prefs.getString('userId');
+    print('userId: ${userId}');
+
+    try {
+      var url = '${Connect_api().domain}/get/profile/$userId';
+      var response = await Dio().get(
+        url,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        GetProfile getInfo = GetProfile.fromJson(response.data);
+        List<Data>? data = getInfo.data;
+
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('username', data!.single.userName!);
+        await prefs.setString('fname', data.single.firstName!);
+        await prefs.setString('lname', data.single.surName!);
+        await prefs.setInt('role', data.single.mobile!);
+        await prefs.setBool('security', false);
+        await prefs.setString('userId', data.single.sId!);
+        await prefs.setString('companyId', data.single.companyId!);
+        await prefs.setString('uuId', data.single.userUuid!);
+
+        if (data.single.image != null) {
+          await prefs.setString('image', data.single.image!);
+        }
+
+        if (data.single.devicegroupUuid != null) {
+          await prefs.setString('deviceId', data.single.devicegroupUuid!);
+        }
+        if (data.single.weigangroupUuid != null) {
+          await prefs.setString('weiganId', data.single.weigangroupUuid!);
+        }
+      }
+    } catch (error) {
+      print(error);
+      // await Future.delayed(Duration(milliseconds: 500));
+      // dialogOnebutton_Subtitle(
+      //     context,
+      //     'พบข้อผิดพลาด',
+      //     'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+      //     Icons.warning_amber_rounded,
+      //     Colors.orange,
+      //     'ตกลง', () {
+      //   Navigator.of(context, rootNavigator: true).pop();
+      //   setState(() {
+      //     _getInfo();
+      //   });
+      // }, false, false);
+      // setState(() {
+      //   loading = false;
+      // });
+    }
+  }
+
   Future<void> checkInternet() async {
     checkNet = await Connectivity().checkConnectivity();
     log('net $checkNet');
@@ -118,6 +179,7 @@ class _Home_PageState extends State<Home_Page>
   void initState() {
     super.initState();
     _getMenu();
+    _getInfo();
     // _subscription =
     //     _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
     //   if (result == ConnectivityResult.none) {
@@ -136,6 +198,12 @@ class _Home_PageState extends State<Home_Page>
     //   }
     //   log("result $result");
     // });
+  }
+
+  Future onGoBack(dynamic value) async {
+    setState(() {
+      _getInfo();
+    });
   }
 
   // @override
@@ -158,14 +226,21 @@ class _Home_PageState extends State<Home_Page>
                     Scaffold.of(context).openDrawer();
                   }),
             ),
-            body: SafeArea(
-              child: checkNet == ConnectivityResult.none ||
-                      loading ||
-                      mobileRole == null
-                  ? Container()
-                  : security == true
-                      ? Security()
-                      : normalUser(),
+            body: RefreshIndicator(
+              onRefresh: () async {
+                _getInfo();
+                _getMenu();
+              },
+              child: SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                child: checkNet == ConnectivityResult.none ||
+                        loading ||
+                        mobileRole == null
+                    ? Container()
+                    : security == true
+                        ? Security()
+                        : normalUser(),
+              ),
             )),
         loading ? Loading() : Container(),
       ],
@@ -173,159 +248,151 @@ class _Home_PageState extends State<Home_Page>
   }
 
   Widget normalUser() {
-    return SafeArea(
-      child: mobileRole == 0
-          ? Logo_Opacity(
-              title: 'โปรดติดต่อผู้ดูแล\nเพื่ออนุมัติสิทธิ์การใช้งาน')
-          : SingleChildScrollView(
-              child: Column(
-                children: [
-                  Container(
-                      height: MediaQuery.of(context).size.width * 0.6,
-                      width: double.infinity,
-                      child: listads.isEmpty
-                          ? Swiper(
-                              autoplay: false,
-                              loop: false,
-                              itemCount: 1,
-                              itemBuilder: (context, index) {
-                                return Image.asset(
-                                  'assets/images/ads.png',
-                                  fit: BoxFit.cover,
-                                );
-                              },
-                            )
-                          : Swiper(
-                              autoplay: listads.length == 1 ? false : true,
-                              loop: listads.length == 1 ? false : true,
-                              pagination: SwiperPagination(
-                                  builder: DotSwiperPaginationBuilder(
-                                      size: 8,
-                                      activeSize: 8,
-                                      color: Colors.grey,
-                                      activeColor: Colors.white)),
-                              itemCount: listads.length,
-                              itemBuilder: (context, index) {
-                                var _Images = convert.base64Decode(
-                                    ('${listads[index].adsversitingPic}')
-                                        .split(',')
-                                        .last);
-                                return InkWell(
-                                    // onTap: () {
-                                    //   launchUrlString('https://hipglobal.co.th/');
-                                    // },
-                                    child: Image.memory(
-                                  _Images,
-                                  fit: BoxFit.cover,
-                                ));
-                              },
-                            )),
-                  listMenu.isEmpty
-                      ? Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical:
-                                  MediaQuery.of(context).size.height * 0.13),
-                          child: Icon_Opacity(
-                              title:
-                                  'ไม่มีเมนูที่คุณใช้งานได้\nโปรดติดต่อผู้ดูแล'),
+    return mobileRole == 0
+        ? Logo_Opacity(title: 'โปรดติดต่อผู้ดูแล\nเพื่ออนุมัติสิทธิ์การใช้งาน')
+        : Column(
+            children: [
+              Container(
+                  height: MediaQuery.of(context).size.width * 0.6,
+                  width: double.infinity,
+                  child: listads.isEmpty
+                      ? Swiper(
+                          autoplay: false,
+                          loop: false,
+                          itemCount: 1,
+                          itemBuilder: (context, index) {
+                            return Image.asset(
+                              'assets/images/ads.png',
+                              fit: BoxFit.cover,
+                            );
+                          },
                         )
-                      : Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 20),
-                          child: GridView.builder(
-                            shrinkWrap: true,
-                            primary: false,
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              childAspectRatio: 0.65,
-                              crossAxisCount: 4,
-                              crossAxisSpacing: 20,
-                              mainAxisSpacing: 5,
-                            ),
-                            itemCount: listMenu.length,
-                            itemBuilder: (context, index) {
-                              return Menu_Home(
-                                title: '${listMenu[index].name}',
-                                icon: listMenu[index].icon,
-                                press: listMenu[index].page,
-                                type: '${listMenu[index].type}',
-                              );
-                            },
+                      : Swiper(
+                          autoplay: listads.length == 1 ? false : true,
+                          loop: listads.length == 1 ? false : true,
+                          pagination: SwiperPagination(
+                              builder: DotSwiperPaginationBuilder(
+                                  size: 8,
+                                  activeSize: 8,
+                                  color: Colors.grey,
+                                  activeColor: Colors.white)),
+                          itemCount: listads.length,
+                          itemBuilder: (context, index) {
+                            var _Images = convert.base64Decode(
+                                ('${listads[index].adsversitingPic}')
+                                    .split(',')
+                                    .last);
+                            return InkWell(
+                                // onTap: () {
+                                //   launchUrlString('https://hipglobal.co.th/');
+                                // },
+                                child: Image.memory(
+                              _Images,
+                              fit: BoxFit.cover,
+                            ));
+                          },
+                        )),
+              Container(
+                child: listMenu.isEmpty
+                    ? Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical:
+                                MediaQuery.of(context).size.height * 0.13),
+                        child: Icon_Opacity(
+                            title:
+                                'ไม่มีเมนูที่คุณใช้งานได้\nโปรดติดต่อผู้ดูแล'),
+                      )
+                    : Container(
+                        padding: EdgeInsets.fromLTRB(20, 20, 20,
+                            MediaQuery.of(context).size.width * 0.15),
+                        child: GridView.builder(
+                          shrinkWrap: true,
+                          primary: false,
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            childAspectRatio: 0.65,
+                            crossAxisCount: 4,
+                            crossAxisSpacing: 20,
+                            mainAxisSpacing: 5,
                           ),
+                          itemCount: listMenu.length,
+                          itemBuilder: (context, index) {
+                            return Menu_Home(
+                              title: '${listMenu[index].name}',
+                              icon: listMenu[index].icon,
+                              press: listMenu[index].page,
+                              type: '${listMenu[index].type}',
+                              goBack: onGoBack,
+                            );
+                          },
                         ),
-                ],
+                      ),
               ),
-            ),
-    );
+            ],
+          );
   }
 
   Widget Security() {
-    return SafeArea(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              height: MediaQuery.of(context).size.width * 0.6,
-              width: double.infinity,
-              child: listads.isNotEmpty
-                  ? Swiper(
-                      autoplay: true,
-                      loop: true,
-                      pagination: SwiperPagination(
-                          builder: DotSwiperPaginationBuilder(
-                              color: Colors.grey, activeColor: Colors.white)),
-                      itemCount: listads.length,
-                      itemBuilder: (context, index) {
-                        var _Images = convert.base64Decode(
-                            ('${listads[index].adsversitingPic}')
-                                .split(',')
-                                .last);
-                        return InkWell(
-                            // onTap: () {
-                            //   launchUrlString(
-                            //       'https://hipglobal.co.th/');
-                            // },
-                            // child: Container(
-                            //     child:
-                            //         Image.network('${_images[index]}')),
-                            child: Image.memory(
-                          _Images,
-                          fit: BoxFit.cover,
-                        ));
-                      },
-                    )
-                  : Swiper(
-                      autoplay: true,
-                      loop: true,
-                      itemCount: 1,
-                      itemBuilder: (context, index) {
-                        return Image.asset(
-                          'assets/images/ads.png',
-                          fit: BoxFit.cover,
-                        );
-                      },
-                    ),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              child: GridView.count(
-                shrinkWrap: true,
-                primary: false,
-                childAspectRatio: 0.65,
-                crossAxisCount: 4,
-                crossAxisSpacing: 20,
-                mainAxisSpacing: 5,
-                children: [
-                  Menu_Security(
-                      title: 'security', press: '/security', icon: Icons.man),
-                  Menu_Security(
-                      title: 'visitor', press: '/visitor', icon: Icons.boy)
-                ],
-              ),
-            )
-          ],
+    return Column(
+      children: [
+        Container(
+          height: MediaQuery.of(context).size.width * 0.6,
+          width: double.infinity,
+          child: listads.isNotEmpty
+              ? Swiper(
+                  autoplay: true,
+                  loop: true,
+                  pagination: SwiperPagination(
+                      builder: DotSwiperPaginationBuilder(
+                          color: Colors.grey, activeColor: Colors.white)),
+                  itemCount: listads.length,
+                  itemBuilder: (context, index) {
+                    var _Images = convert.base64Decode(
+                        ('${listads[index].adsversitingPic}').split(',').last);
+                    return InkWell(
+                        // onTap: () {
+                        //   launchUrlString(
+                        //       'https://hipglobal.co.th/');
+                        // },
+                        // child: Container(
+                        //     child:
+                        //         Image.network('${_images[index]}')),
+                        child: Image.memory(
+                      _Images,
+                      fit: BoxFit.cover,
+                    ));
+                  },
+                )
+              : Swiper(
+                  autoplay: true,
+                  loop: true,
+                  itemCount: 1,
+                  itemBuilder: (context, index) {
+                    return Image.asset(
+                      'assets/images/ads.png',
+                      fit: BoxFit.cover,
+                    );
+                  },
+                ),
         ),
-      ),
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          child: GridView.count(
+            shrinkWrap: true,
+            primary: false,
+            childAspectRatio: 0.65,
+            crossAxisCount: 4,
+            crossAxisSpacing: 20,
+            mainAxisSpacing: 5,
+            children: [
+              Menu_Security(
+                  title: 'security', press: '/security', icon: Icons.man),
+              Menu_Security(
+                  title: 'visitor', press: '/visitor', icon: Icons.boy)
+            ],
+          ),
+        )
+      ],
     );
   }
 }

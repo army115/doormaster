@@ -9,12 +9,14 @@ class Menu_Home extends StatelessWidget {
   final press;
   final icon;
   String type;
+  final goBack;
   Menu_Home(
       {Key? key,
       required this.title,
       required this.press,
       required this.icon,
-      required this.type})
+      required this.type,
+      this.goBack})
       : super(key: key);
 
   @override
@@ -32,7 +34,8 @@ class Menu_Home extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             splashColor: Colors.black12,
             highlightColor: Colors.transparent,
-            onTap: () => checkInternetName(context, press, false),
+            onTap: () =>
+                checkInternetNameOnGoBack(context, press, false, goBack),
             child: Padding(
               padding: const EdgeInsets.all(5),
               child: Icon(

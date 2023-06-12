@@ -193,7 +193,7 @@ class _Add_CompanyState extends State<Add_Company> {
         if (data.single.devicegroupUuid != null) {
           await prefs.setString('deviceId', data.single.devicegroupUuid!);
         }
-        if (data.single.devicegroupUuid != null) {
+        if (data.single.weigangroupUuid != null) {
           await prefs.setString('weiganId', data.single.weigangroupUuid!);
         }
         print('loginMulti Success');

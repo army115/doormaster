@@ -71,6 +71,7 @@ dependencies:
   flutter_phoenix: ^1.1.1
   flutter_datetime_picker_bdaya: ^3.0.1
   package_info_plus: ^4.0.2
+  dotted_line: ^3.2.0
   # flutter_typeahead: ^4.3.7
   # dropdown_search: ^5.0.6
   # buddhist_datetime_dateformat_sns: ^1.0.7

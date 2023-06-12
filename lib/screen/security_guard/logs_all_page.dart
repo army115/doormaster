@@ -15,6 +15,7 @@ import 'package:doormster/models/get_log.dart';
 import 'package:doormster/models/get_logs_all.dart';
 import 'package:doormster/screen/security_guard/record_point_page.dart';
 import 'package:doormster/service/connect_api.dart';
+import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -153,7 +154,28 @@ class _Logs_AllState extends State<Logs_All>
                                 });
                               },
                             ),
-                            listData.length > 10
+                            Container(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: DottedLine(
+                                direction: Axis.horizontal,
+                                alignment: WrapAlignment.center,
+                                lineLength: double.infinity,
+                                lineThickness: 1.5,
+                                dashColor: Colors.grey.shade600,
+                                dashGapColor: Colors.white,
+                              ),
+                            ),
+                            // listData.length > 0
+                            //     ? Divider(
+                            //         height: 0,
+                            //         color: Colors.grey,
+                            //         thickness: 1,
+                            //         indent: 6,
+                            //         endIndent: 6,
+                            //       )
+                            //     : Container(),
+                            listData.length > 0
                                 ? Search_From(
                                     title: 'ค้นหารอบเดิน',
                                     fieldText: searchText,

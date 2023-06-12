@@ -55,9 +55,7 @@ class _Profile_PageState extends State<Profile_Page>
   Future _getInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var userId = prefs.getString('userId');
-    uuId = prefs.getString('uuId');
     print('userId: ${userId}');
-    print('uuId: ${uuId}');
     check = await Connectivity().checkConnectivity();
     try {
       setState(() {
@@ -244,108 +242,106 @@ class _Profile_PageState extends State<Profile_Page>
             },
             child: SingleChildScrollView(
               physics: AlwaysScrollableScrollPhysics(),
-              child: SafeArea(
-                child: Form(
-                  key: _formkey,
-                  child: Container(
-                    padding: EdgeInsets.fromLTRB(20, 20, 20, 80),
-                    child: Column(children: [
-                      Stack(
-                        children: [
-                          CircleAvatar(
-                            radius: 73,
-                            backgroundColor: Colors.white,
-                            child: CircleAvatar(
-                                radius: 70,
-                                backgroundColor: Colors.grey.shade100,
-                                child: image != null
-                                    ? Container(
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          image: DecorationImage(
-                                              fit: BoxFit.cover,
-                                              image: MemoryImage(convert
-                                                  .base64Decode(image!))),
-                                        ),
-                                      )
-                                    : imageProfile != null
-                                        ? Container(
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              image: DecorationImage(
-                                                  fit: BoxFit.cover,
-                                                  image: MemoryImage(
-                                                      convert.base64Decode(
-                                                          imageProfile!))),
-                                            ),
-                                          )
-                                        : loading
-                                            ? Container(
-                                                child: Icon(
-                                                    Icons.person_rounded,
-                                                    size: 140,
-                                                    color: Colors.grey),
-                                              )
-                                            : Container(
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  image: DecorationImage(
-                                                      fit: BoxFit.cover,
-                                                      image: AssetImage(
-                                                          'assets/images/HIP Smart Community Icon-03.png')),
-                                                ),
-                                              )),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: CircleAvatar(
-                                backgroundColor: Colors.white,
-                                radius: 21,
-                                child: CircleAvatar(
-                                    radius: 18,
-                                    backgroundColor:
-                                        Theme.of(context).primaryColor,
-                                    child: IconButton(
-                                      splashRadius: 20,
-                                      onPressed: () {
-                                        editProfile();
-                                      },
-                                      icon: Icon(
-                                        Icons.edit,
-                                        color: Colors.white,
-                                        size: 20,
+              child: Form(
+                key: _formkey,
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(
+                      20, 20, 20, MediaQuery.of(context).size.height * 0.15),
+                  child: Column(children: [
+                    Stack(
+                      children: [
+                        CircleAvatar(
+                          radius: 73,
+                          backgroundColor: Colors.white,
+                          child: CircleAvatar(
+                              radius: 70,
+                              backgroundColor: Colors.grey.shade100,
+                              child: image != null
+                                  ? Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: DecorationImage(
+                                            fit: BoxFit.cover,
+                                            image: MemoryImage(
+                                                convert.base64Decode(image!))),
                                       ),
-                                    ))),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text_Form_NoBorder(
-                        controller: fname,
-                        title: 'ชื่อ',
-                        icon: Icons.person,
-                        error: 'กรุณากรอกชื่อ',
-                        TypeInput: TextInputType.name,
-                      ),
-                      Text_Form_NoBorder(
-                        controller: lname,
-                        title: 'นามสกุล',
-                        icon: Icons.person_outline_rounded,
-                        error: 'กรุณากรอกชื่อ',
-                        TypeInput: TextInputType.name,
-                      ),
-                      Text_Form_NoBorder(
-                        controller: email,
-                        title: 'อีเมล',
-                        icon: Icons.email_rounded,
-                        error: 'กรุณากรอกชื่อ',
-                        TypeInput: TextInputType.emailAddress,
-                      ),
-                    ]),
-                  ),
+                                    )
+                                  : imageProfile != null
+                                      ? Container(
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            image: DecorationImage(
+                                                fit: BoxFit.cover,
+                                                image: MemoryImage(
+                                                    convert.base64Decode(
+                                                        imageProfile!))),
+                                          ),
+                                        )
+                                      : loading
+                                          ? Container(
+                                              child: Icon(Icons.person_rounded,
+                                                  size: 140,
+                                                  color: Colors.grey),
+                                            )
+                                          : Container(
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                image: DecorationImage(
+                                                    fit: BoxFit.cover,
+                                                    image: AssetImage(
+                                                        'assets/images/HIP Smart Community Icon-03.png')),
+                                              ),
+                                            )),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: CircleAvatar(
+                              backgroundColor: Colors.white,
+                              radius: 21,
+                              child: CircleAvatar(
+                                  radius: 18,
+                                  backgroundColor:
+                                      Theme.of(context).primaryColor,
+                                  child: IconButton(
+                                    splashRadius: 20,
+                                    onPressed: () {
+                                      editProfile();
+                                    },
+                                    icon: Icon(
+                                      Icons.edit,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                  ))),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text_Form_NoBorder(
+                      controller: fname,
+                      title: 'ชื่อ',
+                      icon: Icons.person,
+                      error: 'กรุณากรอกชื่อ',
+                      TypeInput: TextInputType.name,
+                    ),
+                    Text_Form_NoBorder(
+                      controller: lname,
+                      title: 'นามสกุล',
+                      icon: Icons.person_outline_rounded,
+                      error: 'กรุณากรอกชื่อ',
+                      TypeInput: TextInputType.name,
+                    ),
+                    Text_Form_NoBorder(
+                      controller: email,
+                      title: 'อีเมล',
+                      icon: Icons.email_rounded,
+                      error: 'กรุณากรอกชื่อ',
+                      TypeInput: TextInputType.emailAddress,
+                    ),
+                  ]),
                 ),
               ),
             ),

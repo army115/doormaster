@@ -1,15 +1,15 @@
 class getAdsCompany {
   int? status;
-  List<Data>? data;
+  List<DataAds>? data;
 
   getAdsCompany({this.status, this.data});
 
   getAdsCompany.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     if (json['data'] != null) {
-      data = <Data>[];
+      data = <DataAds>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(new DataAds.fromJson(v));
       });
     }
   }
@@ -24,7 +24,7 @@ class getAdsCompany {
   }
 }
 
-class Data {
+class DataAds {
   String? sId;
   String? adsversitingName;
   String? adsversitingDetail;
@@ -32,7 +32,7 @@ class Data {
   int? clickCount;
   String? companyId;
 
-  Data(
+  DataAds(
       {this.sId,
       this.adsversitingName,
       this.adsversitingDetail,
@@ -40,7 +40,7 @@ class Data {
       this.clickCount,
       this.companyId});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  DataAds.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     adsversitingName = json['adsversiting_name'];
     adsversitingDetail = json['adsversiting_detail'];

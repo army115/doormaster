@@ -14,6 +14,7 @@ import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:dotted_line/dotted_line.dart';
 
 class Logs_Today extends StatefulWidget {
   const Logs_Today({super.key});
@@ -156,7 +157,27 @@ class _Logs_TodayState extends State<Logs_Today>
                               ),
                             ),
                           ),
-                          listlogs.length > 10
+                          // listlogs.length > 0
+                          //     ? const Divider(
+                          //         height: 0,
+                          //         color: Colors.grey,
+                          //         thickness: 1,
+                          //         indent: 6,
+                          //         endIndent: 6,
+                          //       )
+                          //     : Container(),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: DottedLine(
+                              direction: Axis.horizontal,
+                              alignment: WrapAlignment.center,
+                              lineLength: double.infinity,
+                              lineThickness: 1.5,
+                              dashColor: Colors.grey.shade600,
+                              dashGapColor: Colors.white,
+                            ),
+                          ),
+                          listlogs.length > 0
                               ? Search_From(
                                   title: 'ค้นหารอบเดิน',
                                   fieldText: fieldText,
