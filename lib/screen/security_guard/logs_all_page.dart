@@ -134,10 +134,6 @@ class _Logs_AllState extends State<Logs_All>
                     children: [
                       Container(
                         margin: const EdgeInsets.fromLTRB(20, 15, 20, 10),
-                        // decoration: const BoxDecoration(
-                        // color: Colors.white,
-                        //     borderRadius:
-                        //         BorderRadius.all(Radius.circular(10))),
                         child: Column(
                           children: [
                             Search_Calendar(
@@ -154,40 +150,35 @@ class _Logs_AllState extends State<Logs_All>
                                 });
                               },
                             ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              child: DottedLine(
-                                direction: Axis.horizontal,
-                                alignment: WrapAlignment.center,
-                                lineLength: double.infinity,
-                                lineThickness: 1.5,
-                                dashColor: Colors.grey.shade600,
-                                dashGapColor: Colors.white,
-                              ),
-                            ),
-                            // listData.length > 0
-                            //     ? Divider(
-                            //         height: 0,
-                            //         color: Colors.grey,
-                            //         thickness: 1,
-                            //         indent: 6,
-                            //         endIndent: 6,
-                            //       )
-                            //     : Container(),
-                            listData.length > 0
-                                ? Search_From(
-                                    title: 'ค้นหารอบเดิน',
-                                    fieldText: searchText,
-                                    clear: () {
-                                      setState(() {
-                                        searchText.clear();
-                                        listLog = listData;
-                                      });
-                                    },
-                                    changed: (value) {
-                                      _searchData(value);
-                                    },
+                            listData.length > 10
+                                ? Column(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        child: DottedLine(
+                                          direction: Axis.horizontal,
+                                          alignment: WrapAlignment.center,
+                                          lineLength: double.infinity,
+                                          lineThickness: 2,
+                                          dashColor: Colors.grey.shade600,
+                                          dashGapColor: Colors.white,
+                                        ),
+                                      ),
+                                      Search_From(
+                                        title: 'ค้นหารอบเดิน',
+                                        fieldText: searchText,
+                                        clear: () {
+                                          setState(() {
+                                            searchText.clear();
+                                            listLog = listData;
+                                          });
+                                        },
+                                        changed: (value) {
+                                          _searchData(value);
+                                        },
+                                      ),
+                                    ],
                                   )
                                 : Container(),
                           ],

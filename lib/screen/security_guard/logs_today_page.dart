@@ -130,9 +130,6 @@ class _Logs_TodayState extends State<Logs_Today>
                   children: [
                     Container(
                       margin: const EdgeInsets.fromLTRB(20, 15, 20, 10),
-                      // decoration: const BoxDecoration(
-                      //     color: Colors.white,
-                      //     borderRadius: BorderRadius.all(Radius.circular(10))),
                       child: Column(
                         children: [
                           Material(
@@ -157,39 +154,35 @@ class _Logs_TodayState extends State<Logs_Today>
                               ),
                             ),
                           ),
-                          // listlogs.length > 0
-                          //     ? const Divider(
-                          //         height: 0,
-                          //         color: Colors.grey,
-                          //         thickness: 1,
-                          //         indent: 6,
-                          //         endIndent: 6,
-                          //       )
-                          //     : Container(),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: DottedLine(
-                              direction: Axis.horizontal,
-                              alignment: WrapAlignment.center,
-                              lineLength: double.infinity,
-                              lineThickness: 1.5,
-                              dashColor: Colors.grey.shade600,
-                              dashGapColor: Colors.white,
-                            ),
-                          ),
-                          listlogs.length > 0
-                              ? Search_From(
-                                  title: 'ค้นหารอบเดิน',
-                                  fieldText: fieldText,
-                                  clear: () {
-                                    setState(() {
-                                      fieldText.clear();
-                                      listdata = listlogs;
-                                    });
-                                  },
-                                  changed: (value) {
-                                    _searchData(value);
-                                  },
+                          listlogs.length > 10
+                              ? Column(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      child: DottedLine(
+                                        direction: Axis.horizontal,
+                                        alignment: WrapAlignment.center,
+                                        lineLength: double.infinity,
+                                        lineThickness: 2,
+                                        dashColor: Colors.grey.shade600,
+                                        dashGapColor: Colors.white,
+                                      ),
+                                    ),
+                                    Search_From(
+                                      title: 'ค้นหารอบเดิน',
+                                      fieldText: fieldText,
+                                      clear: () {
+                                        setState(() {
+                                          fieldText.clear();
+                                          listdata = listlogs;
+                                        });
+                                      },
+                                      changed: (value) {
+                                        _searchData(value);
+                                      },
+                                    )
+                                  ],
                                 )
                               : Container(),
                         ],
