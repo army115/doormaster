@@ -188,8 +188,8 @@ class _Visitor_PageState extends State<Visitor_Page> {
                   valuse['tel_visitor'] = phone.text;
                   valuse['visipeople'] = visitPeople.text;
                   valuse['created_by'] = userId;
+                  valuse['typeDevices'] = 'thinmoo';
                   _craateVisitor(valuse);
-                  print(valuse);
                 }
               }),
           body: SafeArea(

@@ -1,4 +1,6 @@
 // ignore_for_file: prefer_const_constructors_in_immutables, avoid_single_cascade_in_expression_statements, avoid_print, use_build_context_synchronously, unused_local_variable, unused_import
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
@@ -32,7 +34,7 @@ class _Login_PageState extends State<Login_Page> {
   TextEditingController _username = TextEditingController();
   TextEditingController _password = TextEditingController();
   bool loading = false;
-  bool isAnimating = true;
+  bool remember = false;
 
   Future doLogin() async {
     if (_formkey.currentState!.validate()) {
@@ -71,6 +73,7 @@ class _Login_PageState extends State<Login_Page> {
               SharedPreferences prefs = await SharedPreferences.getInstance();
               await prefs.setString('token', token!);
               await prefs.setString('username', data.single.userName!);
+              await prefs.setString('password', _password.text);
               await prefs.setString('fname', data.single.firstName!);
               await prefs.setString('lname', data.single.surName!);
               await prefs.setInt('role', data.single.mobile!);
@@ -158,9 +161,44 @@ class _Login_PageState extends State<Login_Page> {
     }
   }
 
+  void _Rememberme(bool? value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool("remember", value!);
+    setState(() {
+      remember = value;
+      print('remember : $remember');
+    });
+  }
+
+  void _loadUsernamePassword() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var username = prefs.getString("username");
+      var password = prefs.getString("password");
+      var remeberMe = prefs.getBool("remember") ?? false;
+      log(remeberMe.toString());
+      if (remeberMe) {
+        setState(() {
+          remember = true;
+        });
+
+        _username.text = username!;
+        _password.text = password!;
+        print('remember : $remember');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  void initState() {
+    _loadUsernamePassword();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final isInit = isAnimating || loading == false;
     return WillPopScope(
       onWillPop: () async => _onBackButtonDoubleClicked(),
       child: Scaffold(
@@ -202,36 +240,38 @@ class _Login_PageState extends State<Login_Page> {
                           }
                         },
                       ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Checkbox(
+                                  activeColor: Theme.of(context).primaryColor,
+                                  value: remember,
+                                  onChanged: _Rememberme),
+                              Text(
+                                'บันทึกรหัสผ่าน',
+                              )
+                            ],
+                          ),
+                          TextButton(
+                              style: const ButtonStyle(
+                                  overlayColor: MaterialStatePropertyAll(
+                                      Colors.transparent)),
+                              onPressed: () {},
+                              child: const Text(
+                                'ลืมรหัสผ่าน',
+                                style: TextStyle(
+                                  decoration: TextDecoration.underline,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 16,
+                                ),
+                              ))
+                        ],
+                      ),
                       const SizedBox(
                         height: 15,
                       ),
-                      // AnimatedContainer(
-                      //   duration: const Duration(milliseconds: 200),
-                      //   onEnd: () => setState(() {
-                      //     isAnimating = !isAnimating;
-                      //   }),
-                      //   width: !loading
-                      //       ? MediaQuery.of(context).size.width * 0.5
-                      //       : 70,
-                      //   height: 45,
-                      //   child: !isInit
-                      //       ? Container(
-                      //           decoration: BoxDecoration(
-                      //               shape: BoxShape.circle,
-                      //               color: Theme.of(context).primaryColor),
-                      //           child: const Center(
-                      //             child: CircularProgressIndicator(
-                      //               color: Colors.white,
-                      //             ),
-                      //           ),
-                      //         )
-                      //       : Buttons(
-                      //           title: 'เข้าสู่ระบบ',
-                      //           press: () {
-                      //             doLogin();
-                      //           },
-                      //         ),
-                      // ),
                       Button_Animation(
                         title: 'เข้าสู่ระบบ',
                         press: () async {

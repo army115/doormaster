@@ -36,6 +36,8 @@
 	<string>bluetooth</string>
 	<key>NSCalendarsUsageDescription</key>
 	<string>Calendars</string>
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>Our app needs access to your camera to allow you to take photos and upload them to your profile and scan QR Code.</string>
 	<key>NSContactsUsageDescription</key>
@@ -77,8 +79,6 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>io.flutter.embedded_views_preview</key>
-	<true/>
 	<key>kTCCServiceMediaLibrary</key>
 	<string>media</string>
 </dict>

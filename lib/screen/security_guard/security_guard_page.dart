@@ -72,7 +72,7 @@ class _Security_GuardState extends State<Security_Guard> {
 
         //loop add list []
         logsList.forEach((value) => listCheckpoint.add(value.chekpointUUid!));
-        print(listCheckpoint);
+        print("listCheckpointId : ${listCheckpoint}");
       }
     } catch (error) {
       print(error);

@@ -130,7 +130,6 @@ class _Home_PageState extends State<Home_Page>
         await prefs.setString('fname', data.single.firstName!);
         await prefs.setString('lname', data.single.surName!);
         await prefs.setInt('role', data.single.mobile!);
-        await prefs.setBool('security', false);
         await prefs.setString('userId', data.single.sId!);
         await prefs.setString('companyId', data.single.companyId!);
         await prefs.setString('uuId', data.single.userUuid!);
@@ -139,12 +138,18 @@ class _Home_PageState extends State<Home_Page>
           await prefs.setString('image', data.single.image!);
         }
 
-        if (data.single.devicegroupUuid != null) {
+        if (data.single.devicegroupUuid != null && security != true) {
           await prefs.setString('deviceId', data.single.devicegroupUuid!);
         }
-        if (data.single.weigangroupUuid != null) {
+
+        if (data.single.weigangroupUuid != null && security != true) {
           await prefs.setString('weiganId', data.single.weigangroupUuid!);
         }
+
+        print('uuId: ${prefs.getString('uuId')}');
+        print('image: ${prefs.getString('image')}');
+        print('deviceId: ${prefs.getString('deviceId')}');
+        print('weiganId: ${prefs.getString('weiganId')}');
       }
     } catch (error) {
       print(error);
