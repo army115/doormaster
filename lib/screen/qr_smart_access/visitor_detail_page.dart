@@ -50,7 +50,7 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
   }
 
   Future _QrcodeImage() async {
-    var QRCode = widget.QRcodeData[2];
+    var QRCode = widget.visitordData[6];
     setState(() {
       _qrcodeImage = convert.base64Decode(QRCode);
     });
@@ -270,10 +270,10 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
                           SizedBox(
                             height: 10,
                           ),
-                          SelectableText(
-                            'รหัสผ่าน : ${widget.QRcodeData[1]}',
-                            style: TextStyle(color: Colors.white, fontSize: 18),
-                          ),
+                          // SelectableText(
+                          //   'รหัสผ่าน : ${widget.QRcodeData[1]}',
+                          //   style: TextStyle(color: Colors.white, fontSize: 18),
+                          // ),
                         ],
                       ),
                     ),

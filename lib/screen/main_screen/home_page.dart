@@ -145,11 +145,6 @@ class _Home_PageState extends State<Home_Page>
         if (data.single.weigangroupUuid != null && security != true) {
           await prefs.setString('weiganId', data.single.weigangroupUuid!);
         }
-
-        print('uuId: ${prefs.getString('uuId')}');
-        print('image: ${prefs.getString('image')}');
-        print('deviceId: ${prefs.getString('deviceId')}');
-        print('weiganId: ${prefs.getString('weiganId')}');
       }
     } catch (error) {
       print(error);

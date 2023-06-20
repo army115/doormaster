@@ -1,13 +1,13 @@
-class getDoorWeigan {
-  List<DataWeigan>? data;
+class getDoorWiegand {
+  List<DataWiegand>? data;
 
-  getDoorWeigan({this.data});
+  getDoorWiegand({this.data});
 
-  getDoorWeigan.fromJson(Map<String, dynamic> json) {
+  getDoorWiegand.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
-      data = <DataWeigan>[];
+      data = <DataWiegand>[];
       json['data'].forEach((v) {
-        data!.add(new DataWeigan.fromJson(v));
+        data!.add(new DataWiegand.fromJson(v));
       });
     }
   }
@@ -21,7 +21,7 @@ class getDoorWeigan {
   }
 }
 
-class DataWeigan {
+class DataWiegand {
   String? sId;
   String? weigangroupUuid;
   String? companyId;
@@ -31,7 +31,7 @@ class DataWeigan {
   String? createdAt;
   List<Det>? det;
 
-  DataWeigan(
+  DataWiegand(
       {this.sId,
       this.weigangroupUuid,
       this.companyId,
@@ -41,7 +41,7 @@ class DataWeigan {
       this.createdAt,
       this.det});
 
-  DataWeigan.fromJson(Map<String, dynamic> json) {
+  DataWiegand.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     weigangroupUuid = json['weigangroup_uuid'];
     companyId = json['company_id'];

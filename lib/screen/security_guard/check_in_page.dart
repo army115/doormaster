@@ -259,7 +259,7 @@ class _Check_InState extends State<Check_In> {
 
   @override
   Widget build(BuildContext context) {
-    String date = DateFormat('y-MM-dd').format(widget.timeCheck);
+    String date = DateFormat('dd-MM-y').format(widget.timeCheck);
     String time = DateFormat('HH:mm:ss').format(widget.timeCheck);
     // String dateTime =
     //     DateFormat('yyyy-MM-ddTHH:mm:ss.SSSZ').format(widget.timeCheck);

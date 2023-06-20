@@ -9,7 +9,7 @@ import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/searchbar/search_from.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/models/doors_device.dart';
-import 'package:doormster/models/getdoor_weigan.dart';
+import 'package:doormster/models/getdoor_wiegand.dart';
 import 'package:doormster/models/opendoors_model.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:doormster/service/connect_native.dart';
@@ -37,7 +37,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
 
   List<Lists> listDevice = [];
   List<Lists> devicelidt = [];
-  List<DataWeigan> listWeigan = [];
+  List<DataWiegand> listWeigan = [];
   List<Det>? listdet = [];
   List<Det>? detlist = [];
   bool loading = false;
@@ -87,7 +87,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
       );
 
       if (res.statusCode == 200 && response.statusCode == 200) {
-        getDoorWeigan doorsWeigan = getDoorWeigan.fromJson(response.data);
+        getDoorWiegand doorsWeigan = getDoorWiegand.fromJson(response.data);
 
         if (res.data == 'มีบางอย่างผิดพลาด') {
           listDevice = [];
@@ -252,7 +252,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
           Icons.warning_amber_rounded,
           Colors.orange,
           'ตกลง', () {
-        Navigator.of(context).pop();
+        Navigator.of(context, rootNavigator: true).pop();
       }, false, false);
       setState(() {
         loading = false;

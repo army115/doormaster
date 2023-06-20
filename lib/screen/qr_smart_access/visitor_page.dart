@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/button/button.dart';
@@ -11,6 +13,7 @@ import 'package:doormster/components/text_form/text_form.dart';
 import 'package:doormster/components/text_form/text_form_number.dart';
 import 'package:doormster/models/device_group.dart';
 import 'package:doormster/models/visitor_model.dart';
+import 'package:doormster/models/wiegand_model.dart';
 import 'package:doormster/screen/qr_smart_access/visitor_detail_page.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +43,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
   var userId;
   var companyId;
   var deviceId;
+  var weiganId;
 
   List<DataDrvices> listDevice = [];
   bool loading = false;
@@ -49,10 +53,12 @@ class _Visitor_PageState extends State<Visitor_Page> {
     userId = prefs.getString('userId');
     companyId = prefs.getString('companyId');
     deviceId = prefs.getString('deviceId');
+    weiganId = prefs.getString('weiganId');
 
     print('userId: ${userId}');
     print('companyId: ${companyId}');
     print('deviceId: ${deviceId}');
+    print('weiganId: ${weiganId}');
 
     try {
       setState(() {
@@ -90,7 +96,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
     }
   }
 
-  Future _craateVisitor(Map<String, dynamic> values) async {
+  Future _createVisitor(Map<String, dynamic> values) async {
     try {
       setState(() {
         loading = true;
@@ -161,6 +167,79 @@ class _Visitor_PageState extends State<Visitor_Page> {
     }
   }
 
+  Future _createVisitorWiegand(Map<String, dynamic> values) async {
+    try {
+      setState(() {
+        loading = true;
+      });
+      var url = '${Connect_api().domain}/createVisitorWeigan';
+      var response = await Dio().post(url,
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          }),
+          data: values);
+
+      if (response.statusCode == 200) {
+        var visitorData;
+        var QRcodeData;
+        WiegandModel wiegandModel = WiegandModel.fromJson(response.data);
+        visitorData = [
+          wiegandModel.visitorName,
+          wiegandModel.visitorPeople,
+          wiegandModel.startDate,
+          wiegandModel.endDate,
+          wiegandModel.telVisitor,
+          wiegandModel.usableCount,
+          wiegandModel.qrcode
+        ];
+        log(visitorData.toString());
+        // QRcodeData = [
+        //   visitormodel.qrcode!.tempCode,
+        //   visitormodel.qrcode!.tempPwd,
+        //   visitormodel.qrcode!.qrCode,
+        // ];
+
+        print('craate Visitor Success');
+        print(values);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Visitor_Detail(
+                      visitordData: visitorData,
+                      QRcodeData: QRcodeData,
+                    )));
+        setState(() {
+          loading = false;
+        });
+        snackbar(context, Theme.of(context).primaryColor,
+            'สร้าง QR Code สำเร็จ', Icons.check_circle_outline_rounded);
+      } else {
+        snackbar(context, Colors.red, 'สร้าง QR Code ไม่สำเร็จ',
+            Icons.highlight_off_rounded);
+        print('craate Visitor Fail!!');
+        print(response.data);
+        setState(() {
+          loading = false;
+        });
+      }
+    } catch (error) {
+      print(error);
+      dialogOnebutton_Subtitle(
+          context,
+          'พบข้อผิดพลาด',
+          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+          Icons.warning_amber_rounded,
+          Colors.orange,
+          'ตกลง', () {
+        Navigator.of(context).pop();
+      }, false, false);
+      setState(() {
+        loading = false;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -180,7 +259,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
               press: () {
                 if (_kye.currentState!.validate()) {
                   Map<String, dynamic> valuse = Map();
-                  valuse['devsns'] = onItemSelect;
+                  valuse['weiganId'] = weiganId;
                   valuse['usableCount'] = useCount.text;
                   valuse['startDate'] = startDate.text;
                   valuse['endDate'] = endDate.text;
@@ -188,8 +267,9 @@ class _Visitor_PageState extends State<Visitor_Page> {
                   valuse['tel_visitor'] = phone.text;
                   valuse['visipeople'] = visitPeople.text;
                   valuse['created_by'] = userId;
-                  valuse['typeDevices'] = 'thinmoo';
-                  _craateVisitor(valuse);
+                  valuse['typeDevices'] = 'wiegand';
+                  // _crateVisitor(valuse);
+                  _createVisitorWiegand(valuse);
                 }
               }),
           body: SafeArea(
@@ -225,7 +305,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
                               controller: phone,
                               title: 'เบอร์โทร',
                               icon: Icons.phone,
-                              type: TextInputType.phone,
+                              type: TextInputType.name,
                               maxLength: 10,
                               error: (values) {
                                 if (values.isEmpty) {
@@ -274,7 +354,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
                               controller: useCount,
                               title: 'จำนวนครั้ง',
                               icon: Icons.add_circle_outline_sharp,
-                              type: TextInputType.number,
+                              type: TextInputType.name,
                               maxLength: 2,
                               error: (values) {
                                 if (values.isEmpty) {

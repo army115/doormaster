@@ -60,7 +60,7 @@ class _ScannerState extends State<Scanner> {
             ),
           ),
           Positioned(
-              top: 35,
+              top: MediaQuery.of(context).size.height * 0.05,
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -71,7 +71,7 @@ class _ScannerState extends State<Scanner> {
               )),
           Positioned(
             left: 10,
-            top: 35,
+            top: MediaQuery.of(context).size.height * 0.05,
             child: Container(
               decoration:
                   BoxDecoration(shape: BoxShape.circle, color: Colors.white30),
@@ -86,7 +86,7 @@ class _ScannerState extends State<Scanner> {
           ),
           Positioned(
               right: 15,
-              top: 25,
+              top: MediaQuery.of(context).size.height * 0.04,
               child: IconButton(
                 onPressed: () async {
                   await controller?.toggleFlash();

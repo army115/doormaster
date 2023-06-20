@@ -150,6 +150,7 @@ class _Settings_PageState extends State<Settings_Page> {
       appBar: AppBar(title: Text('การตั้งค่า')),
       body: Container(
         child: ListView.separated(
+          physics: ClampingScrollPhysics(),
           itemCount: _menu.length,
           itemBuilder: (context, index) {
             return ListTile(

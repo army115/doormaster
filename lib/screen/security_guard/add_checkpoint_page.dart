@@ -215,10 +215,8 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
 
   @override
   Widget build(BuildContext context) {
-    var date = DateFormat('y-MM-dd').format(widget.timeCheck);
+    var date = DateFormat('dd-MM-y').format(widget.timeCheck);
     var time = DateFormat('HH:mm:ss').format(widget.timeCheck);
-    var Datetime = DateFormat('y-MM-dd HH:mm:ss').format(widget.timeCheck);
-    print('time : $Datetime}');
 
     return WillPopScope(
       onWillPop: () async {
