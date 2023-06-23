@@ -68,7 +68,7 @@ class _Login_PageState extends State<Login_Page> {
             print('uuId: ${data.single.userUuid}');
             print('login success');
             print('token: ${token}');
-            if (data.single.block == 0) {
+            if (data.single.block == 0 || data.single.block == null) {
               //ส่งค่าตัวแปร
               SharedPreferences prefs = await SharedPreferences.getInstance();
               await prefs.setString('token', token!);

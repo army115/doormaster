@@ -9,6 +9,7 @@ import 'package:doormster/components/button/buttonback_appbar.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/map/map_page.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
+import 'package:doormster/components/text/text_icon.dart';
 import 'package:doormster/models/get_checklist.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
@@ -259,32 +260,28 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              children: [
-                                Icon(Icons.calendar_month_rounded, size: 25),
-                                SizedBox(width: 5),
-                                Expanded(
-                                  child: Text('วันที่ $date เวลา $time'),
+                            textIcon(
+                                'วันที่ $date เวลา $time',
+                                Icon(
+                                  Icons.calendar_month_rounded,
+                                  size: 25,
                                 ),
-                              ],
+                                color: Colors.red),
+                            SizedBox(height: 10),
+                            textIcon(
+                              'จุดตรวจ : $checkpointName',
+                              Icon(
+                                Icons.maps_home_work_rounded,
+                                size: 25,
+                              ),
                             ),
                             SizedBox(height: 10),
-                            Row(
-                              children: [
-                                Icon(Icons.maps_home_work_rounded, size: 25),
-                                SizedBox(width: 5),
-                                Expanded(
-                                  child: Text('จุดตรวจ : '),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 10),
-                            Row(
-                              children: [
-                                Icon(Icons.task_rounded, size: 25),
-                                SizedBox(width: 5),
-                                Text('รายการตรวจ'),
-                              ],
+                            textIcon(
+                              'รายการตรวจ',
+                              Icon(
+                                Icons.task_rounded,
+                                size: 25,
+                              ),
                             ),
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 5),
@@ -307,20 +304,13 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
                             ),
                             ExpansionTile(
                               tilePadding: EdgeInsets.zero,
-                              title: Row(
-                                children: [
-                                  Icon(
-                                    Icons.location_on_sharp,
-                                    size: 30,
-                                    color: Colors.red.shade600,
-                                  ),
-                                  SizedBox(width: 5),
-                                  Text(
-                                    'ตำแหน่งจุดตรวจ',
-                                    style: TextStyle(
-                                        fontSize: 16, color: Colors.black),
-                                  ),
-                                ],
+                              title: textIcon(
+                                'ตำแหน่งจุดตรวจ',
+                                Icon(
+                                  Icons.location_on_sharp,
+                                  size: 25,
+                                  color: Colors.red.shade600,
+                                ),
                               ),
                               children: [
                                 verify == 1

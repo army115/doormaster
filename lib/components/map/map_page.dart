@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, prefer_collection_literals
 
 import 'dart:io';
 import 'package:flutter/foundation.dart';
@@ -99,7 +99,16 @@ class _Map_PageState extends State<Map_Page> {
                       markers: _markers,
                       zoomControlsEnabled: true,
                       myLocationButtonEnabled: false,
-
+                      //สร้างวงกลมรัศมี
+                      // circles: Set<Circle>.of([
+                      //   Circle(
+                      //       circleId: CircleId('1'),
+                      //       fillColor: Colors.blue.withOpacity(0.5),
+                      //       center: LatLng(widget.lat, widget.lng),
+                      //       strokeColor: Colors.blue,
+                      //       strokeWidth: 2,
+                      //       radius: 20)
+                      // ]),
                       // myLocationEnabled: true,
                       initialCameraPosition: CameraPosition(
                         target: LatLng(widget.lat, widget.lng),

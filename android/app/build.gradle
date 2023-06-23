@@ -63,7 +63,7 @@ android {
         multiDexEnabled true
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 18
+        versionCode 19
         versionName '1.2.5'
         // testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -78,6 +78,12 @@ android {
     // }
 
     signingConfigs {
+    //     release {
+    //     keyAlias 'mykey'
+    //     keyPassword 'HIP1234'
+    //     storeFile file('/Users/hipprogrammer/Desktop/doormaster/android/key/keystore.jks')
+    //     storePassword 'HIP1234'
+    // }
        release {
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']

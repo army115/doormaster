@@ -10,6 +10,7 @@ import 'package:doormster/components/dropdown/dropdown_noborder.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/map/map_page.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
+import 'package:doormster/components/text/text_icon.dart';
 import 'package:doormster/components/text_form/text_form_noborder_validator.dart';
 import 'package:doormster/models/get_checklist.dart';
 import 'package:doormster/screen/security_guard/report_logs_page.dart';
@@ -318,56 +319,44 @@ class _Check_InState extends State<Check_In> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              children: [
-                                Icon(Icons.edit_calendar_rounded, size: 25),
-                                SizedBox(width: 5),
-                                Expanded(
-                                  child: Text(
-                                    'วันที่ $date เวลา $time',
-                                    style: TextStyle(color: Colors.red),
-                                  ),
+                            textIcon(
+                                'วันที่ $date เวลา $time',
+                                Icon(
+                                  Icons.edit_calendar_rounded,
+                                  size: 25,
                                 ),
-                              ],
+                                color: Colors.red),
+                            SizedBox(height: 10),
+                            textIcon(
+                              'รอบเดิน : ${widget.roundName}',
+                              Icon(
+                                Icons.calendar_month_rounded,
+                                size: 25,
+                              ),
                             ),
                             SizedBox(height: 10),
-                            Row(
-                              children: [
-                                Icon(Icons.calendar_month_rounded, size: 25),
-                                SizedBox(width: 5),
-                                Expanded(
-                                  child: Text('รอบเดิน : ${widget.roundName}'),
-                                ),
-                              ],
+                            textIcon(
+                              'ช่วงเวลา : ${widget.roundStart} น. ถึง ${widget.roundEnd} น.',
+                              Icon(
+                                Icons.access_time_rounded,
+                                size: 25,
+                              ),
                             ),
                             SizedBox(height: 10),
-                            Row(
-                              children: [
-                                Icon(Icons.access_time_rounded, size: 25),
-                                SizedBox(width: 5),
-                                Expanded(
-                                  child: Text(
-                                      'ช่วงเวลา : ${widget.roundStart} น. ถึง ${widget.roundEnd} น.'),
-                                ),
-                              ],
+                            textIcon(
+                              'จุดตรวจ : $checkpointName',
+                              Icon(
+                                Icons.maps_home_work_rounded,
+                                size: 25,
+                              ),
                             ),
                             SizedBox(height: 10),
-                            Row(
-                              children: [
-                                Icon(Icons.maps_home_work_rounded, size: 25),
-                                SizedBox(width: 5),
-                                Expanded(
-                                  child: Text('จุดตรวจ : $checkpointName'),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 10),
-                            Row(
-                              children: [
-                                Icon(Icons.task_rounded, size: 25),
-                                SizedBox(width: 5),
-                                Text('รายการตรวจ'),
-                              ],
+                            textIcon(
+                              'รายการตรวจ',
+                              Icon(
+                                Icons.task_rounded,
+                                size: 25,
+                              ),
                             ),
                             ListView.builder(
                                 shrinkWrap: true,
@@ -383,12 +372,12 @@ class _Check_InState extends State<Check_In> {
                                             value: false,
                                             validator: 'กรุณาเลือกรายการ',
                                           ))),
-                            Row(
-                              children: [
-                                Icon(Icons.camera_alt_rounded, size: 25),
-                                SizedBox(width: 5),
-                                Text('รูปภาพประกอบ'),
-                              ],
+                            textIcon(
+                              'รูปภาพประกอบ',
+                              Icon(
+                                Icons.camera_alt_rounded,
+                                size: 25,
+                              ),
                             ),
                             Container(
                               margin: EdgeInsets.symmetric(vertical: 10),
@@ -491,12 +480,12 @@ class _Check_InState extends State<Check_In> {
                                         : Container(),
                                   ]),
                             ),
-                            Row(
-                              children: [
-                                Icon(Icons.assignment_rounded, size: 25),
-                                SizedBox(width: 5),
-                                Text('บันทึกเหตุการณ์'),
-                              ],
+                            textIcon(
+                              'บันทึกเหตุการณ์',
+                              Icon(
+                                Icons.assignment_rounded,
+                                size: 25,
+                              ),
                             ),
                             Dropdown_NoBorder(
                               title: 'เลือกสถานการณ์',
@@ -521,20 +510,13 @@ class _Check_InState extends State<Check_In> {
                             SizedBox(height: 10),
                             ExpansionTile(
                               tilePadding: EdgeInsets.zero,
-                              title: Row(
-                                children: [
-                                  Icon(
-                                    Icons.location_on_sharp,
-                                    size: 30,
-                                    color: Colors.red.shade600,
-                                  ),
-                                  SizedBox(width: 5),
-                                  Text(
-                                    'ตำแหน่งจุดตรวจ',
-                                    style: TextStyle(
-                                        fontSize: 16, color: Colors.black),
-                                  ),
-                                ],
+                              title: textIcon(
+                                'ตำแหน่งจุดตรวจ',
+                                Icon(
+                                  Icons.location_on_sharp,
+                                  size: 25,
+                                  color: Colors.red.shade600,
+                                ),
                               ),
                               children: [
                                 verify == 0

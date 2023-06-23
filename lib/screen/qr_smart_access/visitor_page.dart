@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
 import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/button/button.dart';
@@ -38,6 +37,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
   final endDate = TextEditingController();
   final useCount = TextEditingController();
   final devices = TextEditingController();
+  final types = TextEditingController();
 
   var onItemSelect;
   var userId;
@@ -194,11 +194,6 @@ class _Visitor_PageState extends State<Visitor_Page> {
           wiegandModel.qrcode
         ];
         log(visitorData.toString());
-        // QRcodeData = [
-        //   visitormodel.qrcode!.tempCode,
-        //   visitormodel.qrcode!.tempPwd,
-        //   visitormodel.qrcode!.qrCode,
-        // ];
 
         print('craate Visitor Success');
         print(values);
@@ -258,17 +253,29 @@ class _Visitor_PageState extends State<Visitor_Page> {
               title: 'สร้าง QRCode',
               press: () {
                 if (_kye.currentState!.validate()) {
+                  if (types.text == "thinmoo") {
+                    Map<String, dynamic> valuse = Map();
+                    valuse['devsns'] = onItemSelect;
+                    valuse['usableCount'] = useCount.text;
+                    valuse['startDate'] = startDate.text;
+                    valuse['endDate'] = endDate.text;
+                    valuse['visitor_name'] = visitName.text;
+                    valuse['tel_visitor'] = phone.text;
+                    valuse['visipeople'] = visitPeople.text;
+                    valuse['created_by'] = userId;
+                    valuse['typeDevices'] = types.text;
+                    _createVisitor(valuse);
+                  } else if (types.text == "wiegand") {}
                   Map<String, dynamic> valuse = Map();
                   valuse['weiganId'] = weiganId;
-                  valuse['usableCount'] = useCount.text;
+                  valuse['usableCount'] = "1";
                   valuse['startDate'] = startDate.text;
                   valuse['endDate'] = endDate.text;
                   valuse['visitor_name'] = visitName.text;
                   valuse['tel_visitor'] = phone.text;
                   valuse['visipeople'] = visitPeople.text;
                   valuse['created_by'] = userId;
-                  valuse['typeDevices'] = 'wiegand';
-                  // _crateVisitor(valuse);
+                  valuse['typeDevices'] = types.text;
                   _createVisitorWiegand(valuse);
                 }
               }),
@@ -317,26 +324,55 @@ class _Visitor_PageState extends State<Visitor_Page> {
                                 }
                               },
                             ),
-                            Text('สิทธ์การเข้าถึง'),
+                            Text('ประเภทอุปกรณ์'),
                             Dropdown(
-                              title: deviceId == null || listDevice.length == 0
-                                  ? 'ไม่มีอุปกรณ์'
-                                  : 'เลือกอุปกรณ์',
-                              controller: devices,
-                              leftIcon: Icons.mobile_friendly,
-                              onChanged: (value) {
-                                final index = listDevice.indexWhere(
-                                    (item) => item.deviceName == value);
-                                if (index > -1) {
-                                  onItemSelect = listDevice[index].deviceDevSn;
-                                }
-                                print(onItemSelect);
-                              },
-                              error: 'กรุณากเลือกบริษัท',
-                              listItem: listDevice
-                                  .map((value) => value.deviceName.toString())
-                                  .toList(),
-                            ),
+                                title:
+                                    // deviceId == null || listDevice.length == 0
+                                    //     ? 'ไม่มีอุปกรณ์'
+                                    //     :
+                                    'เลือกประเภท',
+                                controller: types,
+                                leftIcon: Icons.app_settings_alt_rounded,
+                                onChanged: (value) {
+                                  setState(() {
+                                    types.text = value;
+                                  });
+                                  print(value);
+                                },
+                                error: 'กรุณาเลือกประเภท',
+                                listItem: ['thinmoo', 'wiegand']),
+                            types.text == 'thinmoo'
+                                ? Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text('สิทธ์การเข้าถึง'),
+                                      Dropdown(
+                                        title: deviceId == null ||
+                                                listDevice.length == 0
+                                            ? 'ไม่มีอุปกรณ์'
+                                            : 'เลือกอุปกรณ์',
+                                        controller: devices,
+                                        leftIcon: Icons.mobile_friendly,
+                                        onChanged: (value) {
+                                          final index = listDevice.indexWhere(
+                                              (item) =>
+                                                  item.deviceName == value);
+                                          if (index > -1) {
+                                            onItemSelect =
+                                                listDevice[index].deviceDevSn;
+                                          }
+                                          print(onItemSelect);
+                                        },
+                                        error: 'กรุณากเลือกบริษัท',
+                                        listItem: listDevice
+                                            .map((value) =>
+                                                value.deviceName.toString())
+                                            .toList(),
+                                      ),
+                                    ],
+                                  )
+                                : Container(),
                             Text('เริ่มต้น'),
                             Date_time(
                                 controller: startDate,
@@ -349,21 +385,29 @@ class _Visitor_PageState extends State<Visitor_Page> {
                                 title: 'เลือกวันที่',
                                 leftIcon: Icons.event_note_rounded,
                                 error: 'กรุณาเลือกวันที่'),
-                            Text('สิทธิ์การใช้งาน'),
-                            TextForm_Number(
-                              controller: useCount,
-                              title: 'จำนวนครั้ง',
-                              icon: Icons.add_circle_outline_sharp,
-                              type: TextInputType.name,
-                              maxLength: 2,
-                              error: (values) {
-                                if (values.isEmpty) {
-                                  return 'กรุณาเพิ่มสิทธิ์การใช้งาน';
-                                } else {
-                                  return null;
-                                }
-                              },
-                            ),
+                            types.text == 'thinmoo'
+                                ? Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text('สิทธิ์การใช้งาน'),
+                                      TextForm_Number(
+                                        controller: useCount,
+                                        title: 'จำนวนครั้ง',
+                                        icon: Icons.add_circle_outline_sharp,
+                                        type: TextInputType.name,
+                                        maxLength: 2,
+                                        error: (values) {
+                                          if (values.isEmpty) {
+                                            return 'กรุณาเพิ่มสิทธิ์การใช้งาน';
+                                          } else {
+                                            return null;
+                                          }
+                                        },
+                                      ),
+                                    ],
+                                  )
+                                : Container(),
                           ],
                         ),
                       ]),
