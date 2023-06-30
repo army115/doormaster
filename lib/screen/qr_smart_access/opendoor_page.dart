@@ -65,15 +65,28 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
         loading = true;
       });
 
-      //call api device
-      var url = '${Connect_api().domain}/getdeviceuuidmobile/$deviceId';
-      var res = await Dio().get(
-        url,
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        }),
-      );
+      if (deviceId != null) {
+        //call api device
+        var url = '${Connect_api().domain}/getdeviceuuidmobile/$deviceId';
+        var res = await Dio().get(
+          url,
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          }),
+        );
+        if (res.statusCode == 200) {
+          if (res.data == 'มีบางอย่างผิดพลาด') {
+            listDevice = [];
+          } else {
+            DoorsDeviece deviceDoors = DoorsDeviece.fromJson(res.data);
+            setState(() {
+              listDevice = deviceDoors.lists!;
+              devicelidt = listDevice;
+            });
+          }
+        }
+      }
 
       //call api Weigan
       var urlWeigan =
@@ -86,16 +99,8 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
         }),
       );
 
-      if (res.statusCode == 200 && response.statusCode == 200) {
+      if (response.statusCode == 200) {
         getDoorWiegand doorsWeigan = getDoorWiegand.fromJson(response.data);
-
-        if (res.data == 'มีบางอย่างผิดพลาด') {
-          listDevice = [];
-        } else {
-          DoorsDeviece deviceDoors = DoorsDeviece.fromJson(res.data);
-          listDevice = deviceDoors.lists!;
-          devicelidt = listDevice;
-        }
 
         setState(() {
           listWeigan = doorsWeigan.data!;
@@ -107,17 +112,6 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
           // เก็บ List Det จาก DataWeigan ลงในตัวแปร listdet
           listdet?.addAll(listWeigan[i].det!);
         }
-      }
-
-      if (res.data == 'มีบางอย่างผิดพลาด') {
-        listDevice = [];
-      } else {
-        DoorsDeviece deviceDoors = DoorsDeviece.fromJson(res.data);
-        setState(() {
-          listDevice = deviceDoors.lists!;
-          devicelidt = listDevice;
-          loading = false;
-        });
       }
     } catch (error) {
       print(error);

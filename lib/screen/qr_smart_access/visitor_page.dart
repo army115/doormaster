@@ -1,16 +1,21 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
 import 'dart:developer';
+import 'package:checkbox_formfield/checkbox_formfield.dart';
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/button/button.dart';
+import 'package:doormster/components/button/buttonback_appbar.dart';
 import 'package:doormster/components/datetime/date_time.dart';
 import 'package:doormster/components/dropdown/dropdown.dart';
+import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
 import 'package:doormster/components/loading/loading.dart';
+import 'package:doormster/components/searchbar/search_from.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/components/text_form/text_form.dart';
 import 'package:doormster/components/text_form/text_form_number.dart';
 import 'package:doormster/models/device_group.dart';
+import 'package:doormster/models/getdoor_wiegand.dart';
 import 'package:doormster/models/visitor_model.dart';
 import 'package:doormster/models/wiegand_model.dart';
 import 'package:doormster/screen/qr_smart_access/visitor_detail_page.dart';
@@ -38,6 +43,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
   final useCount = TextEditingController();
   final devices = TextEditingController();
   final types = TextEditingController();
+  final selectDevices = TextEditingController();
 
   var onItemSelect;
   var userId;
@@ -46,6 +52,9 @@ class _Visitor_PageState extends State<Visitor_Page> {
   var weiganId;
 
   List<DataDrvices> listDevice = [];
+  List<DataWiegand> listWeigan = [];
+  List<Det>? listdet = [];
+  List<Det>? detlist = [];
   bool loading = false;
 
   Future _getDevice() async {
@@ -64,21 +73,50 @@ class _Visitor_PageState extends State<Visitor_Page> {
       setState(() {
         loading = true;
       });
-      var url = '${Connect_api().domain}/getdevicegroup_uuid/$deviceId';
-      var response = await Dio().get(
-        url,
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        }),
-      );
-      if (response.statusCode == 200) {
-        DeviceGroup deviceGp = DeviceGroup.fromJson(response.data);
-        setState(() {
-          listDevice = deviceGp.data!;
-          loading = false;
-        });
+      if (deviceId != null) {
+        var url = '${Connect_api().domain}/getdevicegroup_uuid/$deviceId';
+        var response = await Dio().get(
+          url,
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          }),
+        );
+        if (response.statusCode == 200) {
+          DeviceGroup deviceGp = DeviceGroup.fromJson(response.data);
+          setState(() {
+            listDevice = deviceGp.data!;
+            loading = false;
+          });
+        }
       }
+      if (weiganId != null) {
+        //call api Weigan
+        var urlWeigan =
+            '${Connect_api().domain}/get/weigan_group_id/$weiganId/$companyId';
+        var response = await Dio().get(
+          urlWeigan,
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          }),
+        );
+
+        if (response.statusCode == 200) {
+          getDoorWiegand doorsWeigan = getDoorWiegand.fromJson(response.data);
+
+          setState(() {
+            listWeigan = doorsWeigan.data!;
+            detlist = listdet;
+            loading = false;
+          });
+          // วน loop เพื่อดึง Det จากแต่ละ DataWeigan
+          listWeigan.forEach((value) => listdet?.addAll(value.det!));
+        }
+      }
+      setState(() {
+        loading = false;
+      });
     } catch (error) {
       print(error);
       dialogOnebutton_Subtitle(
@@ -249,36 +287,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
           appBar: AppBar(title: Text('ลงทะเบียนผู้มาติดต่อ')),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerFloat,
-          floatingActionButton: Buttons(
-              title: 'สร้าง QRCode',
-              press: () {
-                if (_kye.currentState!.validate()) {
-                  if (types.text == "thinmoo") {
-                    Map<String, dynamic> valuse = Map();
-                    valuse['devsns'] = onItemSelect;
-                    valuse['usableCount'] = useCount.text;
-                    valuse['startDate'] = startDate.text;
-                    valuse['endDate'] = endDate.text;
-                    valuse['visitor_name'] = visitName.text;
-                    valuse['tel_visitor'] = phone.text;
-                    valuse['visipeople'] = visitPeople.text;
-                    valuse['created_by'] = userId;
-                    valuse['typeDevices'] = types.text;
-                    _createVisitor(valuse);
-                  } else if (types.text == "wiegand") {}
-                  Map<String, dynamic> valuse = Map();
-                  valuse['weiganId'] = weiganId;
-                  valuse['usableCount'] = "1";
-                  valuse['startDate'] = startDate.text;
-                  valuse['endDate'] = endDate.text;
-                  valuse['visitor_name'] = visitName.text;
-                  valuse['tel_visitor'] = phone.text;
-                  valuse['visipeople'] = visitPeople.text;
-                  valuse['created_by'] = userId;
-                  valuse['typeDevices'] = types.text;
-                  _createVisitorWiegand(valuse);
-                }
-              }),
+          floatingActionButton: _button(),
           body: SafeArea(
             child: SingleChildScrollView(
               child: Form(
@@ -312,35 +321,43 @@ class _Visitor_PageState extends State<Visitor_Page> {
                               controller: phone,
                               title: 'เบอร์โทร',
                               icon: Icons.phone,
-                              type: TextInputType.name,
+                              type: TextInputType.phone,
                               maxLength: 10,
                               error: (values) {
                                 if (values.isEmpty) {
                                   return 'กรุณากรอกเบอร์โทร';
-                                  // } else if (values.length < 10) {
-                                  //   return "กรุณากรอกเบอร์โทรให้ครบ 10 ตัว";
+                                } else if (values.length < 10) {
+                                  return "กรุณากรอกเบอร์โทรให้ครบ 10 ตัว";
                                 } else {
                                   return null;
                                 }
                               },
                             ),
                             Text('ประเภทอุปกรณ์'),
-                            Dropdown(
-                                title:
-                                    // deviceId == null || listDevice.length == 0
-                                    //     ? 'ไม่มีอุปกรณ์'
-                                    //     :
-                                    'เลือกประเภท',
-                                controller: types,
-                                leftIcon: Icons.app_settings_alt_rounded,
-                                onChanged: (value) {
-                                  setState(() {
-                                    types.text = value;
-                                  });
-                                  print(value);
-                                },
-                                error: 'กรุณาเลือกประเภท',
-                                listItem: ['thinmoo', 'wiegand']),
+                            Container(
+                              padding: EdgeInsets.symmetric(vertical: 8),
+                              child: Material(
+                                  elevation: 5,
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: wiegandDevice()),
+                            ),
+                            // Dropdown(
+                            //     title:
+                            //         // deviceId == null || listDevice.length == 0
+                            //         //     ? 'ไม่มีอุปกรณ์'
+                            //         //     :
+                            //         'เลือกประเภท',
+                            //     controller: types,
+                            //     leftIcon: Icons.app_settings_alt_rounded,
+                            //     onChanged: (value) {
+                            //       setState(() {
+                            //         types.text = value;
+                            //       });
+                            //       print(value);
+                            //     },
+                            //     error: 'กรุณาเลือกประเภท',
+                            //     listItem: ['thinmoo', 'wiegand']),
                             types.text == 'thinmoo'
                                 ? Column(
                                     crossAxisAlignment:
@@ -418,6 +435,159 @@ class _Visitor_PageState extends State<Visitor_Page> {
         ),
         loading ? Loading() : Container()
       ],
+    );
+  }
+
+  Widget _button() {
+    return Buttons(
+        title: 'สร้าง QRCode',
+        press: () {
+          if (_kye.currentState!.validate()) {
+            if (types.text == "thinmoo") {
+              Map<String, dynamic> valuse = Map();
+              valuse['devsns'] = onItemSelect;
+              valuse['usableCount'] = useCount.text;
+              valuse['startDate'] = startDate.text;
+              valuse['endDate'] = endDate.text;
+              valuse['visitor_name'] = visitName.text;
+              valuse['tel_visitor'] = phone.text;
+              valuse['visipeople'] = visitPeople.text;
+              valuse['created_by'] = userId;
+              valuse['typeDevices'] = types.text;
+              _createVisitor(valuse);
+            } else if (types.text == "wiegand") {}
+            Map<String, dynamic> valuse = Map();
+            valuse['weiganId'] = weiganId;
+            valuse['usableCount'] = "1";
+            valuse['startDate'] = startDate.text;
+            valuse['endDate'] = endDate.text;
+            valuse['visitor_name'] = visitName.text;
+            valuse['tel_visitor'] = phone.text;
+            valuse['visipeople'] = visitPeople.text;
+            valuse['created_by'] = userId;
+            valuse['typeDevices'] = types.text;
+            _createVisitorWiegand(valuse);
+          }
+        });
+  }
+
+  Widget wiegandDevice() {
+    return TextFormField(
+        controller: selectDevices,
+        readOnly: true,
+        onTap: () {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) => WillPopScope(
+              onWillPop: (() async => false),
+              child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 25, vertical: 80),
+                  child: SelectableItems()),
+            ),
+          );
+        },
+        decoration: InputDecoration(
+            hintText: 'เลือกอุปกรณ์',
+            contentPadding: EdgeInsets.symmetric(vertical: 10),
+            prefixIcon: Icon(
+              Icons.devices,
+              color: Colors.grey.shade600,
+            ),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide.none)));
+  }
+
+  List<bool> selectedItems = [];
+  List<String> selectedItemsName = [];
+  List<String> selectedItemsNum = [];
+
+  Widget SelectableItems() {
+    TextEditingController fieldText = TextEditingController();
+    void _searchData(String text) {
+      setState(() {
+        listdet = detlist?.where((item) {
+          var name = item.doorName!.toLowerCase();
+          return name.contains(text);
+        }).toList();
+      });
+    }
+
+    if (selectedItems.isEmpty) {
+      //set ค่า ใน list ให้เป็น bool = false
+      selectedItems = List<bool>.filled(listdet!.length, false);
+    }
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(7),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('เลือกอุปกรณ์'),
+          leading: button_back(() {
+            Navigator.pop(context);
+            fieldText.clear();
+          }),
+        ),
+        body: Column(
+          children: [
+            // Container(
+            //     padding: EdgeInsets.all(10),
+            //     child: Search_From(
+            //       title: 'ค้นหาประตู',
+            //       fieldText: fieldText,
+            //       clear: () {
+            //         setState(() {
+            //           fieldText.clear();
+            //           listdet = detlist;
+            //         });
+            //       },
+            //       changed: (value) {
+            //         log(fieldText.text);
+            //         _searchData(value);
+            //         setState(() {});
+            //       },
+            //     )),
+            Expanded(
+              child: listdet!.isEmpty
+                  ? Logo_Opacity(title: 'ไม่พบประตูที่ใช้ได้')
+                  : ListView.builder(
+                      padding: EdgeInsets.only(bottom: 10),
+                      itemCount: listdet?.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final String? item = listdet![index].doorName;
+
+                        return CheckboxListTileFormField(
+                          // dense: true,
+                          activeColor: Theme.of(context).primaryColor,
+                          title: Text(
+                            item!,
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          initialValue: selectedItems[index],
+                          onChanged: (value) {
+                            setState(() {
+                              selectedItems[index] = value;
+                              if (selectedItemsName.contains(item)) {
+                                selectedItemsName.remove(item);
+                                selectDevices.text =
+                                    selectedItemsName.join(',');
+                              } else {
+                                selectedItemsName.add(item);
+                                selectDevices.text =
+                                    selectedItemsName.join(',');
+                              }
+
+                              log(selectedItems.toString());
+                              log(selectedItemsName.toString());
+                            });
+                          },
+                        );
+                      },
+                    ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

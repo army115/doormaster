@@ -113,7 +113,7 @@ class _Login_PageState extends State<Login_Page> {
             }
           } else {
             print(jsonRes.data);
-            print('username หรือ password ไม่ถูกต้อง');
+            print('ชื่อผู้ใช้ หรือ รหัสผ่าน ไม่ถูกต้อง');
             snackbar(context, Colors.red, 'ชื่อผู้ใช้ หรือ รหัสผ่าน ไม่ถูกต้อง',
                 Icons.highlight_off_rounded);
             setState(() {

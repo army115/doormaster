@@ -265,8 +265,8 @@ class _Register_PageState extends State<Register_Page> {
                             confirmPass = values;
                             if (values.isEmpty) {
                               return 'กรุณากรอกรหัสผ่าน';
-                              // } else if (values.length < 8) {
-                              //   return "รหัสผ่านอย่างน้อย 8 ตัว";
+                            } else if (values.length < 8) {
+                              return "รหัสผ่านอย่างน้อย 8 ตัว";
                             } else {
                               return null;
                             }

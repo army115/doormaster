@@ -218,30 +218,28 @@ class _Home_PageState extends State<Home_Page>
     return Stack(
       children: [
         Scaffold(
-            appBar: AppBar(
-              title: Text('HIP Smart Community'),
-              leading: IconButton(
-                  icon: Icon(Icons.menu),
-                  onPressed: () {
-                    Scaffold.of(context).openDrawer();
-                  }),
-            ),
-            body: RefreshIndicator(
-              onRefresh: () async {
-                _getInfo();
-                _getMenu();
-              },
-              child: SingleChildScrollView(
-                physics: AlwaysScrollableScrollPhysics(),
-                child: checkNet == ConnectivityResult.none ||
-                        loading ||
-                        mobileRole == null
-                    ? Container()
-                    : security == true
-                        ? Security()
-                        : normalUser(),
-              ),
-            )),
+          appBar: AppBar(
+            title: Text('HIP Smart Community'),
+            leading: IconButton(
+                icon: Icon(Icons.menu),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                }),
+          ),
+          body: RefreshIndicator(
+            onRefresh: () async {
+              _getInfo();
+              _getMenu();
+            },
+            child: checkNet == ConnectivityResult.none ||
+                    loading ||
+                    mobileRole == null
+                ? Container()
+                : security == true
+                    ? Security()
+                    : normalUser(),
+          ),
+        ),
         loading ? Loading() : Container(),
       ],
     );
@@ -250,149 +248,157 @@ class _Home_PageState extends State<Home_Page>
   Widget normalUser() {
     return mobileRole == 0
         ? Logo_Opacity(title: 'โปรดติดต่อผู้ดูแล\nเพื่ออนุมัติสิทธิ์การใช้งาน')
-        : Column(
-            children: [
-              Container(
-                  height: MediaQuery.of(context).size.width * 0.6,
-                  width: double.infinity,
-                  child: listads.isEmpty
-                      ? Swiper(
-                          autoplay: false,
-                          loop: false,
-                          itemCount: 1,
-                          itemBuilder: (context, index) {
-                            return Image.asset(
-                              'assets/images/ads.png',
-                              fit: BoxFit.cover,
-                            );
-                          },
+        : SingleChildScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
+            child: Column(
+              children: [
+                Container(
+                    height: MediaQuery.of(context).size.width * 0.6,
+                    width: double.infinity,
+                    child: listads.isEmpty
+                        ? Swiper(
+                            autoplay: false,
+                            loop: false,
+                            itemCount: 1,
+                            itemBuilder: (context, index) {
+                              return Image.asset(
+                                'assets/images/ads.png',
+                                fit: BoxFit.cover,
+                              );
+                            },
+                          )
+                        : Swiper(
+                            autoplay: listads.length == 1 ? false : true,
+                            loop: listads.length == 1 ? false : true,
+                            pagination: SwiperPagination(
+                                builder: DotSwiperPaginationBuilder(
+                                    size: 8,
+                                    activeSize: 8,
+                                    color: Colors.grey,
+                                    activeColor: Colors.white)),
+                            itemCount: listads.length,
+                            itemBuilder: (context, index) {
+                              var _Images = convert.base64Decode(
+                                  ('${listads[index].adsversitingPic}')
+                                      .split(',')
+                                      .last);
+                              return InkWell(
+                                  // onTap: () {
+                                  //   launchUrlString('https://hipglobal.co.th/');
+                                  // },
+                                  child: Image.memory(
+                                _Images,
+                                fit: BoxFit.cover,
+                              ));
+                            },
+                          )),
+                Container(
+                  child: listMenu.isEmpty
+                      ? Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical:
+                                  MediaQuery.of(context).size.height * 0.13),
+                          child: Icon_Opacity(
+                              title:
+                                  'ไม่มีเมนูที่คุณใช้งานได้\nโปรดติดต่อผู้ดูแล'),
                         )
-                      : Swiper(
-                          autoplay: listads.length == 1 ? false : true,
-                          loop: listads.length == 1 ? false : true,
-                          pagination: SwiperPagination(
-                              builder: DotSwiperPaginationBuilder(
-                                  size: 8,
-                                  activeSize: 8,
-                                  color: Colors.grey,
-                                  activeColor: Colors.white)),
-                          itemCount: listads.length,
-                          itemBuilder: (context, index) {
-                            var _Images = convert.base64Decode(
-                                ('${listads[index].adsversitingPic}')
-                                    .split(',')
-                                    .last);
-                            return InkWell(
-                                // onTap: () {
-                                //   launchUrlString('https://hipglobal.co.th/');
-                                // },
-                                child: Image.memory(
-                              _Images,
-                              fit: BoxFit.cover,
-                            ));
-                          },
-                        )),
-              Container(
-                child: listMenu.isEmpty
-                    ? Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical:
-                                MediaQuery.of(context).size.height * 0.13),
-                        child: Icon_Opacity(
-                            title:
-                                'ไม่มีเมนูที่คุณใช้งานได้\nโปรดติดต่อผู้ดูแล'),
-                      )
-                    : Container(
-                        padding: EdgeInsets.fromLTRB(20, 20, 20,
-                            MediaQuery.of(context).size.width * 0.15),
-                        child: GridView.builder(
-                          shrinkWrap: true,
-                          primary: false,
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            childAspectRatio: 0.65,
-                            crossAxisCount: 4,
-                            crossAxisSpacing: 20,
-                            mainAxisSpacing: 5,
+                      : Container(
+                          padding: EdgeInsets.fromLTRB(20, 20, 20,
+                              MediaQuery.of(context).size.width * 0.15),
+                          child: GridView.builder(
+                            shrinkWrap: true,
+                            primary: false,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              childAspectRatio: 0.65,
+                              crossAxisCount: 4,
+                              crossAxisSpacing: 20,
+                              mainAxisSpacing: 5,
+                            ),
+                            itemCount: listMenu.length,
+                            itemBuilder: (context, index) {
+                              return Menu_Home(
+                                title: '${listMenu[index].name}',
+                                icon: listMenu[index].icon,
+                                press: listMenu[index].page,
+                                type: '${listMenu[index].type}',
+                                goBack: onGoBack,
+                              );
+                            },
                           ),
-                          itemCount: listMenu.length,
-                          itemBuilder: (context, index) {
-                            return Menu_Home(
-                              title: '${listMenu[index].name}',
-                              icon: listMenu[index].icon,
-                              press: listMenu[index].page,
-                              type: '${listMenu[index].type}',
-                              goBack: onGoBack,
-                            );
-                          },
                         ),
-                      ),
-              ),
-            ],
+                ),
+              ],
+            ),
           );
   }
 
   Widget Security() {
-    return Column(
-      children: [
-        Container(
-          height: MediaQuery.of(context).size.width * 0.6,
-          width: double.infinity,
-          child: listads.isNotEmpty
-              ? Swiper(
-                  autoplay: true,
-                  loop: true,
-                  pagination: SwiperPagination(
-                      builder: DotSwiperPaginationBuilder(
-                          color: Colors.grey, activeColor: Colors.white)),
-                  itemCount: listads.length,
-                  itemBuilder: (context, index) {
-                    var _Images = convert.base64Decode(
-                        ('${listads[index].adsversitingPic}').split(',').last);
-                    return InkWell(
-                        // onTap: () {
-                        //   launchUrlString(
-                        //       'https://hipglobal.co.th/');
-                        // },
-                        // child: Container(
-                        //     child:
-                        //         Image.network('${_images[index]}')),
-                        child: Image.memory(
-                      _Images,
-                      fit: BoxFit.cover,
-                    ));
-                  },
-                )
-              : Swiper(
-                  autoplay: true,
-                  loop: true,
-                  itemCount: 1,
-                  itemBuilder: (context, index) {
-                    return Image.asset(
-                      'assets/images/ads.png',
-                      fit: BoxFit.cover,
-                    );
-                  },
-                ),
-        ),
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          child: GridView.count(
-            shrinkWrap: true,
-            primary: false,
-            childAspectRatio: 0.65,
-            crossAxisCount: 4,
-            crossAxisSpacing: 20,
-            mainAxisSpacing: 5,
-            children: [
-              Menu_Security(
-                  title: 'security', press: '/security', icon: Icons.man),
-              Menu_Security(
-                  title: 'visitor', press: '/visitor', icon: Icons.boy)
-            ],
+    return SingleChildScrollView(
+      physics: AlwaysScrollableScrollPhysics(),
+      child: Column(
+        children: [
+          Container(
+            height: MediaQuery.of(context).size.width * 0.6,
+            width: double.infinity,
+            child: listads.isNotEmpty
+                ? Swiper(
+                    autoplay: true,
+                    loop: true,
+                    pagination: SwiperPagination(
+                        builder: DotSwiperPaginationBuilder(
+                            color: Colors.grey, activeColor: Colors.white)),
+                    itemCount: listads.length,
+                    itemBuilder: (context, index) {
+                      var _Images = convert.base64Decode(
+                          ('${listads[index].adsversitingPic}')
+                              .split(',')
+                              .last);
+                      return InkWell(
+                          // onTap: () {
+                          //   launchUrlString(
+                          //       'https://hipglobal.co.th/');
+                          // },
+                          // child: Container(
+                          //     child:
+                          //         Image.network('${_images[index]}')),
+                          child: Image.memory(
+                        _Images,
+                        fit: BoxFit.cover,
+                      ));
+                    },
+                  )
+                : Swiper(
+                    autoplay: true,
+                    loop: true,
+                    itemCount: 1,
+                    itemBuilder: (context, index) {
+                      return Image.asset(
+                        'assets/images/ads.png',
+                        fit: BoxFit.cover,
+                      );
+                    },
+                  ),
           ),
-        )
-      ],
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            child: GridView.count(
+              shrinkWrap: true,
+              primary: false,
+              childAspectRatio: 0.65,
+              crossAxisCount: 4,
+              crossAxisSpacing: 20,
+              mainAxisSpacing: 5,
+              children: [
+                Menu_Security(
+                    title: 'security', press: '/security', icon: Icons.man),
+                Menu_Security(
+                    title: 'visitor', press: '/visitor', icon: Icons.boy)
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }
