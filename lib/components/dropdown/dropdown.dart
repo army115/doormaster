@@ -45,7 +45,7 @@ class Dropdown extends StatelessWidget {
             searchText: 'ค้นหา',
             foundText: 'ไม่พบข้อมูล',
             borderRadiusItem: BorderRadius.circular(10),
-            contentPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 13),
+            contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 13),
             focusedBorder: OutlineInputBorder(
               borderSide:
                   BorderSide(color: Theme.of(context).primaryColor, width: 2),

@@ -10,10 +10,11 @@ import 'package:doormster/components/datetime/date_time.dart';
 import 'package:doormster/components/dropdown/dropdown.dart';
 import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
 import 'package:doormster/components/loading/loading.dart';
-import 'package:doormster/components/searchbar/search_from.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/components/text_form/text_form.dart';
+import 'package:doormster/components/text_form/text_form_null.dart';
 import 'package:doormster/components/text_form/text_form_number.dart';
+import 'package:doormster/components/text_form/text_form_ontap.dart';
 import 'package:doormster/models/device_group.dart';
 import 'package:doormster/models/getdoor_wiegand.dart';
 import 'package:doormster/models/visitor_model.dart';
@@ -68,6 +69,16 @@ class _Visitor_PageState extends State<Visitor_Page> {
     print('companyId: ${companyId}');
     print('deviceId: ${deviceId}');
     print('weiganId: ${weiganId}');
+
+    if (deviceId != null && weiganId != null) {
+      types.text = '';
+    } else if (deviceId != null) {
+      types.text = 'thinmoo';
+    } else if (weiganId != null) {
+      types.text = 'wiegand';
+    } else {
+      types.text = 'null';
+    }
 
     try {
       setState(() {
@@ -210,7 +221,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
       setState(() {
         loading = true;
       });
-      var url = '${Connect_api().domain}/createVisitorWeigan';
+      var url = '${Connect_api().domain}/createVisitorWeigan/$companyId';
       var response = await Dio().post(url,
           options: Options(headers: {
             'Content-Type': 'application/json',
@@ -321,7 +332,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
                               controller: phone,
                               title: 'เบอร์โทร',
                               icon: Icons.phone,
-                              type: TextInputType.phone,
+                              type: TextInputType.name,
                               maxLength: 10,
                               error: (values) {
                                 if (values.isEmpty) {
@@ -333,60 +344,34 @@ class _Visitor_PageState extends State<Visitor_Page> {
                                 }
                               },
                             ),
-                            Text('ประเภทอุปกรณ์'),
-                            Container(
-                              padding: EdgeInsets.symmetric(vertical: 8),
-                              child: Material(
-                                  elevation: 5,
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: wiegandDevice()),
-                            ),
-                            // Dropdown(
-                            //     title:
-                            //         // deviceId == null || listDevice.length == 0
-                            //         //     ? 'ไม่มีอุปกรณ์'
-                            //         //     :
-                            //         'เลือกประเภท',
-                            //     controller: types,
-                            //     leftIcon: Icons.app_settings_alt_rounded,
-                            //     onChanged: (value) {
-                            //       setState(() {
-                            //         types.text = value;
-                            //       });
-                            //       print(value);
-                            //     },
-                            //     error: 'กรุณาเลือกประเภท',
-                            //     listItem: ['thinmoo', 'wiegand']),
-                            types.text == 'thinmoo'
+                            deviceId != null && weiganId != null
+                                ? Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text('ประเภทอุปกรณ์'),
+                                      dropdownType(),
+                                    ],
+                                  )
+                                : Container(),
+                            types.text != ''
                                 ? Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text('สิทธ์การเข้าถึง'),
-                                      Dropdown(
-                                        title: deviceId == null ||
-                                                listDevice.length == 0
-                                            ? 'ไม่มีอุปกรณ์'
-                                            : 'เลือกอุปกรณ์',
-                                        controller: devices,
-                                        leftIcon: Icons.mobile_friendly,
-                                        onChanged: (value) {
-                                          final index = listDevice.indexWhere(
-                                              (item) =>
-                                                  item.deviceName == value);
-                                          if (index > -1) {
-                                            onItemSelect =
-                                                listDevice[index].deviceDevSn;
-                                          }
-                                          print(onItemSelect);
-                                        },
-                                        error: 'กรุณากเลือกบริษัท',
-                                        listItem: listDevice
-                                            .map((value) =>
-                                                value.deviceName.toString())
-                                            .toList(),
-                                      ),
+                                      types.text == 'thinmoo'
+                                          ? dropdownDecives()
+                                          : types.text == 'wiegand'
+                                              ? wiegandDevice()
+                                              : TextForm_Null(
+                                                  title: 'ไม่มีอุปกรณ์',
+                                                  errortext: 'ไม่มีอุปกรณ์',
+                                                  iconleft:
+                                                      Icons.mobile_friendly,
+                                                  iconright: Icons
+                                                      .keyboard_arrow_down_rounded,
+                                                ),
                                     ],
                                   )
                                 : Container(),
@@ -453,7 +438,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
               valuse['tel_visitor'] = phone.text;
               valuse['visipeople'] = visitPeople.text;
               valuse['created_by'] = userId;
-              valuse['typeDevices'] = types.text;
+              valuse['typeDevices'] = "thinmoo";
               _createVisitor(valuse);
             } else if (types.text == "wiegand") {}
             Map<String, dynamic> valuse = Map();
@@ -465,43 +450,78 @@ class _Visitor_PageState extends State<Visitor_Page> {
             valuse['tel_visitor'] = phone.text;
             valuse['visipeople'] = visitPeople.text;
             valuse['created_by'] = userId;
-            valuse['typeDevices'] = types.text;
+            valuse['typeDevices'] = "wiegand";
+            valuse['door_id'] = selectedItemsId;
             _createVisitorWiegand(valuse);
           }
         });
   }
 
-  Widget wiegandDevice() {
-    return TextFormField(
-        controller: selectDevices,
-        readOnly: true,
-        onTap: () {
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (context) => WillPopScope(
-              onWillPop: (() async => false),
-              child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 25, vertical: 80),
-                  child: SelectableItems()),
-            ),
-          );
+  Widget dropdownType() {
+    return Dropdown(
+        title: 'เลือกประเภท',
+        controller: types,
+        leftIcon: Icons.app_settings_alt_rounded,
+        onChanged: (value) {
+          setState(() {
+            types.text = value;
+          });
+          print(value);
         },
-        decoration: InputDecoration(
-            hintText: 'เลือกอุปกรณ์',
-            contentPadding: EdgeInsets.symmetric(vertical: 10),
-            prefixIcon: Icon(
-              Icons.devices,
-              color: Colors.grey.shade600,
-            ),
-            border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide.none)));
+        error: 'กรุณาเลือกประเภท',
+        listItem: ['thinmoo', 'wiegand']);
+  }
+
+  Widget dropdownDecives() {
+    return Dropdown(
+      title: deviceId == null || listDevice.isEmpty
+          ? 'ไม่มีอุปกรณ์'
+          : 'เลือกอุปกรณ์',
+      controller: devices,
+      leftIcon: Icons.mobile_friendly,
+      onChanged: (value) {
+        final index = listDevice.indexWhere((item) => item.deviceName == value);
+        if (index > -1) {
+          onItemSelect = listDevice[index].deviceDevSn;
+        }
+        print(onItemSelect);
+      },
+      error: deviceId == null || listDevice.isEmpty
+          ? 'ไม่มีอุปกรณ์'
+          : 'กรุณากเลือกบริษัท',
+      listItem: listDevice.map((value) => value.deviceName.toString()).toList(),
+    );
+  }
+
+  Widget wiegandDevice() {
+    return TextForm_Ontap(
+      controller: selectDevices,
+      title: weiganId == null || listWeigan.isEmpty
+          ? 'ไม่มีอุปกรณ์'
+          : 'เลือกอุปกรณ์',
+      errortext: weiganId == null || listWeigan.isEmpty
+          ? 'ไม่มีอุปกรณ์'
+          : 'เลือกอุปกรณ์',
+      iconleft: Icons.mobile_friendly,
+      iconright: Icons.keyboard_arrow_down_rounded,
+      ontap: () {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => WillPopScope(
+            onWillPop: (() async => false),
+            child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 25, vertical: 80),
+                child: SelectableItems()),
+          ),
+        );
+      },
+    );
   }
 
   List<bool> selectedItems = [];
   List<String> selectedItemsName = [];
-  List<String> selectedItemsNum = [];
+  List<String> selectedItemsId = [];
 
   Widget SelectableItems() {
     TextEditingController fieldText = TextEditingController();
@@ -549,12 +569,13 @@ class _Visitor_PageState extends State<Visitor_Page> {
             //     )),
             Expanded(
               child: listdet!.isEmpty
-                  ? Logo_Opacity(title: 'ไม่พบประตูที่ใช้ได้')
+                  ? Logo_Opacity(title: 'ไม่พบอุปกรณ์ที่ใช้ได้')
                   : ListView.builder(
                       padding: EdgeInsets.only(bottom: 10),
                       itemCount: listdet?.length,
                       itemBuilder: (BuildContext context, int index) {
                         final String? item = listdet![index].doorName;
+                        final String? id = listdet![index].doorId;
 
                         return CheckboxListTileFormField(
                           // dense: true,
@@ -569,16 +590,19 @@ class _Visitor_PageState extends State<Visitor_Page> {
                               selectedItems[index] = value;
                               if (selectedItemsName.contains(item)) {
                                 selectedItemsName.remove(item);
+                                selectedItemsId.remove(id);
                                 selectDevices.text =
                                     selectedItemsName.join(',');
                               } else {
                                 selectedItemsName.add(item);
+                                selectedItemsId.add(id!);
                                 selectDevices.text =
                                     selectedItemsName.join(',');
                               }
 
                               log(selectedItems.toString());
-                              log(selectedItemsName.toString());
+                              log("devicesName : ${selectedItemsName}");
+                              log("devicesId : ${selectedItemsId}");
                             });
                           },
                         );
