@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_is_empty, use_build_context_synchronously, unused_import
+// ignore_for_file: unused_import, avoid_print, use_build_context_synchronously
 
 import 'dart:developer';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
@@ -47,47 +47,47 @@ class _Logs_AllState extends State<Logs_All>
     companyId = prefs.getString('companyId');
     print('companyId: ${companyId}');
 
-    try {
+    // try {
+    setState(() {
+      loading = true;
+    });
+
+    await Future.delayed(Duration(milliseconds: loadingTime));
+
+    //call api
+    var url = '${Connect_api().domain}/get/getRoundNoPic';
+    var response = await Dio().post(url,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        }),
+        data: {"id": companyId, "from": dateStart, "to": dateEnd});
+
+    if (response.statusCode == 200) {
+      getLog logslist = getLog.fromJson(response.data);
       setState(() {
-        loading = true;
-      });
-
-      await Future.delayed(Duration(milliseconds: loadingTime));
-
-      //call api
-      var url = '${Connect_api().domain}/get/getRoundNoPic';
-      var response = await Dio().post(url,
-          options: Options(headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-          }),
-          data: {"id": companyId, "from": dateStart, "to": dateEnd});
-
-      if (response.statusCode == 200) {
-        getLog logslist = getLog.fromJson(response.data);
-        setState(() {
-          listLog = logslist.data!;
-          listData = listLog;
-          loading = false;
-        });
-      }
-    } catch (error) {
-      print(error);
-      await Future.delayed(Duration(milliseconds: 500));
-      dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง', () {
-        homeKey.currentState?.popUntil(ModalRoute.withName('/security'));
-        Navigator.of(context, rootNavigator: true).pop();
-      }, false, false);
-      setState(() {
+        listLog = logslist.data!;
+        listData = listLog;
         loading = false;
       });
     }
+    // } catch (error) {
+    //   print(error);
+    //   await Future.delayed(const Duration(milliseconds: 500));
+    //   dialogOnebutton_Subtitle(
+    //       context,
+    //       'พบข้อผิดพลาด',
+    //       'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+    //       Icons.warning_amber_rounded,
+    //       Colors.orange,
+    //       'ตกลง', () {
+    //     homeKey.currentState?.popUntil(ModalRoute.withName('/security'));
+    //     Navigator.of(context, rootNavigator: true).pop();
+    //   }, false, false);
+    //   setState(() {
+    //     loading = false;
+    //   });
+    // }
   }
 
   void dateNowAll() {
@@ -116,7 +116,7 @@ class _Logs_AllState extends State<Logs_All>
   void initState() {
     super.initState();
     dateNowAll();
-    _getLog(_startDateText!, _endDateText!, 300);
+    _getLog(_startDateText!, _endDateText!, 0);
   }
 
   @override
@@ -192,15 +192,16 @@ class _Logs_AllState extends State<Logs_All>
                                   _getLog(_startDateText!, _endDateText!, 500);
                                 },
                                 child: ListView.builder(
-                                    padding: EdgeInsets.fromLTRB(20, 0, 20, 5),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(20, 0, 20, 5),
                                     itemCount: listLog.length,
                                     itemBuilder: ((context, index) {
                                       return Card(
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(10)),
-                                        margin:
-                                            EdgeInsets.symmetric(vertical: 5),
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 5),
                                         elevation: 10,
                                         child: InkWell(
                                           borderRadius:
@@ -235,7 +236,7 @@ class _Logs_AllState extends State<Logs_All>
                                             // decoration: BoxDecoration(
                                             //     color: containerColor,
                                             //     borderRadius: BorderRadius.circular(10)),
-                                            padding: EdgeInsets.all(10),
+                                            padding: const EdgeInsets.all(10),
                                             child: Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
@@ -252,34 +253,37 @@ class _Logs_AllState extends State<Logs_All>
                                                             .ellipsis,
                                                       ),
                                                     ),
-                                                    Icon(Icons
+                                                    const Icon(Icons
                                                         .arrow_forward_ios_rounded)
                                                   ],
                                                 ),
                                                 // Text(
                                                 //     'วันที่ : ${fieldText.text}'),
-                                                IntrinsicHeight(
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Text(
-                                                          'เริ่มต้น : ${listLog[index].roundStart} น.'),
-                                                      VerticalDivider(
-                                                          thickness: 1.5,
-                                                          color: Colors.black,
-                                                          width: 1),
-                                                      Text(
-                                                        'สิ้นสุด : ${listLog[index].roundEnd} น.',
+                                                listLog[index].roundName ==
+                                                        'นอกรอบ'
+                                                    ? Container()
+                                                    : IntrinsicHeight(
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Text(
+                                                                'เริ่มต้น : ${listLog[index].roundStart} น.'),
+                                                            const VerticalDivider(
+                                                                thickness: 1.5,
+                                                                color: Colors
+                                                                    .black,
+                                                                width: 1),
+                                                            Text(
+                                                              'สิ้นสุด : ${listLog[index].roundEnd} น.',
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ),
-                                                    ],
-                                                  ),
-                                                ),
                                                 listLog[index]
-                                                            .fileList!
-                                                            .length >
-                                                        0
+                                                        .fileList!
+                                                        .isNotEmpty
                                                     ? Text(
                                                         'มีบันทึก ${listLog[index].fileList?.length} รายการ',
                                                         style: TextStyle(
@@ -287,7 +291,7 @@ class _Logs_AllState extends State<Logs_All>
                                                                     context)
                                                                 .primaryColor),
                                                       )
-                                                    : Text(
+                                                    : const Text(
                                                         'ไม่มีบันทึกรายการตรวจ',
                                                         style: TextStyle(
                                                             color: Colors.red),
@@ -320,7 +324,7 @@ class _Logs_AllState extends State<Logs_All>
       context: context,
       value: _pickerValue,
       config: CalendarDatePicker2WithActionButtonsConfig(
-          yearTextStyle: TextStyle(fontWeight: FontWeight.normal),
+          yearTextStyle: const TextStyle(fontWeight: FontWeight.normal),
           firstDayOfWeek: 1,
           weekdayLabelTextStyle: TextStyle(
               fontWeight: FontWeight.bold,
@@ -341,7 +345,7 @@ class _Logs_AllState extends State<Logs_All>
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).primaryColor),
           )),
-      dialogSize: Size(300, 400),
+      dialogSize: const Size(300, 400),
       borderRadius: BorderRadius.circular(10),
     );
 

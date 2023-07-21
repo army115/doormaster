@@ -22,9 +22,9 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Report_Logs extends StatefulWidget {
-  final dateValue;
   final type;
-  Report_Logs({Key? key, this.dateValue, this.type});
+  final tapIndex;
+  Report_Logs({Key? key, this.type, this.tapIndex});
 
   @override
   State<Report_Logs> createState() => _Report_LogsState();
@@ -40,7 +40,7 @@ class _Report_LogsState extends State<Report_Logs>
     _tabController = TabController(
       length: 2,
       vsync: this,
-      initialIndex: 0,
+      initialIndex: widget.tapIndex,
       // animationDuration: Duration(
       //   seconds: 0,
       // ),
@@ -93,10 +93,18 @@ class _Report_LogsState extends State<Report_Logs>
                     color: Colors.grey[200]),
                 tabs: const [
                   Tab(
-                    text: 'วันนี้',
+                    child: Text(
+                      'วันนี้',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
                   ),
                   Tab(
-                    text: 'ทั้งหมด',
+                    child: Text(
+                      'ทั้งหมด',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
                   )
                 ]),
           ),

@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import, use_build_context_synchronously, sort_child_properties_last
+// ignore_for_file: unused_import, use_build_context_synchronously, sort_child_properties_last, unrelated_type_equality_checks
 
 import 'dart:developer';
 
@@ -152,14 +152,16 @@ class _Record_PointState extends State<Record_Point> {
                         size: 25,
                       ),
                     ),
-                    textIcon(
-                      'ช่วงเวลา : ${widget.roundStart}น. ถึง ${widget.roundEnd}น.',
-                      Icon(
-                        Icons.access_time_rounded,
-                        color: Theme.of(context).primaryColor,
-                        size: 25,
-                      ),
-                    ),
+                    widget.roundName == 'นอกรอบ'
+                        ? Container()
+                        : textIcon(
+                            'ช่วงเวลา : ${widget.roundStart}น. ถึง ${widget.roundEnd}น.',
+                            Icon(
+                              Icons.access_time_rounded,
+                              color: Theme.of(context).primaryColor,
+                              size: 25,
+                            ),
+                          ),
                   ],
                 ),
               ),
@@ -191,10 +193,11 @@ class _Record_PointState extends State<Record_Point> {
                           final time = DateTime.parse(
                               '${fileList[index].checktimeReal}');
                           checkpoint = fileList[index].checkpoint!;
+                          final checklist = checkpoint[0].checklist;
+                          final listcheck = fileList[index].checkList;
+                          log(listcheck.toString());
                           final date =
                               DateTime.parse('${fileList[index].date}');
-                          checkpoint = fileList[index].checkpoint!;
-                          final checklist = checkpoint[0].checklist;
 
                           return Card(
                             shape: RoundedRectangleBorder(
@@ -204,7 +207,7 @@ class _Record_PointState extends State<Record_Point> {
                             child: ExpansionTile(
                                 textColor: Colors.black,
                                 title: Text(
-                                  'จุดตรวจ :  ${checkpoint[0].checkpointName}',
+                                  'จุดตรวจ :  ${checkpoint.isNotEmpty ? checkpoint[0].checkpointName : fileList[index].checkpointName}',
                                   style: const TextStyle(fontSize: 16),
                                 ),
                                 subtitle: Column(
@@ -242,14 +245,13 @@ class _Record_PointState extends State<Record_Point> {
                                           primary: false,
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 3, horizontal: 20),
-                                          itemCount: checklist!.length,
+                                          itemCount: checklist?.length,
                                           itemBuilder: (BuildContext context,
                                               int index) {
-                                            return checklist[index].checklist ==
-                                                    ''
+                                            return checklist?[index] == ''
                                                 ? Container()
                                                 : Text(
-                                                    '- ${checklist[index].checklist}');
+                                                    '- ${checklist?[index]}');
                                           },
                                         ),
                                         fileList[index].desciption != ''

@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import, use_build_context_synchronously
+// ignore_for_file: unused_import, use_build_context_synchronously, sort_child_properties_last, prefer_const_constructors, deprecated_member_use
 
 import 'dart:io';
 import 'package:dio/dio.dart';

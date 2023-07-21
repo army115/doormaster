@@ -111,7 +111,7 @@ class _Logs_TodayState extends State<Logs_Today>
   @override
   void initState() {
     super.initState();
-    _getLog(300);
+    _getLog(0);
   }
 
   @override
@@ -199,10 +199,15 @@ class _Logs_TodayState extends State<Logs_Today>
                                     padding: const EdgeInsets.fromLTRB(
                                         20, 0, 20, 10),
                                     itemCount: listdata.length,
-                                    itemBuilder: ((context, index) {
+                                    itemBuilder: ((context, ndex) {
+                                      final index = ndex + 1;
+                                      if (index >= listdata.length) {
+                                        return Container();
+                                      }
                                       final logsPoint =
                                           listdata[index].fileList!.length;
                                       final checkPoint = listPoint.length;
+
                                       return Card(
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
@@ -255,24 +260,28 @@ class _Logs_TodayState extends State<Logs_Today>
                                                         .arrow_forward_ios_rounded)
                                                   ],
                                                 ),
-                                                IntrinsicHeight(
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Text(
-                                                          'เริ่มต้น : ${listdata[index].roundStart} น.'),
-                                                      const VerticalDivider(
-                                                          thickness: 1.5,
-                                                          color: Colors.black,
-                                                          width: 1),
-                                                      Text(
-                                                        'สิ้นสุด : ${listdata[index].roundEnd} น.',
+                                                listdata[index].roundName ==
+                                                        'นอกรอบ'
+                                                    ? Container()
+                                                    : IntrinsicHeight(
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Text(
+                                                                'เริ่มต้น : ${listdata[index].roundStart} น.'),
+                                                            const VerticalDivider(
+                                                                thickness: 1.5,
+                                                                color: Colors
+                                                                    .black,
+                                                                width: 1),
+                                                            Text(
+                                                              'สิ้นสุด : ${listdata[index].roundEnd} น.',
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ),
-                                                    ],
-                                                  ),
-                                                ),
                                                 logsPoint <= 0
                                                     ? Text(
                                                         'ยังไม่ตรวจ ($logsPoint/$checkPoint)',

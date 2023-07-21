@@ -11,6 +11,7 @@ class Map_Page extends StatefulWidget {
   final lng;
   double width;
   double height;
+  final extra;
 
   Map_Page({
     Key? key,
@@ -18,6 +19,7 @@ class Map_Page extends StatefulWidget {
     this.lng,
     required this.width,
     required this.height,
+    this.extra,
   });
 
   @override
@@ -52,23 +54,26 @@ class _Map_PageState extends State<Map_Page> {
     return Card(
       color: Colors.grey.shade100,
       child: widget.lat == null
-          ? Center(
-              child:
-                  //   Image.asset(
-                  //   'assets/images/pin.gif',
-                  //   scale: 3,
-                  // )
-                  Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Text('Loading...')
-                ],
+          ? Container(
+              margin: EdgeInsets.all(20),
+              child: Center(
+                child:
+                    //   Image.asset(
+                    //   'assets/images/pin.gif',
+                    //   scale: 3,
+                    // )
+                    Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Text('Loading...')
+                  ],
+                ),
               ),
             )
           : Stack(
@@ -96,7 +101,7 @@ class _Map_PageState extends State<Map_Page> {
                       },
                       // scrollGesturesEnabled: false,
                       mapType: maptype,
-                      markers: _markers,
+                      markers: widget.extra == null ? _markers : {},
                       zoomControlsEnabled: true,
                       myLocationButtonEnabled: false,
                       //สร้างวงกลมรัศมี
@@ -108,8 +113,8 @@ class _Map_PageState extends State<Map_Page> {
                       //       strokeColor: Colors.blue,
                       //       strokeWidth: 2,
                       //       radius: 20)
-                      // ]),
-                      // myLocationEnabled: true,
+                      // ]),6
+                      myLocationEnabled: widget.extra == null ? false : true,
                       initialCameraPosition: CameraPosition(
                         target: LatLng(widget.lat, widget.lng),
                         zoom: 20.0,

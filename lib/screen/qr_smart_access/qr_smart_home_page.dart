@@ -101,63 +101,60 @@ class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
                 ],
               ),
             )
-          : SingleChildScrollView(
-              child: Container(
-                padding: EdgeInsets.all(30),
-                child: Column(children: [
-                  GridView.count(
-                    // scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    primary: false,
-                    childAspectRatio: 1.0,
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 25,
-                    mainAxisSpacing: 25,
-                    children: [
-                      Grid_Menu(
-                        title: 'ผู้มาติดต่อ',
-                        icon: Icons.person,
-                        press: () {
-                          checkInternet(context, Visitor_Page(), true);
-                        },
-                      ),
-                      Grid_Menu(
-                        title: 'สแกน',
-                        icon: Icons.qr_code_scanner_rounded,
-                        press: () {
-                          permissionCamere(
-                            context,
-                            () => checkInternet(context, Scanner(), true),
-                          );
-                        },
-                      ),
-                      Grid_Menu(
-                        title: 'เปิดประตู',
-                        icon: Icons.meeting_room_rounded,
-                        press: () {
-                          checkInternet(context, Opendoor_Page(), false);
-                          // requestLocationPermission();
-                        },
-                      ),
-                      Grid_Menu(
-                          title: 'Emergency Call',
-                          icon: Icons.phone_forwarded_rounded,
-                          press: () async {
-                            await launch("tel:02-748-2191");
-                            // await FlutterPhoneDirectCaller.callNumber(
-                            //     '02-748-2191');
-                          }),
-                    ],
+          : Container(
+              child: GridView.extent(
+                padding: EdgeInsets.all(25),
+                // scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                primary: false,
+                childAspectRatio: 1.0,
+                // crossAxisCount: 2,
+                maxCrossAxisExtent: 300,
+                crossAxisSpacing: 25,
+                mainAxisSpacing: 25,
+                children: [
+                  Grid_Menu(
+                    title: 'ผู้มาติดต่อ',
+                    icon: Icons.person,
+                    press: () {
+                      checkInternet(context, Visitor_Page(), true);
+                    },
                   ),
-                  // SizedBox(height: 20),
-                  // Buttons(
-                  //     title: 'test',
-                  //     press: () {
-                  //       Navigator.push(context,
-                  //           MaterialPageRoute(builder: ((context) => Test())));
-                  //     })
-                ]),
+                  Grid_Menu(
+                    title: 'สแกน',
+                    icon: Icons.qr_code_scanner_rounded,
+                    press: () {
+                      permissionCamere(
+                        context,
+                        () => checkInternet(context, Scanner(), true),
+                      );
+                    },
+                  ),
+                  Grid_Menu(
+                    title: 'เปิดประตู',
+                    icon: Icons.meeting_room_rounded,
+                    press: () {
+                      checkInternet(context, Opendoor_Page(), false);
+                      // requestLocationPermission();
+                    },
+                  ),
+                  Grid_Menu(
+                      title: 'Emergency Call',
+                      icon: Icons.phone_forwarded_rounded,
+                      press: () async {
+                        await launch("tel:02-748-2191");
+                        // await FlutterPhoneDirectCaller.callNumber(
+                        //     '02-748-2191');
+                      }),
+                ],
               ),
+              // SizedBox(height: 20),
+              // Buttons(
+              //     title: 'test',
+              //     press: () {
+              //       Navigator.push(context,
+              //           MaterialPageRoute(builder: ((context) => Test())));
+              //     })
             ),
     );
   }

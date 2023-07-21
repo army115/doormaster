@@ -310,11 +310,11 @@ class _Home_PageState extends State<Home_Page>
                             primary: false,
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
-                              childAspectRatio: 0.65,
-                              crossAxisCount: 4,
-                              crossAxisSpacing: 20,
-                              mainAxisSpacing: 5,
-                            ),
+                                    // childAspectRatio: 0.65,
+                                    crossAxisCount: 4,
+                                    crossAxisSpacing: 30,
+                                    // mainAxisSpacing: 5,
+                                    mainAxisExtent: 120),
                             itemCount: listMenu.length,
                             itemBuilder: (context, index) {
                               return Menu_Home(

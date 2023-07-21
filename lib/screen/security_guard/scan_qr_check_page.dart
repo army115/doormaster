@@ -80,6 +80,7 @@ class _ScanQR_CheckState extends State<ScanQR_Check> {
           Navigator.of(context).push(
             MaterialPageRoute<void>(
               builder: (BuildContext context) => Check_In(
+                  title: 'เช็คจุดตรวจ',
                   timeCheck: DateTime.now(),
                   checkpointId: '${result?.code}',
                   lat: position?.latitude,
@@ -91,6 +92,18 @@ class _ScanQR_CheckState extends State<ScanQR_Check> {
             ),
           );
         }
+      } else if (widget.name == 'extra') {
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (BuildContext context) => Check_In(
+                title: 'ตรวจนอกรอบ',
+                timeCheck: DateTime.now(),
+                checkpointId: '${result?.code}',
+                roundName: widget.roundName,
+                lat: position?.latitude,
+                lng: position?.longitude),
+          ),
+        );
       } else if (widget.name == 'add') {
         Navigator.of(context).push(
           MaterialPageRoute<void>(

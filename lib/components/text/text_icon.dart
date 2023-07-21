@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget textIcon(text, icon, {Color? color}) {
+Widget textIcon(text, icon, {Color? color, double? fontsize}) {
   return Text.rich(
     TextSpan(
       children: [
@@ -9,7 +9,8 @@ Widget textIcon(text, icon, {Color? color}) {
           padding: const EdgeInsets.only(right: 5),
           child: icon,
         )),
-        TextSpan(text: text, style: TextStyle(color: color)),
+        TextSpan(
+            text: text, style: TextStyle(color: color, fontSize: fontsize)),
       ],
     ),
   );

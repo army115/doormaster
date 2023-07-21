@@ -6,14 +6,14 @@ import 'package:get/get.dart';
 class TextForm_NoBorder_Validator extends StatelessWidget {
   TextEditingController controller;
   String title;
-  IconData icon;
+  var icon;
   final validator;
   var typeInput;
   TextForm_NoBorder_Validator(
       {Key? key,
       required this.controller,
       required this.title,
-      required this.icon,
+      this.icon,
       this.validator,
       required this.typeInput})
       : super(key: key);
@@ -23,6 +23,8 @@ class TextForm_NoBorder_Validator extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 8),
       child: TextFormField(
+        minLines: 1,
+        maxLines: 5,
         autofocus: false,
         style: TextStyle(fontSize: 16),
         controller: controller,

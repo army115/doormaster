@@ -1,6 +1,7 @@
-// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, use_build_context_synchronously, prefer_const_literals_to_create_immutables, avoid_print, must_be_immutable
+// ignore_for_file: prefer_const_constructors, unnecessary_null_comparison, use_build_context_synchronously
 
 import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/button/button.dart';
@@ -12,46 +13,51 @@ import 'package:doormster/components/map/map_page.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/components/text/text_icon.dart';
 import 'package:doormster/components/text_form/text_form_noborder_validator.dart';
-import 'package:doormster/models/get_checklist.dart';
 import 'package:doormster/screen/security_guard/report_logs_page.dart';
 import 'package:doormster/service/connect_api.dart';
 import 'package:doormster/service/permission/permission_camera.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert' as convert;
+
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Check_In extends StatefulWidget {
+class Extra_Check extends StatefulWidget {
   final title;
-  DateTime timeCheck;
-  final String checkpointId;
-  final lat;
-  final lng;
-  final roundId;
-  final roundName;
-  final roundStart;
-  final roundEnd;
-  Check_In(
-      {Key? key,
-      required this.checkpointId,
-      required this.lat,
-      required this.lng,
-      required this.timeCheck,
-      this.roundId,
-      this.roundName,
-      this.roundStart,
-      this.roundEnd,
-      this.title});
+  final type;
+  const Extra_Check({super.key, this.title, this.type});
 
   @override
-  State<Check_In> createState() => _Check_InState();
+  State<Extra_Check> createState() => _Extra_CheckState();
 }
 
-class _Check_InState extends State<Check_In> {
+class _Extra_CheckState extends State<Extra_Check> {
   final _formkey = GlobalKey<FormState>();
+  TextEditingController pointName = TextEditingController();
   TextEditingController detail = TextEditingController();
   TextEditingController status = TextEditingController();
+
+  var companyId;
+  var userId;
+  bool loading = false;
+  String? checkpointName;
+  DateTime now = DateTime.now();
+  Position? position;
+  double? lat;
+  double? lng;
+  List<String> listcheck = [];
+
+  Future getSharedPref() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    userId = prefs.getString('userId');
+    companyId = prefs.getString('companyId');
+
+    print('userId: ${userId}');
+    print('companyId: ${companyId}');
+  }
 
   final ImagePicker imgpicker = ImagePicker();
   // List<XFile>? listImage = [];
@@ -78,115 +84,17 @@ class _Check_InState extends State<Check_In> {
     }
   }
 
-  var companyId;
-  var userId;
-  List<Data> listdata = [];
-  List<Checklist> listcheck = [];
-  bool loading = false;
-  String? checkpointName;
-  int? verify = 1;
-
-  Future _getChecklist() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    companyId = prefs.getString('companyId');
-    userId = prefs.getString('userId');
-    print('companyId: $companyId');
-    print('userId: $userId');
-    print('timeCheck: ${widget.timeCheck}');
-    print('roundId: ${widget.roundId}');
-    print('lat: ${widget.lat}');
-    print('lng: ${widget.lng}');
-
-    String checkpointId;
-    print('idCheck: ${widget.checkpointId}');
-
-    if (widget.checkpointId.contains('http')) {
-      checkpointId = 'error';
-      log('idCheck: error');
-    } else {
-      checkpointId = widget.checkpointId;
-    }
-
-    if (widget.lat != null) {
-      try {
-        setState(() {
-          loading = true;
-        });
-
-        //call api
-        var url = '${Connect_api().domain}/get/checkpointdetail/$checkpointId';
-        var response = await Dio().get(
-          url,
-          options: Options(headers: {
-            'Connect-type': 'application/json',
-            'Accept': 'application/json',
-          }),
-        );
-
-        if (response.statusCode == 200) {
-          getChecklist checklist = getChecklist.fromJson(response.data);
-          setState(() {
-            listdata = checklist.data!;
-            loading = false;
-          });
-
-          if (listdata.isEmpty) {
-            dialogOnebutton_Subtitle(
-                context,
-                'พบข้อผิดพลาด',
-                'QR Code ไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง',
-                Icons.warning_amber_rounded,
-                Colors.orange,
-                'ตกลง', () {
-              Navigator.popUntil(context, (route) => route.isFirst);
-            }, false, false);
-          } else if (listdata[0].verify == 0) {
-            dialogOnebutton_Subtitle(
-                context,
-                'ไม่พบจุดตรวจ',
-                'จุดตรวจนี้ ยังไม่ได้ลงทะเบียน',
-                Icons.warning_amber_rounded,
-                Colors.orange,
-                'ตกลง', () {
-              Navigator.popUntil(context, (route) => route.isFirst);
-            }, false, false);
-          } else {
-            checkpointName = listdata[0].checkpointName;
-            verify = listdata[0].verify;
-          }
-
-          //loop add list []
-          for (int i = 0; i < listdata.length; i++) {
-            listcheck.addAll(listdata[i].checklist!);
-          }
-        }
-      } catch (error) {
-        print(error);
-        await Future.delayed(Duration(milliseconds: 500));
-        dialogOnebutton_Subtitle(
-            context,
-            'พบข้อผิดพลาด',
-            'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-            Icons.warning_amber_rounded,
-            Colors.orange,
-            'ตกลง', () {
-          Navigator.popUntil(context, (route) => route.isFirst);
-        }, false, false);
-        setState(() {
-          loading = false;
-        });
-      }
-    } else {
-      dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ตำแหน่งไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง',
-          Icons.highlight_off_rounded,
-          Colors.red,
-          'ตกลง', () {
-        Navigator.popUntil(context, (route) => route.isFirst);
-      }, false, false);
-      print('Location Null !!');
+  Future getLocation() async {
+    try {
+      position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.best);
+      setState(() {
+        lat = position?.latitude;
+        lng = position?.longitude;
+      });
+    } catch (error) {
+      print(error);
+      Navigator.of(context, rootNavigator: true).pop();
     }
   }
 
@@ -195,7 +103,7 @@ class _Check_InState extends State<Check_In> {
       setState(() {
         loading = true;
       });
-      var url = '${Connect_api().domain}/created/checkin';
+      var url = '${Connect_api().domain}/created/extracheck';
       var response = await Dio().post(url,
           options: Options(headers: {
             'Content-Type': 'application/json',
@@ -210,11 +118,10 @@ class _Check_InState extends State<Check_In> {
 
         Navigator.of(context, rootNavigator: true).push(
           MaterialPageRoute(
-            builder: (BuildContext context) => Report_Logs(tapIndex: 0),
+            builder: (BuildContext context) => Report_Logs(tapIndex: 1),
           ),
         );
-        // Navigator.popUntil(context, (route) => route.isFirst);
-        snackbar(context, Theme.of(context).primaryColor, 'ตรวจเช็คสำเร็จ',
+        snackbar(context, Theme.of(context).primaryColor, 'บันทึกสำเร็จ',
             Icons.check_circle_outline_rounded);
 
         setState(() {
@@ -223,8 +130,8 @@ class _Check_InState extends State<Check_In> {
       } else {
         dialogOnebutton_Subtitle(
             context,
-            'ตำแหน่งไม่ถูกต้อง',
-            'ตำแหน่งปัจจุบันไม่ตรงจุดตรวจ กรุณาลองใหม่อีกครั้ง',
+            'พบข้อผิดพลาด',
+            'บันทึกไม่สำเร็จ กรุณาลองใหม่อีกครั้ง',
             Icons.highlight_off_rounded,
             Colors.red,
             'ตกลง', () {
@@ -258,18 +165,17 @@ class _Check_InState extends State<Check_In> {
   @override
   void initState() {
     super.initState();
-    _getChecklist();
+    getSharedPref();
+    getLocation();
   }
 
   @override
   Widget build(BuildContext context) {
-    String date = DateFormat('dd-MM-y').format(widget.timeCheck);
-    String time = DateFormat('HH:mm:ss').format(widget.timeCheck);
-    // String dateTime =
-    //     DateFormat('yyyy-MM-ddTHH:mm:ss.SSSZ').format(widget.timeCheck);
+    String date = DateFormat('dd-MM-y').format(now);
+    String time = DateFormat('HH:mm:ss').format(now);
     return WillPopScope(
       onWillPop: () async {
-        Navigator.popUntil(context, (route) => route.isFirst);
+        Navigator.pop(context);
         return false;
       },
       child: Stack(
@@ -278,14 +184,12 @@ class _Check_InState extends State<Check_In> {
             appBar: AppBar(
               title: Text(widget.title),
               leading: button_back(() {
-                Navigator.popUntil(context, (route) => route.isFirst);
+                Navigator.pop(context);
               }),
             ),
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerFloat,
-            floatingActionButton: loading ||
-                    checkpointName == null ||
-                    verify == 0
+            floatingActionButton: loading
                 ? Container()
                 : Buttons(
                     title: 'บันทึก',
@@ -293,23 +197,25 @@ class _Check_InState extends State<Check_In> {
                       if (_formkey.currentState!.validate()) {
                         Map<String, dynamic> valuse = Map();
                         // valuse['time'] = '${DateTime.now()}';
-                        valuse['time'] =
-                            widget.timeCheck.add(Duration(hours: 7)).toString();
+                        valuse['time'] = now.add(Duration(hours: 7)).toString();
                         // .toUtc() //todo ค่าเวลากลาง Utc + 0 ได้ค่ามี Z ต่อท้ายเวลา 2023-03-15 14:05:58.075406Z
                         //todo time zone + 7 ชม.
                         // .toIso8601String(); //todo ได้ค่ามี T ท้ายวันที่ 2023-03-15T14:45:36.325350
-                        valuse['lat'] = widget.lat;
-                        valuse['lng'] = widget.lng;
+                        valuse['lat'] = lat;
+                        valuse['lng'] = lng;
                         valuse['EmpID'] = userId;
                         valuse['id'] = companyId;
-                        valuse['uuid'] = widget.checkpointId;
-                        valuse['Round_uuid'] = widget.roundId ?? 'นอกรอบ';
+                        valuse['uuid'] = 'นอกจุด';
+                        valuse['checkpoint_name'] = pointName.text;
+                        valuse['CheckList'] = listcheck;
+                        valuse['Round_uuid'] =
+                            widget.type == 0 ? "นอกรอบ" : 'เหตุฉุกเฉิน';
                         valuse['Desciption'] = detail.text;
-                        valuse['EventCheck'] = status.text;
-                        valuse['Status'] =
-                            widget.roundId != null ? "Checked" : "Extra";
+                        valuse['Status'] = "Extra";
+                        valuse['EventCheck'] =
+                            status.text != '' ? status.text : 'เหตุฉุกเฉิน';
                         valuse['pic'] = listImage64;
-                        print(valuse);
+                        log(valuse.toString());
                         _checkIn(valuse);
                       }
                     }),
@@ -317,7 +223,7 @@ class _Check_InState extends State<Check_In> {
                 child: SingleChildScrollView(
               child: Form(
                 key: _formkey,
-                child: loading || checkpointName == null || verify == 0
+                child: loading
                     ? Container()
                     : Container(
                         padding: EdgeInsets.fromLTRB(20, 20, 20, 80),
@@ -333,56 +239,93 @@ class _Check_InState extends State<Check_In> {
                                 color: Colors.red),
                             SizedBox(height: 10),
                             textIcon(
-                              'รอบเดิน : ${widget.roundName}',
+                              widget.type == 0
+                                  ? "รอบเดิน : นอกรอบ"
+                                  : 'รอบเดิน : เหตุฉุกเฉิน',
                               Icon(
                                 Icons.calendar_month_rounded,
                                 size: 25,
                               ),
                             ),
-                            widget.roundId != null
-                                ? Column(
-                                    children: [
-                                      SizedBox(height: 10),
-                                      textIcon(
-                                        'ช่วงเวลา : ${widget.roundStart} น. ถึง ${widget.roundEnd} น.',
-                                        Icon(
-                                          Icons.access_time_rounded,
-                                          size: 25,
-                                        ),
+                            // SizedBox(height: 10),
+                            TextFormField(
+                              controller: pointName,
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.zero,
+                                hintText: 'เพิ่มชื่อจุดตรวจ',
+                                hintStyle: TextStyle(fontSize: 16),
+                                errorStyle: TextStyle(fontSize: 15),
+                                icon: textIcon(
+                                  'จุดตรวจ :',
+                                  Icon(
+                                    Icons.maps_home_work_rounded,
+                                    size: 25,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'เพิ่มชื่อจุดตรวจ';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(height: 10),
+                            Wrap(
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              alignment: WrapAlignment.spaceBetween,
+                              children: [
+                                textIcon(
+                                  'รายการตรวจ',
+                                  Icon(
+                                    Icons.task_rounded,
+                                    size: 25,
+                                  ),
+                                ),
+                                SizedBox(width: 10),
+                                ElevatedButton(
+                                    onPressed: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => addChecklist(),
+                                      );
+                                    },
+                                    child: textIcon(
+                                      'เพิ่มรายการตรวจ',
+                                      fontsize: 14,
+                                      Icon(
+                                        Icons.add_box,
+                                        size: 22,
                                       ),
-                                    ],
-                                  )
-                                : Container(),
-                            SizedBox(height: 10),
-                            textIcon(
-                              'จุดตรวจ : $checkpointName',
-                              Icon(
-                                Icons.maps_home_work_rounded,
-                                size: 25,
-                              ),
+                                    )),
+                              ],
                             ),
-                            SizedBox(height: 10),
-                            textIcon(
-                              'รายการตรวจ',
-                              Icon(
-                                Icons.task_rounded,
-                                size: 25,
-                              ),
-                            ),
+                            // SizedBox(height: 10),
                             ListView.builder(
                                 shrinkWrap: true,
                                 primary: false,
-                                // physics: NeverScrollableScrollPhysics(),
                                 itemCount: listcheck.length,
                                 itemBuilder: ((context, index) =>
-                                    listcheck[index].checklist == ''
-                                        ? Container()
-                                        : CheckBox_FormField(
-                                            title:
-                                                '${listcheck[index].checklist}',
-                                            value: false,
-                                            validator: 'กรุณาเลือกรายการ',
-                                          ))),
+                                    CheckBox_FormField(
+                                      title: '${listcheck[index]}',
+                                      value: false,
+                                      validator: 'กรุณาเลือกรายการ',
+                                      secondary: IconButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              listcheck
+                                                  .remove(listcheck[index]);
+                                            });
+                                          },
+                                          icon: Icon(
+                                            Icons.remove_circle_outline_rounded,
+                                            color: Colors.red,
+                                          )),
+                                    ))),
+                            SizedBox(
+                              height: 10,
+                            ),
                             textIcon(
                               'รูปภาพประกอบ',
                               Icon(
@@ -498,13 +441,15 @@ class _Check_InState extends State<Check_In> {
                                 size: 25,
                               ),
                             ),
-                            Dropdown_NoBorder(
-                              title: 'เลือกสถานการณ์',
-                              controller: status,
-                              leftIcon: Icons.mobile_friendly,
-                              error: 'กรุณากเลือกบริษัท',
-                              listItem: ['ปกติ', 'ไม่ปกติ'],
-                            ),
+                            widget.type == 1
+                                ? Container()
+                                : Dropdown_NoBorder(
+                                    title: 'เลือกสถานการณ์',
+                                    controller: status,
+                                    leftIcon: Icons.mobile_friendly,
+                                    error: 'กรุณากเลือกบริษัท',
+                                    listItem: ['ปกติ', 'ไม่ปกติ'],
+                                  ),
                             TextForm_NoBorder_Validator(
                               typeInput: TextInputType.text,
                               controller: detail,
@@ -522,7 +467,7 @@ class _Check_InState extends State<Check_In> {
                             ExpansionTile(
                               tilePadding: EdgeInsets.zero,
                               title: textIcon(
-                                'ตำแหน่งจุดตรวจ',
+                                'ตำแหน่งปัจจุบัน',
                                 Icon(
                                   Icons.location_on_sharp,
                                   size: 25,
@@ -530,14 +475,13 @@ class _Check_InState extends State<Check_In> {
                                 ),
                               ),
                               children: [
-                                verify == 0
-                                    ? Container()
-                                    : Map_Page(
-                                        lat: widget.lat,
-                                        lng: widget.lng,
-                                        width: double.infinity,
-                                        height: 300,
-                                      )
+                                Map_Page(
+                                  extra: 'extra',
+                                  lat: lat,
+                                  lng: lng,
+                                  width: double.infinity,
+                                  height: 300,
+                                )
                               ],
                             ),
                           ],
@@ -547,6 +491,63 @@ class _Check_InState extends State<Check_In> {
           ),
           loading ? Loading() : Container()
         ],
+      ),
+    );
+  }
+
+  Widget addChecklist() {
+    final _fieldkey = GlobalKey<FormState>();
+    TextEditingController fieldText = TextEditingController();
+    return Form(
+      key: _fieldkey,
+      child: AlertDialog(
+        title: Text(
+          'เพิ่มรายการตรวจ',
+          style: TextStyle(fontSize: 16),
+        ),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(
+                'ยกเลิก',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              )),
+          TextButton(
+              onPressed: () {
+                if (_fieldkey.currentState!.validate()) {
+                  setState(() {
+                    listcheck.add(fieldText.text);
+                  });
+                  Navigator.pop(context);
+                }
+              },
+              child: Text(
+                'ตกลง',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ))
+        ],
+        content: TextFormField(
+          autofocus: true,
+          controller: fieldText,
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.zero,
+            hintText: 'กรอกรายการตรวจ',
+            hintStyle: TextStyle(fontSize: 16),
+            errorStyle: TextStyle(fontSize: 15),
+            icon: Icon(
+              Icons.checklist,
+              size: 30,
+            ),
+          ),
+          validator: (values) {
+            if (values!.isEmpty) {
+              return 'กรุณากรอกข้อมูล';
+            }
+            return null;
+          },
+        ),
       ),
     );
   }

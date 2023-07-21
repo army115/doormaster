@@ -11,6 +11,7 @@ import 'package:doormster/screen/main_screen/test.dart';
 import 'package:doormster/screen/security_guard/add_checkpoint_page.dart';
 import 'package:doormster/screen/security_guard/check_in_page.dart';
 import 'package:doormster/screen/security_guard/check_point_page.dart';
+import 'package:doormster/screen/security_guard/extra_round_page.dart';
 import 'package:doormster/screen/security_guard/report_logs_page.dart';
 import 'package:doormster/screen/security_guard/round_check_page.dart';
 import 'package:doormster/screen/security_guard/scan_qr_check_page.dart';
@@ -118,125 +119,101 @@ class _Security_GuardState extends State<Security_Guard> {
         //       Scaffold.of(context).openDrawer();
         //     }),
       ),
-      body: SingleChildScrollView(
-        child: Container(
+      body: Container(
+        child: GridView.extent(
+          // scrollDirection: Axis.vertical,
           padding: EdgeInsets.all(25),
-          child: Column(children: [
-            GridView.count(
-              // scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              primary: false,
-              childAspectRatio: 1.0,
-              crossAxisCount: 2,
-              crossAxisSpacing: 25,
-              mainAxisSpacing: 25,
-              children: [
-                Grid_Menu(
-                  title: 'บันทึกจุดตรวจ',
-                  icon: Icons.qr_code_scanner_rounded,
-                  press: () {
-                    permissionCamere(
+          shrinkWrap: true,
+          primary: false,
+          childAspectRatio: 1.0,
+          // crossAxisCount: 2,
+          maxCrossAxisExtent: 300,
+          crossAxisSpacing: 25,
+          mainAxisSpacing: 25,
+          children: [
+            Grid_Menu(
+              title: 'บันทึกจุดตรวจ',
+              icon: Icons.qr_code_scanner_rounded,
+              press: () {
+                permissionCamere(
+                    context,
+                    () => permissionLocation(
                         context,
-                        () => permissionLocation(
-                            context,
-                            () => listdata.isEmpty
-                                ? dialogOnebutton_Subtitle(
-                                    context,
-                                    'พบข้อผิดพลาด',
-                                    'ยังไม่ถึงรอบเดินตรวจ โปรดลองใหม่ในภายหลัง',
-                                    Icons.warning_amber_rounded,
-                                    Colors.orange,
-                                    'ตกลง', () {
-                                    Navigator.of(context, rootNavigator: true)
-                                        .pop();
-                                  }, true, true)
-                                : checkInternetOnGoBack(
-                                    context,
-                                    ScanQR_Check(
-                                      name: 'check',
-                                      roundName: listdata[0].roundName,
-                                      roundId: listdata[0].roundUuid,
-                                      roundStart: listdata[0].roundStart,
-                                      roundEnd: listdata[0].roundEnd,
-                                      checkpointId: listCheckpoint,
-                                    ),
-                                    true,
-                                    onGoBack)));
-                  },
-                ),
-                Grid_Menu(
-                  title: 'ลงทะเบียนจุดตรวจ',
-                  icon: Icons.pin_drop_outlined,
-                  press: () {
-                    permissionCamere(
-                        context,
-                        () => permissionLocation(
-                            context,
-                            () => checkInternetOnGoBack(
+                        () => listdata.isEmpty
+                            ? dialogOnebutton_Subtitle(
+                                context,
+                                'พบข้อผิดพลาด',
+                                'ยังไม่ถึงรอบเดินตรวจ โปรดลองใหม่ในภายหลัง',
+                                Icons.warning_amber_rounded,
+                                Colors.orange,
+                                'ตกลง', () {
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop();
+                              }, true, true)
+                            : checkInternetOnGoBack(
                                 context,
                                 ScanQR_Check(
-                                  name: 'add',
+                                  name: 'check',
+                                  roundName: listdata[0].roundName,
+                                  roundId: listdata[0].roundUuid,
+                                  roundStart: listdata[0].roundStart,
+                                  roundEnd: listdata[0].roundEnd,
+                                  checkpointId: listCheckpoint,
                                 ),
                                 true,
                                 onGoBack)));
-                  },
-                ),
-                Grid_Menu(
-                    title: 'รอบเดินตรวจ',
-                    icon: Icons.edit_calendar_rounded,
-                    press: () {
-                      checkInternetOnGoBack(
-                          context,
-                          Round_Check(checkpointId: listCheckpoint),
-                          false,
-                          onGoBack);
-                    }),
-                Grid_Menu(
-                    title: 'จุดเดินตรวจ',
-                    icon: Icons.share_location_outlined,
-                    press: () {
-                      checkInternetOnGoBack(
-                          context, Check_Point(), false, onGoBack);
-                    }),
-                Grid_Menu(
-                  title: 'ดูรายการบันทึกการตรวจ',
-                  icon: Icons.event_note,
-                  press: () {
-                    checkInternetOnGoBack(
-                        context, Report_Logs(type: 'home'), false, onGoBack);
-                  },
-                ),
-                Grid_Menu(
-                    title: 'บันทึกการตรวจนอกรอบ',
-                    icon: Icons.assignment_outlined,
-                    press: () {
-                      Navigator.of(context, rootNavigator: true).push(
-                        MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              //  Scaffold(
-                              //       appBar: AppBar(
-                              //         title: Text('บันทึกการตรวจนอกรอบ'),
-                              //       ),
-                              //       body: Logo_Opacity(title: 'ไม่มีข้อมูล'),
-                              //     )
-                              Check_In(
-                            timeCheck: DateTime.now(),
-                            checkpointId:
-                                "d0b26cbe-3351-41b9-87d4-ce2019b4bd4b",
-                            // checkpointId:
-                            //     'bf83c999-6ce0-4083-9b55-6f6b35c315e2',
-                            lat: 13.69521967419439,
-                            lng: 100.64172377200555,
-                            roundName: "รอบเช้า",
-                            roundStart: "14:00",
-                            roundEnd: "16:00",
-                          ),
-                        ),
-                      );
-                    }),
-              ],
+              },
             ),
-          ]),
+            Grid_Menu(
+              title: 'ลงทะเบียนจุดตรวจ',
+              icon: Icons.pin_drop_outlined,
+              press: () {
+                permissionCamere(
+                    context,
+                    () => permissionLocation(
+                        context,
+                        () => checkInternetOnGoBack(
+                            context,
+                            ScanQR_Check(
+                              name: 'add',
+                            ),
+                            true,
+                            onGoBack)));
+              },
+            ),
+            Grid_Menu(
+                title: 'รอบเดินตรวจ',
+                icon: Icons.edit_calendar_rounded,
+                press: () {
+                  checkInternetOnGoBack(
+                      context,
+                      Round_Check(checkpointId: listCheckpoint),
+                      false,
+                      onGoBack);
+                }),
+            Grid_Menu(
+                title: 'จุดเดินตรวจ',
+                icon: Icons.share_location_outlined,
+                press: () {
+                  checkInternetOnGoBack(
+                      context, Check_Point(), false, onGoBack);
+                }),
+            Grid_Menu(
+                title: 'ตรวจนอกรอบ',
+                icon: Icons.assignment_outlined,
+                press: () {
+                  checkInternetOnGoBack(
+                      context, Extra_Round(), false, onGoBack);
+                }),
+            Grid_Menu(
+              title: 'ดูบันทึกรายการตรวจ',
+              icon: Icons.event_note,
+              press: () {
+                checkInternetOnGoBack(context,
+                    Report_Logs(type: 'home', tapIndex: 0), false, onGoBack);
+              },
+            ),
+          ],
         ),
       ),
     );

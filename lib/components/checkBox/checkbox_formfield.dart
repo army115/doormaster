@@ -5,7 +5,9 @@ class CheckBox_FormField extends StatefulWidget {
   final title;
   final value;
   final validator;
-  const CheckBox_FormField({Key? key, this.title, this.value, this.validator});
+  final secondary;
+  const CheckBox_FormField(
+      {Key? key, this.title, this.value, this.validator, this.secondary});
 
   @override
   State<CheckBox_FormField> createState() => _CheckBox_FormFieldState();
@@ -15,6 +17,7 @@ class _CheckBox_FormFieldState extends State<CheckBox_FormField> {
   @override
   Widget build(BuildContext context) {
     return CheckboxListTileFormField(
+      secondary: widget.secondary,
       dense: true,
       activeColor: Theme.of(context).primaryColor,
       title: Text(

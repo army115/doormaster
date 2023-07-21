@@ -31,17 +31,20 @@ class _Auth_PageState extends State<Auth_Page> {
       child: Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
         body: SafeArea(
-          child: SingleChildScrollView(
-            child: Center(
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 30, horizontal: 30),
-                child: Column(children: [
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
                   Image.asset(
                     'assets/images/HIP Smart Community Icon-03.png',
-                    scale: 3,
+                    // scale: 3,
+                    height: MediaQuery.of(context).size.height * 0.4,
                   ),
                   GridView.count(
                     crossAxisCount: 2,
+                    primary: false,
+                    // maxCrossAxisExtent: 300,
                     crossAxisSpacing: 20,
                     shrinkWrap: true,
                     children: [
@@ -52,10 +55,8 @@ class _Auth_PageState extends State<Auth_Page> {
                         Navigator.pushReplacementNamed(context, '/staff');
                       })
                     ],
-                  )
+                  ),
                 ]),
-              ),
-            ),
           ),
         ),
       ),

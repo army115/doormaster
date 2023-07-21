@@ -26,7 +26,7 @@ class TextForm_Ontap extends StatelessWidget {
         elevation: 10,
         child: TextFormField(
           minLines: 1,
-          maxLines: 3,
+          maxLines: 5,
           controller: controller,
           readOnly: true,
           style: TextStyle(fontSize: 16),
