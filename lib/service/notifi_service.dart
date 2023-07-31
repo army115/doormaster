@@ -9,7 +9,7 @@ class NotificationService {
 
   Future<void> notification() async {
     AndroidInitializationSettings initializationSettingsAndroid =
-        const AndroidInitializationSettings("icon_app");
+        const AndroidInitializationSettings('icon_app');
 
     DarwinInitializationSettings initializationSettingsIOS =
         const DarwinInitializationSettings(
@@ -27,21 +27,20 @@ class NotificationService {
     );
   }
 
-  Future<void> showNotification() async {
-    AndroidNotificationDetails androidDetails =
-        const AndroidNotificationDetails(
-      'id',
-      'แจ้งเตือนปกติ',
+  Future<void> showNotification(context) async {
+    AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+      'id', 'แจ้งเตือนปกติ',
       importance: Importance.max,
       priority: Priority.high,
       ticker: 'ticker',
-      icon: "icon_app",
+      icon: 'icon_app',
       channelShowBadge: true,
+      color: Theme.of(context).primaryColor,
       // largeIcon: DrawableResourceAndroidBitmap('circle_icon'),
     );
 
     DarwinNotificationDetails iosDetails = const DarwinNotificationDetails(
-        badgeNumber: 1, subtitle: 'test notification ios');
+        badgeNumber: 0, subtitle: 'การแจ้งเตือนใหม่');
 
     NotificationDetails generalNotificationDetails = NotificationDetails(
       android: androidDetails,

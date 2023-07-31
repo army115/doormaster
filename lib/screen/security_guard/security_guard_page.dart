@@ -182,6 +182,21 @@ class _Security_GuardState extends State<Security_Guard> {
               },
             ),
             Grid_Menu(
+              title: 'ดูบันทึกรายการตรวจ',
+              icon: Icons.event_note,
+              press: () {
+                checkInternetOnGoBack(context,
+                    Report_Logs(type: 'home', tapIndex: 0), false, onGoBack);
+              },
+            ),
+            Grid_Menu(
+                title: 'ตรวจนอกรอบ',
+                icon: Icons.assignment_outlined,
+                press: () {
+                  checkInternetOnGoBack(
+                      context, Extra_Round(), false, onGoBack);
+                }),
+            Grid_Menu(
                 title: 'รอบเดินตรวจ',
                 icon: Icons.edit_calendar_rounded,
                 press: () {
@@ -198,21 +213,6 @@ class _Security_GuardState extends State<Security_Guard> {
                   checkInternetOnGoBack(
                       context, Check_Point(), false, onGoBack);
                 }),
-            Grid_Menu(
-                title: 'ตรวจนอกรอบ',
-                icon: Icons.assignment_outlined,
-                press: () {
-                  checkInternetOnGoBack(
-                      context, Extra_Round(), false, onGoBack);
-                }),
-            Grid_Menu(
-              title: 'ดูบันทึกรายการตรวจ',
-              icon: Icons.event_note,
-              press: () {
-                checkInternetOnGoBack(context,
-                    Report_Logs(type: 'home', tapIndex: 0), false, onGoBack);
-              },
-            ),
           ],
         ),
       ),

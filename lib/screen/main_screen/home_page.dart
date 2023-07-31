@@ -167,11 +167,6 @@ class _Home_PageState extends State<Home_Page>
     }
   }
 
-  Future<void> checkInternet() async {
-    checkNet = await Connectivity().checkConnectivity();
-    log('net $checkNet');
-  }
-
   @override
   bool get wantKeepAlive => true;
 

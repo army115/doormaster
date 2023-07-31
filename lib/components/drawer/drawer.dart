@@ -14,7 +14,6 @@ import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as convert;
-// import 'package:http/http.dart' as http;
 
 class MyDrawer extends StatefulWidget {
   final ontapItem;
@@ -36,7 +35,7 @@ class _MyDrawerState extends State<MyDrawer> {
   List<Data> multiCompany = [];
   late SharedPreferences prefs;
 
-  Future _Logout() async {
+  Future<void> _Logout() async {
     prefs = await SharedPreferences.getInstance();
     if (security == true) {
       prefs.clear();
@@ -59,7 +58,7 @@ class _MyDrawerState extends State<MyDrawer> {
     print('logout success');
   }
 
-  Future getValueShared() async {
+  Future<void> getValueShared() async {
     prefs = await SharedPreferences.getInstance();
     uuId = prefs.getString('uuId');
     companyId = prefs.getString('companyId');
@@ -75,7 +74,7 @@ class _MyDrawerState extends State<MyDrawer> {
     _getMultiCompany();
   }
 
-  Future _getMultiCompany() async {
+  Future<void> _getMultiCompany() async {
     try {
       setState(() {
         loading = true;
@@ -108,7 +107,7 @@ class _MyDrawerState extends State<MyDrawer> {
     }
   }
 
-  Future _selectCompany(uId, comId) async {
+  Future<void> _selectCompany(uId, comId) async {
     prefs.clear();
     try {
       setState(() {
@@ -203,10 +202,6 @@ class _MyDrawerState extends State<MyDrawer> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Drawer(
-        // shape: RoundedRectangleBorder(
-        //     borderRadius: BorderRadius.only(
-        //         bottomRight: Radius.circular(150),
-        //         topRight: Radius.circular(150))),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [

@@ -47,47 +47,47 @@ class _Logs_AllState extends State<Logs_All>
     companyId = prefs.getString('companyId');
     print('companyId: ${companyId}');
 
-    // try {
-    setState(() {
-      loading = true;
-    });
-
-    await Future.delayed(Duration(milliseconds: loadingTime));
-
-    //call api
-    var url = '${Connect_api().domain}/get/getRoundNoPic';
-    var response = await Dio().post(url,
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        }),
-        data: {"id": companyId, "from": dateStart, "to": dateEnd});
-
-    if (response.statusCode == 200) {
-      getLog logslist = getLog.fromJson(response.data);
+    try {
       setState(() {
-        listLog = logslist.data!;
-        listData = listLog;
+        loading = true;
+      });
+
+      await Future.delayed(Duration(milliseconds: loadingTime));
+
+      //call api
+      var url = '${Connect_api().domain}/get/getRoundNoPic';
+      var response = await Dio().post(url,
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          }),
+          data: {"id": companyId, "from": dateStart, "to": dateEnd});
+
+      if (response.statusCode == 200) {
+        getLog logslist = getLog.fromJson(response.data);
+        setState(() {
+          listLog = logslist.data!;
+          listData = listLog;
+          loading = false;
+        });
+      }
+    } catch (error) {
+      print(error);
+      await Future.delayed(const Duration(milliseconds: 500));
+      dialogOnebutton_Subtitle(
+          context,
+          'พบข้อผิดพลาด',
+          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+          Icons.warning_amber_rounded,
+          Colors.orange,
+          'ตกลง', () {
+        homeKey.currentState?.popUntil(ModalRoute.withName('/security'));
+        Navigator.of(context, rootNavigator: true).pop();
+      }, false, false);
+      setState(() {
         loading = false;
       });
     }
-    // } catch (error) {
-    //   print(error);
-    //   await Future.delayed(const Duration(milliseconds: 500));
-    //   dialogOnebutton_Subtitle(
-    //       context,
-    //       'พบข้อผิดพลาด',
-    //       'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-    //       Icons.warning_amber_rounded,
-    //       Colors.orange,
-    //       'ตกลง', () {
-    //     homeKey.currentState?.popUntil(ModalRoute.withName('/security'));
-    //     Navigator.of(context, rootNavigator: true).pop();
-    //   }, false, false);
-    //   setState(() {
-    //     loading = false;
-    //   });
-    // }
   }
 
   void dateNowAll() {
