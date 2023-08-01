@@ -1,13 +1,69 @@
 // ignore_for_file: unused_import
 
+import 'dart:developer';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+Future<void> handleBackgroundMessage(RemoteMessage message) async {
+  log("Title : ${message.notification?.title}");
+  log("Bdy : ${message.notification?.body}");
+  log("Data : ${message.data}");
+}
+
 class NotificationService {
+  final messaging = FirebaseMessaging.instance;
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
+  Future<void> handleMessage(RemoteMessage message) async {
+    BigTextStyleInformation bigTextStyleInformation = BigTextStyleInformation(
+      message.notification!.body.toString(),
+      htmlFormatBigText: true,
+      contentTitle: message.notification!.title.toString(),
+      htmlFormatContentTitle: true,
+    );
+    AndroidNotificationDetails androidChannel = AndroidNotificationDetails(
+      'high_importance_channel', // id
+      'High Importance Notifications', // title
+      importance: Importance.max,
+      priority: Priority.high,
+      ticker: 'ticker',
+      icon: 'icon_app',
+      channelShowBadge: true,
+      styleInformation: bigTextStyleInformation,
+      // color: Theme.of(context).primaryColor,
+      // largeIcon: DrawableResourceAndroidBitmap('circle_icon'),
+    );
+    DarwinNotificationDetails iosChannel = const DarwinNotificationDetails(
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true,
+    );
+    NotificationDetails platformChannel =
+        NotificationDetails(android: androidChannel, iOS: iosChannel);
+
+    await flutterLocalNotificationsPlugin.show(1, message.notification?.title,
+        message.notification?.body, platformChannel,
+        payload: message.data['body']);
+    log("Title : ${message.notification?.title}");
+    log("Bdy : ${message.notification?.body}");
+    log("Data : ${message.data}");
+  }
+
   Future<void> notification() async {
+    await messaging.requestPermission(alert: true, badge: true, sound: true);
+    final fCMToken = await messaging.getToken();
+    log("Token : ${fCMToken}");
+
+    await FirebaseMessaging.instance
+        .setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
     AndroidInitializationSettings initializationSettingsAndroid =
         const AndroidInitializationSettings('icon_app');
 
@@ -25,6 +81,10 @@ class NotificationService {
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
     );
+
+    FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
+    FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
+    FirebaseMessaging.onMessage.listen(handleMessage);
   }
 
   Future<void> showNotification(context) async {

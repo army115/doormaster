@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1070859854806",
+    "project_id": "hip-notification-6d592",
+    "storage_bucket": "hip-notification-6d592.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1070859854806:android:ffb430a0ee95bd3d653a77",
+        "android_client_info": {
+          "package_name": "com.hip.community"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1070859854806-4af9sbiuu428b7lj1254ogctl9l4cllv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdi8P4anrPswCUI_odJMsNa_qsNOfRVOA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1070859854806-4af9sbiuu428b7lj1254ogctl9l4cllv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

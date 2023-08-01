@@ -51,21 +51,33 @@
               android:resource="@style/LaunchTheme"
               />
 
-            <meta-data
-                android:name="com.google.firebase.messaging.default_notification_icon"
-                android:resource="@drawable/icon_app"
-                />
-
-            <meta-data
-                android:name="com.google.firebase.messaging.default_notification_color"
-                android:resource="@android:color/black"
-                />
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/icon_app"/>
+
+        <!-- <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@android:color/black"/> -->
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="high_importance_channel"/>
+
+    <receiver
+        android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
+    <receiver
+        android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
+        <intent-filter>
+            <action
+              android:name="android.intent.action.BOOT_COMPLETED"></action>
+            </intent-filter>
+    </receiver>
 
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->

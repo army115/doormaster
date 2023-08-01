@@ -10,6 +10,7 @@ import 'package:doormster/screen/main_screen/settings_page.dart';
 import 'package:doormster/screen/management_service/management_service_page.dart';
 import 'package:doormster/style/theme.dart';
 import 'package:doormster/service/notifi_service.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -26,7 +27,8 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 
 Future<void> main(context) async {
   WidgetsFlutterBinding.ensureInitialized();
-  NotificationService().notification();
+  // await Firebase.initializeApp();
+  await NotificationService().notification();
   // FlutterNativeSplash.preserve(
   //     widgetsBinding: WidgetsFlutterBinding.ensureInitialized());
   FlutterNativeSplash.remove();
