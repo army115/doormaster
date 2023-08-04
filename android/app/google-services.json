@@ -29,6 +29,14 @@
             {
               "client_id": "1070859854806-4af9sbiuu428b7lj1254ogctl9l4cllv.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1070859854806-e74r4i6abs5f9m5otpp21akkrnjg3k10.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.hip.doormaster",
+                "app_store_id": "6447608906"
+              }
             }
           ]
         }

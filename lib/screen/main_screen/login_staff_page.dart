@@ -1,4 +1,6 @@
 // ignore_for_file: prefer_const_constructors_in_immutables, avoid_single_cascade_in_expression_statements, avoid_print, use_build_context_synchronously, unused_local_variable
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
@@ -70,6 +72,7 @@ class _Login_StaffState extends State<Login_Staff> {
               // ส่งค่าตัวแปร
               SharedPreferences prefs = await SharedPreferences.getInstance();
               await prefs.setString('token', token!);
+              await prefs.setString('sId', data.single.sId!);
               await prefs.setString('username', data.single.userName!);
               await prefs.setString('fname', data.single.firstName!);
               await prefs.setString('lname', data.single.surName!);
@@ -81,6 +84,21 @@ class _Login_StaffState extends State<Login_Staff> {
                 await prefs.setString('image', data.single.image!);
               }
               print(data.single.isSecurity);
+
+              //บันทึก token device เพื่อส่ง notify
+              // var deviceToken = prefs.getString('notifyToken');
+              // String url = '${Connect_api().domain}/create/notifyToken';
+              // var response = await Dio().post(url,
+              //     options: Options(headers: {
+              //       'Content-Type': 'application/json',
+              //       'Accept': 'application/json',
+              //     }),
+              //     data: {
+              //       "device_token": deviceToken,
+              //       "company_id": data.single.companyId,
+              //       "user_id": data.single.sId,
+              //     });
+              // log("Notify: ${response.data}");
 
               Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => BottomBar()));

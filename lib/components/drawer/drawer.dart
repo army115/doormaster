@@ -1,5 +1,5 @@
 // ignore_for_file: sort_child_properties_last, prefer_const_constructors
-
+import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_twobutton_subtext.dart';
@@ -36,7 +36,22 @@ class _MyDrawerState extends State<MyDrawer> {
   late SharedPreferences prefs;
 
   Future<void> _Logout() async {
-    prefs = await SharedPreferences.getInstance();
+    //ลบ token device notify
+    var deviceToken = prefs.getString('notifyToken');
+    var companyId = prefs.getString('companyId');
+    var sId = prefs.getString('sId');
+    String url = '${Connect_api().domain}/delete/notifyToken';
+    var response = await Dio().delete(url,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        }),
+        data: {
+          "device_token": deviceToken,
+          "company_id": companyId,
+          "user_id": sId,
+        });
+    log("Notify: ${response.data}");
     if (security == true) {
       prefs.clear();
       Navigator.of(context).pushAndRemoveUntil(

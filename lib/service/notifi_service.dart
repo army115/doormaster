@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> handleBackgroundMessage(RemoteMessage message) async {
   log("Title : ${message.notification?.title}");
@@ -56,6 +57,8 @@ class NotificationService {
     await messaging.requestPermission(alert: true, badge: true, sound: true);
     final fCMToken = await messaging.getToken();
     log("Token : ${fCMToken}");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString("notifyToken", fCMToken!);
 
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(

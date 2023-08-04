@@ -27,7 +27,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 
 Future<void> main(context) async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp();
+  await Firebase.initializeApp();
   await NotificationService().notification();
   // FlutterNativeSplash.preserve(
   //     widgetsBinding: WidgetsFlutterBinding.ensureInitialized());

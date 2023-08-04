@@ -96,6 +96,21 @@ class _Login_PageState extends State<Login_Page> {
                 await prefs.setString('weiganId', data.single.weigangroupUuid!);
               }
 
+              //บันทึก token device เพื่อส่ง notify
+              // var deviceToken = prefs.getString('notifyToken');
+              // String url = '${Connect_api().domain}/create/notifyToken';
+              // var response = await Dio().post(url,
+              //     options: Options(headers: {
+              //       'Content-Type': 'application/json',
+              //       'Accept': 'application/json',
+              //     }),
+              //     data: {
+              //       "device_token": deviceToken,
+              //       "company_id": data.single.companyId,
+              //       "user_id": data.single.sId,
+              //     });
+              // log("Notify: ${response.data}");
+
               Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => BottomBar()));
               snackbar(context, Theme.of(context).primaryColor,

@@ -88,5 +88,7 @@
 	<true/>
 	<key>kTCCServiceMediaLibrary</key>
 	<string>media</string>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<false/>
 </dict>
 </plist>

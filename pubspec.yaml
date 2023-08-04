@@ -67,14 +67,14 @@ dependencies:
   easy_loading_button: ^0.3.0
   calendar_date_picker2: ^0.4.9
   animated_custom_dropdown: ^1.5.0
-  flutter_local_notifications: ^14.0.0+1
+  flutter_local_notifications: ^15.1.0+1
   flutter_phoenix: ^1.1.1
   flutter_datetime_picker_bdaya: ^3.0.1
   package_info_plus: ^4.0.2
   dotted_line: ^3.2.0
   local_auth: ^2.1.6
-  # firebase_core: ^2.15.0
   firebase_messaging: ^14.6.5
+  firebase_core: ^2.15.0
   # flutter_typeahead: ^4.3.7
   # dropdown_search: ^5.0.6
   # buddhist_datetime_dateformat_sns: ^1.0.7
