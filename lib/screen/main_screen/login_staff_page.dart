@@ -1,6 +1,4 @@
 // ignore_for_file: prefer_const_constructors_in_immutables, avoid_single_cascade_in_expression_statements, avoid_print, use_build_context_synchronously, unused_local_variable
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
@@ -11,6 +9,7 @@ import 'package:doormster/components/text_form/text_form.dart';
 import 'package:doormster/components/text_form/text_form_password.dart';
 import 'package:doormster/models/login_model.dart';
 import 'package:doormster/service/connect_api.dart';
+import 'package:doormster/service/notify_token.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -85,20 +84,9 @@ class _Login_StaffState extends State<Login_Staff> {
               }
               print(data.single.isSecurity);
 
-              //บันทึก token device เพื่อส่ง notify
-              // var deviceToken = prefs.getString('notifyToken');
-              // String url = '${Connect_api().domain}/create/notifyToken';
-              // var response = await Dio().post(url,
-              //     options: Options(headers: {
-              //       'Content-Type': 'application/json',
-              //       'Accept': 'application/json',
-              //     }),
-              //     data: {
-              //       "device_token": deviceToken,
-              //       "company_id": data.single.companyId,
-              //       "user_id": data.single.sId,
-              //     });
-              // log("Notify: ${response.data}");
+              //บันทึก deviece token ลง database
+              Notify_Token()
+                  .create_notifyToken(data.single.companyId, data.single.sId);
 
               Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => BottomBar()));

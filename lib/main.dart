@@ -9,7 +9,7 @@ import 'package:doormster/screen/main_screen/login_staff_page.dart';
 import 'package:doormster/screen/main_screen/settings_page.dart';
 import 'package:doormster/screen/management_service/management_service_page.dart';
 import 'package:doormster/style/theme.dart';
-import 'package:doormster/service/notifi_service.dart';
+import 'package:doormster/service/notify_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

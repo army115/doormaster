@@ -42,7 +42,6 @@ class _Record_PointState extends State<Record_Point> {
   List<DatalogAll> logsDate = [];
   List<FileList> fileList = [];
   List<FileList> logsList = [];
-  List<Checkpoint> checkpoint = [];
   bool loading = false;
   DateFormat formatTime = DateFormat('HH:mm');
   DateFormat formatdate = DateFormat('dd-MM-y');
@@ -96,7 +95,7 @@ class _Record_PointState extends State<Record_Point> {
   void _searchData(String text) {
     setState(() {
       fileList = logsList.where((item) {
-        String name = item.checkpoint![0].checkpointName!.toLowerCase();
+        String name = item.checkpointName!.toLowerCase();
         String dates = formatdate.format(DateTime.parse(item.date!));
         String times = formatTime.format(DateTime.parse(item.checktimeReal!));
         String event = item.event!.toLowerCase();
@@ -192,10 +191,7 @@ class _Record_PointState extends State<Record_Point> {
                         itemBuilder: (context, index) {
                           final time = DateTime.parse(
                               '${fileList[index].checktimeReal}');
-                          checkpoint = fileList[index].checkpoint!;
-                          final checklist = checkpoint[0].checklist;
-                          final listcheck = fileList[index].checkList;
-                          log(listcheck.toString());
+                          final listcheck = fileList[index].checklist;
                           final date =
                               DateTime.parse('${fileList[index].date}');
 
@@ -207,7 +203,7 @@ class _Record_PointState extends State<Record_Point> {
                             child: ExpansionTile(
                                 textColor: Colors.black,
                                 title: Text(
-                                  'จุดตรวจ :  ${checkpoint.isNotEmpty ? checkpoint[0].checkpointName : fileList[index].checkpointName}',
+                                  'จุดตรวจ :  ${fileList[index].checkpointName}',
                                   style: const TextStyle(fontSize: 16),
                                 ),
                                 subtitle: Column(
@@ -245,13 +241,13 @@ class _Record_PointState extends State<Record_Point> {
                                           primary: false,
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 3, horizontal: 20),
-                                          itemCount: checklist?.length,
+                                          itemCount: listcheck?.length,
                                           itemBuilder: (BuildContext context,
                                               int index) {
-                                            return checklist?[index] == ''
+                                            return listcheck?[index] == ''
                                                 ? Container()
                                                 : Text(
-                                                    '- ${checklist?[index]}');
+                                                    '- ${listcheck?[index]}');
                                           },
                                         ),
                                         fileList[index].desciption != ''

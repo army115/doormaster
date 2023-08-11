@@ -14,6 +14,7 @@ import 'package:doormster/models/login_model.dart';
 import 'package:doormster/screen/main_screen/login_staff_page.dart';
 import 'package:doormster/screen/main_screen/register_page.dart';
 import 'package:doormster/service/connect_api.dart';
+import 'package:doormster/service/notify_token.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -96,20 +97,9 @@ class _Login_PageState extends State<Login_Page> {
                 await prefs.setString('weiganId', data.single.weigangroupUuid!);
               }
 
-              //บันทึก token device เพื่อส่ง notify
-              // var deviceToken = prefs.getString('notifyToken');
-              // String url = '${Connect_api().domain}/create/notifyToken';
-              // var response = await Dio().post(url,
-              //     options: Options(headers: {
-              //       'Content-Type': 'application/json',
-              //       'Accept': 'application/json',
-              //     }),
-              //     data: {
-              //       "device_token": deviceToken,
-              //       "company_id": data.single.companyId,
-              //       "user_id": data.single.sId,
-              //     });
-              // log("Notify: ${response.data}");
+              //บันทึก deviece token ลง database
+              Notify_Token()
+                  .create_notifyToken(data.single.companyId, data.single.sId);
 
               Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => BottomBar()));

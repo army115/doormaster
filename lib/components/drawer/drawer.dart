@@ -11,6 +11,7 @@ import 'package:doormster/screen/main_screen/add_company_page.dart';
 import 'package:doormster/screen/main_screen/login_page.dart';
 import 'package:doormster/screen/main_screen/login_staff_page.dart';
 import 'package:doormster/service/connect_api.dart';
+import 'package:doormster/service/notify_token.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as convert;
@@ -37,21 +38,8 @@ class _MyDrawerState extends State<MyDrawer> {
 
   Future<void> _Logout() async {
     //ลบ token device notify
-    var deviceToken = prefs.getString('notifyToken');
-    var companyId = prefs.getString('companyId');
-    var sId = prefs.getString('sId');
-    String url = '${Connect_api().domain}/delete/notifyToken';
-    var response = await Dio().delete(url,
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        }),
-        data: {
-          "device_token": deviceToken,
-          "company_id": companyId,
-          "user_id": sId,
-        });
-    log("Notify: ${response.data}");
+    Notify_Token().deletenotifyToken();
+
     if (security == true) {
       prefs.clear();
       Navigator.of(context).pushAndRemoveUntil(
@@ -123,7 +111,6 @@ class _MyDrawerState extends State<MyDrawer> {
   }
 
   Future<void> _selectCompany(uId, comId) async {
-    prefs.clear();
     try {
       setState(() {
         loading = true;
@@ -139,9 +126,13 @@ class _MyDrawerState extends State<MyDrawer> {
             "company_id": comId,
           });
       var jsonRes = LoginModel.fromJson(response.data);
+      print(response.data);
       if (jsonRes.status == 200) {
         var token = jsonRes.accessToken;
         List<User> data = jsonRes.user!; //ตัวแปร List จาก model
+
+        //ลบค่า device token ของบริษัทก่อนหน้า
+        Notify_Token().deletenotifyToken();
 
         // ส่งค่าตัวแปร
         await prefs.setString('token', token!);
@@ -165,7 +156,10 @@ class _MyDrawerState extends State<MyDrawer> {
 
         print('userId: ${data.single.sId}');
         print('Select Success');
-        print(response.data);
+
+        //เพิ่ม device token ของบริษัทนี้
+        Notify_Token()
+            .create_notifyToken(data.single.companyId, data.single.sId);
 
         Navigator.of(context).pop();
         Navigator.of(context).pop();

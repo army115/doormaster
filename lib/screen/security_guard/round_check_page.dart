@@ -51,8 +51,8 @@ class _Round_CheckState extends State<Round_Check> {
           //  ||now.isAtSameMomentAs(timeEnd!)
           ) {
         containerColor = Theme.of(context).primaryColor;
-        textColor = Colors.yellow;
-        line = Colors.yellow;
+        textColor = Colors.white;
+        line = Colors.white;
         round = 1;
       } else {
         round = 0;

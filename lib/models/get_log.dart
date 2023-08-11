@@ -90,8 +90,13 @@ class DataLog {
 
 class FileList {
   String? sId;
-  String? chekpointUUid;
+  String? checkpointName;
+  String? checkpointUuid;
   String? companyId;
+  double? checkpointLat;
+  double? checkpointLng;
+  List<String>? checklist;
+  String? chekpointUUid;
   String? roundUuid;
   String? empID;
   String? checkTime;
@@ -103,14 +108,16 @@ class FileList {
   String? checktimeReal;
   String? date;
   String? mouth;
-  List<Checkpoint>? checkpoint;
-  String? checkpointName;
-  List<String>? checkList;
 
   FileList(
       {this.sId,
-      this.chekpointUUid,
+      this.checkpointName,
+      this.checkpointUuid,
       this.companyId,
+      this.checkpointLat,
+      this.checkpointLng,
+      this.checklist,
+      this.chekpointUUid,
       this.roundUuid,
       this.empID,
       this.checkTime,
@@ -121,15 +128,17 @@ class FileList {
       this.desciption,
       this.checktimeReal,
       this.date,
-      this.mouth,
-      this.checkpoint,
-      this.checkpointName,
-      this.checkList});
+      this.mouth});
 
   FileList.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
-    chekpointUUid = json['ChekpointUUid'];
+    checkpointName = json['checkpoint_name'];
+    checkpointUuid = json['checkpoint_uuid'];
     companyId = json['company_id'];
+    checkpointLat = json['checkpoint_lat'];
+    checkpointLng = json['checkpoint_lng'];
+    checklist = json['checklist'].cast<String>();
+    chekpointUUid = json['ChekpointUUid'];
     roundUuid = json['Round_uuid'];
     empID = json['EmpID'];
     checkTime = json['CheckTime'];
@@ -141,69 +150,6 @@ class FileList {
     checktimeReal = json['checktime_real'];
     date = json['Date'];
     mouth = json['Mouth'];
-    if (json['checkpoint'] != null) {
-      checkpoint = <Checkpoint>[];
-      json['checkpoint'].forEach((v) {
-        checkpoint!.add(new Checkpoint.fromJson(v));
-      });
-    }
-    checkpointName = json['checkpoint_name'];
-    if (json['CheckList'] != null) {
-      checkList = json['CheckList'].cast<String>();
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
-    data['ChekpointUUid'] = this.chekpointUUid;
-    data['company_id'] = this.companyId;
-    data['Round_uuid'] = this.roundUuid;
-    data['EmpID'] = this.empID;
-    data['CheckTime'] = this.checkTime;
-    data['lat'] = this.lat;
-    data['lng'] = this.lng;
-    data['Status'] = this.status;
-    data['Event'] = this.event;
-    data['Desciption'] = this.desciption;
-    data['checktime_real'] = this.checktimeReal;
-    data['Date'] = this.date;
-    data['Mouth'] = this.mouth;
-    if (this.checkpoint != null) {
-      data['checkpoint'] = this.checkpoint!.map((v) => v.toJson()).toList();
-    }
-    data['checkpoint_name'] = this.checkpointName;
-    data['CheckList'] = this.checkList;
-    return data;
-  }
-}
-
-class Checkpoint {
-  String? sId;
-  String? checkpointName;
-  String? checkpointUuid;
-  String? companyId;
-  double? checkpointLat;
-  double? checkpointLng;
-  List<String>? checklist;
-
-  Checkpoint(
-      {this.sId,
-      this.checkpointName,
-      this.checkpointUuid,
-      this.companyId,
-      this.checkpointLat,
-      this.checkpointLng,
-      this.checklist});
-
-  Checkpoint.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
-    checkpointName = json['checkpoint_name'];
-    checkpointUuid = json['checkpoint_uuid'];
-    companyId = json['company_id'];
-    checkpointLat = json['checkpoint_lat'];
-    checkpointLng = json['checkpoint_lng'];
-    checklist = json['checklist'].cast<String>();
   }
 
   Map<String, dynamic> toJson() {
@@ -215,6 +161,18 @@ class Checkpoint {
     data['checkpoint_lat'] = this.checkpointLat;
     data['checkpoint_lng'] = this.checkpointLng;
     data['checklist'] = this.checklist;
+    data['ChekpointUUid'] = this.chekpointUUid;
+    data['Round_uuid'] = this.roundUuid;
+    data['EmpID'] = this.empID;
+    data['CheckTime'] = this.checkTime;
+    data['lat'] = this.lat;
+    data['lng'] = this.lng;
+    data['Status'] = this.status;
+    data['Event'] = this.event;
+    data['Desciption'] = this.desciption;
+    data['checktime_real'] = this.checktimeReal;
+    data['Date'] = this.date;
+    data['Mouth'] = this.mouth;
     return data;
   }
 }

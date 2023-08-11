@@ -6,6 +6,7 @@ import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/dropdown/dropdonw_search.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
+import 'package:doormster/service/notify_token.dart';
 import 'package:doormster/style/styleButton/ButtonStyle.dart';
 import 'package:doormster/models/create_company_model.dart';
 import 'package:doormster/models/get_company.dart';
@@ -185,6 +186,9 @@ class _Add_CompanyState extends State<Add_Company> {
         print('token: ${token}');
         print('login success');
 
+        //ลบค่า device token ของบริษัทก่อนหน้า
+        Notify_Token().deletenotifyToken();
+
         // ส่งค่าตัวแปร
         await prefs.setString('token', token!);
         await prefs.setString('userId', data.single.sId!);
@@ -200,6 +204,10 @@ class _Add_CompanyState extends State<Add_Company> {
         }
         print('loginMulti Success');
         print(response.data);
+
+        //เพิ่ม device token ของบริษัทนี้
+        Notify_Token()
+            .create_notifyToken(data.single.companyId, data.single.sId);
 
         Navigator.of(context).pushNamedAndRemoveUntil(
             '/bottom', (Route<dynamic> route) => false);

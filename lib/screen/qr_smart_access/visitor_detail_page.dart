@@ -1,14 +1,17 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, must_be_immutable, unused_import
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, must_be_immutable, unused_import, use_build_context_synchronously, avoid_print
 
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/button/buttonback_appbar.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
+import 'package:doormster/service/permission/permission_photos.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:share_files_and_screenshot_widgets/share_files_and_screenshot_widgets.dart';
 import 'dart:convert' as convert;
 import 'dart:ui' as ui;
@@ -49,7 +52,7 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
     usableCount = widget.visitordData[5];
   }
 
-  Future _QrcodeImage() async {
+  Future<void> _QrcodeImage() async {
     if (widget.QRcodeData == null) {
       var QRCode = widget.visitordData[6];
       setState(() {
@@ -63,7 +66,7 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
     }
   }
 
-  void _saveScreenshot() async {
+  Future<void> _saveScreenshot() async {
     try {
       RenderRepaintBoundary boundary = _keyScreenshot.currentContext!
           .findRenderObject() as RenderRepaintBoundary;
@@ -78,11 +81,17 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
             Uint8List.fromList(pngBytes),
             quality: 100,
             name: 'QRCode-${DateTime.now()}.jpg');
-
         print('show : ${result}');
-        print('saved image successfully!!!');
-        snackbar(context, Theme.of(context).primaryColor, 'บันทึกภาพสำเร็จ',
-            Icons.check_circle_outline_rounded);
+
+        if (result["isSuccess"] == true) {
+          print('saved image successfully!!!');
+          snackbar(context, Theme.of(context).primaryColor, 'บันทึกภาพสำเร็จ',
+              Icons.check_circle_outline_rounded);
+        } else {
+          print('saved image successfully!!!');
+          snackbar(context, Colors.red, 'บันทึกภาพไม่สำเร็จ',
+              Icons.highlight_off_rounded);
+        }
       }
     } catch (error) {
       print(error);
@@ -132,7 +141,7 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
                   PopupMenuItem(
                       padding: EdgeInsets.symmetric(horizontal: 10),
                       onTap: () {
-                        _saveScreenshot();
+                        permissionAddPhotos(context, () => _saveScreenshot());
                       },
                       value: 1,
                       child: Row(
