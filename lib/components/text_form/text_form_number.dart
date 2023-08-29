@@ -1,4 +1,5 @@
 // ignore_for_file: avoid_unnecessary_containers, must_be_immutable, unused_import
+import 'package:doormster/style/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -28,7 +29,7 @@ class TextForm_Number extends StatelessWidget {
         elevation: 10,
         color: Colors.white,
         child: TextFormField(
-            style: TextStyle(fontSize: 16),
+            style: textStyle().title16,
             controller: controller,
             maxLength: maxLength,
             keyboardType: type,
@@ -41,8 +42,8 @@ class TextForm_Number extends StatelessWidget {
                   EdgeInsets.symmetric(horizontal: 10, vertical: 13),
               // labelText: 'Username',
               hintText: title,
-              hintStyle: TextStyle(fontSize: 16),
-              errorStyle: TextStyle(fontSize: 15),
+              hintStyle: textStyle().title16,
+              errorStyle: textStyle().body14,
               // ignore: prefer_const_constructors
               prefixIcon: Icon(
                 icon,

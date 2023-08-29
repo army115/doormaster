@@ -1,26 +1,27 @@
 // ignore_for_file: use_key_in_widget_constructors, unused_import
 
+import 'package:doormster/screen/main_screen/news_page.dart';
 import 'package:doormster/screen/main_screen/notification_page.dart';
 import 'package:flutter/material.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
 
-class Notification_Menu extends StatefulWidget {
-  const Notification_Menu({Key? key});
+class News_Menu extends StatefulWidget {
+  const News_Menu({Key? key});
 
   @override
-  State<Notification_Menu> createState() => _Notification_MenuState();
+  State<News_Menu> createState() => _News_MenuState();
 }
 
-class _Notification_MenuState extends State<Notification_Menu> {
+class _News_MenuState extends State<News_Menu> {
   @override
   Widget build(BuildContext context) {
     return Navigator(
-      key: notifyKey,
+      key: newsKey,
       onGenerateRoute: (routeSettings) {
         WidgetBuilder builder;
         switch (routeSettings.name) {
           case '/':
-            builder = (BuildContext context) => Notification_Page();
+            builder = (BuildContext context) => News_Page();
             break;
           // case '/qrsmart':
           //   builder = (BuildContext context) => QRSmart_HomePage();

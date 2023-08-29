@@ -41,8 +41,8 @@ class Notify_Token {
           "user_id": sId,
         });
     print(deviceToken);
-    print(companyId);
-    print(sId);
+    print("companyId : $companyId");
+    print("sId: $sId");
     log("Notify: ${response.data}");
   }
 }

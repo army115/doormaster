@@ -91,7 +91,6 @@ class DataLog {
 class FileList {
   String? sId;
   String? checkpointName;
-  String? checkpointUuid;
   String? companyId;
   double? checkpointLat;
   double? checkpointLng;
@@ -112,7 +111,6 @@ class FileList {
   FileList(
       {this.sId,
       this.checkpointName,
-      this.checkpointUuid,
       this.companyId,
       this.checkpointLat,
       this.checkpointLng,
@@ -133,7 +131,6 @@ class FileList {
   FileList.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     checkpointName = json['checkpoint_name'];
-    checkpointUuid = json['checkpoint_uuid'];
     companyId = json['company_id'];
     checkpointLat = json['checkpoint_lat'];
     checkpointLng = json['checkpoint_lng'];
@@ -156,7 +153,6 @@ class FileList {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['_id'] = this.sId;
     data['checkpoint_name'] = this.checkpointName;
-    data['checkpoint_uuid'] = this.checkpointUuid;
     data['company_id'] = this.companyId;
     data['checkpoint_lat'] = this.checkpointLat;
     data['checkpoint_lng'] = this.checkpointLng;

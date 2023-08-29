@@ -3,6 +3,13 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 
+class textStyle {
+  TextStyle Header18 = TextStyle(fontSize: 18);
+  TextStyle title16 = TextStyle(fontSize: 16);
+  TextStyle body14 = TextStyle(fontSize: 14);
+  TextStyle body12 = TextStyle(fontSize: 12);
+}
+
 ThemeData mytheme() {
   Map<int, Color> color = {
     50: Color.fromRGBO(11, 77, 156, .1),
@@ -43,6 +50,10 @@ ThemeData mytheme() {
             fontFamily: 'Prompt')),
     bottomAppBarTheme: BottomAppBarTheme(color: Color(0xFF0B4D9C)),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        elevation: 10,
+        showUnselectedLabels: true,
+        selectedItemColor: Color(0xFF0B4D9C),
+        unselectedItemColor: Colors.grey,
         selectedIconTheme: IconThemeData(size: 30),
         unselectedIconTheme: IconThemeData(size: 25),
         selectedLabelStyle:

@@ -207,11 +207,11 @@ class _Password_PageState extends State<Password_Page> {
             onPressed: press,
             icon: redeye
                 ? Icon(
-                    Icons.visibility,
+                    Icons.visibility_off,
                     // color: MyConstant.dark,
                   )
                 : Icon(
-                    Icons.visibility_off,
+                    Icons.visibility,
                     // color: MyConstant.dark,
                   ),
           ),

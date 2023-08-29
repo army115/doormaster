@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
+import 'package:doormster/style/theme.dart';
 import 'package:flutter/material.dart';
 
 class Dropdown_Search extends StatelessWidget {
@@ -37,7 +38,7 @@ class Dropdown_Search extends StatelessWidget {
               size: 25,
             ),
             errorText: error,
-            errorStyle: TextStyle(fontSize: 15),
+            errorStyle: textStyle().body14,
             hintText: title,
             searchText: 'ค้นหา',
             foundText: 'ไม่พบข้อมูล',

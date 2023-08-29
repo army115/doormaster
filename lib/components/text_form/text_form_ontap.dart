@@ -1,3 +1,4 @@
+import 'package:doormster/style/theme.dart';
 import 'package:flutter/material.dart';
 
 class TextForm_Ontap extends StatelessWidget {
@@ -29,16 +30,16 @@ class TextForm_Ontap extends StatelessWidget {
           maxLines: 5,
           controller: controller,
           readOnly: true,
-          style: TextStyle(fontSize: 16),
+          style: textStyle().title16,
           onTap: ontap,
           decoration: InputDecoration(
               fillColor: Colors.white,
               filled: true,
               hintText: title,
-              hintStyle: TextStyle(fontSize: 16),
+              hintStyle: textStyle().title16,
               contentPadding:
                   EdgeInsets.symmetric(vertical: 13, horizontal: 10),
-              errorStyle: TextStyle(fontSize: 15),
+              errorStyle: textStyle().body14,
               prefixIcon: Icon(
                 iconleft,
                 color: Colors.grey.shade600,

@@ -23,12 +23,6 @@
             "flutterMode": "release"
         },
         {
-            "name": "Pixel 4a API 30",
-            "request": "launch",
-            "type": "dart",
-            "deviceId": "emulator-5556"
-        },
-        {
             "name": "note 8 pro",
             "request": "launch",
             "type": "dart",
@@ -39,12 +33,6 @@
             "request": "launch",
             "type": "dart",
             "deviceId": "a3971b4c1220"
-        },
-        {
-            "name": "LD Player",
-            "request": "launch",
-            "type": "dart",
-            "deviceId": "emulator-5554"
         },
         {
             "name": "iPhone 14 Pro",
@@ -59,13 +47,25 @@
             "deviceId": "f9de6af2285bf78f84d47077a438018572f131af"
         },
         {
-            "name": "pixel3",
+            "name": "Android 1",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "emulator-5554"
+        },
+        {
+            "name": "Android 2",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "emulator-5556"
+        },
+        {
+            "name": "Android 3",
             "request": "launch",
             "type": "dart",
             "deviceId": "emulator-5557"
         },
         {
-            "name": "pixel4",
+            "name": "Android 4",
             "request": "launch",
             "type": "dart",
             "deviceId": "emulator-5558"

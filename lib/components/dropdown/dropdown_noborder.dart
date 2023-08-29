@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:doormster/style/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 
@@ -36,7 +37,7 @@ class Dropdown_NoBorder extends StatelessWidget {
           size: 25,
         ),
         errorText: error,
-        errorStyle: TextStyle(fontSize: 15),
+        errorStyle: textStyle().body14,
         hintText: title,
         hintStyle: TextStyle(color: Colors.grey.shade600),
         searchText: 'ค้นหา',

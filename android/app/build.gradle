@@ -64,8 +64,8 @@ android {
         multiDexEnabled true
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 19
-        versionName '1.2.5'
+        versionCode 22
+        versionName '1.2.6'
         // testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 

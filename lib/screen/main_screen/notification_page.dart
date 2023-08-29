@@ -2,16 +2,20 @@
 
 import 'dart:convert';
 import 'dart:ffi';
+// import 'dart:html';
 import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
 import 'package:doormster/main.dart';
+import 'package:doormster/models/get_checklist.dart';
 import 'package:doormster/service/notify_service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:http/http.dart' as http;
+// import 'package:http/http.dart' as http;
 import 'package:doormster/components/drawer/drawer.dart';
 import 'package:flutter/material.dart';
 
 class Notification_Page extends StatefulWidget {
-  const Notification_Page({Key? key});
+  final title;
+  final body;
+  const Notification_Page({Key? key, this.title, this.body});
 
   @override
   State<Notification_Page> createState() => _Notification_PageState();
@@ -46,120 +50,32 @@ class _Notification_PageState extends State<Notification_Page>
             }),
       ),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            NotificationService().showNotification(context);
-          },
-          child: Text('Show Notification'),
-        ),
+        child: widget.body == null
+            ? Logo_Opacity(title: 'ไม่มีการแจ้งเตือน')
+            : Column(
+                children: [
+                  Card(
+                    shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                            width: 2, color: Theme.of(context).primaryColor),
+                        borderRadius: BorderRadius.circular(10)),
+                    elevation: 10,
+                    margin: EdgeInsets.all(13),
+                    child: ListTile(
+                      title: Text('${widget.title}'),
+                      subtitle: Text("${widget.body}"),
+                    ),
+                  ),
+
+                  // ElevatedButton(
+                  //   onPressed: () {
+                  //     // NotificationService().showNotification(context);
+                  //   },
+                  //   child: Text('Show Notification'),
+                  // ),
+                ],
+              ),
       ),
-      // Logo_Opacity(title: 'ไม่มีการแจ้งเตือน')
-      // Column(
-      //   children: [
-      //     Expanded(
-      //       child: Container(
-      //         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      //         child: ListView.builder(
-      //           shrinkWrap: true,
-      //           reverse: true,
-      //           itemCount: _messages.length,
-      //           itemBuilder: (context, index) {
-      //             return Column(
-      //               mainAxisAlignment: MainAxisAlignment.end,
-      //               crossAxisAlignment:
-      //                   // current
-      //                   //     ?
-      //                   CrossAxisAlignment.end,
-      //               // : CrossAxisAlignment.start,
-      //               children: [
-      //                 Container(
-      //                   margin: EdgeInsets.symmetric(vertical: 5),
-      //                   // constraints: BoxConstraints(
-      //                   //   minHeight: 40,
-      //                   //   maxHeight: 250,
-      //                   //   maxWidth: MediaQuery.of(context).size.width * 0.7,
-      //                   //   minWidth: MediaQuery.of(context).size.width * 0.1,
-      //                   // ),
-      //                   decoration: BoxDecoration(
-      //                       color:
-      //                           // current
-      //                           // ?
-      //                           Theme.of(context).primaryColor,
-      //                       //     :
-      //                       // Theme.of(context).primaryColorLight,
-      //                       borderRadius:
-      //                           // current
-      //                           //     ?
-      //                           BorderRadius.only(
-      //                         topLeft: Radius.circular(12),
-      //                         bottomLeft: Radius.circular(12),
-      //                         topRight: Radius.circular(12),
-      //                       )
-      //                       //     :
-      //                       //   BorderRadius.only(
-      //                       // topLeft: Radius.circular(20),
-      //                       // bottomRight: Radius.circular(20),
-      //                       // topRight: Radius.circular(20),
-      //                       // ),
-      //                       ),
-      //                   child: Container(
-      //                     padding: const EdgeInsets.symmetric(
-      //                         vertical: 5, horizontal: 10),
-      //                     child: Text('${_messages[index]}',
-      //                         style: TextStyle(color: Colors.white)),
-      //                   ),
-      //                 ),
-      //               ],
-      //             );
-      //           },
-      //         ),
-      //       ),
-      //     ),
-      //     Container(
-      //       padding: EdgeInsets.symmetric(vertical: 10),
-      //       decoration: const BoxDecoration(
-      //         color: Colors.white,
-      //       ),
-      //       child: Row(
-      //         children: [
-      //           IconButton(
-      //             highlightColor: Colors.transparent,
-      //             splashColor: Colors.transparent,
-      //             icon:
-      //                 Icon(Icons.image, color: Theme.of(context).primaryColor),
-      //             iconSize: 30,
-      //             onPressed: () {},
-      //           ),
-      //           Expanded(
-      //             child: TextFormField(
-      //               minLines: 1,
-      //               maxLines: 5,
-      //               controller: _textController,
-      //               decoration: InputDecoration(
-      //                 contentPadding:
-      //                     EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      //                 hintText: 'Enter message',
-      //                 border: OutlineInputBorder(
-      //                   borderRadius: BorderRadius.circular(20),
-      //                 ),
-      //               ),
-      //             ),
-      //           ),
-      //           IconButton(
-      //             highlightColor: Colors.transparent,
-      //             splashColor: Colors.transparent,
-      //             icon: Icon(Icons.send, color: Theme.of(context).primaryColor),
-      //             iconSize: 30,
-      //             onPressed: () {
-      //               _handleSubmitted(_textController.text);
-      //               // sendMessageToOpenAI(_textController.text);
-      //             },
-      //           ),
-      //         ],
-      //       ),
-      //     ),
-      //   ],
-      // ),
     );
   }
 }

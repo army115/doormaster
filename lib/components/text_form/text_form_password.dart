@@ -60,10 +60,10 @@ class _TextForm_PasswordState extends State<TextForm_Password> {
                       },
                       icon: redEye
                           ? Icon(
-                              Icons.visibility_rounded,
+                              Icons.visibility_off,
                             )
                           : Icon(
-                              Icons.visibility_off_rounded,
+                              Icons.visibility,
                             ),
                     )
                   : null,

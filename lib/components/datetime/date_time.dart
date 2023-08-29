@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:doormster/style/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_datetime_picker_bdaya/flutter_datetime_picker_bdaya.dart';
@@ -27,7 +28,7 @@ class _Date_timeState extends State<Date_time> {
         elevation: 10,
         color: Colors.white,
         child: TextFormField(
-          style: TextStyle(fontSize: 16),
+          style: textStyle().title16,
           controller: widget.controller,
           readOnly: true,
           decoration: InputDecoration(
@@ -38,8 +39,8 @@ class _Date_timeState extends State<Date_time> {
             ),
             suffixIcon: Icon(Icons.keyboard_arrow_down_rounded, size: 30),
             hintText: widget.title,
-            hintStyle: TextStyle(fontSize: 16),
-            errorStyle: TextStyle(fontSize: 15),
+            hintStyle: textStyle().title16,
+            errorStyle: textStyle().body14,
             // filled: true, พื้นหลังช่อง
             // fillColor: Colors.white,
             focusedBorder: OutlineInputBorder(

@@ -10,8 +10,7 @@ import 'package:doormster/screen/visitor_service/visitor_service_page.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
 
 class Home_Menu extends StatefulWidget {
-  final navigatorKey;
-  const Home_Menu({Key? key, this.navigatorKey});
+  const Home_Menu({Key? key});
 
   @override
   State<Home_Menu> createState() => _Home_MenuState();
@@ -21,7 +20,7 @@ class _Home_MenuState extends State<Home_Menu> {
   @override
   Widget build(BuildContext context) {
     return Navigator(
-      key: widget.navigatorKey,
+      key: homeKey,
       onGenerateRoute: (routeSettings) {
         WidgetBuilder builder;
         switch (routeSettings.name) {

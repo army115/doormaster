@@ -2,15 +2,33 @@
 
 import 'dart:developer';
 
+import 'package:doormster/components/bottombar/bottom_controller.dart';
+import 'package:doormster/components/bottombar/bottombar.dart';
+import 'package:doormster/routes/menu/notification_menu.dart';
+import 'package:doormster/screen/main_screen/notification_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> handleBackgroundMessage(RemoteMessage message) async {
-  log("Title : ${message.notification?.title}");
-  log("Bdy : ${message.notification?.body}");
-  log("Data : ${message.data}");
+  log("BackgroundMessage : ${"Title : ${message.notification?.title}, \n" "Body : ${message.notification?.body}, \n" "Data : ${message.data}"}");
+  // if (message != null) {
+  //   bottomKey.currentState?.ontapItem(2);
+  //   notifyKey.currentState?.pushReplacement(PageRouteBuilder(
+  //     pageBuilder: (BuildContext context, Animation<double> animation,
+  //         Animation<double> animation2) {
+  //       return Notification_Page(
+  //         title: message.notification?.title,
+  //         body: message.notification?.body,
+  //       );
+  //     },
+  //     // transitionDuration: Duration.zero,
+  //     // reverseTransitionDuration: Duration.zero,
+  //   ));
+  //   // notifyKey.currentState?.popAndPushNamed('/', arguments: message);
+  // }
 }
 
 class NotificationService {
@@ -48,9 +66,19 @@ class NotificationService {
     await flutterLocalNotificationsPlugin.show(1, message.notification?.title,
         message.notification?.body, platformChannel,
         payload: message.data['body']);
-    log("Title : ${message.notification?.title}");
-    log("Bdy : ${message.notification?.body}");
-    log("Data : ${message.data}");
+    log("ForegroundMessage : ${"Title : ${message.notification?.title}, \n" "Body : ${message.notification?.body}, \n" "Data : ${message.data}"}");
+
+    // if (message != null) {
+    //   notifyKey.currentState?.pushReplacement(PageRouteBuilder(
+    //     pageBuilder: (BuildContext context, Animation<double> animation,
+    //         Animation<double> animation2) {
+    //       return Notification_Page(
+    //         title: message.notification?.title,
+    //         body: message.notification?.body,
+    //       );
+    //     },
+    //   ));
+    // }
   }
 
   Future<void> notification() async {
@@ -72,10 +100,11 @@ class NotificationService {
 
     DarwinInitializationSettings initializationSettingsIOS =
         const DarwinInitializationSettings(
-            requestAlertPermission: true,
-            requestBadgePermission: true,
-            requestSoundPermission: true,
-            requestCriticalPermission: true);
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestSoundPermission: true,
+      requestCriticalPermission: true,
+    );
     final InitializationSettings initializationSettings =
         InitializationSettings(
       android: initializationSettingsAndroid,
@@ -83,6 +112,10 @@ class NotificationService {
     );
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
+      onDidReceiveNotificationResponse: (details) {
+        log('${details.notificationResponseType}');
+        bottomController.ontapItem(2);
+      },
     );
 
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);

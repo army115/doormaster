@@ -1,11 +1,15 @@
 // ignore_for_file: unused_field, use_build_context_synchronously
 
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_twobutton_subtext.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/screen/main_screen/login_page.dart';
+import 'package:doormster/screen/main_screen/login_staff_page.dart';
 import 'package:doormster/service/connect_api.dart';
+import 'package:doormster/service/notify_token.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -28,6 +32,7 @@ class menuItem {
 class _Settings_PageState extends State<Settings_Page> {
   late SharedPreferences prefs;
   var uuId;
+  var security;
   bool loading = false;
   PackageInfo? packageInfo;
 
@@ -35,18 +40,34 @@ class _Settings_PageState extends State<Settings_Page> {
     final info = await PackageInfo.fromPlatform();
     prefs = await SharedPreferences.getInstance();
     uuId = prefs.getString('uuId');
+    security = prefs.getBool('security');
     print('uuId: ${uuId}');
     setState(() {
       packageInfo = info;
     });
   }
 
-  Future _Logout() async {
-    prefs = await SharedPreferences.getInstance();
-    prefs.clear();
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (BuildContext context) => Login_Page()),
-        (Route<dynamic> route) => false);
+  Future<void> _Logout() async {
+    //ลบ token device notify
+    await Notify_Token().deletenotifyToken();
+    Set<String> allKeys = prefs.getKeys();
+
+    for (String key in allKeys) {
+      if (key != 'notifyToken' && key != 'security') {
+        prefs.remove(key);
+      }
+    }
+
+    log(allKeys.toString());
+    if (security == true) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => Login_Staff()),
+          (Route<dynamic> route) => false);
+    } else {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => Login_Page()),
+          (Route<dynamic> route) => false);
+    }
     print('logout success');
   }
 
@@ -122,6 +143,7 @@ class _Settings_PageState extends State<Settings_Page> {
       menuItem(Icons.lock, 'เปลี่ยนรหัสผ่าน', () {
         Navigator.of(context).popAndPushNamed('/password');
       }, Colors.black),
+      // menuItem(Icons.translate_rounded, 'เปลี่ยนภาษา', () {}, Colors.black),
       menuItem(Icons.no_accounts_rounded, 'ปิดการใช้งานบัญชี', () {
         dialogTwobutton_Subtitle(
             context,

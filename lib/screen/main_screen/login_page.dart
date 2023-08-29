@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors_in_immutables, avoid_single_cascade_in_expression_statements, avoid_print, use_build_context_synchronously, unused_local_variable, unused_import
 import 'dart:developer';
 
+import 'package:checkbox_formfield/checkbox_formfield.dart';
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
@@ -189,8 +190,8 @@ class _Login_PageState extends State<Login_Page> {
 
         _username.text = username!;
         _password.text = password!;
-        print('remember : $remember');
       }
+      print('remember : $remember');
     } catch (e) {
       print(e);
     }
@@ -245,35 +246,44 @@ class _Login_PageState extends State<Login_Page> {
                           }
                         },
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Checkbox(
-                                  activeColor: Theme.of(context).primaryColor,
-                                  value: remember,
-                                  onChanged: _Rememberme),
-                              Text(
-                                'บันทึกรหัสผ่าน',
-                              )
-                            ],
-                          ),
-                          TextButton(
-                              style: const ButtonStyle(
-                                  overlayColor: MaterialStatePropertyAll(
-                                      Colors.transparent)),
-                              onPressed: () {},
-                              child: const Text(
-                                'ลืมรหัสผ่าน',
-                                style: TextStyle(
-                                  decoration: TextDecoration.underline,
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 16,
-                                ),
-                              ))
-                        ],
+                      CheckboxListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: Text('บันทึกรหัสผ่าน'),
+                        activeColor: Theme.of(context).primaryColor,
+                        value: remember,
+                        onChanged: _Rememberme,
+                        controlAffinity: ListTileControlAffinity
+                            .leading, // Checkbox position
                       ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: [
+                      //     Row(
+                      //       children: [
+                      //         Checkbox(
+                      //             activeColor: Theme.of(context).primaryColor,
+                      //             value: remember,
+                      //             onChanged: _Rememberme),
+                      //         Text(
+                      //           'บันทึกรหัสผ่าน',
+                      //         )
+                      //       ],
+                      //     ),
+                      //     TextButton(
+                      //         style: const ButtonStyle(
+                      //             overlayColor: MaterialStatePropertyAll(
+                      //                 Colors.transparent)),
+                      //         onPressed: () {},
+                      //         child: const Text(
+                      //           'ลืมรหัสผ่าน',
+                      //           style: TextStyle(
+                      //             decoration: TextDecoration.underline,
+                      //             fontWeight: FontWeight.normal,
+                      //             fontSize: 16,
+                      //           ),
+                      //         ))
+                      //   ],
+                      // ),
                       const SizedBox(
                         height: 15,
                       ),

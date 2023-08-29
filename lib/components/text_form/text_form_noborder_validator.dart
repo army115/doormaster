@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_unnecessary_containers, must_be_immutable, unused_import
 
+import 'package:doormster/style/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -26,15 +27,15 @@ class TextForm_NoBorder_Validator extends StatelessWidget {
         minLines: 1,
         maxLines: 5,
         autofocus: false,
-        style: TextStyle(fontSize: 16),
+        style: textStyle().title16,
         controller: controller,
         keyboardType: typeInput,
         decoration: InputDecoration(
           contentPadding: EdgeInsets.fromLTRB(0, 0, 10, 10),
           labelText: title,
           hintText: "กรอกข้อมูล",
-          hintStyle: TextStyle(fontSize: 16),
-          errorStyle: TextStyle(fontSize: 15),
+          hintStyle: textStyle().title16,
+          errorStyle: textStyle().body14,
           prefixIcon: Icon(icon, size: 25),
         ),
         validator: validator,

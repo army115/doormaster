@@ -25,7 +25,7 @@ import 'package:doormster/screen/security_guard/security_guard_page.dart';
 import 'package:doormster/screen/visitor_service/visitor_service_page.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
-Future<void> main(context) async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await NotificationService().notification();

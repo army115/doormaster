@@ -1,233 +1,274 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, overridden_fields, must_call_super
+// ignore_for_file: prefer_const_declarations, unused_local_variable, prefer_const_constructors, unused_import
 
-import 'dart:developer';
-
-import 'package:dio/dio.dart';
-import 'package:doormster/components/button/button.dart';
-import 'package:doormster/components/loading/loading.dart';
+import 'dart:convert';
+import 'dart:ffi';
+import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
+import 'package:doormster/main.dart';
+import 'package:doormster/service/notify_service.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:http/http.dart' as http;
+import 'package:doormster/components/drawer/drawer.dart';
 import 'package:flutter/material.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+class Test_Page extends StatefulWidget {
+  const Test_Page({Key? key});
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State<Test_Page> createState() => _Test_PageState();
 }
 
-class _MyHomePageState extends State<MyHomePage>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(
-        length: 3, vsync: this, animationDuration: Duration(seconds: 0));
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
-  void _ontapItem(int value) {
-    setState(() {
-      _tabController.animateTo(value);
-      // _selectedIndex = value;
-    });
-  }
-
-  final buildBody = [
-    const PageOne(),
-    const PageTwo(),
-    const PageThree(),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: TabBarView(
-        physics: NeverScrollableScrollPhysics(),
-        controller: _tabController,
-        children: buildBody,
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _tabController.index,
-        onTap: _ontapItem,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Page One',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.business),
-            label: 'Page Two',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.school),
-            label: 'Page Three',
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class PageOne extends StatefulWidget {
-  const PageOne({Key? key}) : super(key: key);
-
-  @override
-  _PageOneState createState() => _PageOneState();
-}
-
-class _PageOneState extends State<PageOne> with AutomaticKeepAliveClientMixin {
-  bool load = false;
-
-  @override
-  bool get wantKeepAlive => true;
-
-  Future _getInfo() async {
-    setState(() {
-      load = true;
-    });
-    await Future.delayed(Duration(milliseconds: 300));
-    print('1111');
-    setState(() {
-      load = false;
-    });
-  }
-
-  @override
-  void initState() {
-    _getInfo();
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // super.build(context);
-
-    Future _getLogs() async {
-      try {
-        //call api
-        var url = 'https://192.168.9.124:7082/api/User/admin/admin';
-        var response = await Dio().get(
-          url,
-          options: Options(headers: {'accept': 'text/plain'}),
-        );
-        log('uri : ${url}');
-        log("print : ${response.data}");
-      } catch (error) {
-        log("$error");
-      }
-    }
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('111111'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: load
-            ? Loading()
-            : Buttons(
-                title: 'test',
-                press: () {
-                  _getLogs();
-                }),
-      ),
-    );
-  }
-}
-
-class PageTwo extends StatefulWidget {
-  const PageTwo({Key? key}) : super(key: key);
-
-  @override
-  _PageTwoState createState() => _PageTwoState();
-}
-
-class _PageTwoState extends State<PageTwo> with AutomaticKeepAliveClientMixin {
-  bool load = false;
-
-  @override
-  bool get wantKeepAlive => true;
-
-  Future _getInfo() async {
-    setState(() {
-      load = true;
-    });
-    await Future.delayed(Duration(milliseconds: 300));
-    print('22222');
-    setState(() {
-      load = false;
-    });
-  }
-
-  @override
-  void initState() {
-    _getInfo();
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // super.build(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('2222'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: load ? Loading() : TextField(),
-      ),
-    );
-  }
-}
-
-class PageThree extends StatefulWidget {
-  const PageThree({Key? key}) : super(key: key);
-
-  @override
-  _PageThreeState createState() => _PageThreeState();
-}
-
-class _PageThreeState extends State<PageThree>
+class _Test_PageState extends State<Test_Page>
     with AutomaticKeepAliveClientMixin {
-  bool load = false;
+  final TextEditingController _textController = TextEditingController();
+  final List<String> _messages = [];
+
+  void _handleSubmitted(String text) {
+    if (_textController.text.isEmpty) return;
+    _textController.clear();
+    setState(() {
+      _messages.insert(0, text);
+    });
+  }
 
   @override
   bool get wantKeepAlive => true;
-
-  Future _getInfo() async {
-    setState(() {
-      load = true;
-    });
-    await Future.delayed(Duration(milliseconds: 300));
-    print('3333');
-    setState(() {
-      load = false;
-    });
-  }
-
-  @override
-  void initState() {
-    _getInfo();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('33333'),
+        title: Text('การแจ้งเตือน'),
+        leading: IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            }),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: load ? Loading() : TextField(),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            NotificationService().showNotification(context);
+          },
+          child: Text('Show Notification'),
+        ),
       ),
+      // Logo_Opacity(title: 'ไม่มีการแจ้งเตือน')
+      // Column(
+      //   children: [
+      //     Expanded(
+      //       child: Container(
+      //         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      //         child: ListView.builder(
+      //           shrinkWrap: true,
+      //           reverse: true,
+      //           itemCount: _messages.length,
+      //           itemBuilder: (context, index) {
+      //             return Column(
+      //               mainAxisAlignment: MainAxisAlignment.end,
+      //               crossAxisAlignment:
+      //                   // current
+      //                   //     ?
+      //                   CrossAxisAlignment.end,
+      //               // : CrossAxisAlignment.start,
+      //               children: [
+      //                 Container(
+      //                   margin: EdgeInsets.symmetric(vertical: 5),
+      //                   // constraints: BoxConstraints(
+      //                   //   minHeight: 40,
+      //                   //   maxHeight: 250,
+      //                   //   maxWidth: MediaQuery.of(context).size.width * 0.7,
+      //                   //   minWidth: MediaQuery.of(context).size.width * 0.1,
+      //                   // ),
+      //                   decoration: BoxDecoration(
+      //                       color:
+      //                           // current
+      //                           // ?
+      //                           Theme.of(context).primaryColor,
+      //                       //     :
+      //                       // Theme.of(context).primaryColorLight,
+      //                       borderRadius:
+      //                           // current
+      //                           //     ?
+      //                           BorderRadius.only(
+      //                         topLeft: Radius.circular(12),
+      //                         bottomLeft: Radius.circular(12),
+      //                         topRight: Radius.circular(12),
+      //                       )
+      //                       //     :
+      //                       //   BorderRadius.only(
+      //                       // topLeft: Radius.circular(20),
+      //                       // bottomRight: Radius.circular(20),
+      //                       // topRight: Radius.circular(20),
+      //                       // ),
+      //                       ),
+      //                   child: Container(
+      //                     padding: const EdgeInsets.symmetric(
+      //                         vertical: 5, horizontal: 10),
+      //                     child: Text('${_messages[index]}',
+      //                         style: TextStyle(color: Colors.white)),
+      //                   ),
+      //                 ),
+      //               ],
+      //             );
+      //           },
+      //         ),
+      //       ),
+      //     ),
+      //     Container(
+      //       padding: EdgeInsets.symmetric(vertical: 10),
+      //       decoration: const BoxDecoration(
+      //         color: Colors.white,
+      //       ),
+      //       child: Row(
+      //         children: [
+      //           IconButton(
+      //             highlightColor: Colors.transparent,
+      //             splashColor: Colors.transparent,
+      //             icon:
+      //                 Icon(Icons.image, color: Theme.of(context).primaryColor),
+      //             iconSize: 30,
+      //             onPressed: () {},
+      //           ),
+      //           Expanded(
+      //             child: TextFormField(
+      //               minLines: 1,
+      //               maxLines: 5,
+      //               controller: _textController,
+      //               decoration: InputDecoration(
+      //                 contentPadding:
+      //                     EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      //                 hintText: 'Enter message',
+      //                 border: OutlineInputBorder(
+      //                   borderRadius: BorderRadius.circular(20),
+      //                 ),
+      //               ),
+      //             ),
+      //           ),
+      //           IconButton(
+      //             highlightColor: Colors.transparent,
+      //             splashColor: Colors.transparent,
+      //             icon: Icon(Icons.send, color: Theme.of(context).primaryColor),
+      //             iconSize: 30,
+      //             onPressed: () {
+      //               _handleSubmitted(_textController.text);
+      //               // sendMessageToOpenAI(_textController.text);
+      //             },
+      //           ),
+      //         ],
+      //       ),
+      //     ),
+      //   ],
+      // ),
     );
   }
 }
+
+
+//chat
+// Column(
+      //   children: [
+      //     Expanded(
+      //       child: Container(
+      //         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      //         child: ListView.builder(
+      //           shrinkWrap: true,
+      //           reverse: true,
+      //           itemCount: _messages.length,
+      //           itemBuilder: (context, index) {
+      //             return Column(
+      //               mainAxisAlignment: MainAxisAlignment.end,
+      //               crossAxisAlignment:
+      //                   // current
+      //                   //     ?
+      //                   CrossAxisAlignment.end,
+      //               // : CrossAxisAlignment.start,
+      //               children: [
+      //                 Container(
+      //                   margin: EdgeInsets.symmetric(vertical: 5),
+      //                   // constraints: BoxConstraints(
+      //                   //   minHeight: 40,
+      //                   //   maxHeight: 250,
+      //                   //   maxWidth: MediaQuery.of(context).size.width * 0.7,
+      //                   //   minWidth: MediaQuery.of(context).size.width * 0.1,
+      //                   // ),
+      //                   decoration: BoxDecoration(
+      //                       color:
+      //                           // current
+      //                           // ?
+      //                           Theme.of(context).primaryColor,
+      //                       //     :
+      //                       // Theme.of(context).primaryColorLight,
+      //                       borderRadius:
+      //                           // current
+      //                           //     ?
+      //                           BorderRadius.only(
+      //                         topLeft: Radius.circular(12),
+      //                         bottomLeft: Radius.circular(12),
+      //                         topRight: Radius.circular(12),
+      //                       )
+      //                       //     :
+      //                       //   BorderRadius.only(
+      //                       // topLeft: Radius.circular(20),
+      //                       // bottomRight: Radius.circular(20),
+      //                       // topRight: Radius.circular(20),
+      //                       // ),
+      //                       ),
+      //                   child: Container(
+      //                     padding: const EdgeInsets.symmetric(
+      //                         vertical: 5, horizontal: 10),
+      //                     child: Text('${_messages[index]}',
+      //                         style: TextStyle(color: Colors.white)),
+      //                   ),
+      //                 ),
+      //               ],
+      //             );
+      //           },
+      //         ),
+      //       ),
+      //     ),
+      //     Container(
+      //       padding: EdgeInsets.symmetric(vertical: 10),
+      //       decoration: const BoxDecoration(
+      //         color: Colors.white,
+      //       ),
+      //       child: Row(
+      //         children: [
+      //           IconButton(
+      //             highlightColor: Colors.transparent,
+      //             splashColor: Colors.transparent,
+      //             icon:
+      //                 Icon(Icons.image, color: Theme.of(context).primaryColor),
+      //             iconSize: 30,
+      //             onPressed: () {},
+      //           ),
+      //           Expanded(
+      //             child: TextFormField(
+      //               minLines: 1,
+      //               maxLines: 5,
+      //               controller: _textController,
+      //               decoration: InputDecoration(
+      //                 contentPadding:
+      //                     EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      //                 hintText: 'Enter message',
+      //                 border: OutlineInputBorder(
+      //                   borderRadius: BorderRadius.circular(20),
+      //                 ),
+      //               ),
+      //             ),
+      //           ),
+      //           IconButton(
+      //             highlightColor: Colors.transparent,
+      //             splashColor: Colors.transparent,
+      //             icon: Icon(Icons.send, color: Theme.of(context).primaryColor),
+      //             iconSize: 30,
+      //             onPressed: () {
+      //               _handleSubmitted(_textController.text);
+      //               // sendMessageToOpenAI(_textController.text);
+      //             },
+      //           ),
+      //         ],
+      //       ),
+      //     ),
+      //   ],
+      // ),

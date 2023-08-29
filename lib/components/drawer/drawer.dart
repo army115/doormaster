@@ -1,5 +1,6 @@
 // ignore_for_file: sort_child_properties_last, prefer_const_constructors
 import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_twobutton_subtext.dart';
@@ -38,10 +39,16 @@ class _MyDrawerState extends State<MyDrawer> {
 
   Future<void> _Logout() async {
     //ลบ token device notify
-    Notify_Token().deletenotifyToken();
+    await Notify_Token().deletenotifyToken();
+    Set<String> allKeys = prefs.getKeys();
 
     if (security == true) {
-      prefs.clear();
+      for (String key in allKeys) {
+        if (key != 'notifyToken') {
+          prefs.remove(key);
+        }
+      }
+      log(allKeys.toString());
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) => Login_Staff()),
           (Route<dynamic> route) => false);
@@ -54,6 +61,7 @@ class _MyDrawerState extends State<MyDrawer> {
       prefs.remove('image');
       prefs.remove('fname');
       prefs.remove('lname');
+      log(allKeys.toString());
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) => Login_Page()),
           (Route<dynamic> route) => false);
@@ -230,7 +238,7 @@ class _MyDrawerState extends State<MyDrawer> {
                               borderRadius: BorderRadius.circular(30),
                               onTap: () {
                                 Navigator.pop(context);
-                                widget.ontapItem(2);
+                                widget.ontapItem(3);
                                 profileKey.currentState?.popAndPushNamed('/');
                               },
                               child: CircleAvatar(
@@ -302,7 +310,7 @@ class _MyDrawerState extends State<MyDrawer> {
                         ListTile(
                           onTap: () {
                             Navigator.pop(context);
-                            widget.ontapItem(2);
+                            widget.ontapItem(3);
                             profileKey.currentState?.popAndPushNamed('/');
                           },
                           leading: Icon(

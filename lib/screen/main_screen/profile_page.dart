@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
+import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/drawer/drawer.dart';
 import 'package:doormster/components/loading/loading.dart';
@@ -54,7 +55,9 @@ class _Profile_PageState extends State<Profile_Page>
 
   Future _getInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    uuId = prefs.getString('uuId');
     var userId = prefs.getString('userId');
+    print('uuId: ${uuId}');
     print('userId: ${userId}');
     check = await Connectivity().checkConnectivity();
     try {
@@ -76,6 +79,7 @@ class _Profile_PageState extends State<Profile_Page>
         setState(() {
           profileInfo = getInfo.data!;
           Controller();
+          _sharedInfo();
           loading = false;
         });
       }
@@ -124,6 +128,7 @@ class _Profile_PageState extends State<Profile_Page>
 
         setState(() {
           loading = false;
+          _sharedInfo();
         });
       } else {
         dialogOnebutton_Subtitle(
@@ -233,7 +238,6 @@ class _Profile_PageState extends State<Profile_Page>
                       }
 
                       _editProfile(valuse);
-                      _sharedInfo();
                     }
                   }),
           body: RefreshIndicator(
@@ -256,32 +260,31 @@ class _Profile_PageState extends State<Profile_Page>
                           child: CircleAvatar(
                               radius: 70,
                               backgroundColor: Colors.grey.shade100,
-                              child: image != null
+                              child: loading
                                   ? Container(
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        image: DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: MemoryImage(
-                                                convert.base64Decode(image!))),
-                                      ),
+                                      child: Icon(Icons.person_rounded,
+                                          size: 140, color: Colors.grey),
                                     )
-                                  : imageProfile != null
+                                  : image != null
                                       ? Container(
                                           decoration: BoxDecoration(
                                             shape: BoxShape.circle,
                                             image: DecorationImage(
                                                 fit: BoxFit.cover,
-                                                image: MemoryImage(
-                                                    convert.base64Decode(
-                                                        imageProfile!))),
+                                                image: MemoryImage(convert
+                                                    .base64Decode(image!))),
                                           ),
                                         )
-                                      : loading
+                                      : imageProfile != null
                                           ? Container(
-                                              child: Icon(Icons.person_rounded,
-                                                  size: 140,
-                                                  color: Colors.grey),
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                image: DecorationImage(
+                                                    fit: BoxFit.cover,
+                                                    image: MemoryImage(
+                                                        convert.base64Decode(
+                                                            imageProfile!))),
+                                              ),
                                             )
                                           : Container(
                                               decoration: BoxDecoration(
