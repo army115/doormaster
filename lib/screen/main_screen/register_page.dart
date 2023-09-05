@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import
+// ignore_for_file: unused_import, use_build_context_synchronously
 
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
@@ -15,7 +15,7 @@ import 'package:doormster/components/text_form/text_form_validator.dart';
 import 'package:doormster/models/get_company.dart';
 import 'package:doormster/models/regis_response.dart';
 import 'package:doormster/screen/main_screen/login_page.dart';
-import 'package:doormster/service/connect_api.dart';
+import 'package:doormster/service/connected/connect_api.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -69,8 +69,8 @@ class _Register_PageState extends State<Register_Page> {
       }
     } catch (error) {
       print(error);
-      dialogOnebutton_Subtitle(context, 'พบข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อได้',
-          Icons.warning_amber_rounded, Colors.orange, 'ตกลง', () {
+      dialogOnebutton_Subtitle(context, 'found_error', 'connect_fail'.tr,
+          Icons.warning_amber_rounded, Colors.orange, 'ok'.tr, () {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (BuildContext context) => Login_Page()),
             (Route<dynamic> route) => false);
@@ -104,16 +104,16 @@ class _Register_PageState extends State<Register_Page> {
         setState(() {
           loading = false;
         });
-        snackbar(context, Theme.of(context).primaryColor, 'ลงทะเบียนสำเร็จ',
+        snackbar(context, Theme.of(context).primaryColor, 'register_success'.tr,
             Icons.check_circle_outline_rounded);
       } else {
         dialogOnebutton_Subtitle(
             context,
-            'ลงทะเบียนไม่สำเร็จ',
+            'register_fail'.tr,
             '${jsonRes.result}',
             Icons.highlight_off_rounded,
             Colors.red,
-            'ตกลง', () {
+            'ok'.tr, () {
           Navigator.of(context).pop();
         }, false, false);
         print('Register not Success!!');
@@ -124,13 +124,8 @@ class _Register_PageState extends State<Register_Page> {
       }
     } catch (error) {
       print(error);
-      dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง', () {
+      dialogOnebutton_Subtitle(context, 'found_error'.tr, 'connect_fail'.tr,
+          Icons.warning_amber_rounded, Colors.orange, 'ok'.tr, () {
         Navigator.of(context).pop();
       }, false, false);
       // snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
@@ -167,12 +162,12 @@ class _Register_PageState extends State<Register_Page> {
                         builder: (BuildContext context) => Login_Page()),
                     (Route<dynamic> route) => false);
               }),
-              title: Text('ลงทะเบียน'),
+              title: Text('register_title'.tr),
             ),
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerFloat,
             floatingActionButton: Buttons(
-              title: 'ลงทะเบียน',
+              title: 'submit'.tr,
               press: () {
                 if (_formkey.currentState!.validate()) {
                   Map<String, dynamic> valuse = Map();
@@ -206,42 +201,42 @@ class _Register_PageState extends State<Register_Page> {
                         ),
                         Text_Form(
                           controller: username,
-                          title: 'ชื่อผู้ใช้',
+                          title: 'username'.tr,
                           icon: Icons.account_circle_rounded,
-                          error: 'กรุณากรอกชื่อผู้ใช้',
+                          error: 'enter_username_pls'.tr,
                           TypeInput: TextInputType.name,
                         ),
                         Text_Form(
                           controller: fname,
-                          title: 'ชื่อ',
+                          title: 'fname'.tr,
                           icon: Icons.person_outline_rounded,
-                          error: 'กรุณากรอกชื่อ',
+                          error: 'enter_name_pls'.tr,
                           TypeInput: TextInputType.name,
                         ),
                         Text_Form(
                           controller: lname,
-                          title: 'นามสกุล',
+                          title: 'lname'.tr,
                           icon: Icons.person,
-                          error: 'กรุณากรอกชื่อนามสกุล',
+                          error: 'enter_lname_pls'.tr,
                           TypeInput: TextInputType.name,
                         ),
                         TextForm_validator(
                             controller: email,
-                            title: 'อีเมล',
+                            title: 'email'.tr,
                             icon: Icons.email,
                             TypeInput: TextInputType.emailAddress,
                             error: (values) {
                               if (values.isEmpty) {
-                                return 'กรุณากรอกอีเมล';
+                                return 'enter_email_pls'.tr;
                               } else if (values.isEmpty ||
                                   !values.contains("@")) {
-                                return "รูปแบบอีเมลไม่ถูกต้อง";
+                                return "email_error".tr;
                               } else {
                                 return null;
                               }
                             }),
                         Dropdown_Search(
-                          title: 'เลือกบริษัท',
+                          title: 'company'.tr,
                           controller: company,
                           leftIcon: Icons.home_work_rounded,
                           onChanged: (value) {
@@ -252,21 +247,21 @@ class _Register_PageState extends State<Register_Page> {
                             }
                             print(onItemSelect);
                           },
-                          error: 'กรุณากเลือกบริษัท',
+                          error: 'select_company_pls'.tr,
                           listItem: listCompany
                               .map((value) => value.companyName.toString())
                               .toList(),
                         ),
                         TextForm_Password(
                           controller: password,
-                          title: 'รหัสผ่าน',
+                          title: 'password'.tr,
                           iconLaft: Icons.key,
                           error: (values) {
                             confirmPass = values;
                             if (values.isEmpty) {
-                              return 'กรุณากรอกรหัสผ่าน';
+                              return 'enter_password_pls'.tr;
                             } else if (values.length < 8) {
-                              return "รหัสผ่านอย่างน้อย 8 ตัว";
+                              return "password_8char".tr;
                             } else {
                               return null;
                             }
@@ -274,22 +269,22 @@ class _Register_PageState extends State<Register_Page> {
                         ),
                         TextForm_Password(
                           controller: passwordCon,
-                          title: 'ยืนยันรหัสผ่าน',
+                          title: 'confirm_password'.tr,
                           iconLaft: Icons.key,
                           error: (values) {
                             if (values.isEmpty) {
-                              return 'กรุณายืนยันรหัสผ่าน';
+                              return 'confirm_password_pls'.tr;
                             } else if (values != confirmPass) {
-                              return "รหัสผ่านไม่ตรงกัน";
+                              return "password_no_match".tr;
                             } else {
                               return null;
                             }
                           },
                         ),
                         CheckBox_FormField(
-                          title: 'ยอมรับเงื่อนไขการใช้บริการ',
+                          title: 'accept_terms'.tr,
                           value: Checked,
-                          validator: 'กรุณายอมรับเงื่อนไขการใช้บริการ',
+                          validator: 'accept_terms_pls'.tr,
                         ),
                       ]),
                 ),
@@ -325,42 +320,4 @@ class _Register_PageState extends State<Register_Page> {
           validator: error),
     );
   }
-
-  // var dropdownValue;
-  // Widget DropDownCompany() {
-  //   return Dropdown_Search(
-  //     title: 'เลือกบริษัท',
-  //     // deviceId == null ? 'ไม่มีอุปกรณ์' : 'เลือกอุปกรณ์',
-  //     values: dropdownValue,
-  //     width: 0.85,
-  //     height: 300,
-  //     listItem: listCompany.map((value) {
-  //       return DropdownMenuEntry(
-  //         style: ButtonStyle(
-  //             textStyle: MaterialStateProperty.all(
-  //                 TextStyle(fontWeight: FontWeight.w500))),
-  //         value: value.sId,
-  //         label: value.companyName == ""
-  //             ? 'บริษัทไม่ทราบชื่อ'
-  //             : '${value.companyName}',
-  //       );
-  //     }).toList(),
-  //     leftIcon: Icons.home_work_rounded,
-  //     // validate: (values) {
-  //     //   // if (deviceId != null) {
-  //     //   if (values == null) {
-  //     //     return 'กรุณาเลือกบริษัท';
-  //     //   }
-  //     //   return null;
-  //     //   // }
-  //     //   // return 'ไม่มีอุปกรณ์';
-  //     // },
-  //     onSelected: (value) {
-  //       setState(() {
-  //         dropdownValue = value;
-  //         print('company : ${value}');
-  //       });
-  //     },
-  //   );
-  // }
 }

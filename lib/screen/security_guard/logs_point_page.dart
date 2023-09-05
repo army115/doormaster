@@ -10,13 +10,17 @@ import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/map/map_page.dart';
 import 'package:doormster/components/searchbar/search_from.dart';
 import 'package:doormster/components/text/text_double_colors.dart';
+import 'package:doormster/components/text/text_four_icon.dart';
 import 'package:doormster/components/text/text_icon.dart';
+import 'package:doormster/components/text/text_icon_double.dart';
+import 'package:doormster/components/text/text_triple.dart';
 import 'package:doormster/models/get_log.dart';
 import 'package:doormster/models/get_logs_all.dart';
 import 'package:doormster/models/get_logs_today.dart';
-import 'package:doormster/service/connect_api.dart';
+import 'package:doormster/service/connected/connect_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper_plus/flutter_swiper_plus.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert' as convert;
 
@@ -160,7 +164,7 @@ class _Logs_PointState extends State<Logs_Point> {
     return Stack(
       children: [
         Scaffold(
-          appBar: AppBar(title: const Text('บันทึกจุดตรวจ')),
+          appBar: AppBar(title: Text('checkpoint_report'.tr)),
           body: loading
               ? Container()
               : Column(
@@ -180,30 +184,32 @@ class _Logs_PointState extends State<Logs_Point> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          textIcon(
-                            'รายงานวันที่ : $dateNow',
-                            Icon(
-                              Icons.calendar_month_rounded,
-                              color: Theme.of(context).primaryColor,
-                              size: 25,
-                            ),
-                          ),
-                          textIcon(
-                            'รอบเดิน : ${widget.roundName}',
-                            Icon(
-                              Icons.map_rounded,
-                              color: Theme.of(context).primaryColor,
-                              size: 25,
-                            ),
-                          ),
-                          textIcon(
-                            'ช่วงเวลา : ${widget.roundStart}น. ถึง ${widget.roundEnd}น.',
-                            Icon(
-                              Icons.access_time_rounded,
-                              color: Theme.of(context).primaryColor,
-                              size: 25,
-                            ),
-                          ),
+                          textDouble_iconLeft(
+                              'date_report'.tr,
+                              ' : $dateNow',
+                              Icon(
+                                Icons.calendar_month_rounded,
+                                color: Theme.of(context).primaryColor,
+                                size: 30,
+                              )),
+                          textDouble_iconLeft(
+                              'round'.tr,
+                              ' : ${widget.roundName}',
+                              Icon(
+                                Icons.map_rounded,
+                                color: Theme.of(context).primaryColor,
+                                size: 30,
+                              )),
+                          textFourIcon(
+                              'interval'.tr,
+                              ' : ${widget.roundStart} ',
+                              'to'.tr,
+                              ' ${widget.roundEnd}',
+                              icon: Icon(
+                                Icons.access_time_rounded,
+                                color: Theme.of(context).primaryColor,
+                                size: 30,
+                              ))
                         ],
                       ),
                     ),
@@ -211,7 +217,7 @@ class _Logs_PointState extends State<Logs_Point> {
                         ? Container(
                             padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
                             child: Search_From(
-                              title: 'ค้นหาข้อมูล',
+                              title: 'search'.tr,
                               fieldText: fieldText,
                               clear: () {
                                 setState(() {
@@ -227,7 +233,7 @@ class _Logs_PointState extends State<Logs_Point> {
                         : Container(),
                     Expanded(
                       child: listdata.isEmpty
-                          ? Logo_Opacity(title: 'ไม่มีข้อมูลที่บันทึก')
+                          ? Logo_Opacity(title: 'no_data'.tr)
                           : RefreshIndicator(
                               onRefresh: () async {
                                 _getCheckPoint(500);
@@ -249,29 +255,36 @@ class _Logs_PointState extends State<Logs_Point> {
                                       child: fileList.isEmpty
                                           ? ListTile(
                                               textColor: Colors.black,
-                                              title: Text(
-                                                'จุดตรวจ :  ${listdata[index].checkpointName}',
-                                              ),
-                                              subtitle: textDoubleColors(
-                                                  'สถานะ : ',
+                                              title: textDoubleColors(
+                                                  'checkpoint'.tr,
                                                   Colors.black,
-                                                  'ยังไม่ตรวจ',
+                                                  ' : ${listdata[index].checkpointName}',
+                                                  Colors.black),
+                                              subtitle: textDoubleColors(
+                                                  'status'.tr,
+                                                  Colors.black,
+                                                  'not_checked'.tr,
                                                   Colors.red))
                                           : ExpansionTile(
                                               textColor: Colors.black,
-                                              title: Text(
-                                                'จุดตรวจ :  ${listdata[index].checkpointName}',
-                                              ),
+                                              title: textDoubleColors(
+                                                  'checkpoint'.tr,
+                                                  Colors.black,
+                                                  ' :  ${listdata[index].checkpointName}',
+                                                  Colors.black),
                                               subtitle: Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  Text(
-                                                      "เวลาบันทึก : ${formatTime.format(DateTime.parse(fileList[0].checktimeReal!))} น."),
                                                   textDoubleColors(
-                                                      'สถานะ : ',
+                                                      'record_time'.tr,
                                                       Colors.black,
-                                                      'ตรวจแล้ว',
+                                                      ' : ${formatTime.format(DateTime.parse(fileList[0].checktimeReal!))}',
+                                                      Colors.black),
+                                                  textDoubleColors(
+                                                      'status'.tr,
+                                                      Colors.black,
+                                                      'checked_complete'.tr,
                                                       Theme.of(context)
                                                           .primaryColor),
                                                 ],
@@ -280,7 +293,7 @@ class _Logs_PointState extends State<Logs_Point> {
                                                   Container(
                                                     decoration: BoxDecoration(
                                                         borderRadius: const BorderRadius
-                                                                .only(
+                                                            .only(
                                                             bottomLeft:
                                                                 Radius.circular(
                                                                     10),
@@ -290,7 +303,7 @@ class _Logs_PointState extends State<Logs_Point> {
                                                         color: Colors
                                                             .grey.shade200),
                                                     padding: const EdgeInsets
-                                                            .fromLTRB(
+                                                        .fromLTRB(
                                                         10, 10, 10, 10),
                                                     child: Column(
                                                       crossAxisAlignment:
@@ -298,7 +311,7 @@ class _Logs_PointState extends State<Logs_Point> {
                                                               .start,
                                                       children: [
                                                         textIcon(
-                                                          'เหตุการณ์',
+                                                          'event'.tr,
                                                           const Icon(
                                                             Icons.edit_document,
                                                             size: 25,
@@ -307,7 +320,7 @@ class _Logs_PointState extends State<Logs_Point> {
                                                         Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                      .symmetric(
+                                                                  .symmetric(
                                                                   horizontal:
                                                                       20,
                                                                   vertical: 3),
@@ -315,7 +328,7 @@ class _Logs_PointState extends State<Logs_Point> {
                                                               '- ${fileList[0].event}'),
                                                         ),
                                                         textIcon(
-                                                          'รายการตรวจ',
+                                                          'checklist'.tr,
                                                           const Icon(
                                                             Icons.task_rounded,
                                                             size: 25,
@@ -326,7 +339,7 @@ class _Logs_PointState extends State<Logs_Point> {
                                                           primary: false,
                                                           padding:
                                                               const EdgeInsets
-                                                                      .symmetric(
+                                                                  .symmetric(
                                                                   vertical: 3,
                                                                   horizontal:
                                                                       20),
@@ -353,7 +366,8 @@ class _Logs_PointState extends State<Logs_Point> {
                                                                         .start,
                                                                 children: [
                                                                   textIcon(
-                                                                    'รายละเอียดเพิ่มเติม',
+                                                                    'desciption'
+                                                                        .tr,
                                                                     const Icon(
                                                                       Icons
                                                                           .description_rounded,
@@ -362,7 +376,7 @@ class _Logs_PointState extends State<Logs_Point> {
                                                                   ),
                                                                   Padding(
                                                                     padding: const EdgeInsets
-                                                                            .symmetric(
+                                                                        .symmetric(
                                                                         horizontal:
                                                                             20,
                                                                         vertical:
@@ -378,7 +392,7 @@ class _Logs_PointState extends State<Logs_Point> {
                                                           children: [
                                                             Expanded(
                                                               child: textIcon(
-                                                                'รูปภาพการตรวจ',
+                                                                'pictures'.tr,
                                                                 const Icon(
                                                                   Icons
                                                                       .photo_library_rounded,
@@ -387,7 +401,8 @@ class _Logs_PointState extends State<Logs_Point> {
                                                               ),
                                                             ),
                                                             button(
-                                                                'ดูรูปภาพ',
+                                                                'view_pictures'
+                                                                    .tr,
                                                                 Theme.of(
                                                                         context)
                                                                     .primaryColor,
@@ -405,7 +420,8 @@ class _Logs_PointState extends State<Logs_Point> {
                                                           children: [
                                                             Expanded(
                                                               child: textIcon(
-                                                                'ตำแหน่งที่ตรวจ',
+                                                                'checkpoint_location'
+                                                                    .tr,
                                                                 Icon(
                                                                   Icons
                                                                       .location_on_sharp,
@@ -417,7 +433,8 @@ class _Logs_PointState extends State<Logs_Point> {
                                                               ),
                                                             ),
                                                             button(
-                                                                'ดูตำแหน่ง',
+                                                                'view_location'
+                                                                    .tr,
                                                                 Colors.red
                                                                     .shade600,
                                                                 Icons.map, () {

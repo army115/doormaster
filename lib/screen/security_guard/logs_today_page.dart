@@ -6,12 +6,14 @@ import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/searchbar/search_from.dart';
-import 'package:doormster/components/text/text_icon.dart';
+import 'package:doormster/components/text/text_double_colors.dart';
+import 'package:doormster/components/text/text_icon_double.dart';
 import 'package:doormster/models/get_checklist.dart';
 import 'package:doormster/models/get_log.dart';
 import 'package:doormster/screen/security_guard/logs_point_page.dart';
-import 'package:doormster/service/connect_api.dart';
+import 'package:doormster/service/connected/connect_api.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dotted_line/dotted_line.dart';
@@ -138,21 +140,17 @@ class _Logs_TodayState extends State<Logs_Today>
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(10)),
                             child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 10),
-                              child: Row(
-                                children: [
-                                  textIcon(
-                                    'รายงานวันที่ : $dateNow',
+                                width: double.infinity,
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 10),
+                                child: textDouble_iconLeft(
+                                    'date_report'.tr,
+                                    ' : $dateNow',
                                     Icon(
                                       Icons.event_note,
                                       color: Theme.of(context).primaryColor,
-                                      size: 25,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                                      size: 30,
+                                    ))),
                           ),
                           listlogs.length > 10
                               ? Column(
@@ -170,7 +168,7 @@ class _Logs_TodayState extends State<Logs_Today>
                                       ),
                                     ),
                                     Search_From(
-                                      title: 'ค้นหารอบเดิน',
+                                      title: 'search_round'.tr,
                                       fieldText: fieldText,
                                       clear: () {
                                         setState(() {
@@ -190,7 +188,7 @@ class _Logs_TodayState extends State<Logs_Today>
                     ),
                     Expanded(
                         child: listdata.isEmpty
-                            ? Logo_Opacity(title: 'ไม่มีข้อมูลที่บันทึก')
+                            ? Logo_Opacity(title: 'data_not_found'.tr)
                             : RefreshIndicator(
                                 onRefresh: () async {
                                   _getLog(500);
@@ -200,7 +198,9 @@ class _Logs_TodayState extends State<Logs_Today>
                                         20, 0, 20, 10),
                                     itemCount: listdata.length,
                                     itemBuilder: ((context, ndex) {
+                                      //  เริ่มที่ index 1
                                       final index = ndex + 1;
+                                      //ปิด index แรก
                                       if (index >= listdata.length) {
                                         return Container();
                                       }
@@ -244,65 +244,59 @@ class _Logs_TodayState extends State<Logs_Today>
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Expanded(
-                                                      child: Text(
-                                                        'รอบเดิน : ${listdata[index].roundName}',
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
+                                                textDouble_iconRight(
+                                                    'round'.tr,
+                                                    ' : ${listdata[index].roundName}',
+                                                    Icon(Icons
+                                                        .arrow_forward_ios_rounded),
+                                                    overflow:
+                                                        TextOverflow.ellipsis),
+                                                IntrinsicHeight(
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      textDoubleColors(
+                                                        'start'.tr,
+                                                        Colors.black,
+                                                        ' : ${listdata[index].roundStart}',
+                                                        Colors.black,
                                                       ),
-                                                    ),
-                                                    const Icon(Icons
-                                                        .arrow_forward_ios_rounded)
-                                                  ],
+                                                      const VerticalDivider(
+                                                          thickness: 1.5,
+                                                          color: Colors.black,
+                                                          width: 1),
+                                                      textDoubleColors(
+                                                        'end'.tr,
+                                                        Colors.black,
+                                                        ' : ${listdata[index].roundEnd} ',
+                                                        Colors.black,
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
-                                                listdata[index].roundName ==
-                                                        'นอกรอบ'
-                                                    ? Container()
-                                                    : IntrinsicHeight(
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            Text(
-                                                                'เริ่มต้น : ${listdata[index].roundStart} น.'),
-                                                            const VerticalDivider(
-                                                                thickness: 1.5,
-                                                                color: Colors
-                                                                    .black,
-                                                                width: 1),
-                                                            Text(
-                                                              'สิ้นสุด : ${listdata[index].roundEnd} น.',
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
                                                 logsPoint <= 0
-                                                    ? Text(
-                                                        'ยังไม่ตรวจ ($logsPoint/$checkPoint)',
-                                                        style: const TextStyle(
-                                                            color: Colors.red),
-                                                      )
+                                                    ? textDoubleColors(
+                                                        'not_checked'.tr,
+                                                        Colors.red,
+                                                        ' ($logsPoint/$checkPoint)',
+                                                        Colors.red)
                                                     : logsPoint >= checkPoint
-                                                        ? Text(
-                                                            'ตรวจครบแล้ว ($logsPoint/$checkPoint)',
-                                                            style: TextStyle(
-                                                                color: Theme.of(
-                                                                        context)
-                                                                    .primaryColor),
-                                                          )
-                                                        : Text(
-                                                            'ตรวจไม่ครบ ($logsPoint/$checkPoint)',
-                                                            style:
-                                                                const TextStyle(
-                                                                    color: Colors
-                                                                        .orange),
-                                                          )
+                                                        ? textDoubleColors(
+                                                            'checked_complete'
+                                                                .tr,
+                                                            Theme.of(context)
+                                                                .primaryColor,
+                                                            ' ($logsPoint/$checkPoint)',
+                                                            Theme.of(context)
+                                                                .primaryColor)
+                                                        : textDoubleColors(
+                                                            'checked_incomplete'
+                                                                .tr,
+                                                            Colors.orange,
+                                                            ' ($logsPoint/$checkPoint)',
+                                                            Colors.orange),
                                               ],
                                             ),
                                           ),

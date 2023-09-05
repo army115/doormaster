@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors, must_be_immutable
 
-import 'package:doormster/service/check_connected.dart';
+import 'package:doormster/service/connected/check_connected.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

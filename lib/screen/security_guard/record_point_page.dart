@@ -8,12 +8,17 @@ import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/map/map_page.dart';
 import 'package:doormster/components/searchbar/search_from.dart';
+import 'package:doormster/components/text/text_double_colors.dart';
+import 'package:doormster/components/text/text_four_icon.dart';
 import 'package:doormster/components/text/text_icon.dart';
+import 'package:doormster/components/text/text_icon_double.dart';
+import 'package:doormster/components/text/text_triple.dart';
 import 'package:doormster/models/get_log.dart';
 import 'package:doormster/models/get_logs_all.dart';
-import 'package:doormster/service/connect_api.dart';
+import 'package:doormster/service/connected/connect_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper_plus/flutter_swiper_plus.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert' as convert;
 
@@ -119,7 +124,7 @@ class _Record_PointState extends State<Record_Point> {
     return Stack(
       children: [
         Scaffold(
-          appBar: AppBar(title: const Text('บันทึกจุดตรวจ')),
+          appBar: AppBar(title: Text('checkpoint_report'.tr)),
           body: Column(
             children: [
               Container(
@@ -135,32 +140,34 @@ class _Record_PointState extends State<Record_Point> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    textIcon(
-                      'รายงานวันที่ : ${widget.dateTime}',
-                      Icon(
-                        Icons.calendar_month_rounded,
-                        color: Theme.of(context).primaryColor,
-                        size: 25,
-                      ),
-                    ),
-                    textIcon(
-                      'รอบเดิน : ${widget.roundName}',
-                      Icon(
-                        Icons.map_rounded,
-                        color: Theme.of(context).primaryColor,
-                        size: 25,
-                      ),
-                    ),
-                    widget.roundName == 'นอกรอบ'
+                    textDouble_iconLeft(
+                        'date_report'.tr,
+                        ' : ${widget.dateTime}',
+                        Icon(
+                          Icons.calendar_month_rounded,
+                          color: Theme.of(context).primaryColor,
+                          size: 30,
+                        )),
+                    textDouble_iconLeft(
+                        'round'.tr,
+                        ' : ${widget.roundName}',
+                        Icon(
+                          Icons.map_rounded,
+                          color: Theme.of(context).primaryColor,
+                          size: 30,
+                        )),
+                    widget.roundName == 'extra_round'.tr
                         ? Container()
-                        : textIcon(
-                            'ช่วงเวลา : ${widget.roundStart}น. ถึง ${widget.roundEnd}น.',
-                            Icon(
+                        : textFourIcon(
+                            'interval'.tr,
+                            ' : ${widget.roundStart} ',
+                            'to'.tr,
+                            ' ${widget.roundEnd}',
+                            icon: Icon(
                               Icons.access_time_rounded,
                               color: Theme.of(context).primaryColor,
-                              size: 25,
-                            ),
-                          ),
+                              size: 30,
+                            ))
                   ],
                 ),
               ),
@@ -168,7 +175,7 @@ class _Record_PointState extends State<Record_Point> {
                   ? Container(
                       padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
                       child: Search_From(
-                        title: 'ค้นหาข้อมูล',
+                        title: 'search'.tr,
                         fieldText: fieldText,
                         clear: () {
                           setState(() {
@@ -184,7 +191,7 @@ class _Record_PointState extends State<Record_Point> {
                   : Container(),
               Expanded(
                 child: fileList.isEmpty
-                    ? Logo_Opacity(title: 'ไม่มีข้อมูลที่บันทึก')
+                    ? Logo_Opacity(title: 'no_data'.tr)
                     : ListView.builder(
                         padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
                         itemCount: fileList.length,
@@ -202,17 +209,24 @@ class _Record_PointState extends State<Record_Point> {
                             elevation: 10,
                             child: ExpansionTile(
                                 textColor: Colors.black,
-                                title: Text(
-                                  'จุดตรวจ :  ${fileList[index].checkpointName}',
-                                  style: const TextStyle(fontSize: 16),
-                                ),
+                                title: textDoubleColors(
+                                    'checkpoint'.tr,
+                                    Colors.black,
+                                    ' : ${fileList[index].checkpointName}',
+                                    Colors.black),
                                 subtitle: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                        'เหตุการณ์ : ${fileList[index].event}'),
-                                    Text(
-                                        'วันที่ ${formatdate.format(date)} เวลา ${formatTime.format(time)}'),
+                                    textDoubleColors(
+                                        'event'.tr,
+                                        Colors.black,
+                                        ' : ${fileList[index].event}',
+                                        Colors.black),
+                                    textFourIcon(
+                                        'date'.tr,
+                                        ' ${formatdate.format(date)} ',
+                                        'time'.tr,
+                                        ' ${formatTime.format(time)} '),
                                   ],
                                 ),
                                 children: [
@@ -230,7 +244,7 @@ class _Record_PointState extends State<Record_Point> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         textIcon(
-                                            'รายการตรวจ',
+                                            'checklist'.tr,
                                             const Icon(
                                               Icons.task_rounded,
                                               size: 25,
@@ -256,7 +270,7 @@ class _Record_PointState extends State<Record_Point> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   textIcon(
-                                                      'รายละเอียดเพิ่มเติม',
+                                                      'desciption'.tr,
                                                       const Icon(
                                                         Icons
                                                             .description_rounded,
@@ -265,7 +279,7 @@ class _Record_PointState extends State<Record_Point> {
                                                       )),
                                                   Padding(
                                                     padding: const EdgeInsets
-                                                            .symmetric(
+                                                        .symmetric(
                                                         horizontal: 20,
                                                         vertical: 3),
                                                     child: Text(
@@ -279,7 +293,7 @@ class _Record_PointState extends State<Record_Point> {
                                           children: [
                                             Expanded(
                                                 child: textIcon(
-                                                    'รูปภาพการตรวจ',
+                                                    'pictures'.tr,
                                                     const Icon(
                                                       Icons
                                                           .photo_library_rounded,
@@ -287,7 +301,7 @@ class _Record_PointState extends State<Record_Point> {
                                                       color: Colors.black,
                                                     ))),
                                             button(
-                                                'ดูรูปภาพ',
+                                                'view_pictures'.tr,
                                                 Theme.of(context).primaryColor,
                                                 Icons.photo, () {
                                               _getLog(fileList[index].sId!);
@@ -299,7 +313,7 @@ class _Record_PointState extends State<Record_Point> {
                                           children: [
                                             Expanded(
                                                 child: textIcon(
-                                              'ตำแหน่งที่ตรวจ',
+                                              'checkpoint_location'.tr,
                                               Icon(
                                                 Icons.location_on_sharp,
                                                 size: 25,
@@ -307,7 +321,7 @@ class _Record_PointState extends State<Record_Point> {
                                               ),
                                             )),
                                             button(
-                                                'ดูตำแหน่ง',
+                                                'view_location'.tr,
                                                 Colors.red.shade600,
                                                 Icons.map, () {
                                               showMap(fileList[index].lat!,
@@ -346,14 +360,14 @@ class _Record_PointState extends State<Record_Point> {
                         borderRadius: BorderRadius.circular(10),
                         color: Colors.white,
                       ),
-                      child: const Column(
+                      child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
                               Icons.image_not_supported_rounded,
                               size: 50,
                             ),
-                            Text('ไม่มีรูปภาพ')
+                            Text('no_picture'.tr)
                           ]),
                     )
                   : Swiper(

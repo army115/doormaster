@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 Future<void> permissionPhotos(context, action) async {
@@ -12,11 +13,11 @@ Future<void> permissionPhotos(context, action) async {
   } else {
     dialogOnebutton_Subtitle(
         context,
-        'อนุญาตการเข้าถึง',
-        'จำเป็นต้องเข้าถึงรูปภาพของคุณ',
+        'allow_access'.tr,
+        'need_access_picture'.tr,
         Icons.warning_amber_rounded,
         Colors.orange,
-        'ตกลง', () {
+        'ok'.tr, () {
       Navigator.of(context, rootNavigator: true).pop();
       openAppSettings();
     }, true, true);
@@ -32,11 +33,11 @@ Future<void> permissionAddPhotos(context, action) async {
     } else {
       dialogOnebutton_Subtitle(
           context,
-          'อนุญาตการเข้าถึง',
-          'จำเป็นต้องเข้าถึงรูปภาพของคุณ',
+          'allow_access'.tr,
+          'need_access_picture'.tr,
           Icons.warning_amber_rounded,
           Colors.orange,
-          'ตกลง', () {
+          'ok'.tr, () {
         Navigator.of(context, rootNavigator: true).pop();
         openAppSettings();
       }, true, true);

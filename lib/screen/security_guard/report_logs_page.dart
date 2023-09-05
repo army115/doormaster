@@ -15,7 +15,6 @@ import 'package:doormster/models/get_logs_all.dart';
 import 'package:doormster/screen/security_guard/logs_all_page.dart';
 import 'package:doormster/screen/security_guard/logs_today_page.dart';
 import 'package:doormster/screen/security_guard/record_point_page.dart';
-import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -68,7 +67,7 @@ class _Report_LogsState extends State<Report_Logs>
       child: Scaffold(
           appBar: AppBar(
             elevation: 0,
-            title: Text('บันทึกรายการตรวจ'),
+            title: Text('list_report'.tr),
             leading: button_back(() {
               if (widget.type != null) {
                 Navigator.of(context).pop();
@@ -91,17 +90,17 @@ class _Report_LogsState extends State<Report_Logs>
                         topLeft: Radius.circular(8.0),
                         topRight: Radius.circular(8.0)),
                     color: Colors.grey[200]),
-                tabs: const [
+                tabs: [
                   Tab(
                     child: Text(
-                      'วันนี้',
+                      'today'.tr,
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                   ),
                   Tab(
                     child: Text(
-                      'ทั้งหมด',
+                      'all'.tr,
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),

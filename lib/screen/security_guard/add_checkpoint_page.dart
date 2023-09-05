@@ -9,10 +9,12 @@ import 'package:doormster/components/button/buttonback_appbar.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/map/map_page.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
+import 'package:doormster/components/text/text_four_icon.dart';
 import 'package:doormster/components/text/text_icon.dart';
 import 'package:doormster/models/get_checklist.dart';
-import 'package:doormster/service/connect_api.dart';
+import 'package:doormster/service/connected/connect_api.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -228,7 +230,7 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
         children: [
           Scaffold(
             appBar: AppBar(
-              title: Text('ลงทะเบียนจุดตรวจ'),
+              title: Text('register_point'.tr),
               leading: button_back(() {
                 Navigator.popUntil(context, (route) => route.isFirst);
               }),
@@ -239,7 +241,7 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
                 loading || checkpointName == null || verify == 1
                     ? Container()
                     : Buttons(
-                        title: 'ลงทะเบียน',
+                        title: 'register_title'.tr,
                         press: () {
                           if (_formkey.currentState!.validate()) {
                             Map<String, dynamic> valuse = Map();
@@ -260,24 +262,27 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            textIcon(
-                                'วันที่ $date เวลา $time',
+                            textFourIcon(
+                                'date'.tr, ' $date ', 'time'.tr, ' $time',
+                                color1: Colors.red,
+                                color2: Colors.red,
+                                color3: Colors.red,
+                                color4: Colors.red,
+                                icon: Icon(
+                                  Icons.edit_calendar_rounded,
+                                  size: 30,
+                                )),
+                            SizedBox(height: 10),
+                            textIcon_Double(
+                                'checkpoint',
+                                ' : $checkpointName',
                                 Icon(
-                                  Icons.calendar_month_rounded,
+                                  Icons.maps_home_work_rounded,
                                   size: 25,
-                                ),
-                                color: Colors.red),
+                                )),
                             SizedBox(height: 10),
                             textIcon(
-                              'จุดตรวจ : $checkpointName',
-                              Icon(
-                                Icons.maps_home_work_rounded,
-                                size: 25,
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            textIcon(
-                              'รายการตรวจ',
+                              'checklist'.tr,
                               Icon(
                                 Icons.task_rounded,
                                 size: 25,
@@ -305,7 +310,7 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
                             ExpansionTile(
                               tilePadding: EdgeInsets.zero,
                               title: textIcon(
-                                'ตำแหน่งจุดตรวจ',
+                                'checkpoint_location'.tr,
                                 Icon(
                                   Icons.location_on_sharp,
                                   size: 25,

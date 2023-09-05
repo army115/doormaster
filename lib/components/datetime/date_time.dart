@@ -81,7 +81,9 @@ class _Date_timeState extends State<Date_time> {
                 print(datetime);
               },
               currentTime: dateSelect == null ? DateTime.now() : dateSelect!,
-              locale: LocaleType.th,
+              locale: Localizations.localeOf(context).languageCode == 'en'
+                  ? LocaleType.en
+                  : LocaleType.th,
               theme: DatePickerThemeBdaya(
                 titleHeight: 45,
                 headerColor: Theme.of(context).primaryColor,

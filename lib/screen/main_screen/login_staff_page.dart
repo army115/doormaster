@@ -3,16 +3,16 @@ import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/button/button_animation.dart';
-import 'package:doormster/components/snackbar/back_double.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/components/text_form/text_form.dart';
 import 'package:doormster/components/text_form/text_form_password.dart';
+import 'package:doormster/controller/back_double.dart';
 import 'package:doormster/models/login_model.dart';
-import 'package:doormster/service/connect_api.dart';
-import 'package:doormster/service/notify_token.dart';
+import 'package:doormster/service/connected/connect_api.dart';
+import 'package:doormster/service/notify/notify_token.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:http/http.dart' as http;
 // import 'dart:async';
@@ -91,19 +91,23 @@ class _Login_StaffState extends State<Login_Staff> {
               Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => BottomBar()));
               snackbar(context, Theme.of(context).primaryColor,
-                  'เข้าสู่ระบบสำเร็จ', Icons.check_circle_outline_rounded);
+                  'login_success'.tr, Icons.check_circle_outline_rounded);
 
               // setState(() {
               //   loading = false;
               // });
             } else {
               print(jsonRes.data);
-              print('username หรือ password ไม่ถูกต้อง');
-              snackbar(
+              print('account block');
+              dialogOnebutton_Subtitle(
                   context,
-                  Colors.red,
-                  'ชื่อผู้ใช้ หรือ รหัสผ่าน ไม่ถูกต้อง',
-                  Icons.highlight_off_rounded);
+                  'account_block'.tr,
+                  'unblock_account'.tr,
+                  Icons.warning_amber_rounded,
+                  Colors.orange,
+                  'ok'.tr, () async {
+                Navigator.of(context).pop();
+              }, false, false);
               setState(() {
                 loading = false;
               });
@@ -111,7 +115,7 @@ class _Login_StaffState extends State<Login_Staff> {
           } else {
             print(jsonRes.data);
             print('username หรือ password ไม่ถูกต้อง');
-            snackbar(context, Colors.red, 'ชื่อผู้ใช้ หรือ รหัสผ่าน ไม่ถูกต้อง',
+            snackbar(context, Colors.red, 'wrong_username'.tr,
                 Icons.highlight_off_rounded);
             setState(() {
               loading = false;
@@ -120,7 +124,7 @@ class _Login_StaffState extends State<Login_Staff> {
         } else {
           print(response.statusCode);
           print('Connection Fail');
-          snackbar(context, Colors.red, 'เข้าสู่ระบบไม่สำเร็จ',
+          snackbar(context, Colors.red, 'login_failed'.tr,
               Icons.highlight_off_rounded);
           setState(() {
             loading = false;
@@ -128,13 +132,8 @@ class _Login_StaffState extends State<Login_Staff> {
         }
       } catch (error) {
         print(error);
-        dialogOnebutton_Subtitle(
-            context,
-            'พบข้อผิดพลาด',
-            'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-            Icons.warning_amber_rounded,
-            Colors.orange,
-            'ตกลง', () async {
+        dialogOnebutton_Subtitle(context, 'found_error'.tr, 'connect_fail'.tr,
+            Icons.warning_amber_rounded, Colors.orange, 'ok'.tr, () async {
           Navigator.of(context).pop();
         }, false, false);
         setState(() {
@@ -144,26 +143,12 @@ class _Login_StaffState extends State<Login_Staff> {
     }
   }
 
-  DateTime PressTime = DateTime.now();
-
-  Future<bool> _onBackButtonDoubleClicked() async {
-    int difference = DateTime.now().difference(PressTime).inMilliseconds;
-    PressTime = DateTime.now();
-    if (difference < 1500) {
-      SystemNavigator.pop(animated: true);
-      return true;
-    } else {
-      backDouble(context);
-      return false;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final isInit = isAnimating || loading == false;
 
     return WillPopScope(
-      onWillPop: () async => _onBackButtonDoubleClicked(),
+      onWillPop: () async => onBackButtonDoubleClicked(context),
       child: Scaffold(
           // backgroundColor: Theme.of(context).primaryColor,
           body: SingleChildScrollView(
@@ -190,7 +175,7 @@ class _Login_StaffState extends State<Login_Staff> {
                       scale: 3.5,
                     ),
                     Text(
-                      'เข้าสู่ระบบใช้งาน สำหรับพนักงาน',
+                      'login_for_employee'.tr,
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -209,18 +194,18 @@ class _Login_StaffState extends State<Login_Staff> {
                           children: [
                             Text_Form(
                               controller: _username,
-                              title: 'ชื่อผู้ใช้',
+                              title: 'username'.tr,
                               icon: Icons.account_circle_rounded,
-                              error: 'กรุณากรอกชื่อผู้ใช้',
+                              error: 'enter_username_pls'.tr,
                               TypeInput: TextInputType.name,
                             ),
                             TextForm_Password(
                               controller: _password,
-                              title: 'รหัสผ่าน',
+                              title: 'password'.tr,
                               iconLaft: Icons.key,
                               error: (values) {
                                 if (values!.isEmpty) {
-                                  return 'กรุณากรอกรหัสผ่าน';
+                                  return 'enter_password_pls'.tr;
                                 } else {
                                   return null;
                                 }
@@ -229,39 +214,8 @@ class _Login_StaffState extends State<Login_Staff> {
                             SizedBox(
                               height: 15,
                             ),
-                            // AnimatedContainer(
-                            //   duration: const Duration(milliseconds: 200),
-                            //   onEnd: () => setState(() {
-                            //     isAnimating = !isAnimating;
-                            //   }),
-                            //   width: !loading
-                            //       ? MediaQuery.of(context).size.width * 0.5
-                            //       : 70,
-                            //   height: 45,
-                            //   child: !isInit
-                            //       ? Container(
-                            //           decoration: BoxDecoration(
-                            //               shape: BoxShape.circle,
-                            //               color:
-                            //                   Theme.of(context).primaryColor),
-                            //           child: const Center(
-                            //             child: CircularProgressIndicator(
-                            //               color: Colors.white,
-                            //             ),
-                            //           ),
-                            //         )
-                            //       : Buttons(
-                            //           title: 'เข้าสู่ระบบ',
-                            //           press: () {
-                            //             doLogin();
-                            //           },
-                            //         ),
-                            // ),
-                            // SizedBox(
-                            //   height: 20,
-                            // ),
                             Button_Animation(
-                              title: 'เข้าสู่ระบบ',
+                              title: 'login'.tr,
                               press: () async {
                                 await doLogin();
                               },
@@ -283,10 +237,10 @@ class _Login_StaffState extends State<Login_Staff> {
                                     color: Colors.black,
                                     fontFamily: 'Prompt',
                                   ),
-                                  text: 'เข้าสู่ระบบใช้งาน ',
+                                  text: 'login_for'.tr,
                                   children: [
                                     TextSpan(
-                                        text: 'ผู้ใช้ทั่วไป',
+                                        text: 'user'.tr,
                                         style: TextStyle(
                                           decoration: TextDecoration.underline,
                                           color: Theme.of(context).primaryColor,

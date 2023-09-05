@@ -10,11 +10,14 @@ import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/searchbar/search_calendar.dart';
 import 'package:doormster/components/searchbar/search_from.dart';
+import 'package:doormster/components/text/text_double_colors.dart';
+import 'package:doormster/components/text/text_icon_double.dart';
+import 'package:doormster/components/text/text_triple.dart';
 import 'package:doormster/models/get_checklist.dart';
 import 'package:doormster/models/get_log.dart';
 import 'package:doormster/models/get_logs_all.dart';
 import 'package:doormster/screen/security_guard/record_point_page.dart';
-import 'package:doormster/service/connect_api.dart';
+import 'package:doormster/service/connected/connect_api.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -41,6 +44,7 @@ class _Logs_AllState extends State<Logs_All>
   DateFormat formatDate = DateFormat('y-MM-dd');
   DateTime now = DateTime.now();
   String? dateNow;
+  var language;
 
   Future _getLog(String dateStart, String dateEnd, int loadingTime) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -90,11 +94,17 @@ class _Logs_AllState extends State<Logs_All>
     }
   }
 
-  void dateNowAll() {
-    dateNow = DateFormat('dd-MM-y').format(now);
-    fieldText = TextEditingController(text: 'เลือกวันที่ ($dateNow)');
+  void dateNowAll() async {
     _startDateText = formatDate.format(now);
     _endDateText = formatDate.format(now);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    language = prefs.getString('language');
+    dateNow = DateFormat('dd-MM-y').format(now);
+    if (language == 'en') {
+      fieldText = TextEditingController(text: 'Select Date ($dateNow)');
+    } else {
+      fieldText = TextEditingController(text: 'เลือกวันที่ ($dateNow)');
+    }
   }
 
   Future onGoBack(dynamic value) async {
@@ -137,7 +147,7 @@ class _Logs_AllState extends State<Logs_All>
                         child: Column(
                           children: [
                             Search_Calendar(
-                              title: 'ค้นหา',
+                              title: 'search'.tr,
                               fieldText: fieldText,
                               ontap: () {
                                 calendar(context);
@@ -166,7 +176,7 @@ class _Logs_AllState extends State<Logs_All>
                                         ),
                                       ),
                                       Search_From(
-                                        title: 'ค้นหารอบเดิน',
+                                        title: 'search_round'.tr,
                                         fieldText: searchText,
                                         clear: () {
                                           setState(() {
@@ -186,7 +196,7 @@ class _Logs_AllState extends State<Logs_All>
                       ),
                       Expanded(
                         child: listLog.isEmpty
-                            ? Logo_Opacity(title: 'ไม่มีข้อมูลที่บันทึก')
+                            ? Logo_Opacity(title: 'data_not_found'.tr)
                             : RefreshIndicator(
                                 onRefresh: () async {
                                   _getLog(_startDateText!, _endDateText!, 500);
@@ -214,9 +224,12 @@ class _Logs_AllState extends State<Logs_All>
                                                           fileList:
                                                               listLog[index]
                                                                   .fileList,
-                                                          roundName:
-                                                              listLog[index]
-                                                                  .roundName,
+                                                          roundName: listLog[
+                                                                          index]
+                                                                      .roundName ==
+                                                                  'นอกรอบ'
+                                                              ? 'extra_round'.tr
+                                                              : '${listLog[index].roundName}',
                                                           roundStart:
                                                               listLog[index]
                                                                   .roundStart,
@@ -224,9 +237,12 @@ class _Logs_AllState extends State<Logs_All>
                                                               listLog[index]
                                                                   .roundEnd,
                                                           dateTime: fieldText
-                                                                  .text
-                                                                  .contains(
-                                                                      'วันที่')
+                                                                      .text
+                                                                      .contains(
+                                                                          'วันที่') ||
+                                                                  fieldText.text
+                                                                      .contains(
+                                                                          'Select')
                                                               ? dateNow
                                                               : fieldText.text,
                                                         )))
@@ -241,24 +257,16 @@ class _Logs_AllState extends State<Logs_All>
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Expanded(
-                                                      child: Text(
-                                                        'รอบเดิน : ${listLog[index].roundName}',
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                      ),
-                                                    ),
-                                                    const Icon(Icons
-                                                        .arrow_forward_ios_rounded)
-                                                  ],
-                                                ),
-                                                // Text(
-                                                //     'วันที่ : ${fieldText.text}'),
+                                                textDouble_iconRight(
+                                                    'round'.tr,
+                                                    listLog[index].roundName ==
+                                                            'นอกรอบ'
+                                                        ? 'extra_round'.tr
+                                                        : ' : ${listLog[index].roundName}',
+                                                    Icon(Icons
+                                                        .arrow_forward_ios_rounded),
+                                                    overflow:
+                                                        TextOverflow.ellipsis),
                                                 listLog[index].roundName ==
                                                         'นอกรอบ'
                                                     ? Container()
@@ -268,32 +276,43 @@ class _Logs_AllState extends State<Logs_All>
                                                               MainAxisAlignment
                                                                   .spaceBetween,
                                                           children: [
-                                                            Text(
-                                                                'เริ่มต้น : ${listLog[index].roundStart} น.'),
+                                                            textDoubleColors(
+                                                                'start'.tr,
+                                                                Colors.black,
+                                                                ' : ${listLog[index].roundStart}',
+                                                                Colors.black),
                                                             const VerticalDivider(
                                                                 thickness: 1.5,
                                                                 color: Colors
                                                                     .black,
                                                                 width: 1),
-                                                            Text(
-                                                              'สิ้นสุด : ${listLog[index].roundEnd} น.',
-                                                            ),
+                                                            textDoubleColors(
+                                                                'end'.tr,
+                                                                Colors.black,
+                                                                ' : ${listLog[index].roundEnd}',
+                                                                Colors.black)
                                                           ],
                                                         ),
                                                       ),
                                                 listLog[index]
                                                         .fileList!
                                                         .isNotEmpty
-                                                    ? Text(
-                                                        'มีบันทึก ${listLog[index].fileList?.length} รายการ',
-                                                        style: TextStyle(
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .primaryColor),
-                                                      )
-                                                    : const Text(
-                                                        'ไม่มีบันทึกรายการตรวจ',
-                                                        style: TextStyle(
+                                                    ? textTripleColors(
+                                                        'record'.tr,
+                                                        ' ${listLog[index].fileList?.length} ',
+                                                        'list'.tr,
+                                                        color1:
+                                                            Theme.of(context)
+                                                                .primaryColor,
+                                                        color2:
+                                                            Theme.of(context)
+                                                                .primaryColor,
+                                                        color3:
+                                                            Theme.of(context)
+                                                                .primaryColor)
+                                                    : Text(
+                                                        'no_record'.tr,
+                                                        style: const TextStyle(
                                                             color: Colors.red),
                                                       )
                                               ],
@@ -369,7 +388,11 @@ class _Logs_AllState extends State<Logs_All>
           var _ShowEndDateText = dateShow.format(_endDate!);
 
           //fieldText Controller
-          dateDifferent = "${_ShowStartDate} ถึง ${_ShowEndDateText}";
+          if (language == 'en') {
+            dateDifferent = "${_ShowStartDate} to ${_ShowEndDateText}";
+          } else {
+            dateDifferent = "${_ShowStartDate} ถึง ${_ShowEndDateText}";
+          }
           fieldText.text = dateDifferent!;
         });
 

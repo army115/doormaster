@@ -2,11 +2,13 @@
 
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/loading/loading.dart';
+import 'package:doormster/components/text/text_double_colors.dart';
 import 'package:doormster/models/get_log.dart';
 import 'package:doormster/screen/security_guard/add_checkpoint_page.dart';
 import 'package:doormster/screen/security_guard/check_in_page.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class ScanQR_Check extends StatefulWidget {
@@ -80,7 +82,7 @@ class _ScanQR_CheckState extends State<ScanQR_Check> {
           Navigator.of(context).push(
             MaterialPageRoute<void>(
               builder: (BuildContext context) => Check_In(
-                  title: 'เช็คจุดตรวจ',
+                  title: 'checkIn'.tr,
                   timeCheck: DateTime.now(),
                   checkpointId: '${result?.code}',
                   lat: position?.latitude,
@@ -96,7 +98,7 @@ class _ScanQR_CheckState extends State<ScanQR_Check> {
         Navigator.of(context).push(
           MaterialPageRoute<void>(
             builder: (BuildContext context) => Check_In(
-                title: 'ตรวจนอกรอบ',
+                title: 'check_extra_round'.tr,
                 timeCheck: DateTime.now(),
                 checkpointId: '${result?.code}',
                 roundName: widget.roundName,
@@ -166,13 +168,11 @@ class _ScanQR_CheckState extends State<ScanQR_Check> {
                 Positioned(
                     top: MediaQuery.of(context).size.height * 0.05,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 5),
-                      child: Text(
-                        'สแกน QR Code',
-                        style: TextStyle(color: Colors.white, fontSize: 20),
-                      ),
-                    )),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                        child: textDoubleColors(
+                            'scan'.tr, Colors.white, ' QR Code', Colors.white,
+                            fontsize: 20))),
                 Positioned(
                   left: 10,
                   top: MediaQuery.of(context).size.height * 0.05,

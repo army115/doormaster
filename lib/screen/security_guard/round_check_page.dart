@@ -8,13 +8,15 @@ import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/searchbar/search_from.dart';
+import 'package:doormster/components/text/text_double_colors.dart';
 import 'package:doormster/models/get_round.dart';
 import 'package:doormster/screen/security_guard/scan_qr_check_page.dart';
-import 'package:doormster/service/check_connected.dart';
-import 'package:doormster/service/connect_api.dart';
+import 'package:doormster/service/connected/check_connected.dart';
+import 'package:doormster/service/connected/connect_api.dart';
 import 'package:doormster/service/permission/permission_camera.dart';
 import 'package:doormster/service/permission/permission_location.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -155,7 +157,7 @@ class _Round_CheckState extends State<Round_Check> {
     return Stack(
       children: [
         Scaffold(
-          appBar: AppBar(title: Text('รายการรอบเดินตรวจ')),
+          appBar: AppBar(title: Text('list_round'.tr)),
           body: loading
               ? Container()
               : Column(
@@ -164,7 +166,7 @@ class _Round_CheckState extends State<Round_Check> {
                         ? Container(
                             padding: const EdgeInsets.fromLTRB(20, 15, 20, 10),
                             child: Search_From(
-                              title: 'ค้นหารอบเดิน',
+                              title: 'search_round'.tr,
                               fieldText: fieldText,
                               clear: () {
                                 setState(() {
@@ -180,7 +182,7 @@ class _Round_CheckState extends State<Round_Check> {
                         : Container(),
                     Expanded(
                       child: listdata.isEmpty
-                          ? Logo_Opacity(title: 'ไม่มีข้อมูลที่บันทึก')
+                          ? Logo_Opacity(title: 'no_data'.tr)
                           : RefreshIndicator(
                               onRefresh: () async {
                                 _getCheckRound(500);
@@ -234,18 +236,13 @@ class _Round_CheckState extends State<Round_Check> {
                                                       .spaceBetween,
                                               children: [
                                                 Expanded(
-                                                  child: Text(
-                                                    'รอบเดิน : ${listdata[index].roundName}',
-                                                    maxLines:
-                                                        round == 1 ? 2 : 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                        color: textColor),
-                                                  ),
-                                                ),
+                                                    child: textDoubleColors(
+                                                        'round'.tr,
+                                                        textColor,
+                                                        ' : ${listdata[index].roundName}',
+                                                        textColor)),
                                                 round == 1
-                                                    ? button('เช็คจุดตรวจ',
+                                                    ? button('checkIn'.tr,
                                                         Colors.white, () {
                                                         permissionCamere(
                                                             context,
@@ -298,22 +295,22 @@ class _Round_CheckState extends State<Round_Check> {
                                               child: Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
-                                                        .spaceAround,
+                                                        .spaceBetween,
                                                 children: [
-                                                  Text(
-                                                    'เริ่มต้น : ${listdata[index].roundStart} น.',
-                                                    style: TextStyle(
-                                                        color: textColor),
-                                                  ),
+                                                  textDoubleColors(
+                                                      'start'.tr,
+                                                      textColor,
+                                                      ' : ${listdata[index].roundStart}',
+                                                      textColor),
                                                   VerticalDivider(
                                                       thickness: 1.5,
                                                       color: line,
                                                       width: 1),
-                                                  Text(
-                                                    'สิ้นสุด : ${listdata[index].roundEnd} น.',
-                                                    style: TextStyle(
-                                                        color: textColor),
-                                                  ),
+                                                  textDoubleColors(
+                                                      'end'.tr,
+                                                      textColor,
+                                                      ' : ${listdata[index].roundEnd}',
+                                                      textColor),
                                                 ],
                                               ),
                                             )

@@ -1,11 +1,13 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, avoid_print, use_build_context_synchronously
 
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
+import 'package:doormster/components/bottombar/bottom_controller.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
+import 'package:doormster/service/connected/connect_api.dart';
 import 'package:doormster/style/styleButton/ButtonStyle.dart';
-import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:http/http.dart' as http;
 // import 'dart:convert' as convert;
@@ -33,9 +35,10 @@ class _Password_PageState extends State<Password_Page> {
   bool redEyeold = true;
   bool redEyenew = true;
   bool redEyecon = true;
+  late SharedPreferences prefs;
 
   Future<void> _getUsername() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs = await SharedPreferences.getInstance();
     token = prefs.getString('token');
     username = prefs.getString('username');
     print(username);
@@ -57,7 +60,9 @@ class _Password_PageState extends State<Password_Page> {
       print(_response);
       if (_response != '400') {
         print('Change Success!');
-        Navigator.pop(context);
+        await prefs.setBool("remember", false);
+        Get.until((route) => route.isFirst);
+        bottomController.ontapItem(0);
         snackbar(context, Theme.of(context).primaryColor,
             'เปลี่ยนรหัสผ่านสำเร็จ', Icons.check_circle_outline_rounded);
       } else {
@@ -102,7 +107,7 @@ class _Password_PageState extends State<Password_Page> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text('เปลี่ยนรหัสผ่าน'),
+        title: Text('change_password'.tr),
       ),
       body: SingleChildScrollView(
           child: Container(
@@ -115,7 +120,7 @@ class _Password_PageState extends State<Password_Page> {
               textpass(
                 _oldpass,
                 redEyeold,
-                'รหัสผ่านปัจจุบัน',
+                'current_password'.tr,
                 Icon(
                   Icons.lock_open_rounded,
                   size: 30,
@@ -138,7 +143,7 @@ class _Password_PageState extends State<Password_Page> {
               textpass(
                 _newpass,
                 redEyenew,
-                'รหัสผ่านใหม่',
+                'new_password'.tr,
                 Icon(Icons.key_rounded, size: 30),
                 () => setState(() {
                   redEyenew = !redEyenew;
@@ -163,7 +168,7 @@ class _Password_PageState extends State<Password_Page> {
               textpass(
                 _conpass,
                 redEyecon,
-                'ยืนยันรหัสผ่าน',
+                'confirm_password'.tr,
                 Icon(Icons.key_rounded, size: 30),
                 () => setState(() {
                   redEyecon = !redEyecon;
@@ -229,7 +234,7 @@ class _Password_PageState extends State<Password_Page> {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: Text("ยกเลิก",
+          child: Text("cancel".tr,
               style: TextStyle(
                   fontSize: 16,
                   letterSpacing: 1,
@@ -237,7 +242,7 @@ class _Password_PageState extends State<Password_Page> {
                   fontWeight: FontWeight.normal)),
         ),
         ElevatedButton(
-          onPressed: () {
+          onPressed: () async {
             if (_formkey.currentState!.validate()) {
               Map<String, dynamic> valuse = Map();
               valuse['user_name'] = username;
@@ -249,7 +254,7 @@ class _Password_PageState extends State<Password_Page> {
           style: styleButtons(EdgeInsets.symmetric(horizontal: 40, vertical: 8),
               10.0, Theme.of(context).primaryColor, BorderRadius.circular(10)),
           child: Text(
-            "บันทึก",
+            "save".tr,
             style: TextStyle(
                 fontSize: 16,
                 letterSpacing: 1,

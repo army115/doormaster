@@ -1,6 +1,9 @@
+// ignore_for_file: constant_identifier_names
+
 import 'dart:io';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
+import 'package:doormster/language/translation.dart';
 import 'package:doormster/screen/main_screen/auth_page.dart';
 import 'package:doormster/screen/main_screen/home_page.dart';
 import 'package:doormster/screen/main_screen/login_page.dart';
@@ -8,8 +11,8 @@ import 'package:doormster/screen/main_screen/change_password_page.dart';
 import 'package:doormster/screen/main_screen/login_staff_page.dart';
 import 'package:doormster/screen/main_screen/settings_page.dart';
 import 'package:doormster/screen/management_service/management_service_page.dart';
+import 'package:doormster/service/notify/notify_service.dart';
 import 'package:doormster/style/theme.dart';
-import 'package:doormster/service/notify_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -37,18 +40,25 @@ Future<void> main() async {
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   final prefs = await SharedPreferences.getInstance();
   final token = prefs.getString('token');
+  final language = prefs.getString('language');
+  if (language == null) {
+    await prefs.setString("language", 'th');
+  }
   print(token == null ? 'login : false' : 'login : true');
+  print('language : $language');
   runApp(result == ConnectivityResult.none
       ? Check_Connected()
       : MyApp(
           // token: null,
           token: token,
+          language: language,
         ));
 }
 
 class MyApp extends StatelessWidget {
   final token;
-  MyApp({Key? key, this.token}) : super(key: key);
+  final language;
+  MyApp({Key? key, this.token, this.language}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -68,6 +78,8 @@ class MyApp extends StatelessWidget {
         Locale('en', 'US'),
         Locale('th', 'TH'),
       ],
+      locale: language == null ? Locale('th', 'TH') : Locale(language),
+      translations: Languages(),
       title: 'HIP Smart Community',
       debugShowCheckedModeBanner: false,
       theme: mytheme(),

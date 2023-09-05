@@ -1,16 +1,19 @@
 // ignore_for_file: unused_field, use_build_context_synchronously
 
 import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_twobutton_subtext.dart';
+import 'package:doormster/components/bottombar/bottom_controller.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
+import 'package:doormster/components/text/text_double_colors.dart';
 import 'package:doormster/screen/main_screen/login_page.dart';
 import 'package:doormster/screen/main_screen/login_staff_page.dart';
-import 'package:doormster/service/connect_api.dart';
-import 'package:doormster/service/notify_token.dart';
+import 'package:doormster/service/connected/connect_api.dart';
+import 'package:doormster/service/notify/notify_token.dart';
+import 'package:doormster/style/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -33,6 +36,7 @@ class _Settings_PageState extends State<Settings_Page> {
   late SharedPreferences prefs;
   var uuId;
   var security;
+  var language;
   bool loading = false;
   PackageInfo? packageInfo;
 
@@ -41,6 +45,7 @@ class _Settings_PageState extends State<Settings_Page> {
     prefs = await SharedPreferences.getInstance();
     uuId = prefs.getString('uuId');
     security = prefs.getBool('security');
+    language = prefs.getString('language');
     print('uuId: ${uuId}');
     setState(() {
       packageInfo = info;
@@ -130,6 +135,89 @@ class _Settings_PageState extends State<Settings_Page> {
     }
   }
 
+  void _openBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      shape: RoundedRectangleBorder(
+          side: BorderSide(width: 3, color: Theme.of(context).primaryColor),
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(15), topRight: Radius.circular(15))),
+      builder: (BuildContext context) {
+        return DraggableScrollableSheet(
+          expand: false,
+          initialChildSize: 0.3,
+          minChildSize: 0.2,
+          maxChildSize: 0.5,
+          builder: (context, scrollController) => Container(
+            padding: const EdgeInsets.symmetric(vertical: 5),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: Text(
+                      'select_language'.tr,
+                      style: textStyle().Header18,
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(children: [
+                      ListTile(
+                        selectedTileColor: language == 'th'
+                            ? Theme.of(context).primaryColor
+                            : Colors.white,
+                        selected: language == 'th' ? true : false,
+                        title: Text(
+                          'ไทย',
+                          style: TextStyle(
+                              color: language == 'th'
+                                  ? Colors.white
+                                  : Colors.black),
+                        ),
+                        onTap: () async {
+                          if (language == 'th') {
+                            Get.back();
+                          } else {
+                            bottomController.ontapItem(0);
+                            Get.until((route) => route.isFirst);
+                            Get.updateLocale(Locale('th'));
+                            await prefs.setString("language", 'th');
+                          }
+                        },
+                      ),
+                      ListTile(
+                        selectedTileColor: language == 'en'
+                            ? Theme.of(context).primaryColor
+                            : Colors.white,
+                        selected: language == 'en' ? true : false,
+                        title: Text(
+                          'English',
+                          style: TextStyle(
+                              color: language == 'en'
+                                  ? Colors.white
+                                  : Colors.black),
+                        ),
+                        onTap: () async {
+                          if (language == 'en') {
+                            Get.back();
+                          } else {
+                            bottomController.ontapItem(0);
+                            Get.until((route) => route.isFirst);
+                            Get.updateLocale(Locale('en'));
+                            await prefs.setString("language", 'en');
+                          }
+                        },
+                      ),
+                    ]),
+                  ),
+                ]),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     getValueShared();
@@ -139,12 +227,13 @@ class _Settings_PageState extends State<Settings_Page> {
   @override
   Widget build(BuildContext context) {
     final List<menuItem> _menu = [
-      // menuItem(Icons.person, 'ข้อมูลบัญชี', () {}, Colors.black),
-      menuItem(Icons.lock, 'เปลี่ยนรหัสผ่าน', () {
-        Navigator.of(context).popAndPushNamed('/password');
+      menuItem(Icons.lock, 'change_password'.tr, () {
+        Get.toNamed('/password');
       }, Colors.black),
-      // menuItem(Icons.translate_rounded, 'เปลี่ยนภาษา', () {}, Colors.black),
-      menuItem(Icons.no_accounts_rounded, 'ปิดการใช้งานบัญชี', () {
+      menuItem(Icons.translate_rounded, 'change_language'.tr, () {
+        _openBottomSheet(context);
+      }, Colors.black),
+      menuItem(Icons.no_accounts_rounded, 'disable_account'.tr, () {
         dialogTwobutton_Subtitle(
             context,
             'ปิดการใช้งานบัญชี',
@@ -162,17 +251,14 @@ class _Settings_PageState extends State<Settings_Page> {
             true,
             true);
       }, Colors.red),
-      menuItem(
-          Icons.app_settings_alt_rounded,
-          'เวอร์ชันปัจจุบัน ${packageInfo?.version}',
-          () {},
+      menuItem(Icons.app_settings_alt_rounded, 'เวอร์ชันปัจจุบัน', () {},
           Colors.grey.shade600)
     ];
     return Scaffold(
-      appBar: AppBar(title: Text('การตั้งค่า')),
+      appBar: AppBar(title: Text('setting'.tr)),
       body: Container(
         child: ListView.separated(
-          physics: ClampingScrollPhysics(),
+          physics: const ClampingScrollPhysics(),
           itemCount: _menu.length,
           itemBuilder: (context, index) {
             return ListTile(
@@ -182,16 +268,22 @@ class _Settings_PageState extends State<Settings_Page> {
                 size: 30,
                 color: Colors.grey.shade700,
               ),
-              title: Text(
-                _menu[index].title,
-                style: TextStyle(letterSpacing: 0.5, color: _menu[index].color),
-              ),
+              title: _menu[index].title == 'เวอร์ชันปัจจุบัน'
+                  ? textDoubleColors('version'.tr, _menu[index].color,
+                      ' ${packageInfo?.version}', _menu[index].color)
+                  : Text(
+                      _menu[index].title,
+                      style: TextStyle(
+                          letterSpacing: 0.5,
+                          color: _menu[index].color,
+                          fontSize: 16),
+                    ),
             );
           },
           separatorBuilder: (context, index) {
             return const Divider(
               color: Colors.black,
-              // height: 10,
+              height: 10,
             );
           },
         ),

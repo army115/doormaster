@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:doormster/components/bottombar/bottom_controller.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/screen/main_screen/home_page.dart';
@@ -11,8 +10,6 @@ import 'package:flutter/material.dart';
 NavbarNotifier navbarNotifier = NavbarNotifier();
 
 class NavbarNotifier extends ChangeNotifier {
-  int index = 0;
-
   FutureOr<bool> onBackButtonPressed(int index) async {
     bool exitingApp = true;
     switch (index) {
@@ -57,7 +54,8 @@ class NavbarNotifier extends ChangeNotifier {
       case 0:
         if (homeKey.currentState != null && homeKey.currentState!.canPop()) {
           homeKey.currentState?.popUntil((route) => route.isFirst);
-        } else if (bottomController.selectedIndex == 0) {
+        } else if (bottomController.selectedIndex.value == 0) {
+          homeKey.currentState!.popUntil((route) => route.isFirst);
           homeKey.currentState?.pushReplacement(PageRouteBuilder(
             pageBuilder: (BuildContext context, Animation<double> animation,
                 Animation<double> animation2) {
@@ -70,7 +68,7 @@ class NavbarNotifier extends ChangeNotifier {
         if (newsKey.currentState != null && newsKey.currentState!.canPop()) {
           newsKey.currentState!.popUntil((route) => route.isFirst);
         }
-        if (bottomController.selectedIndex == 1) {
+        if (bottomController.selectedIndex.value == 1) {
           newsKey.currentState?.pushReplacement(PageRouteBuilder(
             pageBuilder: (BuildContext context, Animation<double> animation,
                 Animation<double> animation2) {
@@ -84,7 +82,7 @@ class NavbarNotifier extends ChangeNotifier {
             notifyKey.currentState!.canPop()) {
           notifyKey.currentState!.popUntil((route) => route.isFirst);
         }
-        if (bottomController.selectedIndex == 2) {
+        if (bottomController.selectedIndex.value == 2) {
           notifyKey.currentState?.pushReplacement(PageRouteBuilder(
             pageBuilder: (BuildContext context, Animation<double> animation,
                 Animation<double> animation2) {
@@ -97,7 +95,7 @@ class NavbarNotifier extends ChangeNotifier {
         if (profileKey.currentState != null &&
             profileKey.currentState!.canPop()) {
           profileKey.currentState!.popUntil((route) => route.isFirst);
-        } else if (bottomController.selectedIndex == 3) {
+        } else if (bottomController.selectedIndex.value == 3) {
           profileKey.currentState?.pushReplacement(PageRouteBuilder(
             pageBuilder: (BuildContext context, Animation<double> animation,
                 Animation<double> animation2) {

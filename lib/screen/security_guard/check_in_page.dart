@@ -10,13 +10,15 @@ import 'package:doormster/components/dropdown/dropdown_noborder.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/map/map_page.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
+import 'package:doormster/components/text/text_four_icon.dart';
 import 'package:doormster/components/text/text_icon.dart';
 import 'package:doormster/components/text_form/text_form_noborder_validator.dart';
 import 'package:doormster/models/get_checklist.dart';
 import 'package:doormster/screen/security_guard/report_logs_page.dart';
-import 'package:doormster/service/connect_api.dart';
+import 'package:doormster/service/connected/connect_api.dart';
 import 'package:doormster/service/permission/permission_camera.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert' as convert;
@@ -53,6 +55,18 @@ class _Check_InState extends State<Check_In> {
   TextEditingController detail = TextEditingController();
   TextEditingController status = TextEditingController();
 
+  var companyId;
+  var userId;
+  var language;
+  List<Data> listdata = [];
+  List<Checklist> listcheck = [];
+  bool loading = false;
+  String? checkpointName;
+  int? verify = 1;
+  String? onItemSelect;
+  List<String> itemEvent_EN = ['Normal', 'Not Normal'];
+  List<String> itemEvent_TH = ['ปกติ', 'ไม่ปกติ'];
+
   final ImagePicker imgpicker = ImagePicker();
   // List<XFile>? listImage = [];
   List<String>? listImage64 = [];
@@ -78,18 +92,11 @@ class _Check_InState extends State<Check_In> {
     }
   }
 
-  var companyId;
-  var userId;
-  List<Data> listdata = [];
-  List<Checklist> listcheck = [];
-  bool loading = false;
-  String? checkpointName;
-  int? verify = 1;
-
   Future _getChecklist() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     companyId = prefs.getString('companyId');
     userId = prefs.getString('userId');
+    language = prefs.getString('language');
     print('companyId: $companyId');
     print('userId: $userId');
     print('timeCheck: ${widget.timeCheck}');
@@ -288,7 +295,7 @@ class _Check_InState extends State<Check_In> {
                     verify == 0
                 ? Container()
                 : Buttons(
-                    title: 'บันทึก',
+                    title: 'save'.tr,
                     press: () {
                       if (_formkey.currentState!.validate()) {
                         Map<String, dynamic> valuse = Map();
@@ -305,7 +312,7 @@ class _Check_InState extends State<Check_In> {
                         valuse['uuid'] = widget.checkpointId;
                         valuse['Round_uuid'] = widget.roundId ?? 'นอกรอบ';
                         valuse['Desciption'] = detail.text;
-                        valuse['EventCheck'] = status.text;
+                        valuse['EventCheck'] = onItemSelect;
                         valuse['Status'] =
                             widget.roundId != null ? "Checked" : "Extra";
                         valuse['pic'] = listImage64;
@@ -324,13 +331,20 @@ class _Check_InState extends State<Check_In> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            textIcon(
-                                'วันที่ $date เวลา $time',
-                                Icon(
-                                  Icons.edit_calendar_rounded,
-                                  size: 25,
-                                ),
-                                color: Colors.red),
+                            textFourIcon(
+                              'date'.tr,
+                              ' $date ',
+                              'time'.tr,
+                              ' $time',
+                              icon: Icon(
+                                Icons.edit_calendar_rounded,
+                                size: 30,
+                              ),
+                              color1: Colors.red,
+                              color2: Colors.red,
+                              color3: Colors.red,
+                              color4: Colors.red,
+                            ),
                             SizedBox(height: 10),
                             textIcon(
                               'รอบเดิน : ${widget.roundName}',
@@ -343,27 +357,29 @@ class _Check_InState extends State<Check_In> {
                                 ? Column(
                                     children: [
                                       SizedBox(height: 10),
-                                      textIcon(
-                                        'ช่วงเวลา : ${widget.roundStart} น. ถึง ${widget.roundEnd} น.',
-                                        Icon(
-                                          Icons.access_time_rounded,
-                                          size: 25,
-                                        ),
-                                      ),
+                                      textFourIcon(
+                                          'interval'.tr,
+                                          ' : ${widget.roundStart} ',
+                                          'to'.tr,
+                                          ' ${widget.roundEnd}',
+                                          icon: Icon(
+                                            Icons.access_time_rounded,
+                                            size: 30,
+                                          )),
                                     ],
                                   )
                                 : Container(),
                             SizedBox(height: 10),
-                            textIcon(
-                              'จุดตรวจ : $checkpointName',
-                              Icon(
-                                Icons.maps_home_work_rounded,
-                                size: 25,
-                              ),
-                            ),
+                            textIcon_Double(
+                                'checkpoint'.tr,
+                                ' : $checkpointName',
+                                Icon(
+                                  Icons.maps_home_work_rounded,
+                                  size: 25,
+                                )),
                             SizedBox(height: 10),
                             textIcon(
-                              'รายการตรวจ',
+                              'checklist'.tr,
                               Icon(
                                 Icons.task_rounded,
                                 size: 25,
@@ -384,7 +400,7 @@ class _Check_InState extends State<Check_In> {
                                             validator: 'กรุณาเลือกรายการ',
                                           ))),
                             textIcon(
-                              'รูปภาพประกอบ',
+                              'illustration'.tr,
                               Icon(
                                 Icons.camera_alt_rounded,
                                 size: 25,
@@ -492,26 +508,44 @@ class _Check_InState extends State<Check_In> {
                                   ]),
                             ),
                             textIcon(
-                              'บันทึกเหตุการณ์',
+                              'event_record'.tr,
                               Icon(
                                 Icons.assignment_rounded,
                                 size: 25,
                               ),
                             ),
                             Dropdown_NoBorder(
-                              title: 'เลือกสถานการณ์',
+                              title: 'select_event'.tr,
                               controller: status,
                               leftIcon: Icons.mobile_friendly,
-                              error: 'กรุณากเลือกบริษัท',
-                              listItem: ['ปกติ', 'ไม่ปกติ'],
+                              error: 'กรุณาเลือกเหตุการณ์',
+                              listItem: language == 'th'
+                                  ? itemEvent_TH
+                                  : itemEvent_EN,
+                              onChanged: (value) {
+                                final int index;
+                                //เปรียบเทียบค่า เพื่อหาค่า index จาก listItem
+                                if (language == 'th') {
+                                  index = itemEvent_TH
+                                      .indexWhere((item) => item == value);
+                                } else {
+                                  index = itemEvent_EN
+                                      .indexWhere((item) => item == value);
+                                }
+                                //นำค่า index ที่ได้มาเลือก item
+                                if (index > -1) {
+                                  onItemSelect = itemEvent_TH[index];
+                                }
+                                print(onItemSelect);
+                              },
                             ),
                             TextForm_NoBorder_Validator(
                               typeInput: TextInputType.text,
                               controller: detail,
                               icon: Icons.description_rounded,
-                              title: 'รายละเอียด',
+                              title: 'desciption'.tr,
                               validator: (values) {
-                                if (status.text == 'ไม่ปกติ' &&
+                                if (onItemSelect == 'ไม่ปกติ' &&
                                     values.isEmpty) {
                                   return 'เหตุการณ์ไม่ปกติ กรุณาเพิ่มรายละเอียด';
                                 }
@@ -522,7 +556,7 @@ class _Check_InState extends State<Check_In> {
                             ExpansionTile(
                               tilePadding: EdgeInsets.zero,
                               title: textIcon(
-                                'ตำแหน่งจุดตรวจ',
+                                'checkpoint_location'.tr,
                                 Icon(
                                   Icons.location_on_sharp,
                                   size: 25,

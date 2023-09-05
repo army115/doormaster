@@ -1,9 +1,10 @@
-// ignore_for_file: sort_child_properties_last, prefer_const_constructors
+// ignore_for_file: sort_child_properties_last, prefer_const_constructors, use_build_context_synchronously
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_twobutton_subtext.dart';
+import 'package:doormster/components/bottombar/bottom_controller.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/button/button_outline.dart';
 import 'package:doormster/models/get_multi_company.dart';
@@ -11,15 +12,15 @@ import 'package:doormster/models/login_model.dart';
 import 'package:doormster/screen/main_screen/add_company_page.dart';
 import 'package:doormster/screen/main_screen/login_page.dart';
 import 'package:doormster/screen/main_screen/login_staff_page.dart';
-import 'package:doormster/service/connect_api.dart';
-import 'package:doormster/service/notify_token.dart';
+import 'package:doormster/service/connected/connect_api.dart';
+import 'package:doormster/service/notify/notify_token.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as convert;
 
 class MyDrawer extends StatefulWidget {
-  final ontapItem;
-  MyDrawer({Key? key, this.ontapItem});
+  MyDrawer({Key? key});
 
   @override
   State<MyDrawer> createState() => _MyDrawerState();
@@ -44,7 +45,7 @@ class _MyDrawerState extends State<MyDrawer> {
 
     if (security == true) {
       for (String key in allKeys) {
-        if (key != 'notifyToken') {
+        if (key != 'notifyToken' || key != 'language') {
           prefs.remove(key);
         }
       }
@@ -173,7 +174,7 @@ class _MyDrawerState extends State<MyDrawer> {
         Navigator.of(context).pop();
 
         homeKey.currentState?.popAndPushNamed('/');
-        widget.ontapItem(0);
+        bottomController.ontapItem(0);
 
         setState(() {
           loading = false;
@@ -238,7 +239,7 @@ class _MyDrawerState extends State<MyDrawer> {
                               borderRadius: BorderRadius.circular(30),
                               onTap: () {
                                 Navigator.pop(context);
-                                widget.ontapItem(3);
+                                bottomController.ontapItem(3);
                                 profileKey.currentState?.popAndPushNamed('/');
                               },
                               child: CircleAvatar(
@@ -310,7 +311,7 @@ class _MyDrawerState extends State<MyDrawer> {
                         ListTile(
                           onTap: () {
                             Navigator.pop(context);
-                            widget.ontapItem(3);
+                            bottomController.ontapItem(3);
                             profileKey.currentState?.popAndPushNamed('/');
                           },
                           leading: Icon(
@@ -319,7 +320,7 @@ class _MyDrawerState extends State<MyDrawer> {
                             color: Colors.white,
                           ),
                           title: Text(
-                            'ข้อมูลส่วนตัว',
+                            'info'.tr,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 letterSpacing: 0.5,
@@ -337,7 +338,7 @@ class _MyDrawerState extends State<MyDrawer> {
                             color: Colors.white,
                           ),
                           title: Text(
-                            'การตั้งค่า',
+                            'setting'.tr,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 letterSpacing: 0.5,
@@ -380,7 +381,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 color: Colors.white,
                 size: 30,
               ),
-              title: Text('ออกจากระบบ',
+              title: Text('logout'.tr,
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       letterSpacing: 0.5,
@@ -431,7 +432,7 @@ class _MyDrawerState extends State<MyDrawer> {
                                         borderRadius:
                                             BorderRadius.circular(10))),
                               ),
-                              Text('สลับโครงการ')
+                              Text('switch_company'.tr)
                             ],
                           )),
                     ),
@@ -502,7 +503,7 @@ class _MyDrawerState extends State<MyDrawer> {
                   bottomNavigationBar: Padding(
                     padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
                     child: Buttons_Outline(
-                        title: 'เพิ่มโครงการใหม่',
+                        title: 'add_company'.tr,
                         press: () {
                           Navigator.pop(context);
                           Navigator.of(context)

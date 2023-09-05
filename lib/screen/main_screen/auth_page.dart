@@ -1,6 +1,7 @@
 import 'package:doormster/components/snackbar/back_double.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 class Auth_Page extends StatefulWidget {
   Auth_Page({Key? key});
@@ -48,10 +49,11 @@ class _Auth_PageState extends State<Auth_Page> {
                     crossAxisSpacing: 20,
                     shrinkWrap: true,
                     children: [
-                      menuButton('ผู้ใช้ทั่วไป', Icons.person, () {
+                      menuButton('user'.tr, Icons.person, () {
                         Navigator.pushReplacementNamed(context, '/login');
                       }),
-                      menuButton('พนักงาน', Icons.manage_accounts_rounded, () {
+                      menuButton('employee'.tr, Icons.manage_accounts_rounded,
+                          () {
                         Navigator.pushReplacementNamed(context, '/staff');
                       })
                     ],

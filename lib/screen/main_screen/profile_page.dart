@@ -12,10 +12,11 @@ import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/components/text_form/text_form_noborder.dart';
 import 'package:doormster/models/profile_model.dart';
-import 'package:doormster/service/connect_api.dart';
+import 'package:doormster/service/connected/connect_api.dart';
 import 'package:doormster/service/permission/permission_camera.dart';
 import 'package:doormster/service/permission/permission_photos.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as convert;
@@ -64,7 +65,9 @@ class _Profile_PageState extends State<Profile_Page>
       setState(() {
         loading = true;
       });
-      await Future.delayed(Duration(milliseconds: 300));
+
+      await Future.delayed(Duration(milliseconds: 500));
+
       var url = '${Connect_api().domain}/get/profile/$userId';
       var response = await Dio().get(
         url,
@@ -86,13 +89,8 @@ class _Profile_PageState extends State<Profile_Page>
     } catch (error) {
       print(error);
       await Future.delayed(Duration(milliseconds: 500));
-      dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง', () {
+      dialogOnebutton_Subtitle(context, 'found_error'.tr, 'connect_fail'.tr,
+          Icons.warning_amber_rounded, Colors.orange, 'ok'.tr, () {
         Navigator.of(context, rootNavigator: true).pop();
         setState(() {
           _getInfo();
@@ -131,13 +129,8 @@ class _Profile_PageState extends State<Profile_Page>
           _sharedInfo();
         });
       } else {
-        dialogOnebutton_Subtitle(
-            context,
-            'แก้ไขไม่สำเร็จ',
-            'กรุณาลองใหม่อีกครั้ง',
-            Icons.highlight_off_rounded,
-            Colors.red,
-            'ตกลง', () {
+        dialogOnebutton_Subtitle(context, 'edit_fail'.tr, 'again_pls'.tr,
+            Icons.highlight_off_rounded, Colors.red, 'ตกลง', () {
           Navigator.of(context, rootNavigator: true).pop();
         }, false, false);
         print('checkIn not Success!!');
@@ -148,13 +141,8 @@ class _Profile_PageState extends State<Profile_Page>
       }
     } catch (error) {
       print(error);
-      dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง', () {
+      dialogOnebutton_Subtitle(context, 'found_error'.tr, 'connect_fail'.tr,
+          Icons.warning_amber_rounded, Colors.orange, 'ตกลง', () {
         Navigator.of(context, rootNavigator: true).pop();
       }, false, false);
       // snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
@@ -210,7 +198,7 @@ class _Profile_PageState extends State<Profile_Page>
       children: [
         Scaffold(
           appBar: AppBar(
-            title: Text('ข้อมูลส่วนตัว'),
+            title: Text('info'.tr),
             leading: IconButton(
                 icon: Icon(Icons.menu),
                 onPressed: () {
@@ -222,7 +210,7 @@ class _Profile_PageState extends State<Profile_Page>
           floatingActionButton: loading
               ? Container()
               : Buttons(
-                  title: 'บันทึก',
+                  title: 'save'.tr,
                   press: () {
                     if (_formkey.currentState!.validate()) {
                       Map<String, dynamic> valuse = Map();
@@ -260,7 +248,7 @@ class _Profile_PageState extends State<Profile_Page>
                           child: CircleAvatar(
                               radius: 70,
                               backgroundColor: Colors.grey.shade100,
-                              child: loading
+                              child: loading || profileInfo.isEmpty
                                   ? Container(
                                       child: Icon(Icons.person_rounded,
                                           size: 140, color: Colors.grey),
@@ -325,23 +313,23 @@ class _Profile_PageState extends State<Profile_Page>
                     ),
                     Text_Form_NoBorder(
                       controller: fname,
-                      title: 'ชื่อ',
+                      title: 'fname'.tr,
                       icon: Icons.person,
-                      error: 'กรุณากรอกชื่อ',
+                      error: 'enter_name_pls'.tr,
                       TypeInput: TextInputType.name,
                     ),
                     Text_Form_NoBorder(
                       controller: lname,
-                      title: 'นามสกุล',
+                      title: 'lname'.tr,
                       icon: Icons.person_outline_rounded,
-                      error: 'กรุณากรอกชื่อ',
+                      error: 'enter_lname_pls'.tr,
                       TypeInput: TextInputType.name,
                     ),
                     Text_Form_NoBorder(
                       controller: email,
-                      title: 'อีเมล',
+                      title: 'email'.tr,
                       icon: Icons.email_rounded,
-                      error: 'กรุณากรอกชื่อ',
+                      error: 'enter_email_pls'.tr,
                       TypeInput: TextInputType.emailAddress,
                     ),
                   ]),
@@ -364,20 +352,20 @@ class _Profile_PageState extends State<Profile_Page>
         titlePadding: EdgeInsets.fromLTRB(30, 20, 20, 0),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         title: Text(
-          'เปลี่ยนรูปโปรไฟล์',
+          'change_picture'.tr,
           style: TextStyle(
               fontSize: 16, letterSpacing: 0.5, fontWeight: FontWeight.bold),
         ),
         actions: [
           ListTile(
-              title: Text('ถ่ายรูป',
+              title: Text('camera'.tr,
                   style: TextStyle(fontSize: 15, letterSpacing: 0.5)),
               onTap: () {
                 permissionCamere(context, () => openImages(ImageSource.camera));
                 Navigator.of(context, rootNavigator: true).pop();
               }),
           ListTile(
-            title: Text('เลือกรูปภาพ',
+            title: Text('photo'.tr,
                 style: TextStyle(fontSize: 15, letterSpacing: 0.5)),
             onTap: () {
               if (Platform.isIOS) {
@@ -389,7 +377,7 @@ class _Profile_PageState extends State<Profile_Page>
             },
           ),
           ListTile(
-            title: Text('ยกเลิก',
+            title: Text('cancel'.tr,
                 style: TextStyle(
                   fontSize: 15,
                   letterSpacing: 0.5,

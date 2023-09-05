@@ -6,11 +6,11 @@ import 'dart:ffi';
 import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
 import 'package:doormster/main.dart';
 import 'package:doormster/models/get_checklist.dart';
-import 'package:doormster/service/notify_service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 // import 'package:http/http.dart' as http;
 import 'package:doormster/components/drawer/drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Notification_Page extends StatefulWidget {
   final title;
@@ -42,7 +42,7 @@ class _Notification_PageState extends State<Notification_Page>
     super.build(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('การแจ้งเตือน'),
+        title: Text('notification'.tr),
         leading: IconButton(
             icon: Icon(Icons.menu),
             onPressed: () {
@@ -51,7 +51,7 @@ class _Notification_PageState extends State<Notification_Page>
       ),
       body: Center(
         child: widget.body == null
-            ? Logo_Opacity(title: 'ไม่มีการแจ้งเตือน')
+            ? Logo_Opacity(title: 'no_notification'.tr)
             : Column(
                 children: [
                   Card(

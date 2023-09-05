@@ -1,11 +1,9 @@
 // ignore_for_file: unused_element
 
-import 'dart:developer';
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/bottombar/navbar.dart';
 import 'package:doormster/components/snackbar/back_double.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 BottomController bottomController = BottomController();
@@ -30,11 +28,7 @@ class BottomController extends GetxController
   }
 
   void ontapItem(int index) {
-    if (navbarNotifier.index == index) {
-      navbarNotifier.popAllRoutes(index);
-    } else {
-      navbarNotifier.index = index;
-    }
+    navbarNotifier.popAllRoutes(index);
     tabController.animateTo(index);
     selectedIndex.value = index;
   }
@@ -49,15 +43,15 @@ class BottomController extends GetxController
           await navbarNotifier.onBackButtonPressed(selectedIndex.value);
 
       if (isExitingApp) {
-        if (selectedIndex != 0.obs) {
+        if (selectedIndex.value != 0) {
           tabController.animateTo(0);
-          selectedIndex = 0.obs;
+          selectedIndex.value = 0;
         } else {
           int difference = DateTime.now().difference(PressTime).inMilliseconds;
           PressTime = DateTime.now();
 
           if (difference < 1500) {
-            SystemNavigator.pop(animated: true);
+            return isExitingApp;
           } else {
             backDouble(context);
           }

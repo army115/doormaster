@@ -15,11 +15,13 @@ import 'package:doormster/screen/security_guard/extra_round_page.dart';
 import 'package:doormster/screen/security_guard/report_logs_page.dart';
 import 'package:doormster/screen/security_guard/round_check_page.dart';
 import 'package:doormster/screen/security_guard/scan_qr_check_page.dart';
-import 'package:doormster/service/check_connected.dart';
-import 'package:doormster/service/connect_api.dart';
+import 'package:doormster/controller/get_info.dart';
+import 'package:doormster/service/connected/check_connected.dart';
+import 'package:doormster/service/connected/connect_api.dart';
 import 'package:doormster/service/permission/permission_camera.dart';
 import 'package:doormster/service/permission/permission_location.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -97,6 +99,7 @@ class _Security_GuardState extends State<Security_Guard> {
 
   Future onGoBack(dynamic value) async {
     setState(() {
+      get_Info();
       _getRoundNow();
     });
   }
@@ -104,6 +107,7 @@ class _Security_GuardState extends State<Security_Guard> {
   @override
   void initState() {
     super.initState();
+    get_Info();
     _getRoundNow();
   }
 
@@ -132,7 +136,7 @@ class _Security_GuardState extends State<Security_Guard> {
           mainAxisSpacing: 25,
           children: [
             Grid_Menu(
-              title: 'บันทึกจุดตรวจ',
+              title: 'checkIn'.tr,
               icon: Icons.qr_code_scanner_rounded,
               press: () {
                 permissionCamere(
@@ -165,7 +169,14 @@ class _Security_GuardState extends State<Security_Guard> {
               },
             ),
             Grid_Menu(
-              title: 'ลงทะเบียนจุดตรวจ',
+                title: 'check_extra_round'.tr,
+                icon: Icons.assignment_outlined,
+                press: () {
+                  checkInternetOnGoBack(
+                      context, Extra_Round(), false, onGoBack);
+                }),
+            Grid_Menu(
+              title: 'register_point'.tr,
               icon: Icons.pin_drop_outlined,
               press: () {
                 permissionCamere(
@@ -182,7 +193,14 @@ class _Security_GuardState extends State<Security_Guard> {
               },
             ),
             Grid_Menu(
-              title: 'ดูบันทึกรายการตรวจ',
+                title: 'view_checkpoint'.tr,
+                icon: Icons.share_location_outlined,
+                press: () {
+                  checkInternetOnGoBack(
+                      context, Check_Point(), false, onGoBack);
+                }),
+            Grid_Menu(
+              title: 'report'.tr,
               icon: Icons.event_note,
               press: () {
                 checkInternetOnGoBack(context,
@@ -190,14 +208,7 @@ class _Security_GuardState extends State<Security_Guard> {
               },
             ),
             Grid_Menu(
-                title: 'ตรวจนอกรอบ',
-                icon: Icons.assignment_outlined,
-                press: () {
-                  checkInternetOnGoBack(
-                      context, Extra_Round(), false, onGoBack);
-                }),
-            Grid_Menu(
-                title: 'รอบเดินตรวจ',
+                title: 'view_round'.tr,
                 icon: Icons.edit_calendar_rounded,
                 press: () {
                   checkInternetOnGoBack(
@@ -205,14 +216,7 @@ class _Security_GuardState extends State<Security_Guard> {
                       Round_Check(checkpointId: listCheckpoint),
                       false,
                       onGoBack);
-                }),
-            Grid_Menu(
-                title: 'จุดเดินตรวจ',
-                icon: Icons.share_location_outlined,
-                press: () {
-                  checkInternetOnGoBack(
-                      context, Check_Point(), false, onGoBack);
-                }),
+                })
           ],
         ),
       ),

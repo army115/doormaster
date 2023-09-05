@@ -1,5 +1,6 @@
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 Future<void> permissionCamere(context, action) async {
@@ -10,11 +11,11 @@ Future<void> permissionCamere(context, action) async {
   } else {
     dialogOnebutton_Subtitle(
         context,
-        'อนุญาตการเข้าถึง',
-        'จำเป็นต้องเข้าถึงกล้องของคุณ',
+        'allow_access'.tr,
+        'need_access_camera'.tr,
         Icons.warning_amber_rounded,
         Colors.orange,
-        'ตกลง', () {
+        'ok'.tr, () {
       openAppSettings();
       Navigator.of(context, rootNavigator: true).pop();
     }, true, true);

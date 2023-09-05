@@ -20,8 +20,9 @@ import 'package:doormster/models/getdoor_wiegand.dart';
 import 'package:doormster/models/visitor_model.dart';
 import 'package:doormster/models/wiegand_model.dart';
 import 'package:doormster/screen/qr_smart_access/visitor_detail_page.dart';
-import 'package:doormster/service/connect_api.dart';
+import 'package:doormster/service/connected/connect_api.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 // import 'package:http/http.dart' as http;
 // import 'dart:convert' as convert;
 // import 'dart:async';
@@ -295,7 +296,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
     return Stack(
       children: [
         Scaffold(
-          appBar: AppBar(title: Text('ลงทะเบียนผู้มาติดต่อ')),
+          appBar: AppBar(title: Text('create_visitor'.tr)),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerFloat,
           floatingActionButton: _button(),
@@ -311,26 +312,26 @@ class _Visitor_PageState extends State<Visitor_Page> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('ชื่อผู้มาติดต่อ'),
+                            Text('visitor_name'.tr),
                             Text_Form(
                               controller: visitName,
-                              title: 'ชื่อ - สกุล',
+                              title: 'fullname'.tr,
                               icon: Icons.person,
                               error: 'กรุณากรอกชื่อผู้มาติดต่อ',
                               TypeInput: TextInputType.name,
                             ),
-                            Text('ติดต่อพบ'),
+                            Text('contacts'.tr),
                             Text_Form(
                               controller: visitPeople,
-                              title: 'ชื่อ - สกุล',
+                              title: 'fullname'.tr,
                               icon: Icons.person_outline,
                               error: 'กรุณากรอกชื่อผู้ที่ติดต่อพบ',
                               TypeInput: TextInputType.name,
                             ),
-                            Text('เบอร์ติดต่อ'),
+                            Text('phone'.tr),
                             TextForm_Number(
                               controller: phone,
-                              title: 'เบอร์โทร',
+                              title: 'phone_number'.tr,
                               icon: Icons.phone,
                               type: TextInputType.name,
                               maxLength: 10,
@@ -349,7 +350,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text('ประเภทอุปกรณ์'),
+                                      Text('device_type'.tr),
                                       dropdownType(),
                                     ],
                                   )
@@ -359,14 +360,14 @@ class _Visitor_PageState extends State<Visitor_Page> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text('สิทธ์การเข้าถึง'),
+                                      Text('access'.tr),
                                       types.text == 'thinmoo'
                                           ? dropdownDecives()
                                           : types.text == 'wiegand'
                                               ? wiegandDevice()
                                               : TextForm_Null(
-                                                  title: 'ไม่มีอุปกรณ์',
-                                                  errortext: 'ไม่มีอุปกรณ์',
+                                                  title: 'no_device'.tr,
+                                                  errortext: 'no_device'.tr,
                                                   iconleft:
                                                       Icons.mobile_friendly,
                                                   iconright: Icons
@@ -375,16 +376,16 @@ class _Visitor_PageState extends State<Visitor_Page> {
                                     ],
                                   )
                                 : Container(),
-                            Text('เริ่มต้น'),
+                            Text('start'.tr),
                             Date_time(
                                 controller: startDate,
-                                title: 'เลือกวันที่',
+                                title: 'pick_date'.tr,
                                 leftIcon: Icons.event_note_rounded,
                                 error: 'กรุณาเลือกวันที่'),
-                            Text('สิ้นสุด'),
+                            Text('end'.tr),
                             Date_time(
                                 controller: endDate,
-                                title: 'เลือกวันที่',
+                                title: 'pick_date'.tr,
                                 leftIcon: Icons.event_note_rounded,
                                 error: 'กรุณาเลือกวันที่'),
                             types.text == 'thinmoo'
@@ -392,10 +393,10 @@ class _Visitor_PageState extends State<Visitor_Page> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text('สิทธิ์การใช้งาน'),
+                                      Text('access_count'.tr),
                                       TextForm_Number(
                                         controller: useCount,
-                                        title: 'จำนวนครั้ง',
+                                        title: 'count'.tr,
                                         icon: Icons.add_circle_outline_sharp,
                                         type: TextInputType.name,
                                         maxLength: 2,
@@ -425,7 +426,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
 
   Widget _button() {
     return Buttons(
-        title: 'สร้าง QRCode',
+        title: 'create_qrcode'.tr,
         press: () {
           if (_kye.currentState!.validate()) {
             if (types.text == "thinmoo") {
@@ -440,26 +441,27 @@ class _Visitor_PageState extends State<Visitor_Page> {
               valuse['created_by'] = userId;
               valuse['typeDevices'] = "thinmoo";
               _createVisitor(valuse);
-            } else if (types.text == "wiegand") {}
-            Map<String, dynamic> valuse = Map();
-            valuse['weiganId'] = weiganId;
-            valuse['usableCount'] = "1";
-            valuse['startDate'] = startDate.text;
-            valuse['endDate'] = endDate.text;
-            valuse['visitor_name'] = visitName.text;
-            valuse['tel_visitor'] = phone.text;
-            valuse['visipeople'] = visitPeople.text;
-            valuse['created_by'] = userId;
-            valuse['typeDevices'] = "wiegand";
-            valuse['door_id'] = selectedItemsId;
-            _createVisitorWiegand(valuse);
+            } else if (types.text == "wiegand") {
+              Map<String, dynamic> valuse = Map();
+              valuse['weiganId'] = weiganId;
+              valuse['usableCount'] = "1";
+              valuse['startDate'] = startDate.text;
+              valuse['endDate'] = endDate.text;
+              valuse['visitor_name'] = visitName.text;
+              valuse['tel_visitor'] = phone.text;
+              valuse['visipeople'] = visitPeople.text;
+              valuse['created_by'] = userId;
+              valuse['typeDevices'] = "wiegand";
+              valuse['door_id'] = selectedItemsId;
+              _createVisitorWiegand(valuse);
+            }
           }
         });
   }
 
   Widget dropdownType() {
     return Dropdown(
-        title: 'เลือกประเภท',
+        title: 'device_type'.tr,
         controller: types,
         leftIcon: Icons.app_settings_alt_rounded,
         onChanged: (value) {
@@ -474,9 +476,8 @@ class _Visitor_PageState extends State<Visitor_Page> {
 
   Widget dropdownDecives() {
     return Dropdown(
-      title: deviceId == null || listDevice.isEmpty
-          ? 'ไม่มีอุปกรณ์'
-          : 'เลือกอุปกรณ์',
+      title:
+          deviceId == null || listDevice.isEmpty ? 'no_device'.tr : 'device'.tr,
       controller: devices,
       leftIcon: Icons.mobile_friendly,
       onChanged: (value) {
@@ -486,9 +487,8 @@ class _Visitor_PageState extends State<Visitor_Page> {
         }
         print(onItemSelect);
       },
-      error: deviceId == null || listDevice.isEmpty
-          ? 'ไม่มีอุปกรณ์'
-          : 'กรุณากเลือกบริษัท',
+      error:
+          deviceId == null || listDevice.isEmpty ? 'no_device'.tr : 'device'.tr,
       listItem: listDevice.map((value) => value.deviceName.toString()).toList(),
     );
   }
@@ -496,12 +496,10 @@ class _Visitor_PageState extends State<Visitor_Page> {
   Widget wiegandDevice() {
     return TextForm_Ontap(
       controller: selectDevices,
-      title: weiganId == null || listWeigan.isEmpty
-          ? 'ไม่มีอุปกรณ์'
-          : 'เลือกอุปกรณ์',
-      errortext: weiganId == null || listWeigan.isEmpty
-          ? 'ไม่มีอุปกรณ์'
-          : 'เลือกอุปกรณ์',
+      title:
+          weiganId == null || listWeigan.isEmpty ? 'no_device'.tr : 'device'.tr,
+      errortext:
+          weiganId == null || listWeigan.isEmpty ? 'no_device'.tr : 'device'.tr,
       iconleft: Icons.mobile_friendly,
       iconright: Icons.keyboard_arrow_down_rounded,
       ontap: () {
@@ -542,7 +540,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
       borderRadius: BorderRadius.circular(7),
       child: Scaffold(
         appBar: AppBar(
-          title: Text('เลือกอุปกรณ์'),
+          title: Text('device'.tr),
           leading: button_back(() {
             Navigator.pop(context);
             fieldText.clear();
@@ -569,7 +567,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
             //     )),
             Expanded(
               child: listdet!.isEmpty
-                  ? Logo_Opacity(title: 'ไม่พบอุปกรณ์ที่ใช้ได้')
+                  ? Logo_Opacity(title: 'device_not_found'.tr)
                   : ListView.builder(
                       padding: EdgeInsets.only(bottom: 10),
                       itemCount: listdet?.length,

@@ -1,7 +1,6 @@
 import 'dart:developer';
-
 import 'package:dio/dio.dart';
-import 'package:doormster/service/connect_api.dart';
+import 'package:doormster/service/connected/connect_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Notify_Token {

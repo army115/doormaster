@@ -6,9 +6,11 @@ import 'dart:typed_data';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/button/buttonback_appbar.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
+import 'package:doormster/components/text/text_double_colors.dart';
 import 'package:doormster/service/permission/permission_photos.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:get/get.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -118,14 +120,14 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Navigator.popUntil(context, (route) => route.isFirst);
+        Get.until((route) => route.isFirst);
         return false;
       },
       child: Scaffold(
         appBar: AppBar(
-            title: Text('ผู้มาติดต่อ'),
+            title: Text('visitor'.tr),
             leading: button_back(() {
-              Navigator.popUntil(context, (route) => route.isFirst);
+              Get.until((route) => route.isFirst);
             }),
             actions: [
               PopupMenuButton(
@@ -155,7 +157,7 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
                             width: 5,
                           ),
                           Text(
-                            "บันทึก",
+                            "save".tr,
                             style: TextStyle(
                               fontSize: 18,
                               color: Colors.black,
@@ -170,7 +172,7 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
                         ShareFilesAndScreenshotWidgets().shareScreenshot(
                           _keyScreenshot,
                           800,
-                          "แชร์",
+                          "share".tr,
                           "QRCode-${DateTime.now()}.jpg",
                           "image/jpg",
                         );
@@ -187,7 +189,7 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
                             width: 5,
                           ),
                           Text(
-                            "แชร์",
+                            "share".tr,
                             style: TextStyle(
                               fontSize: 18,
                               color: Colors.black,
@@ -216,7 +218,7 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
                       Row(
                         children: [
                           Text(
-                            'ข้อมูลผู้มาติดต่อ',
+                            'visitor_info'.tr,
                             style: TextStyle(fontSize: 18, color: Colors.white),
                           ),
                         ],
@@ -225,30 +227,26 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
                         color: Colors.white,
                         thickness: 1.5,
                       ),
-                      Text(
-                        'ผู้มาติดต่อ : คุณ ${visitorName}',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      Text(
-                        'ติดต่อพบ : คุณ ${visitorPeople}',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      Text(
-                        'เบอร์โทร : ${telVisitor}',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      Text(
-                        'สิทธ์การใช้งาน : ${usableCount} ครั้ง',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      Text(
-                        'เริ่มต้น : ${format.format(DateTime.parse('$startDate'))}',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      Text(
-                        'สิ้นสุด : ${format.format(DateTime.parse('$endDate'))}',
-                        style: TextStyle(color: Colors.white),
-                      ),
+                      textDoubleColors('visitor'.tr, Colors.white,
+                          ' : ${visitorName}', Colors.white),
+                      textDoubleColors('contacts'.tr, Colors.white,
+                          ' : ${visitorPeople}', Colors.white),
+                      textDoubleColors('phone_number'.tr, Colors.white,
+                          ' : ${telVisitor}', Colors.white),
+                      widget.QRcodeData == null
+                          ? Container()
+                          : textDoubleColors('access_count'.tr, Colors.white,
+                              ' : ${usableCount}', Colors.white),
+                      textDoubleColors(
+                          'start'.tr,
+                          Colors.white,
+                          ' : ${format.format(DateTime.parse('$startDate'))}',
+                          Colors.white),
+                      textDoubleColors(
+                          'end'.tr,
+                          Colors.white,
+                          ' : ${format.format(DateTime.parse('$endDate'))}',
+                          Colors.white),
                     ]),
                   ),
                 ),
@@ -288,10 +286,20 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
                           ),
                           widget.QRcodeData == null
                               ? Container()
-                              : SelectableText(
-                                  'รหัสผ่าน : ${widget.QRcodeData[1]}',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18),
+                              : Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'password'.tr,
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 18),
+                                    ),
+                                    SelectableText(
+                                      ' : ${widget.QRcodeData[1]}',
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 18),
+                                    ),
+                                  ],
                                 ),
                         ],
                       ),

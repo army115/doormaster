@@ -10,8 +10,8 @@ import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/models/get_ads_company.dart';
 import 'package:doormster/models/get_menu.dart';
-import 'package:doormster/models/profile_model.dart';
-import 'package:doormster/service/connect_api.dart';
+import 'package:doormster/controller/get_info.dart';
+import 'package:doormster/service/connected/connect_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper_plus/flutter_swiper_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -55,6 +55,8 @@ class _Home_PageState extends State<Home_Page>
       setState(() {
         loading = true;
       });
+
+      await Future.delayed(Duration(milliseconds: 300));
 
       //call api manu
       var url = '${Connect_api().domain}/get/menumobile/$companyId';
@@ -106,67 +108,6 @@ class _Home_PageState extends State<Home_Page>
     }
   }
 
-  Future _getInfo() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var userId = prefs.getString('userId');
-    print('userId: ${userId}');
-
-    try {
-      var url = '${Connect_api().domain}/get/profile/$userId';
-      var response = await Dio().get(
-        url,
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        }),
-      );
-
-      if (response.statusCode == 200) {
-        GetProfile getInfo = GetProfile.fromJson(response.data);
-        List<Data>? data = getInfo.data;
-
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('username', data!.single.userName!);
-        await prefs.setString('fname', data.single.firstName!);
-        await prefs.setString('lname', data.single.surName!);
-        await prefs.setInt('role', data.single.mobile!);
-        await prefs.setString('userId', data.single.sId!);
-        await prefs.setString('companyId', data.single.companyId!);
-        await prefs.setString('uuId', data.single.userUuid!);
-
-        if (data.single.image != null) {
-          await prefs.setString('image', data.single.image!);
-        }
-
-        if (data.single.devicegroupUuid != null && security != true) {
-          await prefs.setString('deviceId', data.single.devicegroupUuid!);
-        }
-
-        if (data.single.weigangroupUuid != null && security != true) {
-          await prefs.setString('weiganId', data.single.weigangroupUuid!);
-        }
-      }
-    } catch (error) {
-      print(error);
-      // await Future.delayed(Duration(milliseconds: 500));
-      // dialogOnebutton_Subtitle(
-      //     context,
-      //     'พบข้อผิดพลาด',
-      //     'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-      //     Icons.warning_amber_rounded,
-      //     Colors.orange,
-      //     'ตกลง', () {
-      //   Navigator.of(context, rootNavigator: true).pop();
-      //   setState(() {
-      //     _getInfo();
-      //   });
-      // }, false, false);
-      // setState(() {
-      //   loading = false;
-      // });
-    }
-  }
-
   @override
   bool get wantKeepAlive => true;
 
@@ -174,7 +115,7 @@ class _Home_PageState extends State<Home_Page>
   void initState() {
     super.initState();
     _getMenu();
-    _getInfo();
+    get_Info();
     // _subscription =
     //     _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
     //   if (result == ConnectivityResult.none) {
@@ -197,7 +138,7 @@ class _Home_PageState extends State<Home_Page>
 
   Future onGoBack(dynamic value) async {
     setState(() {
-      _getInfo();
+      get_Info();
     });
   }
 
@@ -223,7 +164,7 @@ class _Home_PageState extends State<Home_Page>
           ),
           body: RefreshIndicator(
             onRefresh: () async {
-              _getInfo();
+              get_Info();
               _getMenu();
             },
             child: checkNet == ConnectivityResult.none ||

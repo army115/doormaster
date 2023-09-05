@@ -6,14 +6,15 @@ import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/dropdown/dropdonw_search.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
-import 'package:doormster/service/notify_token.dart';
+import 'package:doormster/service/connected/connect_api.dart';
+import 'package:doormster/service/notify/notify_token.dart';
 import 'package:doormster/style/styleButton/ButtonStyle.dart';
 import 'package:doormster/models/create_company_model.dart';
 import 'package:doormster/models/get_company.dart';
 import 'package:doormster/models/get_multi_company.dart';
 import 'package:doormster/models/login_model.dart';
-import 'package:doormster/service/connect_api.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 // import 'package:http/http.dart' as http;
 // import 'dart:convert' as convert;
 
@@ -267,7 +268,7 @@ class _Add_CompanyState extends State<Add_Company> {
         children: [
           Scaffold(
             appBar: AppBar(
-              title: Text('เพิ่มโครงการใหม่'),
+              title: Text('add_company'.tr),
               automaticallyImplyLeading: false,
             ),
             body: SingleChildScrollView(
@@ -278,7 +279,7 @@ class _Add_CompanyState extends State<Add_Company> {
                   key: _formkey,
                   child: Column(children: [
                     Dropdown_Search(
-                      title: 'เลือกบริษัท',
+                      title: 'company'.tr,
                       controller: controller,
                       leftIcon: Icons.home_work_rounded,
                       onChanged: (value) {
@@ -287,9 +288,9 @@ class _Add_CompanyState extends State<Add_Company> {
                         if (index > -1) {
                           onItemSelect = listCompany[index].sId;
                         }
-                        print(onItemSelect);
+                        print(index);
                       },
-                      error: 'กรุณากเลือกบริษัท',
+                      error: 'select_company_pls'.tr,
                       listItem: listCompany
                           .map((value) => value.companyName.toString())
                           .toList(),
@@ -322,7 +323,7 @@ class _Add_CompanyState extends State<Add_Company> {
                     builder: (BuildContext context) => BottomBar()),
                 (Route<dynamic> route) => true);
           },
-          child: Text("ยกเลิก",
+          child: Text("cancel".tr,
               style: TextStyle(
                   fontSize: 16,
                   letterSpacing: 1,
@@ -356,8 +357,8 @@ class _Add_CompanyState extends State<Add_Company> {
           },
           style: styleButtons(EdgeInsets.symmetric(horizontal: 40, vertical: 8),
               10.0, Theme.of(context).primaryColor, BorderRadius.circular(10)),
-          child: const Text(
-            "บันทึก",
+          child: Text(
+            "save".tr,
             style: TextStyle(
                 fontSize: 16,
                 letterSpacing: 1,

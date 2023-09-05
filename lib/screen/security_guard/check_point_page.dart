@@ -10,8 +10,9 @@ import 'package:doormster/components/searchbar/search_from.dart';
 import 'package:doormster/components/text/text_double_colors.dart';
 import 'package:doormster/components/text/text_icon.dart';
 import 'package:doormster/models/get_checklist.dart';
-import 'package:doormster/service/connect_api.dart';
+import 'package:doormster/service/connected/connect_api.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Check_Point extends StatefulWidget {
@@ -97,7 +98,9 @@ class _Check_PointState extends State<Check_Point> {
     return Stack(
       children: [
         Scaffold(
-          appBar: AppBar(title: Text('รายการจุดตรวจ')),
+          appBar: AppBar(
+            title: Text('list_checkpoint'.tr),
+          ),
           body: loading
               ? Container()
               : Column(
@@ -106,7 +109,7 @@ class _Check_PointState extends State<Check_Point> {
                         ? Container(
                             padding: const EdgeInsets.fromLTRB(20, 15, 20, 10),
                             child: Search_From(
-                              title: 'ค้นหาจุดตรวจ',
+                              title: 'search_checkpoint'.tr,
                               fieldText: fieldText,
                               clear: () {
                                 setState(() {
@@ -122,7 +125,7 @@ class _Check_PointState extends State<Check_Point> {
                         : Container(),
                     Expanded(
                       child: listdata.isEmpty
-                          ? Logo_Opacity(title: 'ไม่มีข้อมูลที่บันทึก')
+                          ? Logo_Opacity(title: 'no_data'.tr)
                           : RefreshIndicator(
                               onRefresh: () async {
                                 _getCheckPoint(500);
@@ -145,22 +148,25 @@ class _Check_PointState extends State<Check_Point> {
                                       child: Container(
                                         child: ExpansionTile(
                                             textColor: Colors.black,
-                                            title: Text(
-                                              'จุดตรวจ :  ${listdata[index].checkpointName}',
-                                              style: TextStyle(fontSize: 16),
+                                            title: textDoubleColors(
+                                              'checkpoint'.tr,
+                                              Colors.black,
+                                              ' :  ${listdata[index].checkpointName}',
+                                              Colors.black,
                                             ),
                                             subtitle: textDoubleColors(
-                                                'สถานะ : ',
+                                                'status'.tr,
                                                 Colors.black,
                                                 listdata[index].verify == 0
-                                                    ? 'ยังไม่ลงทะเบียน'
-                                                    : 'ลงทะเบียนแล้ว',
+                                                    ? 'no_regis'.tr
+                                                    : 'registered'.tr,
                                                 listdata[index].verify == 0
                                                     ? Colors.red
                                                     : Theme.of(context)
                                                         .primaryColor),
                                             children: [
                                               Container(
+                                                width: double.infinity,
                                                 decoration: BoxDecoration(
                                                     borderRadius: BorderRadius.only(
                                                         bottomLeft:
@@ -172,88 +178,90 @@ class _Check_PointState extends State<Check_Point> {
                                                         Colors.grey.shade200),
                                                 padding: EdgeInsets.fromLTRB(
                                                     10, 10, 10, 10),
-                                                child:
-                                                    listdata[index].verify == 0
-                                                        ? Row(
-                                                            children: [
-                                                              textIcon(
-                                                                'ยังไม่ลงทะเบียนจุดตรวจนี้',
-                                                                const Icon(
-                                                                  Icons
-                                                                      .warning_rounded,
-                                                                  size: 25,
-                                                                  color: Colors
-                                                                      .orange,
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          )
-                                                        : Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              textIcon(
-                                                                'รายการตรวจ',
-                                                                const Icon(
-                                                                    Icons
-                                                                        .task_rounded,
-                                                                    size: 25),
-                                                              ),
-                                                              ListView.builder(
-                                                                shrinkWrap:
-                                                                    true,
-                                                                primary: false,
-                                                                padding: EdgeInsets
-                                                                    .symmetric(
-                                                                        vertical:
-                                                                            3,
-                                                                        horizontal:
-                                                                            20),
-                                                                itemCount:
-                                                                    listcheckpoint
-                                                                        ?.length,
-                                                                itemBuilder:
-                                                                    (BuildContext
-                                                                            context,
-                                                                        int index) {
-                                                                  return listcheckpoint?[index]
-                                                                              .checklist ==
-                                                                          ''
-                                                                      ? Container()
-                                                                      : Text(
-                                                                          '- ${listcheckpoint?[index].checklist}');
-                                                                },
-                                                              ),
-                                                              listdata[index]
-                                                                          .verify ==
-                                                                      0
-                                                                  ? Container()
-                                                                  : Row(
-                                                                      children: [
-                                                                        Expanded(
-                                                                          child:
-                                                                              textIcon(
-                                                                            'ตำแหน่งจุดตรวจ',
-                                                                            const Icon(Icons.location_on_sharp,
-                                                                                color: Colors.red,
-                                                                                size: 25),
-                                                                          ),
-                                                                        ),
-                                                                        button(
-                                                                            'ดูตำแหน่ง',
-                                                                            Colors
-                                                                                .red.shade600,
-                                                                            Icons.map,
-                                                                            () {
-                                                                          showMap(
-                                                                              listdata[index].checkpointLat!,
-                                                                              listdata[index].checkpointLng!);
-                                                                        })
-                                                                      ],
-                                                                    ),
-                                                            ],
+                                                child: listdata[index].verify ==
+                                                        0
+                                                    ? textIcon(
+                                                        'no_regis_checkpoint'
+                                                            .tr,
+                                                        const Icon(
+                                                          Icons.warning_rounded,
+                                                          size: 25,
+                                                          color: Colors.orange,
+                                                        ))
+                                                    : Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          textIcon(
+                                                            'checklist'.tr,
+                                                            const Icon(
+                                                                Icons
+                                                                    .task_rounded,
+                                                                size: 25),
                                                           ),
+                                                          ListView.builder(
+                                                            shrinkWrap: true,
+                                                            primary: false,
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    vertical: 3,
+                                                                    horizontal:
+                                                                        20),
+                                                            itemCount:
+                                                                listcheckpoint
+                                                                    ?.length,
+                                                            itemBuilder:
+                                                                (BuildContext
+                                                                        context,
+                                                                    int index) {
+                                                              return listcheckpoint?[
+                                                                              index]
+                                                                          .checklist ==
+                                                                      ''
+                                                                  ? Container()
+                                                                  : Text(
+                                                                      '- ${listcheckpoint?[index].checklist}');
+                                                            },
+                                                          ),
+                                                          listdata[index]
+                                                                      .verify ==
+                                                                  0
+                                                              ? Container()
+                                                              : Row(
+                                                                  children: [
+                                                                    Expanded(
+                                                                      child:
+                                                                          textIcon(
+                                                                        'checkpoint_location'
+                                                                            .tr,
+                                                                        const Icon(
+                                                                            Icons
+                                                                                .location_on_sharp,
+                                                                            color:
+                                                                                Colors.red,
+                                                                            size: 25),
+                                                                      ),
+                                                                    ),
+                                                                    button(
+                                                                        'view_location'
+                                                                            .tr,
+                                                                        Colors
+                                                                            .red
+                                                                            .shade600,
+                                                                        Icons
+                                                                            .map,
+                                                                        () {
+                                                                      showMap(
+                                                                          listdata[index]
+                                                                              .checkpointLat!,
+                                                                          listdata[index]
+                                                                              .checkpointLng!);
+                                                                    })
+                                                                  ],
+                                                                ),
+                                                        ],
+                                                      ),
                                               ),
                                             ]),
                                       ),

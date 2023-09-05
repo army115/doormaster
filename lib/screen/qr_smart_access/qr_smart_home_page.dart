@@ -6,10 +6,12 @@ import 'package:doormster/components/girdManu/grid_menu.dart';
 import 'package:doormster/screen/qr_smart_access/opendoor_page.dart';
 import 'package:doormster/screen/qr_smart_access/scan_qrcode_page.dart';
 import 'package:doormster/screen/qr_smart_access/visitor_page.dart';
-import 'package:doormster/service/check_connected.dart';
+import 'package:doormster/controller/get_info.dart';
+import 'package:doormster/service/connected/check_connected.dart';
 import 'package:doormster/service/permission/permission_camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -63,9 +65,16 @@ class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
     }
   }
 
+  Future onGoBack(dynamic value) async {
+    setState(() {
+      get_Info();
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    get_Info();
     _getRole();
   }
 
@@ -114,14 +123,15 @@ class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
                 mainAxisSpacing: 25,
                 children: [
                   Grid_Menu(
-                    title: 'ผู้มาติดต่อ',
+                    title: 'visitor'.tr,
                     icon: Icons.person,
                     press: () {
-                      checkInternet(context, Visitor_Page(), true);
+                      checkInternetOnGoBack(
+                          context, Visitor_Page(), true, onGoBack);
                     },
                   ),
                   Grid_Menu(
-                    title: 'สแกน',
+                    title: 'scan'.tr,
                     icon: Icons.qr_code_scanner_rounded,
                     press: () {
                       permissionCamere(
@@ -131,15 +141,15 @@ class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
                     },
                   ),
                   Grid_Menu(
-                    title: 'เปิดประตู',
+                    title: 'open_door'.tr,
                     icon: Icons.meeting_room_rounded,
                     press: () {
-                      checkInternet(context, Opendoor_Page(), false);
-                      // requestLocationPermission();
+                      checkInternetOnGoBack(
+                          context, Opendoor_Page(), false, onGoBack);
                     },
                   ),
                   Grid_Menu(
-                      title: 'Emergency Call',
+                      title: 'emergancy_call'.tr,
                       icon: Icons.phone_forwarded_rounded,
                       press: () async {
                         await launch("tel:02-748-2191");

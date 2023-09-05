@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'dart:ffi';
 import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
 import 'package:doormster/main.dart';
-import 'package:doormster/service/notify_service.dart';
+import 'package:doormster/service/notify/notify_service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 import 'package:doormster/components/drawer/drawer.dart';

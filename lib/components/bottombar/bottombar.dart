@@ -40,14 +40,7 @@ class _BottomBarState extends State<BottomBar>
       child: Scaffold(
         drawerEnableOpenDragGesture: false,
         key: scaffoldKey,
-        drawer: MyDrawer(
-          ontapItem: (int index) {
-            setState(() {
-              bottomController.tabController.animateTo(index);
-              bottomController.selectedIndex.value = index;
-            });
-          },
-        ),
+        drawer: MyDrawer(),
         body: TabBarView(
           physics: NeverScrollableScrollPhysics(),
           controller: bottomController.tabController,
@@ -66,19 +59,19 @@ class _BottomBarState extends State<BottomBar>
               items: [
                 BottomNavigationBarItem(
                   icon: Icon(Icons.home_rounded),
-                  label: 'หน้าหลัก',
+                  label: 'home'.tr,
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.newspaper_rounded),
-                  label: 'ข่าวสาร',
+                  label: 'news'.tr,
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.notifications_rounded),
-                  label: 'แจ้งเตือน',
+                  label: 'notification'.tr,
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.account_circle_rounded),
-                  label: 'โปรไฟล์',
+                  label: 'profile'.tr,
                 ),
               ],
             )),

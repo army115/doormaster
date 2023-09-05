@@ -11,13 +11,16 @@ import 'package:doormster/components/dropdown/dropdown_noborder.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/map/map_page.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
+import 'package:doormster/components/text/text_four_icon.dart';
 import 'package:doormster/components/text/text_icon.dart';
+import 'package:doormster/components/text/text_triple.dart';
 import 'package:doormster/components/text_form/text_form_noborder_validator.dart';
 import 'package:doormster/screen/security_guard/report_logs_page.dart';
-import 'package:doormster/service/connect_api.dart';
+import 'package:doormster/service/connected/connect_api.dart';
 import 'package:doormster/service/permission/permission_camera.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert' as convert;
@@ -25,8 +28,8 @@ import 'dart:convert' as convert;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Extra_Check extends StatefulWidget {
-  final title;
-  final type;
+  final String? title;
+  final int? type;
   const Extra_Check({super.key, this.title, this.type});
 
   @override
@@ -41,6 +44,7 @@ class _Extra_CheckState extends State<Extra_Check> {
 
   var companyId;
   var userId;
+  var language;
   bool loading = false;
   String? checkpointName;
   DateTime now = DateTime.now();
@@ -48,10 +52,13 @@ class _Extra_CheckState extends State<Extra_Check> {
   double? lat;
   double? lng;
   List<String> listcheck = [];
+  String? onItemSelect;
+  List<String> itemEvent_EN = ['Normal', 'Not Normal'];
+  List<String> itemEvent_TH = ['ปกติ', 'ไม่ปกติ'];
 
   Future getSharedPref() async {
     final prefs = await SharedPreferences.getInstance();
-
+    language = prefs.getString('language');
     userId = prefs.getString('userId');
     companyId = prefs.getString('companyId');
 
@@ -182,7 +189,7 @@ class _Extra_CheckState extends State<Extra_Check> {
         children: [
           Scaffold(
             appBar: AppBar(
-              title: Text(widget.title),
+              title: Text(widget.title!.tr),
               leading: button_back(() {
                 Navigator.pop(context);
               }),
@@ -192,7 +199,7 @@ class _Extra_CheckState extends State<Extra_Check> {
             floatingActionButton: loading
                 ? Container()
                 : Buttons(
-                    title: 'บันทึก',
+                    title: 'save'.tr,
                     press: () {
                       if (_formkey.currentState!.validate()) {
                         Map<String, dynamic> valuse = Map();
@@ -230,54 +237,65 @@ class _Extra_CheckState extends State<Extra_Check> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            textIcon(
-                                'วันที่ $date เวลา $time',
-                                Icon(
+                            textFourIcon(
+                                'date'.tr, ' $date ', 'time'.tr, ' $time',
+                                color1: Colors.red,
+                                color2: Colors.red,
+                                color3: Colors.red,
+                                color4: Colors.red,
+                                icon: Icon(
                                   Icons.edit_calendar_rounded,
-                                  size: 25,
-                                ),
-                                color: Colors.red),
+                                  size: 30,
+                                )),
                             SizedBox(height: 10),
-                            textIcon(
-                              widget.type == 0
-                                  ? "รอบเดิน : นอกรอบ"
-                                  : 'รอบเดิน : เหตุฉุกเฉิน',
-                              Icon(
-                                Icons.calendar_month_rounded,
-                                size: 25,
-                              ),
-                            ),
-                            // SizedBox(height: 10),
+                            widget.type == 0
+                                ? textTripleColors(
+                                    'round'.tr,
+                                    ' : ',
+                                    'extra_point'.tr,
+                                    icon: Icon(
+                                      Icons.calendar_month_rounded,
+                                      size: 30,
+                                    ),
+                                  )
+                                : textTripleColors(
+                                    'round'.tr,
+                                    ' : ',
+                                    'emergency'.tr,
+                                    icon: Icon(
+                                      Icons.calendar_month_rounded,
+                                      size: 30,
+                                    ),
+                                  ),
                             TextFormField(
                               controller: pointName,
                               decoration: InputDecoration(
-                                contentPadding: EdgeInsets.zero,
-                                hintText: 'เพิ่มชื่อจุดตรวจ',
-                                hintStyle: TextStyle(fontSize: 16),
-                                errorStyle: TextStyle(fontSize: 15),
-                                icon: textIcon(
-                                  'จุดตรวจ :',
-                                  Icon(
-                                    Icons.maps_home_work_rounded,
-                                    size: 25,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
+                                  contentPadding: EdgeInsets.zero,
+                                  hintText: 'checkpoint_name'.tr,
+                                  hintStyle: TextStyle(fontSize: 16),
+                                  errorStyle: TextStyle(fontSize: 15),
+                                  icon: textIcon_Double(
+                                      'checkpoint'.tr,
+                                      ' :',
+                                      Icon(
+                                        Icons.maps_home_work_rounded,
+                                        size: 25,
+                                        color: Colors.black,
+                                      ))),
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return 'เพิ่มชื่อจุดตรวจ';
+                                  return 'checkpoint_name'.tr;
                                 }
                                 return null;
                               },
                             ),
                             SizedBox(height: 10),
-                            Wrap(
-                              crossAxisAlignment: WrapCrossAlignment.center,
-                              alignment: WrapAlignment.spaceBetween,
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 textIcon(
-                                  'รายการตรวจ',
+                                  'checklist'.tr,
                                   Icon(
                                     Icons.task_rounded,
                                     size: 25,
@@ -292,7 +310,7 @@ class _Extra_CheckState extends State<Extra_Check> {
                                       );
                                     },
                                     child: textIcon(
-                                      'เพิ่มรายการตรวจ',
+                                      'add_checklist'.tr,
                                       fontsize: 14,
                                       Icon(
                                         Icons.add_box,
@@ -327,7 +345,7 @@ class _Extra_CheckState extends State<Extra_Check> {
                               height: 10,
                             ),
                             textIcon(
-                              'รูปภาพประกอบ',
+                              'illustration'.tr,
                               Icon(
                                 Icons.camera_alt_rounded,
                                 size: 25,
@@ -434,8 +452,9 @@ class _Extra_CheckState extends State<Extra_Check> {
                                         : Container(),
                                   ]),
                             ),
+
                             textIcon(
-                              'บันทึกเหตุการณ์',
+                              'event_record'.tr,
                               Icon(
                                 Icons.assignment_rounded,
                                 size: 25,
@@ -444,17 +463,35 @@ class _Extra_CheckState extends State<Extra_Check> {
                             widget.type == 1
                                 ? Container()
                                 : Dropdown_NoBorder(
-                                    title: 'เลือกสถานการณ์',
+                                    title: 'select_event'.tr,
                                     controller: status,
                                     leftIcon: Icons.mobile_friendly,
-                                    error: 'กรุณากเลือกบริษัท',
-                                    listItem: ['ปกติ', 'ไม่ปกติ'],
+                                    error: 'กรุณาเลือกเหตุการณ์',
+                                    listItem: language == 'th'
+                                        ? itemEvent_TH
+                                        : itemEvent_EN,
+                                    onChanged: (value) {
+                                      final int index;
+                                      //เปรียบเทียบค่า เพื่อหาค่า index จาก listItem
+                                      if (language == 'th') {
+                                        index = itemEvent_TH.indexWhere(
+                                            (item) => item == value);
+                                      } else {
+                                        index = itemEvent_EN.indexWhere(
+                                            (item) => item == value);
+                                      }
+                                      //นำค่า index ที่ได้มาเลือก item
+                                      if (index > -1) {
+                                        onItemSelect = itemEvent_TH[index];
+                                      }
+                                      print(onItemSelect);
+                                    },
                                   ),
                             TextForm_NoBorder_Validator(
                               typeInput: TextInputType.text,
                               controller: detail,
                               icon: Icons.description_rounded,
-                              title: 'รายละเอียด',
+                              title: 'desciption'.tr,
                               validator: (values) {
                                 if (status.text == 'ไม่ปกติ' &&
                                     values.isEmpty) {
@@ -467,7 +504,7 @@ class _Extra_CheckState extends State<Extra_Check> {
                             ExpansionTile(
                               tilePadding: EdgeInsets.zero,
                               title: textIcon(
-                                'ตำแหน่งปัจจุบัน',
+                                'current_position'.tr,
                                 Icon(
                                   Icons.location_on_sharp,
                                   size: 25,
@@ -502,7 +539,7 @@ class _Extra_CheckState extends State<Extra_Check> {
       key: _fieldkey,
       child: AlertDialog(
         title: Text(
-          'เพิ่มรายการตรวจ',
+          'add_checklist'.tr,
           style: TextStyle(fontSize: 16),
         ),
         actions: [
@@ -511,7 +548,7 @@ class _Extra_CheckState extends State<Extra_Check> {
                 Navigator.pop(context);
               },
               child: Text(
-                'ยกเลิก',
+                'cancel'.tr,
                 style: TextStyle(fontWeight: FontWeight.bold),
               )),
           TextButton(
@@ -524,7 +561,7 @@ class _Extra_CheckState extends State<Extra_Check> {
                 }
               },
               child: Text(
-                'ตกลง',
+                'submit'.tr,
                 style: TextStyle(fontWeight: FontWeight.bold),
               ))
         ],
