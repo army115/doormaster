@@ -59,23 +59,18 @@ class _ScanQR_CheckState extends State<ScanQR_Check> {
       });
       if (widget.name == 'check') {
         if (widget.roundId == null) {
-          dialogOnebutton_Subtitle(
-              context,
-              'พบข้อผิดพลาด',
-              'ยังไม่ถึงรอบเดินตรวจ โปรดลองใหม่ในภายหลัง',
-              Icons.highlight_off_rounded,
-              Colors.red,
-              'ตกลง', () {
+          dialogOnebutton_Subtitle(context, 'found_error'.tr, 'check_later'.tr,
+              Icons.highlight_off_rounded, Colors.red, 'ok'.tr, () {
             Navigator.popUntil(context, (route) => route.isFirst);
           }, false, false);
         } else if (widget.checkpointId.contains(result?.code)) {
           dialogOnebutton_Subtitle(
               context,
-              'ตรวจจุดซ้ำ',
-              'จุดตรวจนี้ ถูกบันทึกข้อมูลแล้ว',
+              'repeat_checkpoint'.tr,
+              'data_checkpoint'.tr,
               Icons.warning_amber_rounded,
               Colors.orange,
-              'ตกลง', () {
+              'ok'.tr, () {
             Navigator.popUntil(context, (route) => route.isFirst);
           }, false, false);
         } else {
@@ -170,9 +165,9 @@ class _ScanQR_CheckState extends State<ScanQR_Check> {
                     child: Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10, vertical: 5),
-                        child: textDoubleColors(
-                            'scan'.tr, Colors.white, ' QR Code', Colors.white,
-                            fontsize: 20))),
+                        child: Text('${'scan'.tr} QR Code',
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 20)))),
                 Positioned(
                   left: 10,
                   top: MediaQuery.of(context).size.height * 0.05,

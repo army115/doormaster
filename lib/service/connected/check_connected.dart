@@ -7,7 +7,7 @@ Future<void> checkInternet(context, page, rootNavi) async {
   var result = await Connectivity().checkConnectivity();
   print(result);
   if (result == ConnectivityResult.none) {
-    snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
+    snackbar(context, Colors.orange, 'connect_internet_pls'.tr,
         Icons.warning_amber_rounded);
     print('not connected');
   } else {
@@ -20,7 +20,7 @@ Future<void> checkInternetOnGoBack(context, page, rootNavi, onGoBack) async {
   var result = await Connectivity().checkConnectivity();
   print(result);
   if (result == ConnectivityResult.none) {
-    snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
+    snackbar(context, Colors.orange, 'connect_internet_pls'.tr,
         Icons.warning_amber_rounded);
     print('not connected');
   } else {
@@ -34,7 +34,7 @@ Future<void> checkInternetName(context, page, rootNavi) async {
   var result = await Connectivity().checkConnectivity();
   print(result);
   if (result == ConnectivityResult.none) {
-    snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
+    snackbar(context, Colors.orange, 'connect_internet_pls'.tr,
         Icons.warning_amber_rounded);
     print('not connected');
   } else {

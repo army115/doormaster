@@ -87,11 +87,11 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
 
         if (result["isSuccess"] == true) {
           print('saved image successfully!!!');
-          snackbar(context, Theme.of(context).primaryColor, 'บันทึกภาพสำเร็จ',
-              Icons.check_circle_outline_rounded);
+          snackbar(context, Theme.of(context).primaryColor,
+              'capture_success'.tr, Icons.check_circle_outline_rounded);
         } else {
           print('saved image successfully!!!');
-          snackbar(context, Colors.red, 'บันทึกภาพไม่สำเร็จ',
+          snackbar(context, Colors.red, 'capture_fail'.tr,
               Icons.highlight_off_rounded);
         }
       }
@@ -99,11 +99,11 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
       print(error);
       dialogOnebutton_Subtitle(
           context,
-          'พบข้อผิดพลาด',
-          'บันทึกภาพไม่สำเร็จ กรุณาลองใหม่อีกครั้ง',
+          'found_error'.tr,
+          'capture_fail_again'.tr,
           Icons.warning_amber_rounded,
           Colors.orange,
-          'ตกลง', () {
+          'ok'.tr, () {
         Navigator.of(context).pop();
       }, false, false);
     }
@@ -227,26 +227,22 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
                         color: Colors.white,
                         thickness: 1.5,
                       ),
-                      textDoubleColors('visitor'.tr, Colors.white,
-                          ' : ${visitorName}', Colors.white),
-                      textDoubleColors('contacts'.tr, Colors.white,
-                          ' : ${visitorPeople}', Colors.white),
-                      textDoubleColors('phone_number'.tr, Colors.white,
-                          ' : ${telVisitor}', Colors.white),
+                      Text('${'visitor'.tr} : ${visitorName}',
+                          style: TextStyle(color: Colors.white)),
+                      Text('${'contacts'.tr} : ${visitorPeople}',
+                          style: TextStyle(color: Colors.white)),
+                      Text('${'phone_number'.tr} : ${telVisitor}',
+                          style: TextStyle(color: Colors.white)),
                       widget.QRcodeData == null
                           ? Container()
-                          : textDoubleColors('access_count'.tr, Colors.white,
-                              ' : ${usableCount}', Colors.white),
-                      textDoubleColors(
-                          'start'.tr,
-                          Colors.white,
-                          ' : ${format.format(DateTime.parse('$startDate'))}',
-                          Colors.white),
-                      textDoubleColors(
-                          'end'.tr,
-                          Colors.white,
-                          ' : ${format.format(DateTime.parse('$endDate'))}',
-                          Colors.white),
+                          : Text('${'access_count'.tr} : ${usableCount}',
+                              style: TextStyle(color: Colors.white)),
+                      Text(
+                          '${'start'.tr} : ${format.format(DateTime.parse('$startDate'))}',
+                          style: TextStyle(color: Colors.white)),
+                      Text(
+                          '${'end'.tr} : ${format.format(DateTime.parse('$endDate'))}',
+                          style: TextStyle(color: Colors.white)),
                     ]),
                   ),
                 ),

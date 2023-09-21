@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, unused_import, avoid_function_literals_in_foreach_calls
 
 import 'package:dio/dio.dart';
+import 'package:doormster/components/actions/disconnected_dialog.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/drawer/drawer.dart';
@@ -79,18 +80,12 @@ class _Security_GuardState extends State<Security_Guard> {
       }
     } catch (error) {
       print(error);
-      dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง', () {
+      error_connected(context, () {
         homeKey.currentState?.popUntil(
           (route) => route.isFirst,
         );
         Navigator.of(context, rootNavigator: true).pop();
-      }, false, false);
+      });
       setState(() {
         loading = false;
       });
@@ -146,11 +141,11 @@ class _Security_GuardState extends State<Security_Guard> {
                         () => listdata.isEmpty
                             ? dialogOnebutton_Subtitle(
                                 context,
-                                'พบข้อผิดพลาด',
-                                'ยังไม่ถึงรอบเดินตรวจ โปรดลองใหม่ในภายหลัง',
+                                'found_error'.tr,
+                                'check_later'.tr,
                                 Icons.warning_amber_rounded,
                                 Colors.orange,
-                                'ตกลง', () {
+                                'ok'.tr, () {
                                 Navigator.of(context, rootNavigator: true)
                                     .pop();
                               }, true, true)

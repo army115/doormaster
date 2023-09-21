@@ -3,6 +3,7 @@
 import 'dart:developer';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:dio/dio.dart';
+import 'package:doormster/components/actions/disconnected_dialog.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/button/buttonback_appbar.dart';
@@ -11,8 +12,6 @@ import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/searchbar/search_calendar.dart';
 import 'package:doormster/components/searchbar/search_from.dart';
 import 'package:doormster/components/text/text_double_colors.dart';
-import 'package:doormster/components/text/text_icon_double.dart';
-import 'package:doormster/components/text/text_triple.dart';
 import 'package:doormster/models/get_checklist.dart';
 import 'package:doormster/models/get_log.dart';
 import 'package:doormster/models/get_logs_all.dart';
@@ -78,16 +77,10 @@ class _Logs_AllState extends State<Logs_All>
     } catch (error) {
       print(error);
       await Future.delayed(const Duration(milliseconds: 500));
-      dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง', () {
+      error_connected(context, () {
         homeKey.currentState?.popUntil(ModalRoute.withName('/security'));
         Navigator.of(context, rootNavigator: true).pop();
-      }, false, false);
+      });
       setState(() {
         loading = false;
       });
@@ -257,16 +250,19 @@ class _Logs_AllState extends State<Logs_All>
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                textDouble_iconRight(
-                                                    'round'.tr,
-                                                    listLog[index].roundName ==
-                                                            'นอกรอบ'
-                                                        ? 'extra_round'.tr
-                                                        : ' : ${listLog[index].roundName}',
+                                                Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: Text(
+                                                        '${'round'.tr} : ${listLog[index].roundName == 'นอกรอบ' ? 'extra_round'.tr : listLog[index].roundName}',
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                    ),
                                                     Icon(Icons
-                                                        .arrow_forward_ios_rounded),
-                                                    overflow:
-                                                        TextOverflow.ellipsis),
+                                                        .arrow_forward_ios_rounded)
+                                                  ],
+                                                ),
                                                 listLog[index].roundName ==
                                                         'นอกรอบ'
                                                     ? Container()
@@ -276,40 +272,29 @@ class _Logs_AllState extends State<Logs_All>
                                                               MainAxisAlignment
                                                                   .spaceBetween,
                                                           children: [
-                                                            textDoubleColors(
-                                                                'start'.tr,
-                                                                Colors.black,
-                                                                ' : ${listLog[index].roundStart}',
-                                                                Colors.black),
+                                                            Text(
+                                                                '${'start'.tr} : ${listLog[index].roundStart}'),
                                                             const VerticalDivider(
                                                                 thickness: 1.5,
                                                                 color: Colors
                                                                     .black,
                                                                 width: 1),
-                                                            textDoubleColors(
-                                                                'end'.tr,
-                                                                Colors.black,
-                                                                ' : ${listLog[index].roundEnd}',
-                                                                Colors.black)
+                                                            Text(
+                                                                '${'end'.tr} : ${listLog[index].roundEnd}'),
                                                           ],
                                                         ),
                                                       ),
                                                 listLog[index]
                                                         .fileList!
                                                         .isNotEmpty
-                                                    ? textTripleColors(
-                                                        'record'.tr,
-                                                        ' ${listLog[index].fileList?.length} ',
-                                                        'list'.tr,
-                                                        color1:
-                                                            Theme.of(context)
-                                                                .primaryColor,
-                                                        color2:
-                                                            Theme.of(context)
-                                                                .primaryColor,
-                                                        color3:
-                                                            Theme.of(context)
-                                                                .primaryColor)
+                                                    ? Text(
+                                                        '${'record'.tr} ${listLog[index].fileList?.length} ${'list'.tr}',
+                                                        style: TextStyle(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .primaryColor,
+                                                        ),
+                                                      )
                                                     : Text(
                                                         'no_record'.tr,
                                                         style: const TextStyle(
@@ -353,13 +338,13 @@ class _Logs_AllState extends State<Logs_All>
           lastDate: DateTime.now(),
           calendarType: CalendarDatePicker2Type.range,
           cancelButton: Text(
-            'ยกเลิก',
+            'cancel'.tr,
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).primaryColor),
           ),
           okButton: Text(
-            'ตกลง',
+            'ok'.tr,
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).primaryColor),

@@ -4,6 +4,7 @@ const Map<String, String> th_TH = {
   //Login page
   'login': 'เข้าสู่ระบบ',
   'logout': 'ออกจากระบบ',
+  'want_logout': 'คุณต้องการออกจากระบบ\nใช่ หรือ ไม่',
   'register': 'กรุณาลงทะเบียน',
   'remember': 'บันทึกรหัสผ่าน',
   'user': 'ผู้ใช้ทั่วไป',
@@ -11,6 +12,7 @@ const Map<String, String> th_TH = {
   'no_account': 'ยังไม่ได้เป็นสมาชิก HIP Smart Community ',
   'login_for': 'เข้าสู่ระบบใช้งาน ',
   'login_for_employee': 'เข้าสู่ระบบใช้งาน สำหรับพนักงาน',
+
   //Register page
   'register_title': 'ลงทะเบียน',
   'username': 'ชื่อผู้ใช้',
@@ -23,22 +25,26 @@ const Map<String, String> th_TH = {
   'new_password': 'รหัสผ่านใหม่',
   'confirm_password': 'ยืนยันรหัสผ่าน',
   'accept_terms': 'ยอมรับเงื่อนไขการใช้บริการ',
+
   //Bottom bar
   'home': 'หน้าหลัก',
   'news': 'ข่าวสาร',
   'notification': 'แจ้งเตือน',
   'profile': 'โปรไฟล์',
+
   //Drawer
   'info': 'ข้อมูลส่วนตัว',
   'setting': 'การตั้งค่า',
   'switch_company': 'สลับโครงการ',
   'add_company': 'เพิ่มโครงการใหม่',
+
   //Qr smart
   'visitor': 'ผู้มาติดต่อ',
   'scan': 'สแกน',
   'open_door': 'เปิดประตู',
   'offline_door': 'ประตูออฟไลน์',
   'emergancy_call': 'ติดต่อฉุกเฉิน',
+
   //Register visitor
   'visitor_info': 'ข้อมูลผู้มาติดต่อ',
   'create_visitor': 'ลงทะเบียนผู้มาติดต่อ',
@@ -57,6 +63,7 @@ const Map<String, String> th_TH = {
   'access_count': 'สิทธิ์การใช้งาน',
   'count': 'จำนวนครั้ง',
   'create_qrcode': 'สร้าง QRCode',
+
   //Security guard
   'checkIn': 'ตรวจจุด',
   'register_point': 'ลงทะเบียนจุดตรวจ',
@@ -64,7 +71,7 @@ const Map<String, String> th_TH = {
   'checkpoint_report': 'รายงานจุดตรวจ',
   'date_report': 'รายงานวันที่',
   'check_extra_round': 'ตรวจนอกรอบ',
-  'extra_round': ' : นอกรอบ',
+  'extra_round': 'นอกรอบ',
   'view_round': 'ดูรอบเดินตรวจ',
   'view_checkpoint': 'ดูจุดตรวจ',
   'by_point': 'ตรวจตามจุด',
@@ -100,27 +107,37 @@ const Map<String, String> th_TH = {
   'checked_complete': 'ตรวจแล้ว',
   'not_checked': 'ยังไม่ตรวจ',
   'checked_incomplete': 'ตรวจไม่ครบ',
+  'need_check': 'รอบที่ต้องตรวจสอบ',
+
   //Setting
   'change_password': 'เปลี่ยนรหัสผ่าน',
   'change_language': 'เปลี่ยนภาษา',
   'select_language': 'เลือกภาษา',
   'disable_account': 'ปิดการใช้งานบัญชี',
   'version': 'เวอร์ชันปัจจุบัน',
+
   //Profile
   'change_picture': 'เปลี่ยนรูปโปรไฟล์',
   'camera': 'ถ่ายรูป',
   'photo': 'เลือกรูปภาพ',
+
   //Search
   'search': 'ค้นหา',
   'search_door': 'ค้นหาประตู',
   'search_round': 'ค้นหารอบเดิน',
   'search_checkpoint': 'ค้นหาจุดตรวจ',
+
   //Title appbar
   'news_feed': 'ข้อมูลข่าวสาร',
   'list_checkpoint': 'รายการจุดตรวจ',
   'list_report': 'รายงานการตรวจ',
   'list_round': 'รายการรอบเดินตรวจ',
+
   //Opacity title
+  'contact_admin_approve': 'โปรดติดต่อผู้ดูแล\nเพื่ออนุมัติสิทธิ์การใช้งาน',
+  'contact_admin_door': 'ไม่มีประตูที่คุณใช้ได้\nโปรดติดต่อผู้ดูแล',
+  'contact_admin_manu': 'ไม่มีเมนูที่คุณใช้งานได้\nโปรดติดต่อผู้ดูแล',
+  'check_connect': 'โปรดตรวจสอบการเชื่อมต่อ',
   'door_not_found': 'ไม่พบประตูที่ใช้ได้',
   'device_not_found': 'ไม่พบอุปกรณ์ที่ใช้ได้',
   'data_not_found': 'ไม่พบข้อมูล',
@@ -128,6 +145,7 @@ const Map<String, String> th_TH = {
   'no_notification': 'ไม่มีการแจ้งเตือน',
   'no_data': 'ไม่มีข้อมูลที่บันทึก',
   'no_picture': 'ไม่มีรูปภาพ',
+
   //Button
   'ok': 'ตกลง',
   'yes': 'ใช่',
@@ -141,35 +159,96 @@ const Map<String, String> th_TH = {
   'today': 'วันนี้',
   'all': 'ทั้งหมด',
   'to': 'ถึง',
-  //text action
+
+  //Text action
   'login_success': 'เข้าสู่ระบบสำเร็จ',
   'login_failed': 'เข้าสู่ระบบสำไม่เร็จ',
   'wrong_username': 'ชื่อผู้ใช้ หรือ รหัสผ่าน ไม่ถูกต้อง',
+  'register_success': 'ลงทะเบียนสำเร็จ',
+  'register_fail': 'ลงทะเบียนไม่สำเร็จ',
+  'register_fail_again': 'ลงทะเบียนไม่สำเร็จ กรุณาลองใหม่อีกครั้ง',
+  'press_again': 'กดอีกครั้งเพื่อออก',
+
   'found_error': 'พบข้อผิดพลาด',
   'connect_fail': 'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
   'connect_internet_pls': 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
-  'account_block': 'บัญชีนี้ถูกระงับการใช้งาน',
-  'unblock_account': 'โปรดติดต่อผู้ดูแล เพื่อเปิดการใช้งานอีกครั้ง',
-  'register_success': 'ลงทะเบียนสำเร็จ',
-  'register_fail': 'ลงทะเบียนไม่สำเร็จ',
-  'edit_fail': 'แก้ไขไม่สำเร็จ',
   'again_pls': 'กรุณาลองใหม่อีกครั้ง',
+  'account_block': 'บัญชีนี้ถูกระงับการใช้งาน',
+  'deactivate_confirm': 'หากคุณต้องการปิดการใช้งานบัญชีนี้ โปรดยืนยันคำสั่ง',
+  'deactivation_success': 'ปิดการใช้งานสำเร็จ',
+  'deactivation_fail': 'ปิดการใช้งานไม่สำเร็จ',
+  'unblock_account': 'โปรดติดต่อผู้ดูแล เพื่อเปิดการใช้งานอีกครั้ง',
+
+  'edit_success': 'แก้ไขสำเร็จ',
+  'edit_fail': 'แก้ไขไม่สำเร็จ',
+  'select_fail': 'เลือกไม่สำเร็จ',
+  'add_success': 'เพิ่มสำเร็จ',
+  'add_fail': 'เพิ่มไม่สำเร็จ',
+  'cannot_add': 'ไม่สามารถเพิ่มได้',
+  'have_company': 'คุณมีบริษัทนี้อยู่แล้ว',
+
+  'door_open_success': 'เปิดประตูสำเร็จ',
+  'door_open_fail': 'เปิดประตูไม่สำเร็จ',
+  'door_offline': 'ประตูออฟไลน์อยู่',
+  'invalid_device': 'หมายเลขอุปกรณ์ไม่ถูกต้อง',
+
   'allow_access': 'อนุญาตการเข้าถึง',
+  'need_access_device': 'จำเป็นต้องเข้าถึงอุปกรณ์ของคุณ',
   'need_access_camera': 'จำเป็นต้องเข้าถึงกล้องของคุณ',
   'need_access_picture': 'จำเป็นต้องเข้าถึงรูปภาพของคุณ',
   'need_access_location': 'จำเป็นต้องเข้าถึงตำแหน่งอุปกรณ์ของคุณ',
   'access_location': 'การเข้าถึงตำแหน่งที่ตั้ง',
   'turn_on_location': 'เปิดบริการตำแหน่งที่ตั้งอุปกรณ์ของคุณ',
-  //error text
+
+  'checkpoint_regis': 'จุดตรวจนี้ลงทะเบียนแล้ว',
+  'checkpoint_no_regis': 'จุดตรวจนี้ ยังไม่ได้ลงทะเบียน',
+  'checkin_success': 'ตรวจเช็คสำเร็จ',
+  'checkpoint_found': 'ไม่พบจุดตรวจ',
+  'repeat_checkpoint': 'ตรวจจุดซ้ำ',
+  'data_checkpoint': 'จุดตรวจนี้ ถูกบันทึกข้อมูลแล้ว',
+  'save_success': 'บันทึกสำเร็จ',
+  'save_unsuccess': 'บันทึกไม่สำเร็จ กรุณาลองใหม่อีกครั้ง',
+  'check_later': 'ยังไม่ถึงรอบเดินตรวจ โปรดลองใหม่ในภายหลัง',
+  'create_qrcode_success': 'สร้าง QR Code สำเร็จ',
+  'create_qrcode_fail': 'สร้าง QR Code ไม่สำเร็จ',
+  'invalid_qrcode': 'QR Code ไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง',
+
+  'invalid_location': 'ตำแหน่งไม่ถูกต้อง',
+  'location_checkpoint': 'ตำแหน่งปัจจุบันไม่ตรงจุดตรวจ กรุณาลองใหม่อีกครั้ง',
+  'invalid_location_again': 'ตำแหน่งไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง',
+  'password_success': 'เปลี่ยนรหัสผ่านสำเร็จ',
+  'wrong_password': 'รหัสผ่านปัจจุบันไม่ถูกต้อง',
+  'capture_success': 'บันทึกภาพสำเร็จ',
+  'capture_fail': 'บันทึกภาพไม่สำเร็จ',
+  'capture_fail_again': 'บันทึกภาพไม่สำเร็จ กรุณาลองใหม่อีกครั้ง',
+
+  //Error text form
+  'enter_info': 'กรอกข้อมูล',
+  'enter_info_pls': 'กรุณากรอกข้อมูล',
   'enter_username_pls': 'กรุณากรอกชื่อผู้ใช้',
   'enter_password_pls': 'กรุณากรอกรหัสผ่าน',
+  'enter_password_current': 'กรอกรหัสผ่านปัจจุบัน',
   'confirm_password_pls': 'กรุณายืนยันรหัสผ่าน',
   'password_no_match': 'รหัสผ่านไม่ตรงกัน',
   'password_8char': 'รหัสผ่านอย่างน้อย 8 ตัว',
+  'same_password': 'ซ้ำกับรหัสผ่านปัจจุบัน กรุณากรอกรหัสผ่านใหม่',
   'accept_terms_pls': 'กรุณายอมรับเงื่อนไขการใช้บริการ',
   'enter_name_pls': 'กรุณากรอกชื่อ',
   'enter_lname_pls': 'กรุณากรอกนามสกุล',
   'enter_email_pls': 'กรุณากรอกอีเมล',
   'email_error': 'รูปแบบอีเมลไม่ถูกต้อง',
   'select_company_pls': 'กรุณาเลือกบริษัท',
+
+  'enter_name_visitor': 'กรุณากรอกชื่อผู้มาติดต่อ',
+  'enter_name_contacts': 'กรุณากรอกชื่อผู้ที่ติดต่อพบ',
+  'enter_phone': 'กรุณากรอกเบอร์โทร',
+  'phone_10char': 'กรุณากรอกเบอร์โทรให้ครบ 10 ตัว',
+  'select_type': 'กรุณาเลือกประเภท',
+  'select_date': 'กรุณาเลือกวันที่',
+  'enter_access_count': 'กรุณาเพิ่มจำนวนสิทธิ์การใช้งาน',
+
+  'enter_checklist': 'กรอกรายการตรวจ',
+  'select_checklist': 'กรุณาเลือกรายการตรวจ',
+  'select_event_pls': 'กรุณาเลือกเหตุการณ์',
+  'enter_desciption': 'เหตุการณ์ไม่ปกติ กรุณาเพิ่มรายละเอียด',
 };

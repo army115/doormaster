@@ -1,13 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:dio/dio.dart';
-import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
+import 'package:doormster/components/actions/disconnected_dialog.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/searchbar/search_from.dart';
-import 'package:doormster/components/text/text_double_colors.dart';
-import 'package:doormster/components/text/text_icon_double.dart';
+import 'package:doormster/components/text/text_icon.dart';
 import 'package:doormster/models/get_checklist.dart';
 import 'package:doormster/models/get_log.dart';
 import 'package:doormster/screen/security_guard/logs_point_page.dart';
@@ -79,16 +78,10 @@ class _Logs_TodayState extends State<Logs_Today>
     } catch (error) {
       print(error);
       await Future.delayed(const Duration(milliseconds: 500));
-      dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง', () {
+      error_connected(context, () {
         homeKey.currentState?.popUntil(ModalRoute.withName('/security'));
         Navigator.of(context, rootNavigator: true).pop();
-      }, false, false);
+      });
       setState(() {
         loading = false;
       });
@@ -143,13 +136,12 @@ class _Logs_TodayState extends State<Logs_Today>
                                 width: double.infinity,
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 10, horizontal: 10),
-                                child: textDouble_iconLeft(
-                                    'date_report'.tr,
-                                    ' : $dateNow',
+                                child: textIcon(
+                                    '${'date_report'.tr} : $dateNow',
                                     Icon(
                                       Icons.event_note,
                                       color: Theme.of(context).primaryColor,
-                                      size: 30,
+                                      size: 25,
                                     ))),
                           ),
                           listlogs.length > 10
@@ -244,59 +236,53 @@ class _Logs_TodayState extends State<Logs_Today>
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                textDouble_iconRight(
-                                                    'round'.tr,
-                                                    ' : ${listdata[index].roundName}',
+                                                Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: Text(
+                                                        '${'round'.tr} : ${listdata[index].roundName}',
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                    ),
                                                     Icon(Icons
-                                                        .arrow_forward_ios_rounded),
-                                                    overflow:
-                                                        TextOverflow.ellipsis),
+                                                        .arrow_forward_ios_rounded)
+                                                  ],
+                                                ),
                                                 IntrinsicHeight(
                                                   child: Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
                                                             .spaceBetween,
                                                     children: [
-                                                      textDoubleColors(
-                                                        'start'.tr,
-                                                        Colors.black,
-                                                        ' : ${listdata[index].roundStart}',
-                                                        Colors.black,
-                                                      ),
+                                                      Text(
+                                                          '${'start'.tr} : ${listdata[index].roundStart}'),
                                                       const VerticalDivider(
                                                           thickness: 1.5,
                                                           color: Colors.black,
                                                           width: 1),
-                                                      textDoubleColors(
-                                                        'end'.tr,
-                                                        Colors.black,
-                                                        ' : ${listdata[index].roundEnd} ',
-                                                        Colors.black,
-                                                      ),
+                                                      Text(
+                                                          '${'end'.tr} : ${listdata[index].roundEnd}'),
                                                     ],
                                                   ),
                                                 ),
                                                 logsPoint <= 0
-                                                    ? textDoubleColors(
-                                                        'not_checked'.tr,
-                                                        Colors.red,
-                                                        ' ($logsPoint/$checkPoint)',
-                                                        Colors.red)
+                                                    ? Text(
+                                                        '${'not_checked'.tr} ($logsPoint/$checkPoint)',
+                                                        style: TextStyle(
+                                                            color: Colors.red))
                                                     : logsPoint >= checkPoint
-                                                        ? textDoubleColors(
-                                                            'checked_complete'
-                                                                .tr,
-                                                            Theme.of(context)
-                                                                .primaryColor,
-                                                            ' ($logsPoint/$checkPoint)',
-                                                            Theme.of(context)
-                                                                .primaryColor)
-                                                        : textDoubleColors(
-                                                            'checked_incomplete'
-                                                                .tr,
-                                                            Colors.orange,
-                                                            ' ($logsPoint/$checkPoint)',
-                                                            Colors.orange),
+                                                        ? Text(
+                                                            '${'checked_complete'.tr} ($logsPoint/$checkPoint)',
+                                                            style: TextStyle(
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .primaryColor))
+                                                        : Text(
+                                                            '${'checked_incomplete'.tr} ($logsPoint/$checkPoint)',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .orange)),
                                               ],
                                             ),
                                           ),

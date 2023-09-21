@@ -137,11 +137,11 @@ class Check_Connected extends StatelessWidget {
                   height: double.infinity,
                   color: Colors.black38,
                   child: dialogmain(
-                      'พบข้อผิดพลาด',
-                      'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+                      'found_error'.tr,
+                      'connect_fail'.tr,
                       Icons.warning_amber_rounded,
                       Colors.orange,
-                      'ตกลง', () async {
+                      'ok'.tr, () async {
                     if (Platform.isAndroid) {
                       Restart.restartApp();
                     } else if (Platform.isIOS) {

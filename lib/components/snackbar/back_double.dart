@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 void backDouble(context) {
   ScaffoldMessenger.of(context).showSnackBar(
@@ -6,7 +7,7 @@ void backDouble(context) {
       dismissDirection: DismissDirection.none,
       backgroundColor: Theme.of(context).primaryColor,
       content: Text(
-        "กดอีกครั้งเพื่อออก",
+        "press_again".tr,
         textAlign: TextAlign.center,
         style: TextStyle(fontSize: 14, fontFamily: 'Kanit'),
       ),

@@ -1,6 +1,4 @@
 // ignore_for_file: prefer_const_constructors
-
-import 'package:doormster/components/text/text_double_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -66,9 +64,10 @@ class _ScannerState extends State<Scanner> {
               child: Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  child: textDoubleColors(
-                      'scan'.tr, Colors.white, ' QR Code', Colors.white,
-                      fontsize: 20))),
+                  child: Text(
+                    '${'scan'.tr} QR Code',
+                    style: TextStyle(color: Colors.white, fontSize: 20),
+                  ))),
           Positioned(
             left: 10,
             top: MediaQuery.of(context).size.height * 0.05,

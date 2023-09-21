@@ -3,16 +3,14 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:doormster/components/actions/disconnected_dialog.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/map/map_page.dart';
 import 'package:doormster/components/searchbar/search_from.dart';
 import 'package:doormster/components/text/text_double_colors.dart';
-import 'package:doormster/components/text/text_four_icon.dart';
 import 'package:doormster/components/text/text_icon.dart';
-import 'package:doormster/components/text/text_icon_double.dart';
-import 'package:doormster/components/text/text_triple.dart';
 import 'package:doormster/models/get_log.dart';
 import 'package:doormster/models/get_logs_all.dart';
 import 'package:doormster/service/connected/connect_api.dart';
@@ -82,15 +80,9 @@ class _Record_PointState extends State<Record_Point> {
     } catch (error) {
       print(error);
       await Future.delayed(const Duration(milliseconds: 500));
-      dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง', () {
+      error_connected(context, () {
         Navigator.of(context, rootNavigator: true).pop();
-      }, false, false);
+      });
       setState(() {
         loading = false;
       });
@@ -140,33 +132,28 @@ class _Record_PointState extends State<Record_Point> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    textDouble_iconLeft(
-                        'date_report'.tr,
-                        ' : ${widget.dateTime}',
+                    textIcon(
+                        '${'date_report'.tr} : ${widget.dateTime}',
                         Icon(
                           Icons.calendar_month_rounded,
                           color: Theme.of(context).primaryColor,
-                          size: 30,
+                          size: 25,
                         )),
-                    textDouble_iconLeft(
-                        'round'.tr,
-                        ' : ${widget.roundName}',
+                    textIcon(
+                        '${'round'.tr} : ${widget.roundName}',
                         Icon(
                           Icons.map_rounded,
                           color: Theme.of(context).primaryColor,
-                          size: 30,
+                          size: 25,
                         )),
                     widget.roundName == 'extra_round'.tr
                         ? Container()
-                        : textFourIcon(
-                            'interval'.tr,
-                            ' : ${widget.roundStart} ',
-                            'to'.tr,
-                            ' ${widget.roundEnd}',
-                            icon: Icon(
+                        : textIcon(
+                            '${'interval'.tr} : ${widget.roundStart} ${'to'.tr} ${widget.roundEnd}',
+                            Icon(
                               Icons.access_time_rounded,
                               color: Theme.of(context).primaryColor,
-                              size: 30,
+                              size: 25,
                             ))
                   ],
                 ),
@@ -209,24 +196,15 @@ class _Record_PointState extends State<Record_Point> {
                             elevation: 10,
                             child: ExpansionTile(
                                 textColor: Colors.black,
-                                title: textDoubleColors(
-                                    'checkpoint'.tr,
-                                    Colors.black,
-                                    ' : ${fileList[index].checkpointName}',
-                                    Colors.black),
+                                title: Text(
+                                    '${'checkpoint'.tr} : ${fileList[index].checkpointName}'),
                                 subtitle: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    textDoubleColors(
-                                        'event'.tr,
-                                        Colors.black,
-                                        ' : ${fileList[index].event}',
-                                        Colors.black),
-                                    textFourIcon(
-                                        'date'.tr,
-                                        ' ${formatdate.format(date)} ',
-                                        'time'.tr,
-                                        ' ${formatTime.format(time)} '),
+                                    Text(
+                                        '${'event'.tr} : ${fileList[index].event}'),
+                                    Text(
+                                        '${'date'.tr} ${formatdate.format(date)} ${'time'.tr} ${formatTime.format(time)}'),
                                   ],
                                 ),
                                 children: [

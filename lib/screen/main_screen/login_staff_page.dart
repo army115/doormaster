@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors_in_immutables, avoid_single_cascade_in_expression_statements, avoid_print, use_build_context_synchronously, unused_local_variable
 import 'package:dio/dio.dart';
+import 'package:doormster/components/actions/disconnected_dialog.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/button/button_animation.dart';
@@ -132,10 +133,9 @@ class _Login_StaffState extends State<Login_Staff> {
         }
       } catch (error) {
         print(error);
-        dialogOnebutton_Subtitle(context, 'found_error'.tr, 'connect_fail'.tr,
-            Icons.warning_amber_rounded, Colors.orange, 'ok'.tr, () async {
+        error_connected(context, () async {
           Navigator.of(context).pop();
-        }, false, false);
+        });
         setState(() {
           loading = false;
         });

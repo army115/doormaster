@@ -33,7 +33,7 @@ class TextForm_NoBorder_Validator extends StatelessWidget {
         decoration: InputDecoration(
           contentPadding: EdgeInsets.fromLTRB(0, 0, 10, 10),
           labelText: title,
-          hintText: "กรอกข้อมูล",
+          hintText: "enter_info".tr,
           hintStyle: textStyle().title16,
           errorStyle: textStyle().body14,
           prefixIcon: Icon(icon, size: 25),

@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, avoid_print, use_build_context_synchronously
 
 import 'package:dio/dio.dart';
+import 'package:doormster/components/actions/disconnected_dialog.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottom_controller.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
@@ -63,31 +64,20 @@ class _Password_PageState extends State<Password_Page> {
         await prefs.setBool("remember", false);
         Get.until((route) => route.isFirst);
         bottomController.ontapItem(0);
-        snackbar(context, Theme.of(context).primaryColor,
-            'เปลี่ยนรหัสผ่านสำเร็จ', Icons.check_circle_outline_rounded);
+        snackbar(context, Theme.of(context).primaryColor, 'password_success'.tr,
+            Icons.check_circle_outline_rounded);
       } else {
         print('Change Fail!!');
-        dialogOnebutton_Subtitle(
-            context,
-            'พบข้อผิดพลาด',
-            'รหัสผ่านปัจจุบันไม่ถูกต้อง',
-            Icons.highlight_off_rounded,
-            Colors.red,
-            'ตกลง', () {
+        dialogOnebutton_Subtitle(context, 'found_error'.tr, 'wrong_password'.tr,
+            Icons.highlight_off_rounded, Colors.red, 'ok'.tr, () {
           Navigator.of(context).pop();
         }, false, false);
       }
     } catch (error) {
       print(error);
-      dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง', () {
+      error_connected(context, () async {
         Navigator.of(context).pop();
-      }, false, false);
+      });
       // snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
       //     Icons.warning_amber_rounded);
       setState(() {
@@ -130,7 +120,7 @@ class _Password_PageState extends State<Password_Page> {
                 }),
                 (values) {
                   if (values!.isEmpty) {
-                    return 'กรอกรหัสผ่านปัจจุบัน';
+                    return 'enter_password_current'.tr;
                   } else {
                     return null;
                   }
@@ -151,11 +141,11 @@ class _Password_PageState extends State<Password_Page> {
                 (values) {
                   confirmPass = values;
                   if (values.isEmpty) {
-                    return 'กรุณากรอกรหัสผ่าน';
+                    return 'enter_password_pls'.tr;
                   } else if (values == widget.userpass) {
-                    return "ซ้ำกับรหัสผ่านปัจจุบัน กรุณากรอกรหัสผ่านใหม่";
-                    // } else if (values.length < 8) {
-                    //   return "รหัสผ่านอย่างน้อย 8 ตัว";
+                    return "same_password".tr;
+                  } else if (values.length < 8) {
+                    return "password_8char".tr;
                   } else {
                     return null;
                   }
@@ -175,9 +165,9 @@ class _Password_PageState extends State<Password_Page> {
                 }),
                 (values) {
                   if (values.isEmpty) {
-                    return 'กรุณากรอกรหัสผ่าน';
+                    return 'enter_password_pls'.tr;
                   } else if (values != confirmPass) {
-                    return "รหัสผ่านไม่ตรงกัน";
+                    return "password_no_match".tr;
                   } else {
                     return null;
                   }

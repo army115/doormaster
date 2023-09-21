@@ -7,6 +7,7 @@ import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -37,7 +38,7 @@ class _Visitor_ServiceState extends State<Visitor_Service> {
         //       Scaffold.of(context).openDrawer();
         //     }),
       ),
-      body: Logo_Opacity(title: 'ไม่มีข้อมูล'),
+      body: Logo_Opacity(title: 'no_data'.tr),
     );
   }
 }

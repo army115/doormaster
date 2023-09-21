@@ -2,6 +2,7 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:doormster/components/actions/disconnected_dialog.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_twobutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottom_controller.dart';
@@ -183,8 +184,8 @@ class _MyDrawerState extends State<MyDrawer> {
         // snackbar(context, Theme.of(context).primaryColor, 'เลือกสำเร็จ',
         //     Icons.check_circle_outline_rounded);
       } else {
-        dialogOnebutton_Subtitle(context, 'เลือกไม่สำเร็จ', '${jsonRes.data}',
-            Icons.highlight_off_rounded, Colors.red, 'ตกลง', () {
+        dialogOnebutton_Subtitle(context, 'select_fail'.tr, '${jsonRes.data}',
+            Icons.highlight_off_rounded, Colors.red, 'ok'.tr, () {
           Navigator.of(context).pop();
         }, false, false);
         print('Select fail!!');
@@ -195,15 +196,9 @@ class _MyDrawerState extends State<MyDrawer> {
       }
     } catch (error) {
       print(error);
-      dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง', () {
+      error_connected(context, () async {
         Navigator.of(context).pop();
-      }, false, false);
+      });
       setState(() {
         loading = false;
       });
@@ -361,15 +356,15 @@ class _MyDrawerState extends State<MyDrawer> {
               onTap: () {
                 dialogTwobutton_Subtitle(
                     context,
-                    'ออกจากระบบ',
-                    'คุณต้องการออกจากระบบ\nใช่ หรือ ไม่',
+                    'logout'.tr,
+                    'want_logout'.tr,
                     Icons.warning_amber_rounded,
                     Colors.orange,
-                    'ใช่',
+                    'yes'.tr,
                     () {
                       _Logout();
                     },
-                    'ไม่ใช่',
+                    'no'.tr,
                     () {
                       Navigator.pop(context);
                     },
@@ -443,7 +438,7 @@ class _MyDrawerState extends State<MyDrawer> {
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                     child: multiCompany.isEmpty
                         ? Center(
-                            child: Text('โปรดตรวจสอบการเชื่อมต่อ',
+                            child: Text('check_connect'.tr,
                                 style: TextStyle(color: Colors.white)),
                           )
                         : ListView.builder(

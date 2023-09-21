@@ -54,11 +54,11 @@ class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
     } else {
       dialogOnebutton_Subtitle(
           context,
-          'อนุญาตการเข้าถึง',
-          'จำเป็นต้องเข้าถึงอุปกรณ์ของคุณ',
+          'allow_access'.tr,
+          'need_access_device'.tr,
           Icons.warning_amber_rounded,
           Colors.orange,
-          'ตกลง', () {
+          'ok'.tr, () {
         Navigator.of(context, rootNavigator: true).pop();
         openAppSettings();
       }, false, true);
@@ -97,7 +97,7 @@ class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'โปรดติดต่อผู้ดูแล\nเพื่ออนุมัติสิทธิ์การใช้งาน',
+                    'contact_admin_approve'.tr,
                     textAlign: TextAlign.center,
                     style:
                         TextStyle(fontSize: 22, fontWeight: FontWeight.normal),

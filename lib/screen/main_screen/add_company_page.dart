@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'package:dio/dio.dart';
+import 'package:doormster/components/actions/disconnected_dialog.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/dropdown/dropdonw_search.dart';
@@ -94,16 +95,10 @@ class _Add_CompanyState extends State<Add_Company> {
       }
     } catch (error) {
       print(error);
-      dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง', () {
+      error_connected(context, () {
         Navigator.of(context).pushNamedAndRemoveUntil(
             '/bottom', (Route<dynamic> route) => false);
-      }, false, false);
+      });
       setState(() {
         loading = false;
       });
@@ -131,11 +126,11 @@ class _Add_CompanyState extends State<Add_Company> {
         setState(() {
           loading = false;
         });
-        snackbar(context, Theme.of(context).primaryColor, 'เพิ่มสำเร็จ',
+        snackbar(context, Theme.of(context).primaryColor, 'add_success'.tr,
             Icons.check_circle_outline_rounded);
       } else {
-        dialogOnebutton_Subtitle(context, 'เพิ่มไม่สำเร็จ', '${jsonRes.status}',
-            Icons.highlight_off_rounded, Colors.red, 'ตกลง', () {
+        dialogOnebutton_Subtitle(context, 'add_fail'.tr, '${jsonRes.status}',
+            Icons.highlight_off_rounded, Colors.red, 'ok'.tr, () {
           Navigator.of(context).pop();
         }, false, false);
         print('add not Success!!');
@@ -146,15 +141,9 @@ class _Add_CompanyState extends State<Add_Company> {
       }
     } catch (error) {
       print(error);
-      dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง', () {
+      error_connected(context, () async {
         Navigator.of(context).pop();
-      }, false, false);
+      });
       // snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
       //     Icons.warning_amber_rounded);
       setState(() {
@@ -218,13 +207,8 @@ class _Add_CompanyState extends State<Add_Company> {
         // snackbar(context, Theme.of(context).primaryColor, 'เลือกสำเร็จ',
         //     Icons.check_circle_outline_rounded);
       } else {
-        dialogOnebutton_Subtitle(
-            context,
-            'เพิ่มไม่สำเร็จ',
-            'กรุณาลองใหม่อีกครั้ง',
-            Icons.highlight_off_rounded,
-            Colors.red,
-            'ตกลง', () {
+        dialogOnebutton_Subtitle(context, 'add_fail'.tr, 'again_pls'.tr,
+            Icons.highlight_off_rounded, Colors.red, 'ok'.tr, () {
           Navigator.of(context).pop();
         }, false, false);
         print('loginMulti fail!!');
@@ -235,15 +219,9 @@ class _Add_CompanyState extends State<Add_Company> {
       }
     } catch (error) {
       print(error);
-      dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง', () {
+      error_connected(context, () async {
         Navigator.of(context).pop();
-      }, false, false);
+      });
       setState(() {
         loading = false;
       });
@@ -340,11 +318,11 @@ class _Add_CompanyState extends State<Add_Company> {
                       .contains(onItemSelect)) {
                 dialogOnebutton_Subtitle(
                     context,
-                    'ไม่สามารถเพิ่มได้',
-                    'คุณมีบริษัทนี้อยู่แล้ว',
+                    'cannot_add'.tr,
+                    'have_company'.tr,
                     Icons.warning_amber_rounded,
                     Colors.orange,
-                    'ตกลง', () {
+                    'ok'.tr, () {
                   Navigator.of(context).pop();
                 }, false, false);
               } else {

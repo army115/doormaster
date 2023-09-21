@@ -2,6 +2,7 @@
 
 import 'package:doormster/style/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Text_Form_NoBorder extends StatelessWidget {
   TextEditingController controller;
@@ -31,7 +32,7 @@ class Text_Form_NoBorder extends StatelessWidget {
         decoration: InputDecoration(
           contentPadding: EdgeInsets.fromLTRB(0, 0, 10, 10),
           labelText: title,
-          hintText: "กรอกข้อมูล",
+          hintText: "enter_info".tr,
           hintStyle: textStyle().title16,
           errorStyle: textStyle().body14,
           // ignore: prefer_const_constructors

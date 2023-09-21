@@ -2,6 +2,7 @@
 
 import 'dart:developer';
 import 'package:dio/dio.dart';
+import 'package:doormster/components/actions/disconnected_dialog.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/button/button.dart';
@@ -9,7 +10,6 @@ import 'package:doormster/components/button/buttonback_appbar.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/map/map_page.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
-import 'package:doormster/components/text/text_four_icon.dart';
 import 'package:doormster/components/text/text_icon.dart';
 import 'package:doormster/models/get_checklist.dart';
 import 'package:doormster/service/connected/connect_api.dart';
@@ -94,16 +94,16 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
           if (listdata.isEmpty) {
             dialogOnebutton_Subtitle(
                 context,
-                'พบข้อผิดพลาด',
-                'QR Code ไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง',
+                'found_error'.tr,
+                'invalid_qrcode'.tr,
                 Icons.highlight_off_rounded,
                 Colors.red,
-                'ตกลง', () {
+                'ok'.tr, () {
               Navigator.popUntil(context, (route) => route.isFirst);
             }, false, false);
           } else if (listdata[0].verify == 1) {
-            dialogOnebutton(context, 'จุดตรวจนี้ลงทะเบียนแล้ว',
-                Icons.warning_amber_rounded, Colors.orange, 'ตกลง', () {
+            dialogOnebutton(context, 'checkpoint_regis'.tr,
+                Icons.warning_amber_rounded, Colors.orange, 'ok'.tr, () {
               Navigator.popUntil(context, (route) => route.isFirst);
             }, false, false);
           } else {
@@ -118,15 +118,9 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
       } catch (error) {
         print(error);
         await Future.delayed(Duration(milliseconds: 500));
-        dialogOnebutton_Subtitle(
-            context,
-            'พบข้อผิดพลาด',
-            'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-            Icons.warning_amber_rounded,
-            Colors.orange,
-            'ตกลง', () {
+        error_connected(context, () {
           Navigator.popUntil(context, (route) => route.isFirst);
-        }, false, false);
+        });
         setState(() {
           loading = false;
         });
@@ -134,11 +128,11 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
     } else {
       dialogOnebutton_Subtitle(
           context,
-          'พบข้อผิดพลาด',
-          'ตำแหน่งไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง',
+          'found_error'.tr,
+          'invalid_location_again'.tr,
           Icons.highlight_off_rounded,
           Colors.red,
-          'ตกลง', () {
+          'ok'.tr, () {
         Navigator.popUntil(context, (route) => route.isFirst);
       }, false, false);
       print('Location Null !!');
@@ -164,8 +158,8 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
         print(values);
         print(response.data);
 
-        dialogOnebutton(context, 'ลงทะเบียนสำเร็จ',
-            Icons.check_circle_outline_rounded, Colors.green, 'ตกลง', () {
+        dialogOnebutton(context, 'register_success'.tr,
+            Icons.check_circle_outline_rounded, Colors.green, 'ok'.tr, () {
           Navigator.of(context).popUntil((route) => route.isFirst);
         }, false, false);
 
@@ -178,11 +172,11 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
       } else {
         dialogOnebutton_Subtitle(
             context,
-            'พบข้อผิดพลาด',
-            'ลงทะเบียนไม่สำเร็จ กรุณาลองใหม่อีกครั้ง',
+            'found_error'.tr,
+            'register_fail_again'.tr,
             Icons.highlight_off_rounded,
             Colors.red,
-            'ตกลง', () {
+            'ok'.tr, () {
           Navigator.of(context).pop();
         }, false, false);
         print('checkIn not Success!!');
@@ -193,15 +187,10 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
       }
     } catch (error) {
       print(error);
-      dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง', () {
+      error_connected(context, () {
         Navigator.of(context, rootNavigator: true).pop();
-      }, false, false);
+      });
+
       // snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
       //     Icons.warning_amber_rounded);
       setState(() {
@@ -262,20 +251,16 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            textFourIcon(
-                                'date'.tr, ' $date ', 'time'.tr, ' $time',
-                                color1: Colors.red,
-                                color2: Colors.red,
-                                color3: Colors.red,
-                                color4: Colors.red,
-                                icon: Icon(
+                            textIcon(
+                                '${'date'.tr} $date ${'time'.tr} $time',
+                                color: Colors.red,
+                                Icon(
                                   Icons.edit_calendar_rounded,
-                                  size: 30,
+                                  size: 25,
                                 )),
                             SizedBox(height: 10),
-                            textIcon_Double(
-                                'checkpoint',
-                                ' : $checkpointName',
+                            textIcon(
+                                '${'checkpoint'.tr} : $checkpointName',
                                 Icon(
                                   Icons.maps_home_work_rounded,
                                   size: 25,

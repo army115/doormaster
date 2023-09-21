@@ -2,11 +2,11 @@
 
 import 'dart:developer';
 import 'package:dio/dio.dart';
+import 'package:doormster/components/actions/disconnected_dialog.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_twobutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottom_controller.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
-import 'package:doormster/components/text/text_double_colors.dart';
 import 'package:doormster/screen/main_screen/login_page.dart';
 import 'package:doormster/screen/main_screen/login_staff_page.dart';
 import 'package:doormster/service/connected/connect_api.dart';
@@ -96,8 +96,8 @@ class _Settings_PageState extends State<Settings_Page> {
 
         _Logout();
 
-        snackbar(context, Theme.of(context).primaryColor, 'ปิดการใช้งานสำเร็จ',
-            Icons.check_circle_outline_rounded);
+        snackbar(context, Theme.of(context).primaryColor,
+            'deactivation_success'.tr, Icons.check_circle_outline_rounded);
 
         setState(() {
           loading = false;
@@ -105,11 +105,11 @@ class _Settings_PageState extends State<Settings_Page> {
       } else {
         dialogOnebutton_Subtitle(
             context,
-            'ปิดการใช้งานไม่สำเร็จ',
-            'กรุณาลองใหม่อีกครั้ง',
+            'deactivation_fail'.tr,
+            'again_pls'.tr,
             Icons.highlight_off_rounded,
             Colors.red,
-            'ตกลง', () {
+            'ok'.tr, () {
           Navigator.of(context, rootNavigator: true).pop();
         }, false, false);
         print('checkIn not Success!!');
@@ -120,15 +120,9 @@ class _Settings_PageState extends State<Settings_Page> {
       }
     } catch (error) {
       print(error);
-      dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง', () {
+      error_connected(context, () {
         Navigator.of(context, rootNavigator: true).pop();
-      }, false, false);
+      });
       setState(() {
         loading = false;
       });
@@ -236,22 +230,25 @@ class _Settings_PageState extends State<Settings_Page> {
       menuItem(Icons.no_accounts_rounded, 'disable_account'.tr, () {
         dialogTwobutton_Subtitle(
             context,
-            'ปิดการใช้งานบัญชี',
-            'หากคุณต้องการปิดการใช้งานบัญชีนี้ โปรดยืนยันคำสั่ง',
+            'disable_account'.tr,
+            'deactivate_confirm'.tr,
             Icons.warning_amber_rounded,
             Colors.orange,
-            'ยกเลิก',
+            'no'.tr,
             () {
               Navigator.pop(context);
             },
-            'ตกลง',
+            'yes'.tr,
             () {
               _blockUser();
             },
             true,
             true);
       }, Colors.red),
-      menuItem(Icons.app_settings_alt_rounded, 'เวอร์ชันปัจจุบัน', () {},
+      menuItem(
+          Icons.app_settings_alt_rounded,
+          '${'version'.tr} ${packageInfo?.version}',
+          () {},
           Colors.grey.shade600)
     ];
     return Scaffold(
@@ -268,16 +265,13 @@ class _Settings_PageState extends State<Settings_Page> {
                 size: 30,
                 color: Colors.grey.shade700,
               ),
-              title: _menu[index].title == 'เวอร์ชันปัจจุบัน'
-                  ? textDoubleColors('version'.tr, _menu[index].color,
-                      ' ${packageInfo?.version}', _menu[index].color)
-                  : Text(
-                      _menu[index].title,
-                      style: TextStyle(
-                          letterSpacing: 0.5,
-                          color: _menu[index].color,
-                          fontSize: 16),
-                    ),
+              title: Text(
+                _menu[index].title,
+                style: TextStyle(
+                    letterSpacing: 0.5,
+                    color: _menu[index].color,
+                    fontSize: 16),
+              ),
             );
           },
           separatorBuilder: (context, index) {

@@ -3,6 +3,7 @@
 import 'package:doormster/style/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
+import 'package:get/get.dart';
 
 class Dropdown extends StatelessWidget {
   String title;
@@ -43,8 +44,8 @@ class Dropdown extends StatelessWidget {
             errorStyle: textStyle().body14,
             hintText: title,
             hintStyle: TextStyle(color: Colors.grey.shade600),
-            searchText: 'ค้นหา',
-            foundText: 'ไม่พบข้อมูล',
+            searchText: 'search'.tr,
+            foundText: 'data_not_found'.tr,
             borderRadiusItem: BorderRadius.circular(10),
             contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 13),
             focusedBorder: OutlineInputBorder(

@@ -3,6 +3,7 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:doormster/components/actions/disconnected_dialog.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
@@ -10,10 +11,7 @@ import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/map/map_page.dart';
 import 'package:doormster/components/searchbar/search_from.dart';
 import 'package:doormster/components/text/text_double_colors.dart';
-import 'package:doormster/components/text/text_four_icon.dart';
 import 'package:doormster/components/text/text_icon.dart';
-import 'package:doormster/components/text/text_icon_double.dart';
-import 'package:doormster/components/text/text_triple.dart';
 import 'package:doormster/models/get_log.dart';
 import 'package:doormster/models/get_logs_all.dart';
 import 'package:doormster/models/get_logs_today.dart';
@@ -84,16 +82,10 @@ class _Logs_PointState extends State<Logs_Point> {
     } catch (error) {
       print(error);
       await Future.delayed(const Duration(milliseconds: 500));
-      dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง', () {
+      error_connected(context, () {
         Navigator.of(context, rootNavigator: true).pop();
         Navigator.pop(context);
-      }, false, false);
+      });
       setState(() {
         loading = false;
       });
@@ -128,15 +120,9 @@ class _Logs_PointState extends State<Logs_Point> {
     } catch (error) {
       print(error);
       await Future.delayed(const Duration(milliseconds: 500));
-      dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง', () {
+      error_connected(context, () {
         Navigator.of(context, rootNavigator: true).pop();
-      }, false, false);
+      });
       setState(() {
         load = false;
       });
@@ -184,32 +170,27 @@ class _Logs_PointState extends State<Logs_Point> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          textDouble_iconLeft(
-                              'date_report'.tr,
-                              ' : $dateNow',
+                          textIcon(
+                              '${'date_report'.tr} : $dateNow',
                               Icon(
                                 Icons.calendar_month_rounded,
                                 color: Theme.of(context).primaryColor,
-                                size: 30,
+                                size: 25,
                               )),
-                          textDouble_iconLeft(
-                              'round'.tr,
-                              ' : ${widget.roundName}',
+                          textIcon(
+                              '${'round'.tr} : ${widget.roundName}',
                               Icon(
                                 Icons.map_rounded,
                                 color: Theme.of(context).primaryColor,
-                                size: 30,
+                                size: 25,
                               )),
-                          textFourIcon(
-                              'interval'.tr,
-                              ' : ${widget.roundStart} ',
-                              'to'.tr,
-                              ' ${widget.roundEnd}',
-                              icon: Icon(
+                          textIcon(
+                              '${'interval'.tr} : ${widget.roundStart} ${'to'.tr} ${widget.roundEnd}',
+                              Icon(
                                 Icons.access_time_rounded,
                                 color: Theme.of(context).primaryColor,
-                                size: 30,
-                              ))
+                                size: 25,
+                              )),
                         ],
                       ),
                     ),
@@ -255,11 +236,8 @@ class _Logs_PointState extends State<Logs_Point> {
                                       child: fileList.isEmpty
                                           ? ListTile(
                                               textColor: Colors.black,
-                                              title: textDoubleColors(
-                                                  'checkpoint'.tr,
-                                                  Colors.black,
-                                                  ' : ${listdata[index].checkpointName}',
-                                                  Colors.black),
+                                              title: Text(
+                                                  '${'checkpoint'.tr} : ${listdata[index].checkpointName}'),
                                               subtitle: textDoubleColors(
                                                   'status'.tr,
                                                   Colors.black,
@@ -267,20 +245,14 @@ class _Logs_PointState extends State<Logs_Point> {
                                                   Colors.red))
                                           : ExpansionTile(
                                               textColor: Colors.black,
-                                              title: textDoubleColors(
-                                                  'checkpoint'.tr,
-                                                  Colors.black,
-                                                  ' :  ${listdata[index].checkpointName}',
-                                                  Colors.black),
+                                              title: Text(
+                                                  '${'checkpoint'.tr} : ${listdata[index].checkpointName}'),
                                               subtitle: Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  textDoubleColors(
-                                                      'record_time'.tr,
-                                                      Colors.black,
-                                                      ' : ${formatTime.format(DateTime.parse(fileList[0].checktimeReal!))}',
-                                                      Colors.black),
+                                                  Text(
+                                                      '${'record_time'.tr} : ${formatTime.format(DateTime.parse(fileList[0].checktimeReal!))}'),
                                                   textDoubleColors(
                                                       'status'.tr,
                                                       Colors.black,

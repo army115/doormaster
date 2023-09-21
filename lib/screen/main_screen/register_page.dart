@@ -1,6 +1,7 @@
 // ignore_for_file: unused_import, use_build_context_synchronously
 
 import 'package:dio/dio.dart';
+import 'package:doormster/components/actions/disconnected_dialog.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/button/buttonback_appbar.dart';
@@ -124,10 +125,9 @@ class _Register_PageState extends State<Register_Page> {
       }
     } catch (error) {
       print(error);
-      dialogOnebutton_Subtitle(context, 'found_error'.tr, 'connect_fail'.tr,
-          Icons.warning_amber_rounded, Colors.orange, 'ok'.tr, () {
+      error_connected(context, () async {
         Navigator.of(context).pop();
-      }, false, false);
+      });
       // snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
       //     Icons.warning_amber_rounded);
       setState(() {

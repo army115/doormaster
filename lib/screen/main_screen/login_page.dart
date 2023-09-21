@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:checkbox_formfield/checkbox_formfield.dart';
 import 'package:dio/dio.dart';
+import 'package:doormster/components/actions/disconnected_dialog.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/button/button.dart';
@@ -143,10 +144,9 @@ class _Login_PageState extends State<Login_Page> {
         }
       } catch (error) {
         print(error);
-        dialogOnebutton_Subtitle(context, 'found_error'.tr, 'connect_fail'.tr,
-            Icons.warning_amber_rounded, Colors.orange, 'ok'.tr, () async {
+        error_connected(context, () async {
           Navigator.of(context).pop();
-        }, false, false);
+        });
         setState(() {
           loading = false;
         });

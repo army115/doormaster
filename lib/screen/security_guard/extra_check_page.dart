@@ -3,6 +3,7 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:doormster/components/actions/disconnected_dialog.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/button/buttonback_appbar.dart';
@@ -11,9 +12,7 @@ import 'package:doormster/components/dropdown/dropdown_noborder.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/map/map_page.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
-import 'package:doormster/components/text/text_four_icon.dart';
 import 'package:doormster/components/text/text_icon.dart';
-import 'package:doormster/components/text/text_triple.dart';
 import 'package:doormster/components/text_form/text_form_noborder_validator.dart';
 import 'package:doormster/screen/security_guard/report_logs_page.dart';
 import 'package:doormster/service/connected/connect_api.dart';
@@ -53,7 +52,7 @@ class _Extra_CheckState extends State<Extra_Check> {
   double? lng;
   List<String> listcheck = [];
   String? onItemSelect;
-  List<String> itemEvent_EN = ['Normal', 'Not Normal'];
+  List<String> itemEvent_EN = ['Normal', 'Abnormal'];
   List<String> itemEvent_TH = ['ปกติ', 'ไม่ปกติ'];
 
   Future getSharedPref() async {
@@ -128,20 +127,15 @@ class _Extra_CheckState extends State<Extra_Check> {
             builder: (BuildContext context) => Report_Logs(tapIndex: 1),
           ),
         );
-        snackbar(context, Theme.of(context).primaryColor, 'บันทึกสำเร็จ',
+        snackbar(context, Theme.of(context).primaryColor, 'save_success'.tr,
             Icons.check_circle_outline_rounded);
 
         setState(() {
           loading = false;
         });
       } else {
-        dialogOnebutton_Subtitle(
-            context,
-            'พบข้อผิดพลาด',
-            'บันทึกไม่สำเร็จ กรุณาลองใหม่อีกครั้ง',
-            Icons.highlight_off_rounded,
-            Colors.red,
-            'ตกลง', () {
+        dialogOnebutton_Subtitle(context, 'found_error'.tr, 'save_unsuccess'.tr,
+            Icons.highlight_off_rounded, Colors.red, 'ok'.tr, () {
           Navigator.of(context).pop();
         }, false, false);
         print('checkIn not Success!!');
@@ -152,15 +146,9 @@ class _Extra_CheckState extends State<Extra_Check> {
       }
     } catch (error) {
       print(error);
-      dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง', () {
+      error_connected(context, () {
         Navigator.of(context, rootNavigator: true).pop();
-      }, false, false);
+      });
       // snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
       //     Icons.warning_amber_rounded);
       setState(() {
@@ -237,51 +225,32 @@ class _Extra_CheckState extends State<Extra_Check> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            textFourIcon(
-                                'date'.tr, ' $date ', 'time'.tr, ' $time',
-                                color1: Colors.red,
-                                color2: Colors.red,
-                                color3: Colors.red,
-                                color4: Colors.red,
-                                icon: Icon(
+                            textIcon(
+                                '${'date'.tr} $date ${'time'.tr} $time',
+                                color: Colors.red,
+                                Icon(
                                   Icons.edit_calendar_rounded,
-                                  size: 30,
+                                  size: 25,
                                 )),
                             SizedBox(height: 10),
-                            widget.type == 0
-                                ? textTripleColors(
-                                    'round'.tr,
-                                    ' : ',
-                                    'extra_point'.tr,
-                                    icon: Icon(
-                                      Icons.calendar_month_rounded,
-                                      size: 30,
-                                    ),
-                                  )
-                                : textTripleColors(
-                                    'round'.tr,
-                                    ' : ',
-                                    'emergency'.tr,
-                                    icon: Icon(
-                                      Icons.calendar_month_rounded,
-                                      size: 30,
-                                    ),
-                                  ),
+                            textIcon(
+                                '${'round'.tr} : ${widget.type == 0 ? 'extra_point'.tr : 'emergency'.tr}',
+                                Icon(
+                                  Icons.calendar_month_rounded,
+                                  size: 25,
+                                )),
                             TextFormField(
                               controller: pointName,
                               decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.zero,
-                                  hintText: 'checkpoint_name'.tr,
-                                  hintStyle: TextStyle(fontSize: 16),
-                                  errorStyle: TextStyle(fontSize: 15),
-                                  icon: textIcon_Double(
-                                      'checkpoint'.tr,
-                                      ' :',
-                                      Icon(
-                                        Icons.maps_home_work_rounded,
-                                        size: 25,
-                                        color: Colors.black,
-                                      ))),
+                                contentPadding: EdgeInsets.zero,
+                                hintText: 'checkpoint_name'.tr,
+                                hintStyle: TextStyle(fontSize: 16),
+                                errorStyle: TextStyle(fontSize: 15),
+                                icon: textIcon(
+                                    '${'checkpoint'.tr} : ',
+                                    Icon(Icons.maps_home_work_rounded,
+                                        size: 25, color: Colors.black)),
+                              ),
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return 'checkpoint_name'.tr;
@@ -328,7 +297,7 @@ class _Extra_CheckState extends State<Extra_Check> {
                                     CheckBox_FormField(
                                       title: '${listcheck[index]}',
                                       value: false,
-                                      validator: 'กรุณาเลือกรายการ',
+                                      validator: 'select_checklist'.tr,
                                       secondary: IconButton(
                                           onPressed: () {
                                             setState(() {
@@ -466,7 +435,7 @@ class _Extra_CheckState extends State<Extra_Check> {
                                     title: 'select_event'.tr,
                                     controller: status,
                                     leftIcon: Icons.mobile_friendly,
-                                    error: 'กรุณาเลือกเหตุการณ์',
+                                    error: 'select_event_pls'.tr,
                                     listItem: language == 'th'
                                         ? itemEvent_TH
                                         : itemEvent_EN,
@@ -493,9 +462,9 @@ class _Extra_CheckState extends State<Extra_Check> {
                               icon: Icons.description_rounded,
                               title: 'desciption'.tr,
                               validator: (values) {
-                                if (status.text == 'ไม่ปกติ' &&
+                                if (onItemSelect == 'ไม่ปกติ' &&
                                     values.isEmpty) {
-                                  return 'เหตุการณ์ไม่ปกติ กรุณาเพิ่มรายละเอียด';
+                                  return 'enter_desciption'.tr;
                                 }
                                 return null;
                               },
@@ -570,7 +539,7 @@ class _Extra_CheckState extends State<Extra_Check> {
           controller: fieldText,
           decoration: InputDecoration(
             contentPadding: EdgeInsets.zero,
-            hintText: 'กรอกรายการตรวจ',
+            hintText: 'enter_checklist'.tr,
             hintStyle: TextStyle(fontSize: 16),
             errorStyle: TextStyle(fontSize: 15),
             icon: Icon(
@@ -580,7 +549,7 @@ class _Extra_CheckState extends State<Extra_Check> {
           ),
           validator: (values) {
             if (values!.isEmpty) {
-              return 'กรุณากรอกข้อมูล';
+              return 'enter_info_pls'.tr;
             }
             return null;
           },

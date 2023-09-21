@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:doormster/components/actions/disconnected_dialog.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/button/button.dart';
@@ -121,7 +122,7 @@ class _Profile_PageState extends State<Profile_Page>
         print(values);
         print(response.data);
 
-        snackbar(context, Theme.of(context).primaryColor, 'แก้ไขสำเร็จ',
+        snackbar(context, Theme.of(context).primaryColor, 'edit_success'.tr,
             Icons.check_circle_outline_rounded);
 
         setState(() {
@@ -130,7 +131,7 @@ class _Profile_PageState extends State<Profile_Page>
         });
       } else {
         dialogOnebutton_Subtitle(context, 'edit_fail'.tr, 'again_pls'.tr,
-            Icons.highlight_off_rounded, Colors.red, 'ตกลง', () {
+            Icons.highlight_off_rounded, Colors.red, 'ok'.tr, () {
           Navigator.of(context, rootNavigator: true).pop();
         }, false, false);
         print('checkIn not Success!!');
@@ -141,10 +142,9 @@ class _Profile_PageState extends State<Profile_Page>
       }
     } catch (error) {
       print(error);
-      dialogOnebutton_Subtitle(context, 'found_error'.tr, 'connect_fail'.tr,
-          Icons.warning_amber_rounded, Colors.orange, 'ตกลง', () {
-        Navigator.of(context, rootNavigator: true).pop();
-      }, false, false);
+      error_connected(context, () async {
+        Navigator.of(context).pop();
+      });
       // snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
       //     Icons.warning_amber_rounded);
       setState(() {

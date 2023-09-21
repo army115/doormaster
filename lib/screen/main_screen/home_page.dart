@@ -2,7 +2,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'package:dio/dio.dart';
-import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
+import 'package:doormster/components/actions/disconnected_dialog.dart';
 import 'package:doormster/components/girdManu/menu_home.dart';
 import 'package:doormster/components/girdManu/menu_security.dart';
 import 'package:doormster/components/list_null_opacity/icon_opacity.dart';
@@ -14,6 +14,7 @@ import 'package:doormster/controller/get_info.dart';
 import 'package:doormster/service/connected/connect_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper_plus/flutter_swiper_plus.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'dart:convert' as convert;
@@ -90,18 +91,12 @@ class _Home_PageState extends State<Home_Page>
     } catch (error) {
       print(error);
       await Future.delayed(Duration(milliseconds: 500));
-      dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง', () {
+      error_connected(context, () {
         Navigator.of(context, rootNavigator: true).pop();
         setState(() {
           _getMenu();
         });
-      }, false, false);
+      });
       setState(() {
         loading = false;
       });
@@ -183,7 +178,7 @@ class _Home_PageState extends State<Home_Page>
 
   Widget normalUser() {
     return mobileRole == 0
-        ? Logo_Opacity(title: 'โปรดติดต่อผู้ดูแล\nเพื่ออนุมัติสิทธิ์การใช้งาน')
+        ? Logo_Opacity(title: 'contact_admin_approve'.tr)
         : SingleChildScrollView(
             physics: AlwaysScrollableScrollPhysics(),
             child: Column(
@@ -234,9 +229,7 @@ class _Home_PageState extends State<Home_Page>
                           padding: EdgeInsets.symmetric(
                               vertical:
                                   MediaQuery.of(context).size.height * 0.13),
-                          child: Icon_Opacity(
-                              title:
-                                  'ไม่มีเมนูที่คุณใช้งานได้\nโปรดติดต่อผู้ดูแล'),
+                          child: Icon_Opacity(title: 'contact_admin_manu'.tr),
                         )
                       : Container(
                           padding: EdgeInsets.fromLTRB(20, 20, 20,

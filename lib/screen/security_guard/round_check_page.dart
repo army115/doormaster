@@ -3,6 +3,7 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:doormster/components/actions/disconnected_dialog.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
@@ -114,16 +115,10 @@ class _Round_CheckState extends State<Round_Check> {
     } catch (error) {
       print(error);
       await Future.delayed(Duration(milliseconds: 500));
-      dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง', () {
+      error_connected(context, () {
         homeKey.currentState?.popUntil(ModalRoute.withName('/security'));
         Navigator.of(context, rootNavigator: true).pop();
-      }, false, false);
+      });
       setState(() {
         loading = false;
       });
@@ -219,7 +214,7 @@ class _Round_CheckState extends State<Round_Check> {
                                                 ? Column(
                                                     children: [
                                                       Text(
-                                                        'รอบที่ต้องเดินตรวจ',
+                                                        'need_check'.tr,
                                                         style: TextStyle(
                                                             color: textColor),
                                                       ),
@@ -236,11 +231,11 @@ class _Round_CheckState extends State<Round_Check> {
                                                       .spaceBetween,
                                               children: [
                                                 Expanded(
-                                                    child: textDoubleColors(
-                                                        'round'.tr,
-                                                        textColor,
-                                                        ' : ${listdata[index].roundName}',
-                                                        textColor)),
+                                                    child: Text(
+                                                  '${'round'.tr} : ${listdata[index].roundName}',
+                                                  style: TextStyle(
+                                                      color: textColor),
+                                                )),
                                                 round == 1
                                                     ? button('checkIn'.tr,
                                                         Colors.white, () {
@@ -297,20 +292,20 @@ class _Round_CheckState extends State<Round_Check> {
                                                     MainAxisAlignment
                                                         .spaceBetween,
                                                 children: [
-                                                  textDoubleColors(
-                                                      'start'.tr,
-                                                      textColor,
-                                                      ' : ${listdata[index].roundStart}',
-                                                      textColor),
+                                                  Text(
+                                                    '${'start'.tr} : ${listdata[index].roundStart}',
+                                                    style: TextStyle(
+                                                        color: textColor),
+                                                  ),
                                                   VerticalDivider(
                                                       thickness: 1.5,
                                                       color: line,
                                                       width: 1),
-                                                  textDoubleColors(
-                                                      'end'.tr,
-                                                      textColor,
-                                                      ' : ${listdata[index].roundEnd}',
-                                                      textColor),
+                                                  Text(
+                                                    '${'end'.tr} : ${listdata[index].roundEnd}',
+                                                    style: TextStyle(
+                                                        color: textColor),
+                                                  ),
                                                 ],
                                               ),
                                             )

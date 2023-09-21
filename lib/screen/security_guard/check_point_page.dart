@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, use_build_context_synchronously, sort_child_properties_last
 
 import 'package:dio/dio.dart';
-import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
+import 'package:doormster/components/actions/disconnected_dialog.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
 import 'package:doormster/components/loading/loading.dart';
@@ -62,16 +62,10 @@ class _Check_PointState extends State<Check_Point> {
     } catch (error) {
       print(error);
       await Future.delayed(Duration(milliseconds: 500));
-      dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง', () {
+      error_connected(context, () {
         homeKey.currentState?.popUntil(ModalRoute.withName('/security'));
         Navigator.of(context, rootNavigator: true).pop();
-      }, false, false);
+      });
       setState(() {
         loading = false;
       });
@@ -148,12 +142,8 @@ class _Check_PointState extends State<Check_Point> {
                                       child: Container(
                                         child: ExpansionTile(
                                             textColor: Colors.black,
-                                            title: textDoubleColors(
-                                              'checkpoint'.tr,
-                                              Colors.black,
-                                              ' :  ${listdata[index].checkpointName}',
-                                              Colors.black,
-                                            ),
+                                            title: Text(
+                                                '${'checkpoint'.tr} : ${listdata[index].checkpointName}'),
                                             subtitle: textDoubleColors(
                                                 'status'.tr,
                                                 Colors.black,

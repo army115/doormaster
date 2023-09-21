@@ -1,7 +1,6 @@
 // ignore_for_file: unnecessary_brace_in_string_interps, avoid_print, use_build_context_synchronously
 
 import 'dart:typed_data';
-
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
@@ -63,11 +62,11 @@ class _News_PageState extends State<News_Page>
 
         if (result["isSuccess"] == true) {
           print('saved image successfully!!!');
-          snackbar(context, Theme.of(context).primaryColor, 'บันทึกภาพสำเร็จ',
-              Icons.check_circle_outline_rounded);
+          snackbar(context, Theme.of(context).primaryColor,
+              'capture_success'.tr, Icons.check_circle_outline_rounded);
         } else {
           print('saved image successfully!!!');
-          snackbar(context, Colors.red, 'บันทึกภาพไม่สำเร็จ',
+          snackbar(context, Colors.red, 'capture_fail'.tr,
               Icons.highlight_off_rounded);
         }
       }
@@ -75,11 +74,11 @@ class _News_PageState extends State<News_Page>
       print(error);
       dialogOnebutton_Subtitle(
           context,
-          'พบข้อผิดพลาด',
-          'บันทึกภาพไม่สำเร็จ กรุณาลองใหม่อีกครั้ง',
+          'found_error'.tr,
+          'capture_fail_again'.tr,
           Icons.warning_amber_rounded,
           Colors.orange,
-          'ตกลง', () {
+          'ok'.tr, () {
         Navigator.of(context).pop();
       }, false, false);
     }

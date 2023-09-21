@@ -3,7 +3,7 @@
 import 'dart:developer';
 import 'package:checkbox_formfield/checkbox_formfield.dart';
 import 'package:dio/dio.dart';
-import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
+import 'package:doormster/components/actions/disconnected_dialog.dart';
 import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/button/buttonback_appbar.dart';
 import 'package:doormster/components/datetime/date_time.dart';
@@ -131,15 +131,9 @@ class _Visitor_PageState extends State<Visitor_Page> {
       });
     } catch (error) {
       print(error);
-      dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง', () {
+      error_connected(context, () {
         Navigator.popUntil(context, (route) => route.isFirst);
-      }, false, false);
+      });
       setState(() {
         loading = false;
       });
@@ -190,9 +184,9 @@ class _Visitor_PageState extends State<Visitor_Page> {
           loading = false;
         });
         snackbar(context, Theme.of(context).primaryColor,
-            'สร้าง QR Code สำเร็จ', Icons.check_circle_outline_rounded);
+            'create_qrcode_success'.tr, Icons.check_circle_outline_rounded);
       } else {
-        snackbar(context, Colors.red, 'สร้าง QR Code ไม่สำเร็จ',
+        snackbar(context, Colors.red, 'create_qrcode_fail'.tr,
             Icons.highlight_off_rounded);
         print('craate Visitor Fail!!');
         print(response.data);
@@ -202,15 +196,9 @@ class _Visitor_PageState extends State<Visitor_Page> {
       }
     } catch (error) {
       print(error);
-      dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง', () {
+      error_connected(context, () async {
         Navigator.of(context).pop();
-      }, false, false);
+      });
       setState(() {
         loading = false;
       });
@@ -258,9 +246,9 @@ class _Visitor_PageState extends State<Visitor_Page> {
           loading = false;
         });
         snackbar(context, Theme.of(context).primaryColor,
-            'สร้าง QR Code สำเร็จ', Icons.check_circle_outline_rounded);
+            'create_qrcode_success'.tr, Icons.check_circle_outline_rounded);
       } else {
-        snackbar(context, Colors.red, 'สร้าง QR Code ไม่สำเร็จ',
+        snackbar(context, Colors.red, 'create_qrcode_fail'.tr,
             Icons.highlight_off_rounded);
         print('craate Visitor Fail!!');
         print(response.data);
@@ -270,15 +258,9 @@ class _Visitor_PageState extends State<Visitor_Page> {
       }
     } catch (error) {
       print(error);
-      dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง', () {
+      error_connected(context, () async {
         Navigator.of(context).pop();
-      }, false, false);
+      });
       setState(() {
         loading = false;
       });
@@ -317,7 +299,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
                               controller: visitName,
                               title: 'fullname'.tr,
                               icon: Icons.person,
-                              error: 'กรุณากรอกชื่อผู้มาติดต่อ',
+                              error: 'enter_name_visitor'.tr,
                               TypeInput: TextInputType.name,
                             ),
                             Text('contacts'.tr),
@@ -325,7 +307,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
                               controller: visitPeople,
                               title: 'fullname'.tr,
                               icon: Icons.person_outline,
-                              error: 'กรุณากรอกชื่อผู้ที่ติดต่อพบ',
+                              error: 'enter_name_contacts'.tr,
                               TypeInput: TextInputType.name,
                             ),
                             Text('phone'.tr),
@@ -337,9 +319,9 @@ class _Visitor_PageState extends State<Visitor_Page> {
                               maxLength: 10,
                               error: (values) {
                                 if (values.isEmpty) {
-                                  return 'กรุณากรอกเบอร์โทร';
+                                  return 'enter_phone'.tr;
                                 } else if (values.length < 10) {
-                                  return "กรุณากรอกเบอร์โทรให้ครบ 10 ตัว";
+                                  return "phone_10char".tr;
                                 } else {
                                   return null;
                                 }
@@ -381,13 +363,13 @@ class _Visitor_PageState extends State<Visitor_Page> {
                                 controller: startDate,
                                 title: 'pick_date'.tr,
                                 leftIcon: Icons.event_note_rounded,
-                                error: 'กรุณาเลือกวันที่'),
+                                error: 'select_date'.tr),
                             Text('end'.tr),
                             Date_time(
                                 controller: endDate,
                                 title: 'pick_date'.tr,
                                 leftIcon: Icons.event_note_rounded,
-                                error: 'กรุณาเลือกวันที่'),
+                                error: 'select_date'.tr),
                             types.text == 'thinmoo'
                                 ? Column(
                                     crossAxisAlignment:
@@ -402,7 +384,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
                                         maxLength: 2,
                                         error: (values) {
                                           if (values.isEmpty) {
-                                            return 'กรุณาเพิ่มสิทธิ์การใช้งาน';
+                                            return 'enter_access_count'.tr;
                                           } else {
                                             return null;
                                           }
@@ -470,7 +452,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
           });
           print(value);
         },
-        error: 'กรุณาเลือกประเภท',
+        error: 'select_type'.tr,
         listItem: ['thinmoo', 'wiegand']);
   }
 

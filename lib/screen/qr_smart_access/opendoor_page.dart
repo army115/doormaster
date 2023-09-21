@@ -2,6 +2,7 @@
 
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:doormster/components/actions/disconnected_dialog.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
@@ -14,6 +15,7 @@ import 'package:doormster/models/opendoors_model.dart';
 import 'package:doormster/service/connected/connect_api.dart';
 import 'package:doormster/service/connected/connect_native.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 // import 'package:http/http.dart' as http;
 // import 'dart:convert' as convert;
 // import 'dart:async';
@@ -117,16 +119,10 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
       print(error);
       if (deviceId == null) {
       } else {
-        dialogOnebutton_Subtitle(
-            context,
-            'พบข้อผิดพลาด',
-            'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-            Icons.warning_amber_rounded,
-            Colors.orange,
-            'ตกลง', () {
+        error_connected(context, () {
           homeKey.currentState?.popUntil(ModalRoute.withName('/qrsmart'));
           Navigator.of(context, rootNavigator: true).pop();
-        }, false, false);
+        });
       }
       setState(() {
         loading = false;
@@ -156,8 +152,8 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
           setState(() {
             loading = false;
           });
-          snackbar(context, Theme.of(context).primaryColor, 'เปิดประตูสำเร็จ',
-              Icons.check_circle_outline_rounded);
+          snackbar(context, Theme.of(context).primaryColor,
+              'door_open_success'.tr, Icons.check_circle_outline_rounded);
         } else if (jsonRes.data!.code == 10000) {
           print('DeviceNumber : ${devSn}');
           print('Door Offline');
@@ -165,7 +161,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
           setState(() {
             loading = false;
           });
-          snackbar(context, Colors.red, 'ประตูออฟไลน์อยู่',
+          snackbar(context, Colors.red, 'door_offline'.tr,
               Icons.highlight_off_rounded);
         } else if (jsonRes.data!.code == 10400) {
           print('DeviceNumber : ${devSn}');
@@ -174,11 +170,11 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
           setState(() {
             loading = false;
           });
-          snackbar(context, Colors.red, 'หมายเลขอุปกรณ์ไม่ถูกต้อง',
+          snackbar(context, Colors.red, 'invalid_device'.tr,
               Icons.highlight_off_rounded);
         }
       } else {
-        snackbar(context, Colors.red, 'เปิดประตูไม่สำเร็จ',
+        snackbar(context, Colors.red, 'door_open_fail'.tr,
             Icons.highlight_off_rounded);
         print('OpenDoor Fail!!');
         print(response.data);
@@ -188,15 +184,9 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
       }
     } catch (error) {
       print(error);
-      dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง', () {
+      error_connected(context, () async {
         Navigator.of(context).pop();
-      }, false, false);
+      });
       setState(() {
         loading = false;
       });
@@ -226,10 +216,10 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
         setState(() {
           loading = false;
         });
-        snackbar(context, Theme.of(context).primaryColor, 'เปิดประตูสำเร็จ',
-            Icons.check_circle_outline_rounded);
+        snackbar(context, Theme.of(context).primaryColor,
+            'door_open_success'.tr, Icons.check_circle_outline_rounded);
       } else {
-        snackbar(context, Colors.red, 'เปิดประตูไม่สำเร็จ',
+        snackbar(context, Colors.red, 'door_open_fail'.tr,
             Icons.highlight_off_rounded);
         print('OpenDoor Fail!!');
         print(response.data);
@@ -239,15 +229,9 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
       }
     } catch (error) {
       print(error);
-      dialogOnebutton_Subtitle(
-          context,
-          'พบข้อผิดพลาด',
-          'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ตกลง', () {
+      error_connected(context, () {
         Navigator.of(context, rootNavigator: true).pop();
-      }, false, false);
+      });
       setState(() {
         loading = false;
       });
@@ -286,7 +270,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
         children: [
           Scaffold(
             appBar: AppBar(
-              title: Text('เปิดประตู'),
+              title: Text('open_door'.tr),
               // leading: IconButton(
               //     icon: Platform.isIOS
               //         ? Icon(Icons.arrow_back_ios_new_rounded)
@@ -300,13 +284,13 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
                 ? Container()
                 : deviceId == null && weiganId == null
                     ? Logo_Opacity(
-                        title: 'ไม่มีประตูที่คุณใช้ได้\nโปรดติดต่อผู้ดูแล')
+                        title: 'contact_admin_door'.tr)
                     : Column(
                         children: [
                           Container(
                               padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
                               child: Search_From(
-                                title: 'ค้นหาประตู',
+                                title: 'search_door'.tr,
                                 fieldText: fieldText,
                                 clear: () {
                                   setState(() {
@@ -321,7 +305,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
                               )),
                           Expanded(
                             child: listDevice.isEmpty && listdet!.isEmpty
-                                ? Logo_Opacity(title: 'ไม่พบประตูที่ใช้ได้')
+                                ? Logo_Opacity(title: 'door_not_found'.tr)
                                 : RefreshIndicator(
                                     onRefresh: () async {
                                       getValueShared();
@@ -348,7 +332,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
                                                           1
                                                       ? doorsButton(
                                                           '${listDevice[index].name}',
-                                                          'เปิดประตู',
+                                                          'open_door'.tr,
                                                           Icons
                                                               .meeting_room_rounded,
                                                           Theme.of(context)
@@ -369,14 +353,14 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
                                                       //   )
                                                       : doorsButton(
                                                           '${listDevice[index].name}',
-                                                          'ประตูออฟไลน์',
+                                                          'offline_door'.tr,
                                                           Icons
                                                               .no_meeting_room_rounded,
                                                           Colors.red,
                                                           () => snackbar(
                                                               context,
                                                               Colors.red,
-                                                              'ประตูออฟไลน์อยู่',
+                                                              'door_offline'.tr,
                                                               Icons.highlight_off_rounded)));
                                             },
                                           ),
@@ -395,7 +379,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
                                                   elevation: 5,
                                                   child: doorsButton(
                                                       '${listdet?[index].doorName}',
-                                                      'เปิดประตู',
+                                                      'open_door'.tr,
                                                       Icons
                                                           .meeting_room_rounded,
                                                       Theme.of(context)
