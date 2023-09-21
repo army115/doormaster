@@ -28,7 +28,9 @@ class BottomController extends GetxController
   }
 
   void ontapItem(int index) {
-    navbarNotifier.popAllRoutes(index);
+    if (selectedIndex.value == index) {
+      navbarNotifier.popAllRoutes(index);
+    }
     tabController.animateTo(index);
     selectedIndex.value = index;
   }

@@ -27,7 +27,12 @@ class _LoadingState extends State<Loading> {
   void configLoading() {
     EasyLoading.instance
       ..textAlign = TextAlign.center
+      ..animationDuration = Duration.zero
       ..loadingStyle = EasyLoadingStyle.light
+      ..maskType = EasyLoadingMaskType.black
+      ..dismissOnTap = false
+      ..userInteractions = false
+      ..indicatorWidget = CircularProgressIndicator()
       ..contentPadding = EdgeInsets.fromLTRB(25, 25, 25, 20)
       ..fontSize = 16
       ..textStyle = TextStyle(height: 2)
@@ -35,11 +40,8 @@ class _LoadingState extends State<Loading> {
   }
 
   Future<void> showDialogLoading() async {
-    EasyLoading.show(
-      dismissOnTap: false,
+    await EasyLoading.show(
       status: 'Loading...',
-      maskType: EasyLoadingMaskType.black,
-      indicator: CircularProgressIndicator(),
     );
   }
 

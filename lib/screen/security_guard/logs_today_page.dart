@@ -41,7 +41,11 @@ class _Logs_TodayState extends State<Logs_Today>
 
     try {
       setState(() {
-        loading = true;
+        if (loadingTime == 0) {
+          loading = false;
+        } else {
+          loading = true;
+        }
       });
 
       await Future.delayed(Duration(milliseconds: loadingTime));
@@ -106,7 +110,7 @@ class _Logs_TodayState extends State<Logs_Today>
   @override
   void initState() {
     super.initState();
-    _getLog(0);
+    _getLog(1);
   }
 
   @override

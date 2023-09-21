@@ -52,7 +52,11 @@ class _Logs_AllState extends State<Logs_All>
 
     try {
       setState(() {
-        loading = true;
+        if (loadingTime == 0) {
+          loading = false;
+        } else {
+          loading = true;
+        }
       });
 
       await Future.delayed(Duration(milliseconds: loadingTime));
@@ -119,7 +123,7 @@ class _Logs_AllState extends State<Logs_All>
   void initState() {
     super.initState();
     dateNowAll();
-    _getLog(_startDateText!, _endDateText!, 0);
+    _getLog(_startDateText!, _endDateText!, 1);
   }
 
   @override

@@ -142,8 +142,8 @@ class _Check_InState extends State<Check_In> {
                 context,
                 'found_error'.tr,
                 'invalid_qrcode'.tr,
-                Icons.warning_amber_rounded,
-                Colors.orange,
+                Icons.highlight_off_rounded,
+                Colors.red,
                 'ok'.tr, () {
               Navigator.popUntil(context, (route) => route.isFirst);
             }, false, false);

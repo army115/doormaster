@@ -3,7 +3,7 @@
 import 'package:dio/dio.dart';
 import 'package:doormster/components/actions/disconnected_dialog.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
-import 'package:doormster/components/bottombar/bottombar.dart';
+import 'package:doormster/components/bottombar/bottom_controller.dart';
 import 'package:doormster/components/dropdown/dropdonw_search.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
@@ -96,8 +96,7 @@ class _Add_CompanyState extends State<Add_Company> {
     } catch (error) {
       print(error);
       error_connected(context, () {
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            '/bottom', (Route<dynamic> route) => false);
+        Navigator.of(context).popAndPushNamed('/bottom');
       });
       setState(() {
         loading = false;
@@ -199,8 +198,9 @@ class _Add_CompanyState extends State<Add_Company> {
         Notify_Token()
             .create_notifyToken(data.single.companyId, data.single.sId);
 
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            '/bottom', (Route<dynamic> route) => false);
+        Navigator.of(context).pushReplacementNamed('/bottom');
+        bottomController.ontapItem(0);
+
         setState(() {
           loading = false;
         });
@@ -238,8 +238,8 @@ class _Add_CompanyState extends State<Add_Company> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            '/bottom', (Route<dynamic> route) => false);
+        Navigator.of(context).popAndPushNamed('/bottom');
+
         return false;
       },
       child: Stack(
@@ -296,10 +296,7 @@ class _Add_CompanyState extends State<Add_Company> {
           style: styleButtons(EdgeInsets.symmetric(horizontal: 40, vertical: 8),
               10.0, Colors.white, BorderRadius.circular(10)),
           onPressed: () {
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(
-                    builder: (BuildContext context) => BottomBar()),
-                (Route<dynamic> route) => true);
+            Navigator.of(context).popAndPushNamed('/bottom');
           },
           child: Text("cancel".tr,
               style: TextStyle(

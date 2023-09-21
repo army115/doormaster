@@ -174,7 +174,6 @@ class _MyDrawerState extends State<MyDrawer> {
         Navigator.of(context).pop();
         Navigator.of(context).pop();
 
-        homeKey.currentState?.popAndPushNamed('/');
         bottomController.ontapItem(0);
 
         setState(() {
