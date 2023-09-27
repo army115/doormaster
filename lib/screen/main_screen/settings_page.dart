@@ -38,7 +38,7 @@ class _Settings_PageState extends State<Settings_Page> {
   var security;
   var language;
   bool loading = false;
-  PackageInfo? packageInfo;
+  String? version;
 
   Future getValueShared() async {
     final info = await PackageInfo.fromPlatform();
@@ -48,7 +48,7 @@ class _Settings_PageState extends State<Settings_Page> {
     language = prefs.getString('language');
     print('uuId: ${uuId}');
     setState(() {
-      packageInfo = info;
+      version = info.version;
     });
   }
 
@@ -245,11 +245,8 @@ class _Settings_PageState extends State<Settings_Page> {
             true,
             true);
       }, Colors.red),
-      menuItem(
-          Icons.app_settings_alt_rounded,
-          '${'version'.tr} ${packageInfo?.version}',
-          () {},
-          Colors.grey.shade600)
+      menuItem(Icons.app_settings_alt_rounded, '${'version'.tr} ${version}',
+          () {}, Colors.grey.shade600)
     ];
     return Scaffold(
       appBar: AppBar(title: Text('setting'.tr)),

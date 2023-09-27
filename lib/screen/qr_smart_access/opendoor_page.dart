@@ -13,7 +13,6 @@ import 'package:doormster/models/doors_device.dart';
 import 'package:doormster/models/getdoor_wiegand.dart';
 import 'package:doormster/models/opendoors_model.dart';
 import 'package:doormster/service/connected/connect_api.dart';
-import 'package:doormster/service/connected/connect_native.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 // import 'package:http/http.dart' as http;
@@ -148,7 +147,6 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
           print('DeviceNumber : ${devSn}');
           print('OpenDoor Success');
           print('Status : ${jsonRes.data!.code}');
-          CallNativeJava(false, null, null, null);
           setState(() {
             loading = false;
           });
@@ -271,20 +269,11 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
           Scaffold(
             appBar: AppBar(
               title: Text('open_door'.tr),
-              // leading: IconButton(
-              //     icon: Platform.isIOS
-              //         ? Icon(Icons.arrow_back_ios_new_rounded)
-              //         : Icon(Icons.arrow_back),
-              //     onPressed: () {
-              //       // CallNativeJava(false, null, null, null);
-              //       Navigator.pop(context);
-              //     }),
             ),
             body: loading
                 ? Container()
                 : deviceId == null && weiganId == null
-                    ? Logo_Opacity(
-                        title: 'contact_admin_door'.tr)
+                    ? Logo_Opacity(title: 'contact_admin_door'.tr)
                     : Column(
                         children: [
                           Container(
@@ -322,14 +311,13 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
                                             itemBuilder: (context, index) {
                                               return Card(
                                                   shape: RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius.circular(
-                                                          10)),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10)),
                                                   margin: EdgeInsets.symmetric(
                                                       vertical: 5),
                                                   elevation: 10,
-                                                  child: listDevice[index]
-                                                              .connectionStatus ==
-                                                          1
+                                                  child: listDevice[index].connectionStatus == 1
                                                       ? doorsButton(
                                                           '${listDevice[index].name}',
                                                           'open_door'.tr,
@@ -340,17 +328,6 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
                                                           () => _openDoors(
                                                               listDevice[index]
                                                                   .devSn))
-                                                      // DoorOnline(
-                                                      //     name: listDevice[index].name!,
-                                                      //     press: () {
-                                                      //       _openDoors(listDevice[index].devSn);
-                                                      //     },
-                                                      //     devSn: listDevice[index].devSn!,
-                                                      //     devMac: listDevice[index].devMac!,
-                                                      //     appKey: listDevice[index].appEkey!,
-                                                      //     valueDoor:
-                                                      //         listDevice[index].screenType!,
-                                                      //   )
                                                       : doorsButton(
                                                           '${listDevice[index].name}',
                                                           'offline_door'.tr,
