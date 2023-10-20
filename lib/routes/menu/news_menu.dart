@@ -23,21 +23,6 @@ class _News_MenuState extends State<News_Menu> {
           case '/':
             builder = (BuildContext context) => News_Page();
             break;
-          // case '/qrsmart':
-          //   builder = (BuildContext context) => QRSmart_HomePage();
-          //   break;
-          // case '/parcel':
-          //   builder = (BuildContext context) => Parcel_service();
-          //   break;
-          // case '/managemant':
-          //   builder = (BuildContext context) => Managemant_Service();
-          //   break;
-          // case '/security':
-          //   builder = (BuildContext context) => Security_Guard();
-          //   break;
-          // case '/visitor':
-          //   builder = (BuildContext context) => Visitor_Service();
-          //   break;
           default:
             throw Exception('Invalid route: ${routeSettings.name}');
         }

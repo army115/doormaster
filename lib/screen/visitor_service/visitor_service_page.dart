@@ -1,21 +1,6 @@
-// ignore_for_file: avoid_unnecessary_containers, must_be_immutable, unused_import
-import 'dart:developer';
-
-import 'package:doormster/components/bottombar/bottombar.dart';
-import 'package:doormster/components/drawer/drawer.dart';
-import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
-import 'package:doormster/components/snackbar/snackbar.dart';
+import 'package:doormster/components/girdManu/grid_menu.dart';
+import 'package:doormster/screen/visitor_service/scan_idcard_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
-import 'dart:async';
-import 'dart:typed_data';
-
-import 'package:image_picker/image_picker.dart';
-import 'package:local_auth/local_auth.dart';
-import 'package:path_provider/path_provider.dart';
-import 'dart:io';
-import 'package:flutter/foundation.dart';
 
 class Visitor_Service extends StatefulWidget {
   Visitor_Service({Key? key});
@@ -29,16 +14,34 @@ class _Visitor_ServiceState extends State<Visitor_Service> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // drawer: MyDrawer(),
       appBar: AppBar(
         title: Text('Visitor'),
-        // leading: IconButton(
-        //     icon: Icon(Icons.menu),
-        //     onPressed: () {
-        //       Scaffold.of(context).openDrawer();
-        //     }),
       ),
-      body: Logo_Opacity(title: 'no_data'.tr),
+      body: Stack(
+        alignment: Alignment.center,
+        children: [
+          GridView.count(
+            physics: const ClampingScrollPhysics(),
+            padding: const EdgeInsets.all(30),
+            primary: false,
+            childAspectRatio: 2,
+            crossAxisSpacing: 25,
+            mainAxisSpacing: 25,
+            crossAxisCount: 1,
+            children: [
+              Grid_Menu(
+                  title: 'Scan IDCard',
+                  press: () {
+                    Navigator.of(context, rootNavigator: true)
+                        .push(MaterialPageRoute(
+                      builder: (context) => Scan_IDCard(),
+                    ));
+                  },
+                  icon: Icons.document_scanner_outlined),
+            ],
+          )
+        ],
+      ),
     );
   }
 }

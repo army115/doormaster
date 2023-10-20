@@ -119,14 +119,14 @@ class _Security_GuardState extends State<Security_Guard> {
         //     }),
       ),
       body: Container(
-        child: GridView.extent(
+        child: GridView.count(
           // scrollDirection: Axis.vertical,
           padding: EdgeInsets.all(25),
           shrinkWrap: true,
           primary: false,
           childAspectRatio: 1.0,
-          // crossAxisCount: 2,
-          maxCrossAxisExtent: 300,
+          crossAxisCount: 2,
+          // maxCrossAxisExtent: 300,
           crossAxisSpacing: 25,
           mainAxisSpacing: 25,
           children: [
@@ -143,7 +143,7 @@ class _Security_GuardState extends State<Security_Guard> {
                                 context,
                                 'found_error'.tr,
                                 'check_later'.tr,
-                                Icons.warning_amber_rounded,
+                                Icons.person,
                                 Colors.orange,
                                 'ok'.tr, () {
                                 Navigator.of(context, rootNavigator: true)

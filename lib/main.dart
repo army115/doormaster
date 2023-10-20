@@ -93,7 +93,7 @@ class MyApp extends StatelessWidget {
         '/bottom': (context) => BottomBar(),
         '/qrsmart': (context) => QRSmart_HomePage(),
         '/parcel': (context) => Parcel_service(),
-        '/managemant': (context) => Management_Service(),
+        '/management': (context) => Management_Service(),
         '/security': (context) => Security_Guard(),
         '/visitor': (context) => Visitor_Service(),
         '/password': (context) => Password_Page(),

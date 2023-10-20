@@ -5,6 +5,7 @@ import 'package:checkbox_formfield/checkbox_formfield.dart';
 import 'package:dio/dio.dart';
 import 'package:doormster/components/actions/disconnected_dialog.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
+import 'package:doormster/components/bottombar/bottom_controller.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/button/button_animation.dart';
@@ -107,6 +108,7 @@ class _Login_PageState extends State<Login_Page> {
 
               Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => BottomBar()));
+              bottomController.ontapItem(0);
               snackbar(context, Theme.of(context).primaryColor,
                   'login_success'.tr, Icons.check_circle_outline_rounded);
             } else {

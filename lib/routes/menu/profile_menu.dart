@@ -21,21 +21,6 @@ class _Profile_MenuState extends State<Profile_Menu> {
           case '/':
             builder = (BuildContext context) => Profile_Page();
             break;
-          // case '/qrsmart':
-          //   builder = (BuildContext context) => QRSmart_HomePage();
-          //   break;
-          // case '/parcel':
-          //   builder = (BuildContext context) => Parcel_service();
-          //   break;
-          // case '/managemant':
-          //   builder = (BuildContext context) => Managemant_Service();
-          //   break;
-          // case '/security':
-          //   builder = (BuildContext context) => Security_Guard();
-          //   break;
-          // case '/visitor':
-          //   builder = (BuildContext context) => Visitor_Service();
-          //   break;
           default:
             throw Exception('Invalid route: ${routeSettings.name}');
         }

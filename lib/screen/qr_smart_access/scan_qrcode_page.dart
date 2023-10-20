@@ -32,7 +32,7 @@ class _ScannerState extends State<Scanner> {
     controller.scannedDataStream.listen((scanData) {
       setState(() {
         result = scanData;
-        controller.pauseCamera();
+        // controller.pauseCamera();
       });
     });
   }

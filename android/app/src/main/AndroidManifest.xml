@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
+    <!-- <activity android:name="io.github.edufolly.fluttermobilevision.ocr.OcrCaptureActivity"/> -->
 
     <uses-permission android:name="android.permission.BLUETOOTH" />  
 	  <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />

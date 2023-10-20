@@ -87,16 +87,26 @@ class _Profile_PageState extends State<Profile_Page>
           loading = false;
         });
       }
-    } catch (error) {
-      print(error);
+    } catch (e) {
+      print(e);
       await Future.delayed(Duration(milliseconds: 500));
-      dialogOnebutton_Subtitle(context, 'found_error'.tr, 'connect_fail'.tr,
-          Icons.warning_amber_rounded, Colors.orange, 'ok'.tr, () {
-        Navigator.of(context, rootNavigator: true).pop();
-        setState(() {
-          _getInfo();
-        });
-      }, false, false);
+      if (e is DioError) {
+        if (e.response != null) {
+          print('Error status code: ${e.response!.statusCode}');
+          print('Error response data: ${e.response!.data}');
+        } else {
+          dialogOnebutton_Subtitle(context, 'found_error'.tr, 'connect_fail'.tr,
+              Icons.warning_amber_rounded, Colors.orange, 'ok'.tr, () {
+            Navigator.of(context, rootNavigator: true).pop();
+            setState(() {
+              _getInfo();
+            });
+          }, false, false);
+        }
+      } else {
+        print('An unexpected error occurred: $e');
+      }
+
       setState(() {
         loading = false;
       });
@@ -140,11 +150,8 @@ class _Profile_PageState extends State<Profile_Page>
           loading = false;
         });
       }
-    } catch (error) {
-      print(error);
-      error_connected(context, () async {
-        Navigator.of(context).pop();
-      });
+    } catch (e) {
+      print(e);
       // snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
       //     Icons.warning_amber_rounded);
       setState(() {
@@ -231,6 +238,9 @@ class _Profile_PageState extends State<Profile_Page>
           body: RefreshIndicator(
             onRefresh: () async {
               _getInfo();
+              setState(() {
+                imageProfile = null;
+              });
             },
             child: SingleChildScrollView(
               physics: AlwaysScrollableScrollPhysics(),

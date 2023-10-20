@@ -42,11 +42,13 @@ class _MyDrawerState extends State<MyDrawer> {
   Future<void> _Logout() async {
     //ลบ token device notify
     await Notify_Token().deletenotifyToken();
+    //เรียก keys ที่แชร์ไว้มารวมกัน ใน allKeys
     Set<String> allKeys = prefs.getKeys();
 
+    //loop keys เพื่อหา key ที่ไม่ต้องการ remove
     if (security == true) {
       for (String key in allKeys) {
-        if (key != 'notifyToken' || key != 'language') {
+        if (key != 'notifyToken' && key != 'language') {
           prefs.remove(key);
         }
       }

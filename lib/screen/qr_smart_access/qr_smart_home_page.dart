@@ -111,14 +111,14 @@ class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
               ),
             )
           : Container(
-              child: GridView.extent(
+              child: GridView.count(
                 padding: EdgeInsets.all(25),
                 // scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 primary: false,
                 childAspectRatio: 1.0,
-                // crossAxisCount: 2,
-                maxCrossAxisExtent: 300,
+                crossAxisCount: 2,
+                // maxCrossAxisExtent: 300,
                 crossAxisSpacing: 25,
                 mainAxisSpacing: 25,
                 children: [

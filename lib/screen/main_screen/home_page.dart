@@ -57,7 +57,7 @@ class _Home_PageState extends State<Home_Page>
         loading = true;
       });
 
-      await Future.delayed(Duration(milliseconds: 300));
+      // await Future.delayed(Duration(milliseconds: 300));
 
       //call api manu
       var url = '${Connect_api().domain}/get/menumobile/$companyId';
@@ -90,7 +90,7 @@ class _Home_PageState extends State<Home_Page>
       }
     } catch (error) {
       print(error);
-      await Future.delayed(Duration(milliseconds: 500));
+      // await Future.delayed(Duration(milliseconds: 500));
       error_connected(context, () {
         Navigator.of(context, rootNavigator: true).pop();
         setState(() {

@@ -1,16 +1,29 @@
+import 'dart:async';
 import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Parcel_service extends StatefulWidget {
   Parcel_service({Key? key});
-  static const String route = '/parcel';
+  // static const String route = '/parcel';
 
   @override
   State<Parcel_service> createState() => _Parcel_serviceState();
 }
 
 class _Parcel_serviceState extends State<Parcel_service> {
+  String text = "";
+  final StreamController<String> controller = StreamController<String>();
+  void setText(value) {
+    controller.add(value);
+  }
+
+  @override
+  void dispose() {
+    controller.close();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

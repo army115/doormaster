@@ -20,14 +20,15 @@ class _Extra_RoundState extends State<Extra_Round> {
     return Scaffold(
         appBar: AppBar(title: Text('check_extra_round'.tr)),
         body: Container(
-          child: GridView.extent(
+          child: GridView.count(
               physics: const ClampingScrollPhysics(),
               padding: const EdgeInsets.all(30),
               primary: false,
               childAspectRatio: 2,
               crossAxisSpacing: 25,
               mainAxisSpacing: 25,
-              maxCrossAxisExtent: 400,
+              crossAxisCount: 1,
+              // maxCrossAxisExtent: 400,
               children: [
                 Grid_Menu(
                     title: 'by_point'.tr,
