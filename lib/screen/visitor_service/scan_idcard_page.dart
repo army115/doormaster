@@ -1,4 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:dio/dio.dart';
@@ -20,6 +23,7 @@ class _Scan_IDCardState extends State<Scan_IDCard> {
   XFile? image;
   String? imagePath;
   final StreamController<String> _controller = StreamController<String>();
+  bool _isInitialized = false;
 
   @override
   void initState() {
@@ -33,7 +37,9 @@ class _Scan_IDCardState extends State<Scan_IDCard> {
             if (!mounted) {
               return;
             }
-            setState(() {});
+            setState(() {
+              _isInitialized = true;
+            });
           });
         });
       }
@@ -118,14 +124,13 @@ class _Scan_IDCardState extends State<Scan_IDCard> {
             ),
           ),
           Positioned(
-            right: 10,
-            top: MediaQuery.of(context).size.height * 0.05,
+            bottom: MediaQuery.of(context).size.height * 0.05,
             child: Container(
               decoration: const BoxDecoration(
                   shape: BoxShape.circle, color: Colors.white30),
               child: IconButton(
                   color: Colors.white,
-                  iconSize: 30,
+                  iconSize: 60,
                   onPressed: _capture,
                   icon: const Icon(Icons.camera)),
             ),
@@ -187,7 +192,7 @@ class _Show_ImageState extends State<Show_Image> {
       // await Future.delayed(Duration(milliseconds: loadingTime));
 
       //call api Dio
-      var host = 'https://api.iapp.co.th/thai-national-id-card/v3/front';
+      var host = 'http://localhost:8080/ocr';
       FormData formData = FormData.fromMap({
         'file': await MultipartFile.fromFile(
           file.path,
@@ -198,9 +203,9 @@ class _Show_ImageState extends State<Show_Image> {
       Response response = await Dio().post(
         host,
         data: formData,
-        options: Options(
-          headers: {'apikey': 'NmQF10gmOYyg8Sa1abNuiu6EEH0Yzlnr'},
-        ),
+        // options: Options(
+        //   headers: {'apikey': 'NmQF10gmOYyg8Sa1abNuiu6EEH0Yzlnr'},
+        // ),
       );
 
       if (response.statusCode == 200) {
@@ -245,6 +250,10 @@ class _Show_ImageState extends State<Show_Image> {
             Navigator.pop(context);
           }, false, false);
         } else {
+          dialogOnebutton_Subtitle(
+              context, 'Error', '${e}', Icons.warning, Colors.orange, 'OK', () {
+            Navigator.pop(context);
+          }, false, false);
           print('Request failed without a response.');
         }
       } else {
@@ -296,8 +305,8 @@ class _Show_ImageState extends State<Show_Image> {
             top: MediaQuery.of(context).size.height * 0.05,
             child: ElevatedButton(
                 onPressed: () {
-                  _scantext();
-                  // _sendID(file);
+                  // _scantext();
+                  _sendID(file);
                 },
                 child: Icon(Icons.translate)),
           ),
