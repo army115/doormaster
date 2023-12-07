@@ -35,7 +35,6 @@ class Text_Form_NoBorder extends StatelessWidget {
           hintText: "enter_info".tr,
           hintStyle: textStyle().title16,
           errorStyle: textStyle().body14,
-          // ignore: prefer_const_constructors
           icon: Icon(icon, size: 25),
         ),
         validator: (values) {

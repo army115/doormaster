@@ -30,12 +30,12 @@ flutter_ios_podfile_setup
 target 'Runner' do
   use_frameworks!
   use_modular_headers!
-  platform :ios, '12.0'
+  platform :ios, '11.0'
   pod 'GoogleUtilities'
-  pod 'GoogleMLKit/TextRecognitionChinese', '~> 4.0.0'
-  pod 'GoogleMLKit/TextRecognitionDevanagari', '~> 4.0.0'
-  pod 'GoogleMLKit/TextRecognitionJapanese', '~> 4.0.0'
-  pod 'GoogleMLKit/TextRecognitionKorean', '~> 4.0.0'
+  # pod 'GoogleMLKit/TextRecognitionChinese', '~> 4.0.0'
+  # pod 'GoogleMLKit/TextRecognitionDevanagari', '~> 4.0.0'
+  # pod 'GoogleMLKit/TextRecognitionJapanese', '~> 4.0.0'
+  # pod 'GoogleMLKit/TextRecognitionKorean', '~> 4.0.0'
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end
@@ -44,7 +44,7 @@ post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
     target.build_configurations.each do |config|
-      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '11.0'
       config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
         '$(inherited)',
         

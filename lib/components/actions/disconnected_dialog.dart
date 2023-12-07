@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 
 void error_connected(context, navigator) {
   dialogOnebutton_Subtitle(
-      context,
       'found_error'.tr,
       'connect_fail'.tr,
       Icons.warning_amber_rounded,

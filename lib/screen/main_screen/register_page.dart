@@ -70,7 +70,7 @@ class _Register_PageState extends State<Register_Page> {
       }
     } catch (error) {
       print(error);
-      dialogOnebutton_Subtitle(context, 'found_error', 'connect_fail'.tr,
+      dialogOnebutton_Subtitle('found_error', 'connect_fail'.tr,
           Icons.warning_amber_rounded, Colors.orange, 'ok'.tr, () {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (BuildContext context) => Login_Page()),
@@ -105,16 +105,11 @@ class _Register_PageState extends State<Register_Page> {
         setState(() {
           loading = false;
         });
-        snackbar(context, Theme.of(context).primaryColor, 'register_success'.tr,
+        snackbar(Get.theme.primaryColor, 'register_success'.tr,
             Icons.check_circle_outline_rounded);
       } else {
-        dialogOnebutton_Subtitle(
-            context,
-            'register_fail'.tr,
-            '${jsonRes.result}',
-            Icons.highlight_off_rounded,
-            Colors.red,
-            'ok'.tr, () {
+        dialogOnebutton_Subtitle('register_fail'.tr, '${jsonRes.result}',
+            Icons.highlight_off_rounded, Colors.red, 'ok'.tr, () {
           Navigator.of(context).pop();
         }, false, false);
         print('Register not Success!!');
@@ -128,7 +123,7 @@ class _Register_PageState extends State<Register_Page> {
       error_connected(context, () async {
         Navigator.of(context).pop();
       });
-      // snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
+      // snackbar( Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
       //     Icons.warning_amber_rounded);
       setState(() {
         loading = false;

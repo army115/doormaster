@@ -33,7 +33,7 @@ class Search_From extends StatelessWidget {
             hintStyle: TextStyle(color: Colors.black38, fontSize: 16),
             prefixIcon: Icon(
               Icons.search,
-              color: Theme.of(context).primaryColor,
+              color: Get.theme.primaryColor,
               size: 30,
             ),
             suffixIcon: fieldText.text.length > 0

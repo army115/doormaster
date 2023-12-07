@@ -41,7 +41,7 @@ class _Extra_RoundState extends State<Extra_Round> {
                                     context,
                                     ScanQR_Check(
                                       name: 'extra',
-                                      roundName: 'extra_point'.tr,
+                                      roundName: 'extra_round'.tr,
                                     ),
                                     true,
                                   )));

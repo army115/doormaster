@@ -1,5 +1,5 @@
 // ignore_for_file: avoid_unnecessary_containers, must_be_immutable, unused_import
-
+import 'package:get/get.dart';
 import 'package:doormster/style/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +24,7 @@ class Text_Form extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 8),
       child: PhysicalModel(
         borderRadius: BorderRadius.circular(10),
-        elevation: 10,
+        elevation: 3,
         color: Colors.white,
         child: TextFormField(
           autofocus: false,
@@ -37,13 +37,11 @@ class Text_Form extends StatelessWidget {
             hintText: title,
             hintStyle: textStyle().title16,
             errorStyle: textStyle().body14,
-            // ignore: prefer_const_constructors
             prefixIcon: Icon(icon, size: 25),
             // filled: true, พื้นหลังช่อง
             // fillColor: Colors.white,
             focusedBorder: OutlineInputBorder(
-              borderSide:
-                  BorderSide(color: Theme.of(context).primaryColor, width: 2),
+              borderSide: BorderSide(color: Get.theme.primaryColor, width: 2),
               borderRadius: BorderRadius.circular(10.0),
             ),
             enabledBorder: OutlineInputBorder(

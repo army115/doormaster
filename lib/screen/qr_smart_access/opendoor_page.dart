@@ -150,8 +150,8 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
           setState(() {
             loading = false;
           });
-          snackbar(context, Theme.of(context).primaryColor,
-              'door_open_success'.tr, Icons.check_circle_outline_rounded);
+          snackbar(Get.theme.primaryColor, 'door_open_success'.tr,
+              Icons.check_circle_outline_rounded);
         } else if (jsonRes.data!.code == 10000) {
           print('DeviceNumber : ${devSn}');
           print('Door Offline');
@@ -159,8 +159,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
           setState(() {
             loading = false;
           });
-          snackbar(context, Colors.red, 'door_offline'.tr,
-              Icons.highlight_off_rounded);
+          snackbar(Colors.red, 'door_offline'.tr, Icons.highlight_off_rounded);
         } else if (jsonRes.data!.code == 10400) {
           print('DeviceNumber : ${devSn}');
           print('Invalid Device');
@@ -168,12 +167,11 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
           setState(() {
             loading = false;
           });
-          snackbar(context, Colors.red, 'invalid_device'.tr,
-              Icons.highlight_off_rounded);
+          snackbar(
+              Colors.red, 'invalid_device'.tr, Icons.highlight_off_rounded);
         }
       } else {
-        snackbar(context, Colors.red, 'door_open_fail'.tr,
-            Icons.highlight_off_rounded);
+        snackbar(Colors.red, 'door_open_fail'.tr, Icons.highlight_off_rounded);
         print('OpenDoor Fail!!');
         print(response.data);
         setState(() {
@@ -214,11 +212,10 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
         setState(() {
           loading = false;
         });
-        snackbar(context, Theme.of(context).primaryColor,
-            'door_open_success'.tr, Icons.check_circle_outline_rounded);
+        snackbar(Get.theme.primaryColor, 'door_open_success'.tr,
+            Icons.check_circle_outline_rounded);
       } else {
-        snackbar(context, Colors.red, 'door_open_fail'.tr,
-            Icons.highlight_off_rounded);
+        snackbar(Colors.red, 'door_open_fail'.tr, Icons.highlight_off_rounded);
         print('OpenDoor Fail!!');
         print(response.data);
         setState(() {
@@ -335,7 +332,6 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
                                                               .no_meeting_room_rounded,
                                                           Colors.red,
                                                           () => snackbar(
-                                                              context,
                                                               Colors.red,
                                                               'door_offline'.tr,
                                                               Icons.highlight_off_rounded)));

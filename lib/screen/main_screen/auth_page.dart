@@ -30,7 +30,7 @@ class _Auth_PageState extends State<Auth_Page> {
     return WillPopScope(
       onWillPop: () => _onBackButtonDoubleClicked(),
       child: Scaffold(
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Get.theme.primaryColor,
         body: SafeArea(
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 30, horizontal: 30),
@@ -82,7 +82,7 @@ class _Auth_PageState extends State<Auth_Page> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 50, color: Theme.of(context).primaryColor),
+            Icon(icon, size: 50, color: Get.theme.primaryColor),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Text(
@@ -91,7 +91,7 @@ class _Auth_PageState extends State<Auth_Page> {
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                    color: Theme.of(context).primaryColor,
+                    color: Get.theme.primaryColor,
                     fontSize: 16,
                     letterSpacing: 0.5,
                     fontWeight: FontWeight.bold),

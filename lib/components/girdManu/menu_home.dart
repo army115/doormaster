@@ -3,6 +3,7 @@
 import 'package:doormster/service/connected/check_connected.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Menu_Home extends StatelessWidget {
   String title;
@@ -29,7 +30,7 @@ class Menu_Home extends StatelessWidget {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           // borderRadius: BorderRadius.circular(20),
           elevation: 10,
-          color: Theme.of(context).primaryColor,
+          color: Get.theme.primaryColor,
           child: InkWell(
             borderRadius: BorderRadius.circular(10),
             splashColor: Colors.black12,

@@ -138,18 +138,12 @@ class _Check_InState extends State<Check_In> {
           });
 
           if (listdata.isEmpty) {
-            dialogOnebutton_Subtitle(
-                context,
-                'found_error'.tr,
-                'invalid_qrcode'.tr,
-                Icons.highlight_off_rounded,
-                Colors.red,
-                'ok'.tr, () {
+            dialogOnebutton_Subtitle('found_error'.tr, 'invalid_qrcode'.tr,
+                Icons.highlight_off_rounded, Colors.red, 'ok'.tr, () {
               Navigator.popUntil(context, (route) => route.isFirst);
             }, false, false);
           } else if (listdata[0].verify == 0) {
             dialogOnebutton_Subtitle(
-                context,
                 'checkpoint_found'.tr,
                 'checkpoint_no_regis'.tr,
                 Icons.warning_amber_rounded,
@@ -178,13 +172,8 @@ class _Check_InState extends State<Check_In> {
         });
       }
     } else {
-      dialogOnebutton_Subtitle(
-          context,
-          'found_error'.tr,
-          'invalid_location_again'.tr,
-          Icons.highlight_off_rounded,
-          Colors.red,
-          'ok'.tr, () {
+      dialogOnebutton_Subtitle('found_error'.tr, 'invalid_location_again'.tr,
+          Icons.highlight_off_rounded, Colors.red, 'ok'.tr, () {
         Navigator.popUntil(context, (route) => route.isFirst);
       }, false, false);
       print('Location Null !!');
@@ -203,8 +192,9 @@ class _Check_InState extends State<Check_In> {
             'Accept': 'application/json',
           }),
           data: values);
-      var _response = response.toString().split(',').first.split(':').last;
-      if (_response == '200') {
+      var _response = response.data['status'];
+      print("status code : ${_response}");
+      if (_response == 200) {
         print('checkIn Success');
         print(values);
         print(response.data);
@@ -215,7 +205,7 @@ class _Check_InState extends State<Check_In> {
           ),
         );
         // Navigator.popUntil(context, (route) => route.isFirst);
-        snackbar(context, Theme.of(context).primaryColor, 'checkin_success'.tr,
+        snackbar(Get.theme.primaryColor, 'checkin_success'.tr,
             Icons.check_circle_outline_rounded);
 
         setState(() {
@@ -223,7 +213,6 @@ class _Check_InState extends State<Check_In> {
         });
       } else {
         dialogOnebutton_Subtitle(
-            context,
             'invalid_location'.tr,
             'location_checkpoint'.tr,
             Icons.highlight_off_rounded,
@@ -242,7 +231,7 @@ class _Check_InState extends State<Check_In> {
       error_connected(context, () {
         Navigator.of(context, rootNavigator: true).pop();
       });
-      // snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
+      // snackbar( Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
       //     Icons.warning_amber_rounded);
       setState(() {
         loading = false;

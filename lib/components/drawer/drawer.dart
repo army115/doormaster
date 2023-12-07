@@ -182,10 +182,10 @@ class _MyDrawerState extends State<MyDrawer> {
           loading = false;
         });
 
-        // snackbar(context, Theme.of(context).primaryColor, 'เลือกสำเร็จ',
+        // snackbar( Get.theme.primaryColor, 'เลือกสำเร็จ',
         //     Icons.check_circle_outline_rounded);
       } else {
-        dialogOnebutton_Subtitle(context, 'select_fail'.tr, '${jsonRes.data}',
+        dialogOnebutton_Subtitle('select_fail'.tr, '${jsonRes.data}',
             Icons.highlight_off_rounded, Colors.red, 'ok'.tr, () {
           Navigator.of(context).pop();
         }, false, false);
@@ -302,47 +302,50 @@ class _MyDrawerState extends State<MyDrawer> {
                     height: 0,
                   ),
                   Expanded(
-                    child: Column(
-                      children: [
-                        ListTile(
-                          onTap: () {
-                            Navigator.pop(context);
-                            bottomController.ontapItem(3);
-                            profileKey.currentState?.popAndPushNamed('/');
-                          },
-                          leading: Icon(
-                            Icons.person,
-                            size: 25,
-                            color: Colors.white,
+                    child: Container(
+                      color: Colors.blue[800],
+                      child: Column(
+                        children: [
+                          ListTile(
+                            onTap: () {
+                              Navigator.pop(context);
+                              bottomController.ontapItem(3);
+                              profileKey.currentState?.popAndPushNamed('/');
+                            },
+                            leading: Icon(
+                              Icons.person,
+                              size: 25,
+                              color: Colors.white,
+                            ),
+                            title: Text(
+                              'info'.tr,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 0.5,
+                                  color: Colors.white),
+                            ),
+                            // tileColor: Colors.cyan,
                           ),
-                          title: Text(
-                            'info'.tr,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 0.5,
-                                color: Colors.white),
+                          ListTile(
+                            onTap: () {
+                              Navigator.of(context).popAndPushNamed('/setting');
+                            },
+                            leading: Icon(
+                              Icons.settings,
+                              size: 30,
+                              color: Colors.white,
+                            ),
+                            title: Text(
+                              'setting'.tr,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 0.5,
+                                  color: Colors.white),
+                            ),
+                            // tileColor: Colors.cyan,
                           ),
-                          // tileColor: Colors.cyan,
-                        ),
-                        ListTile(
-                          onTap: () {
-                            Navigator.of(context).popAndPushNamed('/setting');
-                          },
-                          leading: Icon(
-                            Icons.settings,
-                            size: 30,
-                            color: Colors.white,
-                          ),
-                          title: Text(
-                            'setting'.tr,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 0.5,
-                                color: Colors.white),
-                          ),
-                          // tileColor: Colors.cyan,
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -393,7 +396,7 @@ class _MyDrawerState extends State<MyDrawer> {
   void bottomsheet() {
     showModalBottomSheet<void>(
       isScrollControlled: true,
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Get.theme.primaryColor,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(25), topRight: Radius.circular(25))),
@@ -497,7 +500,7 @@ class _MyDrawerState extends State<MyDrawer> {
                           ),
                   ),
                   bottomNavigationBar: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 30),
                     child: Buttons_Outline(
                         title: 'add_company'.tr,
                         press: () {

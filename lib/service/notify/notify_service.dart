@@ -1,6 +1,7 @@
 // ignore_for_file: unused_import
 
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:doormster/components/bottombar/bottom_controller.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
@@ -13,22 +14,8 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> handleBackgroundMessage(RemoteMessage message) async {
-  log("BackgroundMessage : ${"Title : ${message.notification?.title}, \n" "Body : ${message.notification?.body}, \n" "Data : ${message.data}"}");
-  // if (message != null) {
-  //   bottomKey.currentState?.ontapItem(2);
-  //   notifyKey.currentState?.pushReplacement(PageRouteBuilder(
-  //     pageBuilder: (BuildContext context, Animation<double> animation,
-  //         Animation<double> animation2) {
-  //       return Notification_Page(
-  //         title: message.notification?.title,
-  //         body: message.notification?.body,
-  //       );
-  //     },
-  //     // transitionDuration: Duration.zero,
-  //     // reverseTransitionDuration: Duration.zero,
-  //   ));
-  //   // notifyKey.currentState?.popAndPushNamed('/', arguments: message);
-  // }
+  log("BackgroundMessage ");
+  // : ${"Title : ${message.notification?.title}, \n" "Body : ${message.notification?.body}, \n" "Data : ${message.data}"}");
 }
 
 class NotificationService {
@@ -52,7 +39,7 @@ class NotificationService {
       icon: 'icon_app',
       channelShowBadge: true,
       styleInformation: bigTextStyleInformation,
-      // color: Theme.of(context).primaryColor,
+      // color: Get.theme.primaryColor,
       // largeIcon: DrawableResourceAndroidBitmap('circle_icon'),
     );
     DarwinNotificationDetails iosChannel = const DarwinNotificationDetails(
@@ -66,19 +53,8 @@ class NotificationService {
     await flutterLocalNotificationsPlugin.show(1, message.notification?.title,
         message.notification?.body, platformChannel,
         payload: message.data['body']);
-    log("ForegroundMessage : ${"Title : ${message.notification?.title}, \n" "Body : ${message.notification?.body}, \n" "Data : ${message.data}"}");
-
-    // if (message != null) {
-    //   notifyKey.currentState?.pushReplacement(PageRouteBuilder(
-    //     pageBuilder: (BuildContext context, Animation<double> animation,
-    //         Animation<double> animation2) {
-    //       return Notification_Page(
-    //         title: message.notification?.title,
-    //         body: message.notification?.body,
-    //       );
-    //     },
-    //   ));
-    // }
+    log("ForegroundMessage");
+    //  : ${"Title : ${message.notification?.title}, \n" "Body : ${message.notification?.body}, \n" "Data : ${message.data}"}");
   }
 
   Future<void> notification() async {
@@ -112,6 +88,10 @@ class NotificationService {
     );
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
+      // onDidReceiveBackgroundNotificationResponse: (details) {
+      //   log('BackgroundNotificationResponse');
+      //   bottomController.ontapItem(2);
+      // },
       onDidReceiveNotificationResponse: (details) {
         log('${details.notificationResponseType}');
         bottomController.ontapItem(2);
@@ -119,35 +99,10 @@ class NotificationService {
     );
 
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
-    FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
-    FirebaseMessaging.onMessage.listen(handleMessage);
-  }
-
-  Future<void> showNotification(context) async {
-    AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
-      'id', 'แจ้งเตือนปกติ',
-      importance: Importance.max,
-      priority: Priority.high,
-      ticker: 'ticker',
-      icon: 'icon_app',
-      channelShowBadge: true,
-      color: Theme.of(context).primaryColor,
-      // largeIcon: DrawableResourceAndroidBitmap('circle_icon'),
-    );
-
-    DarwinNotificationDetails iosDetails = const DarwinNotificationDetails(
-        badgeNumber: 0, subtitle: 'การแจ้งเตือนใหม่');
-
-    NotificationDetails generalNotificationDetails = NotificationDetails(
-      android: androidDetails,
-      iOS: iosDetails,
-    );
-
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      'ทดสอบ',
-      'การแจ้งเตือน',
-      generalNotificationDetails,
-    );
+    if (Platform.isIOS) {
+      FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
+    } else {
+      FirebaseMessaging.onMessage.listen(handleMessage);
+    }
   }
 }

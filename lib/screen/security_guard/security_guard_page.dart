@@ -140,7 +140,6 @@ class _Security_GuardState extends State<Security_Guard> {
                         context,
                         () => listdata.isEmpty
                             ? dialogOnebutton_Subtitle(
-                                context,
                                 'found_error'.tr,
                                 'check_later'.tr,
                                 Icons.person,

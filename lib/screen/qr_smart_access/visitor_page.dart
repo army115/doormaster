@@ -183,11 +183,11 @@ class _Visitor_PageState extends State<Visitor_Page> {
         setState(() {
           loading = false;
         });
-        snackbar(context, Theme.of(context).primaryColor,
-            'create_qrcode_success'.tr, Icons.check_circle_outline_rounded);
+        snackbar(Get.theme.primaryColor, 'create_qrcode_success'.tr,
+            Icons.check_circle_outline_rounded);
       } else {
-        snackbar(context, Colors.red, 'create_qrcode_fail'.tr,
-            Icons.highlight_off_rounded);
+        snackbar(
+            Colors.red, 'create_qrcode_fail'.tr, Icons.highlight_off_rounded);
         print('craate Visitor Fail!!');
         print(response.data);
         setState(() {
@@ -245,11 +245,11 @@ class _Visitor_PageState extends State<Visitor_Page> {
         setState(() {
           loading = false;
         });
-        snackbar(context, Theme.of(context).primaryColor,
-            'create_qrcode_success'.tr, Icons.check_circle_outline_rounded);
+        snackbar(Get.theme.primaryColor, 'create_qrcode_success'.tr,
+            Icons.check_circle_outline_rounded);
       } else {
-        snackbar(context, Colors.red, 'create_qrcode_fail'.tr,
-            Icons.highlight_off_rounded);
+        snackbar(
+            Colors.red, 'create_qrcode_fail'.tr, Icons.highlight_off_rounded);
         print('craate Visitor Fail!!');
         print(response.data);
         setState(() {
@@ -559,7 +559,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
 
                         return CheckboxListTileFormField(
                           // dense: true,
-                          activeColor: Theme.of(context).primaryColor,
+                          activeColor: Get.theme.primaryColor,
                           title: Text(
                             item!,
                             style: TextStyle(fontSize: 16),

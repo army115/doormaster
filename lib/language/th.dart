@@ -34,6 +34,7 @@ const Map<String, String> th_TH = {
 
   //Drawer
   'info': 'ข้อมูลส่วนตัว',
+  'edit_profile': 'แก้ไขข้อมูลส่วนตัว',
   'setting': 'การตั้งค่า',
   'switch_company': 'สลับโครงการ',
   'add_company': 'เพิ่มโครงการใหม่',

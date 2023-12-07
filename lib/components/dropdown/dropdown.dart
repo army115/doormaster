@@ -28,7 +28,7 @@ class Dropdown extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 8),
       child: PhysicalModel(
           borderRadius: BorderRadius.circular(10),
-          elevation: 10,
+          elevation: 3,
           color: Colors.white,
           child: CustomDropdown(
             excludeSelected: controller.text == (null) ? false : true,
@@ -49,8 +49,7 @@ class Dropdown extends StatelessWidget {
             borderRadiusItem: BorderRadius.circular(10),
             contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 13),
             focusedBorder: OutlineInputBorder(
-              borderSide:
-                  BorderSide(color: Theme.of(context).primaryColor, width: 2),
+              borderSide: BorderSide(color: Get.theme.primaryColor, width: 2),
               borderRadius: BorderRadius.circular(10.0),
             ),
             enabledBorder: OutlineInputBorder(

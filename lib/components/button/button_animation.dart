@@ -2,6 +2,7 @@
 
 import 'package:easy_loading_button/easy_loading_button.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Button_Animation extends StatelessWidget {
   String title;
@@ -32,7 +33,7 @@ class Button_Animation extends StatelessWidget {
         height: 45,
         borderRadius: 10.0,
         contentGap: 5.0,
-        buttonColor: Theme.of(context).primaryColor,
+        buttonColor: Get.theme.primaryColor,
         onPressed: press);
   }
 }

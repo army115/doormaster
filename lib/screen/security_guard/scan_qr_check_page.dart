@@ -59,18 +59,13 @@ class _ScanQR_CheckState extends State<ScanQR_Check> {
       });
       if (widget.name == 'check') {
         if (widget.roundId == null) {
-          dialogOnebutton_Subtitle(context, 'found_error'.tr, 'check_later'.tr,
+          dialogOnebutton_Subtitle('found_error'.tr, 'check_later'.tr,
               Icons.highlight_off_rounded, Colors.red, 'ok'.tr, () {
             Navigator.popUntil(context, (route) => route.isFirst);
           }, false, false);
         } else if (widget.checkpointId.contains(result?.code)) {
-          dialogOnebutton_Subtitle(
-              context,
-              'repeat_checkpoint'.tr,
-              'data_checkpoint'.tr,
-              Icons.warning_amber_rounded,
-              Colors.orange,
-              'ok'.tr, () {
+          dialogOnebutton_Subtitle('repeat_checkpoint'.tr, 'data_checkpoint'.tr,
+              Icons.warning_amber_rounded, Colors.orange, 'ok'.tr, () {
             Navigator.popUntil(context, (route) => route.isFirst);
           }, false, false);
         } else {

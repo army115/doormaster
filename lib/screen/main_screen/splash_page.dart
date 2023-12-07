@@ -3,6 +3,7 @@ import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/screen/main_screen/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart';
 
 class Splash_Page extends StatefulWidget {
   const Splash_Page({Key? key});
@@ -36,7 +37,7 @@ class _Splash_PageState extends State<Splash_Page> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Get.theme.primaryColor,
       body: Container(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

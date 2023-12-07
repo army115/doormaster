@@ -2,6 +2,7 @@
 import 'package:doormster/style/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 class TextForm_Number extends StatelessWidget {
   TextEditingController controller;
@@ -26,7 +27,7 @@ class TextForm_Number extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 8),
       child: PhysicalModel(
         borderRadius: BorderRadius.circular(10),
-        elevation: 10,
+        elevation: 3,
         color: Colors.white,
         child: TextFormField(
             style: textStyle().title16,
@@ -52,8 +53,7 @@ class TextForm_Number extends StatelessWidget {
               // filled: true, พื้นหลังช่อง
               // fillColor: Colors.white,
               focusedBorder: OutlineInputBorder(
-                borderSide:
-                    BorderSide(color: Theme.of(context).primaryColor, width: 2),
+                borderSide: BorderSide(color: Get.theme.primaryColor, width: 2),
                 borderRadius: BorderRadius.circular(10.0),
               ),
               enabledBorder: OutlineInputBorder(

@@ -1,5 +1,6 @@
 import 'package:doormster/style/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class TextForm_Null extends StatelessWidget {
   final title;
@@ -15,8 +16,8 @@ class TextForm_Null extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 8),
       child: Material(
         borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
-        elevation: 10,
+        color: Colors.red,
+        elevation: 3,
         child: TextFormField(
           readOnly: true,
           style: textStyle().title16,
@@ -38,8 +39,7 @@ class TextForm_Null extends StatelessWidget {
                 size: 30,
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide:
-                    BorderSide(color: Theme.of(context).primaryColor, width: 2),
+                borderSide: BorderSide(color: Get.theme.primaryColor, width: 2),
                 borderRadius: BorderRadius.circular(10.0),
               ),
               enabledBorder: OutlineInputBorder(

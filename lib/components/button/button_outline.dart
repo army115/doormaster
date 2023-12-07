@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, sort_child_properties_last, prefer_const_constructors
 
 import 'package:flutter/material.dart';
 
@@ -15,6 +15,7 @@ class Buttons_Outline extends StatelessWidget {
       height: 45,
       child: OutlinedButton(
           style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.blue[800]),
               overlayColor: MaterialStateProperty.all(Colors.black26),
               shape: MaterialStateProperty.all(RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10))),

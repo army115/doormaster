@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Search_Calendar extends StatelessWidget {
   String title;
@@ -38,7 +39,7 @@ class Search_Calendar extends StatelessWidget {
             hintStyle: TextStyle(color: Colors.black38, fontSize: 16),
             prefixIcon: Icon(
               Icons.event_note,
-              color: Theme.of(context).primaryColor,
+              color: Get.theme.primaryColor,
               size: 30,
             ),
             suffixIcon: fieldText.text.contains('วันที่') ||
@@ -49,7 +50,7 @@ class Search_Calendar extends StatelessWidget {
                     icon: Icon(
                       Icons.close,
                       size: 30,
-                      color: Theme.of(context).primaryColor,
+                      color: Get.theme.primaryColor,
                     )),
             border: InputBorder.none,
           ),

@@ -125,8 +125,8 @@ class _Record_PointState extends State<Record_Point> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                 decoration: BoxDecoration(
-                    border: Border.all(
-                        width: 2.5, color: Theme.of(context).primaryColor),
+                    border:
+                        Border.all(width: 2.5, color: Get.theme.primaryColor),
                     color: Colors.white,
                     borderRadius: const BorderRadius.all(Radius.circular(10))),
                 child: Column(
@@ -136,14 +136,14 @@ class _Record_PointState extends State<Record_Point> {
                         '${'date_report'.tr} : ${widget.dateTime}',
                         Icon(
                           Icons.calendar_month_rounded,
-                          color: Theme.of(context).primaryColor,
+                          color: Get.theme.primaryColor,
                           size: 25,
                         )),
                     textIcon(
                         '${'round'.tr} : ${widget.roundName}',
                         Icon(
                           Icons.map_rounded,
-                          color: Theme.of(context).primaryColor,
+                          color: Get.theme.primaryColor,
                           size: 25,
                         )),
                     widget.roundName == 'extra_round'.tr
@@ -152,7 +152,7 @@ class _Record_PointState extends State<Record_Point> {
                             '${'interval'.tr} : ${widget.roundStart} ${'to'.tr} ${widget.roundEnd}',
                             Icon(
                               Icons.access_time_rounded,
-                              color: Theme.of(context).primaryColor,
+                              color: Get.theme.primaryColor,
                               size: 25,
                             ))
                   ],
@@ -280,7 +280,7 @@ class _Record_PointState extends State<Record_Point> {
                                                     ))),
                                             button(
                                                 'view_pictures'.tr,
-                                                Theme.of(context).primaryColor,
+                                                Get.theme.primaryColor,
                                                 Icons.photo, () {
                                               _getLog(fileList[index].sId!);
                                             })

@@ -125,10 +125,10 @@ class _Add_CompanyState extends State<Add_Company> {
         setState(() {
           loading = false;
         });
-        snackbar(context, Theme.of(context).primaryColor, 'add_success'.tr,
+        snackbar(Get.theme.primaryColor, 'add_success'.tr,
             Icons.check_circle_outline_rounded);
       } else {
-        dialogOnebutton_Subtitle(context, 'add_fail'.tr, '${jsonRes.status}',
+        dialogOnebutton_Subtitle('add_fail'.tr, '${jsonRes.status}',
             Icons.highlight_off_rounded, Colors.red, 'ok'.tr, () {
           Navigator.of(context).pop();
         }, false, false);
@@ -143,7 +143,7 @@ class _Add_CompanyState extends State<Add_Company> {
       error_connected(context, () async {
         Navigator.of(context).pop();
       });
-      // snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
+      // snackbar( Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
       //     Icons.warning_amber_rounded);
       setState(() {
         loading = false;
@@ -204,10 +204,10 @@ class _Add_CompanyState extends State<Add_Company> {
         setState(() {
           loading = false;
         });
-        // snackbar(context, Theme.of(context).primaryColor, 'เลือกสำเร็จ',
+        // snackbar( Get.theme.primaryColor, 'เลือกสำเร็จ',
         //     Icons.check_circle_outline_rounded);
       } else {
-        dialogOnebutton_Subtitle(context, 'add_fail'.tr, 'again_pls'.tr,
+        dialogOnebutton_Subtitle('add_fail'.tr, 'again_pls'.tr,
             Icons.highlight_off_rounded, Colors.red, 'ok'.tr, () {
           Navigator.of(context).pop();
         }, false, false);
@@ -313,13 +313,8 @@ class _Add_CompanyState extends State<Add_Company> {
                   multiCompany
                       .map((item) => item.companyId)
                       .contains(onItemSelect)) {
-                dialogOnebutton_Subtitle(
-                    context,
-                    'cannot_add'.tr,
-                    'have_company'.tr,
-                    Icons.warning_amber_rounded,
-                    Colors.orange,
-                    'ok'.tr, () {
+                dialogOnebutton_Subtitle('cannot_add'.tr, 'have_company'.tr,
+                    Icons.warning_amber_rounded, Colors.orange, 'ok'.tr, () {
                   Navigator.of(context).pop();
                 }, false, false);
               } else {
@@ -331,7 +326,7 @@ class _Add_CompanyState extends State<Add_Company> {
             }
           },
           style: styleButtons(EdgeInsets.symmetric(horizontal: 40, vertical: 8),
-              10.0, Theme.of(context).primaryColor, BorderRadius.circular(10)),
+              10.0, Get.theme.primaryColor, BorderRadius.circular(10)),
           child: Text(
             "save".tr,
             style: TextStyle(

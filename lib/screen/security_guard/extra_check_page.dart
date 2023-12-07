@@ -116,8 +116,9 @@ class _Extra_CheckState extends State<Extra_Check> {
             'Accept': 'application/json',
           }),
           data: values);
-      var _response = response.toString().split(',').first.split(':').last;
-      if (_response == '200') {
+      var _response = response.data['status'];
+      print("status code : ${_response}");
+      if (_response == 200) {
         print('checkIn Success');
         print(values);
         print(response.data);
@@ -127,14 +128,14 @@ class _Extra_CheckState extends State<Extra_Check> {
             builder: (BuildContext context) => Report_Logs(tapIndex: 1),
           ),
         );
-        snackbar(context, Theme.of(context).primaryColor, 'save_success'.tr,
+        snackbar(Get.theme.primaryColor, 'save_success'.tr,
             Icons.check_circle_outline_rounded);
 
         setState(() {
           loading = false;
         });
       } else {
-        dialogOnebutton_Subtitle(context, 'found_error'.tr, 'save_unsuccess'.tr,
+        dialogOnebutton_Subtitle('found_error'.tr, 'save_unsuccess'.tr,
             Icons.highlight_off_rounded, Colors.red, 'ok'.tr, () {
           Navigator.of(context).pop();
         }, false, false);
@@ -149,7 +150,7 @@ class _Extra_CheckState extends State<Extra_Check> {
       error_connected(context, () {
         Navigator.of(context, rootNavigator: true).pop();
       });
-      // snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
+      // snackbar( Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
       //     Icons.warning_amber_rounded);
       setState(() {
         loading = false;

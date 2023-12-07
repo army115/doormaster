@@ -1,4 +1,4 @@
-// ignore_for_file: constant_identifier_names
+// ignore_for_file: constant_identifier_names, prefer_const_constructors, prefer_const_constructors_in_immutables, avoid_print
 
 import 'dart:io';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
@@ -46,19 +46,18 @@ Future<void> main() async {
   }
   print(token == null ? 'login : false' : 'login : true');
   print('language : $language');
-  runApp(result == ConnectivityResult.none
-      ? Check_Connected()
-      : MyApp(
-          // token: null,
-          token: token,
-          language: language,
-        ));
+  runApp(MyApp(
+    connect: result,
+    token: token,
+    language: language,
+  ));
 }
 
 class MyApp extends StatelessWidget {
   final token;
   final language;
-  MyApp({Key? key, this.token, this.language}) : super(key: key);
+  final connect;
+  MyApp({Key? key, this.token, this.language, this.connect}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -84,8 +83,13 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: mytheme(),
       // home: token == null ? Login_Page() : BottomBar(),
-      initialRoute: token == null ? '/auth' : '/bottom',
+      initialRoute: connect == ConnectivityResult.none
+          ? '/check'
+          : token == null
+              ? '/auth'
+              : '/bottom',
       routes: {
+        '/check': (context) => Check_Connected(),
         '/auth': (context) => Auth_Page(),
         '/login': (context) => Login_Page(),
         '/staff': (context) => Login_Staff(),
@@ -106,51 +110,46 @@ class MyApp extends StatelessWidget {
 class Check_Connected extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'HIP Smart Community',
-      debugShowCheckedModeBanner: false,
-      theme: mytheme(),
-      home: WillPopScope(
-        onWillPop: (() async => false),
-        child: Scaffold(
-          backgroundColor: const Color(0xFF0B4D9C),
-          body: SafeArea(
-            child: Stack(
-              children: [
-                Center(
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: Image.asset(
-                          'assets/images/HIP Smart Community Icon-03.png',
-                          scale: 4,
-                        ),
-                      ),
-                      Image.asset(
-                        'assets/images/banner.png',
+    return WillPopScope(
+      onWillPop: (() async => false),
+      child: Scaffold(
+        backgroundColor: const Color(0xFF0B4D9C),
+        body: SafeArea(
+          child: Stack(
+            children: [
+              Center(
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Image.asset(
+                        'assets/images/HIP Smart Community Icon-03.png',
                         scale: 4,
                       ),
-                    ],
-                  ),
+                    ),
+                    Image.asset(
+                      'assets/images/banner.png',
+                      scale: 4,
+                    ),
+                  ],
                 ),
-                Container(
-                  height: double.infinity,
-                  color: Colors.black38,
-                  child: dialogmain(
-                      'found_error'.tr,
-                      'connect_fail'.tr,
-                      Icons.warning_amber_rounded,
-                      Colors.orange,
-                      'ok'.tr, () async {
-                    if (Platform.isAndroid) {
-                      Restart.restartApp();
-                    } else if (Platform.isIOS) {
-                      exit(0);
-                    }
-                  }),
-                ),
-              ],
-            ),
+              ),
+              Container(
+                height: double.infinity,
+                color: Colors.black38,
+                child: dialogmain(
+                    'found_error'.tr,
+                    'connect_fail'.tr,
+                    Icons.warning_amber_rounded,
+                    Colors.orange,
+                    'ok'.tr, () async {
+                  if (Platform.isAndroid) {
+                    Restart.restartApp();
+                  } else if (Platform.isIOS) {
+                    exit(0);
+                  }
+                }),
+              ),
+            ],
           ),
         ),
       ),

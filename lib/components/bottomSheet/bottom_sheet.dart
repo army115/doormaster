@@ -4,11 +4,12 @@ import 'package:doormster/components/drawer/drawer.dart';
 import 'package:doormster/components/button/button_outline.dart';
 import 'package:doormster/screen/main_screen/add_company_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 void bottomsheet(context, companyId, multiCompany) {
   showModalBottomSheet<void>(
     isScrollControlled: true,
-    backgroundColor: Theme.of(context).primaryColor,
+    backgroundColor: Get.theme.primaryColor,
     shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(25), topRight: Radius.circular(25))),

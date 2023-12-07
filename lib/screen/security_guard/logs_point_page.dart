@@ -162,8 +162,7 @@ class _Logs_PointState extends State<Logs_Point> {
                           vertical: 10, horizontal: 10),
                       decoration: BoxDecoration(
                           border: Border.all(
-                              width: 2.5,
-                              color: Theme.of(context).primaryColor),
+                              width: 2.5, color: Get.theme.primaryColor),
                           color: Colors.white,
                           borderRadius:
                               const BorderRadius.all(Radius.circular(10))),
@@ -174,21 +173,21 @@ class _Logs_PointState extends State<Logs_Point> {
                               '${'date_report'.tr} : $dateNow',
                               Icon(
                                 Icons.calendar_month_rounded,
-                                color: Theme.of(context).primaryColor,
+                                color: Get.theme.primaryColor,
                                 size: 25,
                               )),
                           textIcon(
                               '${'round'.tr} : ${widget.roundName}',
                               Icon(
                                 Icons.map_rounded,
-                                color: Theme.of(context).primaryColor,
+                                color: Get.theme.primaryColor,
                                 size: 25,
                               )),
                           textIcon(
                               '${'interval'.tr} : ${widget.roundStart} ${'to'.tr} ${widget.roundEnd}',
                               Icon(
                                 Icons.access_time_rounded,
-                                color: Theme.of(context).primaryColor,
+                                color: Get.theme.primaryColor,
                                 size: 25,
                               )),
                         ],

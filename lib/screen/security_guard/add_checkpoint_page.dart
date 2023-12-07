@@ -92,13 +92,8 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
           });
 
           if (listdata.isEmpty) {
-            dialogOnebutton_Subtitle(
-                context,
-                'found_error'.tr,
-                'invalid_qrcode'.tr,
-                Icons.highlight_off_rounded,
-                Colors.red,
-                'ok'.tr, () {
+            dialogOnebutton_Subtitle('found_error'.tr, 'invalid_qrcode'.tr,
+                Icons.highlight_off_rounded, Colors.red, 'ok'.tr, () {
               Navigator.popUntil(context, (route) => route.isFirst);
             }, false, false);
           } else if (listdata[0].verify == 1) {
@@ -126,13 +121,8 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
         });
       }
     } else {
-      dialogOnebutton_Subtitle(
-          context,
-          'found_error'.tr,
-          'invalid_location_again'.tr,
-          Icons.highlight_off_rounded,
-          Colors.red,
-          'ok'.tr, () {
+      dialogOnebutton_Subtitle('found_error'.tr, 'invalid_location_again'.tr,
+          Icons.highlight_off_rounded, Colors.red, 'ok'.tr, () {
         Navigator.popUntil(context, (route) => route.isFirst);
       }, false, false);
       print('Location Null !!');
@@ -152,8 +142,9 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
           }),
           data: values);
       print(values);
-      var _response = response.toString().split(',').first.split(':').last;
-      if (_response == '200') {
+      var _response = response.data['status'];
+      print("status code : ${_response}");
+      if (_response == 200) {
         print('checkIn Success');
         print(values);
         print(response.data);
@@ -163,20 +154,15 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
           Navigator.of(context).popUntil((route) => route.isFirst);
         }, false, false);
 
-        // snackbar(context, Theme.of(context).primaryColor, 'ลงทะเบียนสำเร็จ',
+        // snackbar( Get.theme.primaryColor, 'ลงทะเบียนสำเร็จ',
         //     Icons.check_circle_outline_rounded);
 
         setState(() {
           loading = false;
         });
       } else {
-        dialogOnebutton_Subtitle(
-            context,
-            'found_error'.tr,
-            'register_fail_again'.tr,
-            Icons.highlight_off_rounded,
-            Colors.red,
-            'ok'.tr, () {
+        dialogOnebutton_Subtitle('found_error'.tr, 'register_fail_again'.tr,
+            Icons.highlight_off_rounded, Colors.red, 'ok'.tr, () {
           Navigator.of(context).pop();
         }, false, false);
         print('checkIn not Success!!');
@@ -191,7 +177,7 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
         Navigator.of(context, rootNavigator: true).pop();
       });
 
-      // snackbar(context, Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
+      // snackbar( Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
       //     Icons.warning_amber_rounded);
       setState(() {
         loading = false;

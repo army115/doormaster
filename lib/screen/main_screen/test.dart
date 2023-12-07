@@ -48,7 +48,7 @@ class _Test_PageState extends State<Test_Page>
       body: Center(
         child: ElevatedButton(
           onPressed: () {
-            NotificationService().showNotification(context);
+            // NotificationService().showNotification(context);
           },
           child: Text('Show Notification'),
         ),
@@ -84,9 +84,9 @@ class _Test_PageState extends State<Test_Page>
       //                       color:
       //                           // current
       //                           // ?
-      //                           Theme.of(context).primaryColor,
+      //                           Get.theme.primaryColor,
       //                       //     :
-      //                       // Theme.of(context).primaryColorLight,
+      //                       // Get.theme.primaryColorLight,
       //                       borderRadius:
       //                           // current
       //                           //     ?
@@ -126,7 +126,7 @@ class _Test_PageState extends State<Test_Page>
       //             highlightColor: Colors.transparent,
       //             splashColor: Colors.transparent,
       //             icon:
-      //                 Icon(Icons.image, color: Theme.of(context).primaryColor),
+      //                 Icon(Icons.image, color: Get.theme.primaryColor),
       //             iconSize: 30,
       //             onPressed: () {},
       //           ),
@@ -148,7 +148,7 @@ class _Test_PageState extends State<Test_Page>
       //           IconButton(
       //             highlightColor: Colors.transparent,
       //             splashColor: Colors.transparent,
-      //             icon: Icon(Icons.send, color: Theme.of(context).primaryColor),
+      //             icon: Icon(Icons.send, color: Get.theme.primaryColor),
       //             iconSize: 30,
       //             onPressed: () {
       //               _handleSubmitted(_textController.text);
@@ -196,9 +196,9 @@ class _Test_PageState extends State<Test_Page>
       //                       color:
       //                           // current
       //                           // ?
-      //                           Theme.of(context).primaryColor,
+      //                           Get.theme.primaryColor,
       //                       //     :
-      //                       // Theme.of(context).primaryColorLight,
+      //                       // Get.theme.primaryColorLight,
       //                       borderRadius:
       //                           // current
       //                           //     ?
@@ -238,7 +238,7 @@ class _Test_PageState extends State<Test_Page>
       //             highlightColor: Colors.transparent,
       //             splashColor: Colors.transparent,
       //             icon:
-      //                 Icon(Icons.image, color: Theme.of(context).primaryColor),
+      //                 Icon(Icons.image, color: Get.theme.primaryColor),
       //             iconSize: 30,
       //             onPressed: () {},
       //           ),
@@ -260,7 +260,7 @@ class _Test_PageState extends State<Test_Page>
       //           IconButton(
       //             highlightColor: Colors.transparent,
       //             splashColor: Colors.transparent,
-      //             icon: Icon(Icons.send, color: Theme.of(context).primaryColor),
+      //             icon: Icon(Icons.send, color: Get.theme.primaryColor),
       //             iconSize: 30,
       //             onPressed: () {
       //               _handleSubmitted(_textController.text);

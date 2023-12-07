@@ -5,7 +5,7 @@ void backDouble(context) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       dismissDirection: DismissDirection.none,
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Get.theme.primaryColor,
       content: Text(
         "press_again".tr,
         textAlign: TextAlign.center,

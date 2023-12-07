@@ -337,21 +337,19 @@ class _Logs_AllState extends State<Logs_All>
           weekdayLabelTextStyle: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 15,
-              color: Theme.of(context).primaryColor),
+              color: Get.theme.primaryColor),
           centerAlignModePicker: true,
           lastDate: DateTime.now(),
           calendarType: CalendarDatePicker2Type.range,
           cancelButton: Text(
             'cancel'.tr,
             style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).primaryColor),
+                fontWeight: FontWeight.bold, color: Get.theme.primaryColor),
           ),
           okButton: Text(
             'ok'.tr,
             style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).primaryColor),
+                fontWeight: FontWeight.bold, color: Get.theme.primaryColor),
           )),
       dialogSize: const Size(300, 400),
       borderRadius: BorderRadius.circular(10),

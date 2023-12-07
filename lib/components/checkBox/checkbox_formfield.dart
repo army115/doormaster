@@ -1,5 +1,6 @@
 import 'package:checkbox_formfield/checkbox_formfield.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CheckBox_FormField extends StatefulWidget {
   final title;
@@ -19,7 +20,7 @@ class _CheckBox_FormFieldState extends State<CheckBox_FormField> {
     return CheckboxListTileFormField(
       secondary: widget.secondary,
       dense: true,
-      activeColor: Theme.of(context).primaryColor,
+      activeColor: Get.theme.primaryColor,
       title: Text(
         widget.title,
         style: TextStyle(fontSize: 16),

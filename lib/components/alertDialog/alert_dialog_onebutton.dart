@@ -1,5 +1,8 @@
+// ignore_for_file: prefer_const_constructors, sort_child_properties_last, sized_box_for_whitespace
+
 import 'package:doormster/style/styleButton/ButtonStyle.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 void dialogOnebutton(
   context,
@@ -48,7 +51,7 @@ void dialogOnebutton(
                           style: styleButtons(
                               EdgeInsets.symmetric(vertical: 5),
                               10.0,
-                              Theme.of(context).primaryColor,
+                              Get.theme.primaryColor,
                               BorderRadius.circular(5)),
                           child: Text(
                             button,

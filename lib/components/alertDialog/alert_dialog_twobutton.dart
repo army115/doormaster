@@ -1,5 +1,6 @@
 import 'package:doormster/style/styleButton/ButtonStyle.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 void dialogTwobutton(
   context,
@@ -54,7 +55,7 @@ void dialogTwobutton(
                                   EdgeInsets.symmetric(
                                       vertical: 5, horizontal: 35),
                                   10.0,
-                                  Theme.of(context).primaryColor,
+                                  Get.theme.primaryColor,
                                   BorderRadius.circular(5)),
                               child: Text(
                                 button1,
@@ -71,7 +72,7 @@ void dialogTwobutton(
                                   EdgeInsets.symmetric(
                                       vertical: 5, horizontal: 25),
                                   10.0,
-                                  Theme.of(context).primaryColor,
+                                  Get.theme.primaryColor,
                                   BorderRadius.circular(5)),
                               child: Text(
                                 button2,

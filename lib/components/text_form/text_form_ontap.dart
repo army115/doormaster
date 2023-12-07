@@ -1,5 +1,6 @@
 import 'package:doormster/style/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class TextForm_Ontap extends StatelessWidget {
   final title;
@@ -24,7 +25,7 @@ class TextForm_Ontap extends StatelessWidget {
       child: Material(
         borderRadius: BorderRadius.circular(10),
         color: Colors.white,
-        elevation: 10,
+        elevation: 3,
         child: TextFormField(
           minLines: 1,
           maxLines: 5,
@@ -50,8 +51,7 @@ class TextForm_Ontap extends StatelessWidget {
                 size: 30,
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide:
-                    BorderSide(color: Theme.of(context).primaryColor, width: 2),
+                borderSide: BorderSide(color: Get.theme.primaryColor, width: 2),
                 borderRadius: BorderRadius.circular(10.0),
               ),
               enabledBorder: OutlineInputBorder(

@@ -34,6 +34,7 @@ const Map<String, String> en_US = {
 
   //Drawer
   'info': 'Personal Info',
+  'edit_profile': 'Edit Profile',
   'setting': 'Settings',
   'switch_company': 'Switch Company',
   'add_company': 'Add New Company',
@@ -150,7 +151,7 @@ const Map<String, String> en_US = {
   'no_picture': 'No Picture',
 
   //Button
-  'ok': 'Okay',
+  'ok': 'Done',
   'yes': 'Yes',
   'no': 'No',
   'submit': 'Submit',

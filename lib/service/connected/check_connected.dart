@@ -7,8 +7,8 @@ Future<void> checkInternet(context, page, rootNavi) async {
   var result = await Connectivity().checkConnectivity();
   print(result);
   if (result == ConnectivityResult.none) {
-    snackbar(context, Colors.orange, 'connect_internet_pls'.tr,
-        Icons.warning_amber_rounded);
+    snackbar(
+        Colors.orange, 'connect_internet_pls'.tr, Icons.warning_amber_rounded);
     print('not connected');
   } else {
     Navigator.of(context, rootNavigator: rootNavi)
@@ -20,8 +20,8 @@ Future<void> checkInternetOnGoBack(context, page, rootNavi, onGoBack) async {
   var result = await Connectivity().checkConnectivity();
   print(result);
   if (result == ConnectivityResult.none) {
-    snackbar(context, Colors.orange, 'connect_internet_pls'.tr,
-        Icons.warning_amber_rounded);
+    snackbar(
+        Colors.orange, 'connect_internet_pls'.tr, Icons.warning_amber_rounded);
     print('not connected');
   } else {
     Navigator.of(context, rootNavigator: rootNavi)
@@ -34,8 +34,8 @@ Future<void> checkInternetName(context, page, rootNavi) async {
   var result = await Connectivity().checkConnectivity();
   print(result);
   if (result == ConnectivityResult.none) {
-    snackbar(context, Colors.orange, 'connect_internet_pls'.tr,
-        Icons.warning_amber_rounded);
+    snackbar(
+        Colors.orange, 'connect_internet_pls'.tr, Icons.warning_amber_rounded);
     print('not connected');
   } else {
     Navigator.of(context, rootNavigator: rootNavi).pushNamed(page);
@@ -47,8 +47,8 @@ Future<void> checkInternetNameOnGoBack(
   var result = await Connectivity().checkConnectivity();
   print(result);
   if (result == ConnectivityResult.none) {
-    snackbar(context, Colors.orange, 'connect_internet_pls'.tr,
-        Icons.warning_amber_rounded);
+    snackbar(
+        Colors.orange, 'connect_internet_pls'.tr, Icons.warning_amber_rounded);
     print('not connected');
   } else {
     Navigator.of(context, rootNavigator: rootNavi)

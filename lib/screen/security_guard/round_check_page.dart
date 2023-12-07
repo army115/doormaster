@@ -53,7 +53,7 @@ class _Round_CheckState extends State<Round_Check> {
               now.isAtSameMomentAs(timeStart!)
           //  ||now.isAtSameMomentAs(timeEnd!)
           ) {
-        containerColor = Theme.of(context).primaryColor;
+        containerColor = Get.theme.primaryColor;
         textColor = Colors.white;
         line = Colors.white;
         round = 1;
@@ -68,7 +68,7 @@ class _Round_CheckState extends State<Round_Check> {
               now.isAtSameMomentAs(timeStart!)
           // || now.isAtSameMomentAs(timeEnd!)
           ) {
-        containerColor = Theme.of(context).primaryColor;
+        containerColor = Get.theme.primaryColor;
         textColor = Colors.white;
         line = Colors.white;
         round = 1;

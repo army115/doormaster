@@ -2,6 +2,7 @@
 
 import 'package:doormster/style/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_datetime_picker_bdaya/flutter_datetime_picker_bdaya.dart';
 
@@ -25,7 +26,7 @@ class _Date_timeState extends State<Date_time> {
       padding: EdgeInsets.symmetric(vertical: 8),
       child: PhysicalModel(
         borderRadius: BorderRadius.circular(10),
-        elevation: 10,
+        elevation: 3,
         color: Colors.white,
         child: TextFormField(
           style: textStyle().title16,
@@ -44,8 +45,7 @@ class _Date_timeState extends State<Date_time> {
             // filled: true, พื้นหลังช่อง
             // fillColor: Colors.white,
             focusedBorder: OutlineInputBorder(
-              borderSide:
-                  BorderSide(color: Theme.of(context).primaryColor, width: 2),
+              borderSide: BorderSide(color: Get.theme.primaryColor, width: 2),
               borderRadius: BorderRadius.circular(10.0),
             ),
             enabledBorder: OutlineInputBorder(
@@ -86,7 +86,7 @@ class _Date_timeState extends State<Date_time> {
                   : LocaleType.th,
               theme: DatePickerThemeBdaya(
                 titleHeight: 45,
-                headerColor: Theme.of(context).primaryColor,
+                headerColor: Get.theme.primaryColor,
                 cancelStyle: TextStyle(
                     color: Colors.white,
                     fontSize: 17,

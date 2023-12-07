@@ -1,5 +1,6 @@
 import 'package:doormster/style/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 // ignore_for_file: avoid_unnecessary_containers, must_be_immutable, unused_import
 
 class TextForm_validator extends StatelessWidget {
@@ -23,7 +24,7 @@ class TextForm_validator extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 8),
       child: PhysicalModel(
         borderRadius: BorderRadius.circular(10),
-        elevation: 10,
+        elevation: 3,
         color: Colors.white,
         child: TextFormField(
             style: textStyle().title16,
@@ -44,8 +45,7 @@ class TextForm_validator extends StatelessWidget {
               // filled: true, พื้นหลังช่อง
               // fillColor: Colors.white,
               focusedBorder: OutlineInputBorder(
-                borderSide:
-                    BorderSide(color: Theme.of(context).primaryColor, width: 2),
+                borderSide: BorderSide(color: Get.theme.primaryColor, width: 2),
                 borderRadius: BorderRadius.circular(10.0),
               ),
               enabledBorder: OutlineInputBorder(

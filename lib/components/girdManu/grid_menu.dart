@@ -1,6 +1,7 @@
 // ignore_for_file: camel_case_types, must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Grid_Menu extends StatelessWidget {
   String title;
@@ -23,7 +24,7 @@ class Grid_Menu extends StatelessWidget {
       margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       elevation: 10,
-      color: color ?? Theme.of(context).primaryColor,
+      color: color ?? Get.theme.primaryColor,
       child: InkWell(
         borderRadius: BorderRadius.circular(20),
         splashColor: Colors.black12,

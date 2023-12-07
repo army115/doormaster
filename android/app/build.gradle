@@ -115,9 +115,5 @@ dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
     implementation platform('com.google.firebase:firebase-bom:32.2.0')
     implementation 'com.google.firebase:firebase-analytics'
-    implementation 'com.google.mlkit:text-recognition-chinese:16.0.0-beta6'
-    implementation 'com.google.mlkit:text-recognition-devanagari:16.0.0-beta6'
-    implementation 'com.google.mlkit:text-recognition-japanese:16.0.0-beta6'
-    implementation 'com.google.mlkit:text-recognition-korean:16.0.0-beta6'
     // implementation 'androidx.work:work-runtime-ktx:2.7.1'
 }

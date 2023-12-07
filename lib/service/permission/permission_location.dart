@@ -17,13 +17,8 @@ Future<void> permissionLocation(context, action) async {
     if (permission.isGranted) {
       await action();
     } else {
-      dialogOnebutton_Subtitle(
-          context,
-          'allow_access'.tr,
-          'need_access_location'.tr,
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ok'.tr, () {
+      dialogOnebutton_Subtitle('allow_access'.tr, 'need_access_location'.tr,
+          Icons.warning_amber_rounded, Colors.orange, 'ok'.tr, () {
         openAppSettings();
 
         Navigator.of(context, rootNavigator: true).pop();
@@ -34,25 +29,15 @@ Future<void> permissionLocation(context, action) async {
     if (permission.isGranted && location) {
       await action();
     } else if (!location) {
-      dialogOnebutton_Subtitle(
-          context,
-          'access_location'.tr,
-          'turn_on_location'.tr,
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ok'.tr, () async {
+      dialogOnebutton_Subtitle('access_location'.tr, 'turn_on_location'.tr,
+          Icons.warning_amber_rounded, Colors.orange, 'ok'.tr, () async {
         await launch('App-Prefs:LOCATION_SERVICES');
 
         Navigator.of(context, rootNavigator: true).pop();
       }, true, true);
     } else {
-      dialogOnebutton_Subtitle(
-          context,
-          'allow_access'.tr,
-          'need_access_location'.tr,
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ok'.tr, () {
+      dialogOnebutton_Subtitle('allow_access'.tr, 'need_access_location'.tr,
+          Icons.warning_amber_rounded, Colors.orange, 'ok'.tr, () {
         print('setting');
         openAppSettings();
 

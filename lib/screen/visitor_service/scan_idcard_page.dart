@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, unnecessary_null_comparison, deprecated_member_use, avoid_print
 
 import 'dart:async';
 import 'dart:developer';
@@ -7,9 +7,11 @@ import 'package:camera/camera.dart';
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/models/id_card.dart';
+import 'package:doormster/service/connected/connect_api.dart';
 import 'package:doormster/style/overlay_frame.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:image_picker/image_picker.dart';
+// import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
 class Scan_IDCard extends StatefulWidget {
   const Scan_IDCard({super.key});
@@ -53,61 +55,63 @@ class _Scan_IDCardState extends State<Scan_IDCard> {
   }
 
   void _capture() async {
-    if (!controller!.value.isTakingPicture) {
-      try {
-        await controller?.setFlashMode(FlashMode.off);
-        await controller?.setFocusMode(FocusMode.auto);
-        final image = await controller!.takePicture();
-        print(image.path);
-        setState(() {
-          imagePath = image.path;
-        });
-        // final ImagePicker imgpicker = ImagePicker();
-        // final image = await imgpicker.pickImage(
-        //     source: ImageSource.camera, maxHeight: 1080, maxWidth: 1080);
+    // if (!controller!.value.isTakingPicture) {
+    try {
+      // await controller?.setFlashMode(FlashMode.off);
+      // await controller?.setFocusMode(FocusMode.auto);
+      // final image = await controller!.takePicture();
+      // print(image.path);
+      // setState(() {
+      //   imagePath = image.path;
+      // });
+      final ImagePicker imgpicker = ImagePicker();
+      final images = await imgpicker.pickImage(
+          source: ImageSource.gallery, maxHeight: 1080, maxWidth: 1080);
+      if (images != null) {
         Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => Show_Image(
-                imagepath: image,
+                imagepath: images,
               ),
             ));
-        // Get.to(Show_Image(
-        //   imagepath: image,
-        // ));
-      } catch (e) {
-        print("Error: $e");
       }
+      // Get.to(Show_Image(
+      //   imagepath: image,
+      // ));
+    } catch (e) {
+      print("Error: $e");
     }
+    // }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (controller == null || !controller!.value.isInitialized) {
-      return Container();
-    }
+    // if (controller == null || !controller!.value.isInitialized) {
+    //   return Container();
+    // }
     return Scaffold(
       backgroundColor: Colors.black,
       body: Stack(
         alignment: Alignment.center,
         // fit: StackFit.expand,
         children: [
-          Center(
-            child: CameraPreview(
-              controller!,
-              child: Container(
-                decoration: ShapeDecoration(
-                  shape: OverlayShape(
-                    borderWidth: 10,
-                    borderRadius: 10,
-                    cutOutHeight: 240,
-                    cutOutWidth: 370,
-                  ),
-                ),
-                // child: FutureBuilder(future: , builder: builder),
-              ),
-            ),
-          ),
+          // Center(
+          //   child: CameraPreview(
+          //     controller!,
+          //     child: Container(
+          //       decoration: ShapeDecoration(
+          //         shape: OverlayShape(
+          //           borderWidth: 10,
+          //           borderRadius: 10,
+          //           cutOutHeight: 240,
+          //           cutOutWidth: 370,
+          //         ),
+          //       ),
+          //       // child: FutureBuilder(future: , builder: builder),
+          //     ),
+          //   ),
+          // ),
           Positioned(
             left: 10,
             top: MediaQuery.of(context).size.height * 0.05,
@@ -157,42 +161,53 @@ class _Show_ImageState extends State<Show_Image> {
   String? lname;
   String? id_number;
 
-  void _scantext() async {
-    try {
-      final inputImage = InputImage.fromFilePath(widget.imagepath.path);
-      final textRecognizer = TextRecognizer();
-      final RecognizedText recognizedText =
-          await textRecognizer.processImage(inputImage);
-      for (TextBlock block in recognizedText.blocks) {
-        for (TextLine line in block.lines) {
-          for (TextElement element in line.elements) {
-            setState(() {});
-            // text = text + element.text + ' ';
-            data.add(element.text);
-            print(text);
-          }
-        }
-      }
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ID_Form(
-              fname: data[1],
-              lname: data[2],
-              id_card: data[3],
-            ),
-          ));
-    } catch (e) {
-      print(e);
-    }
-  }
+  // void _scantext() async {
+  //   try {
+  //     final inputImage = InputImage.fromFilePath(widget.imagepath.path);
+  //     final textRecognizer =
+  //         TextRecognizer(script: TextRecognitionScript.chinese);
+  //     final RecognizedText recognizedText =
+  //         await textRecognizer.processImage(inputImage);
+  //     if (text == '' || data.isEmpty) {
+  //       for (TextBlock block in recognizedText.blocks) {
+  //         for (TextLine line in block.lines) {
+  //           for (TextElement element in line.elements) {
+  //             setState(() {});
+  //             text = text + element.text + ' ';
+  //             data.add(element.text);
+  //             print(text);
+  //           }
+  //         }
+  //       }
+  //     }
+  //     if (data.isNotEmpty) {
+  //       Navigator.push(
+  //           context,
+  //           MaterialPageRoute(
+  //             builder: (context) => ID_Form(
+  //               fname: data[0],
+  //               lname: data[1],
+  //               id_card: data[2],
+  //               textFull: text,
+  //             ),
+  //           ));
+  //     } else {
+  //       dialogOnebutton_Subtitle(context, 'Error', 'ข้อมูลบัตรไม่ถูกต้อง',
+  //           Icons.warning, Colors.orange, 'OK', () {
+  //         Navigator.pop(context);
+  //       }, false, false);
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 
   Future<void> _sendID(XFile file) async {
     try {
       // await Future.delayed(Duration(milliseconds: loadingTime));
 
       //call api Dio
-      var host = 'http://localhost:8080/ocr';
+      var host = 'http://localhost:8080/OCR';
       FormData formData = FormData.fromMap({
         'file': await MultipartFile.fromFile(
           file.path,
@@ -207,23 +222,25 @@ class _Show_ImageState extends State<Show_Image> {
         //   headers: {'apikey': 'NmQF10gmOYyg8Sa1abNuiu6EEH0Yzlnr'},
         // ),
       );
+      log(response.data.toString());
 
       if (response.statusCode == 200) {
         ID_Card id_card = ID_Card.fromJson(response.data);
         setState(() {
-          fname = id_card.thFname;
-          lname = id_card.thLname;
-          id_number = id_card.idNumber;
+          // fname = id_card.thFname;
+          // lname = id_card.thLname;
+          // id_number = id_card.idNumber;
+          text = response.data.toString();
         });
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ID_Form(
-                fname: id_card.thFname,
-                lname: id_card.thLname,
-                id_card: id_card.idNumber,
-              ),
-            ));
+        // Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //       builder: (context) => ID_Form(
+        //         fname: id_card.thFname,
+        //         lname: id_card.thLname,
+        //         id_card: id_card.idNumber,
+        //       ),
+        //     ));
         // Get.to(ID_Form(
         //   fname: id_card.thFname,
         //   lname: id_card.thLname,
@@ -233,31 +250,26 @@ class _Show_ImageState extends State<Show_Image> {
         print(response.statusCode);
         ID_Card error = ID_Card.fromJson(response.data);
         // Error error = Error.fromJson(convert.jsonDecode(responseBody));
-        dialogOnebutton_Subtitle(context, 'Error', '${error.errorMessage}',
+        dialogOnebutton_Subtitle('Error', '${error.errorMessage}',
             Icons.warning, Colors.orange, 'OK', () {
           Navigator.pop(context);
         }, false, false);
       }
-    } catch (e) {
-      print(e);
-      if (e is DioError) {
-        if (e.response != null) {
-          print('Error status code: ${e.response!.statusCode}');
-          print('Error response data: ${e.response!.data}');
-          ID_Card error = ID_Card.fromJson(e.response?.data);
-          dialogOnebutton_Subtitle(context, 'Error', '${error.errorMessage}',
-              Icons.warning, Colors.orange, 'OK', () {
-            Navigator.pop(context);
-          }, false, false);
-        } else {
-          dialogOnebutton_Subtitle(
-              context, 'Error', '${e}', Icons.warning, Colors.orange, 'OK', () {
-            Navigator.pop(context);
-          }, false, false);
-          print('Request failed without a response.');
-        }
+    } on DioError catch (e) {
+      if (e.response != null) {
+        print('Error status code: ${e.response!.statusCode}');
+        print('Error response data: ${e.response!.data}');
+        ID_Card error = ID_Card.fromJson(e.response?.data);
+        dialogOnebutton_Subtitle('Error', '${error.errorMessage}',
+            Icons.check_circle, Colors.green, 'OK', () {
+          Navigator.pop(context);
+        }, false, false);
       } else {
-        print('An unexpected error occurred: $e');
+        dialogOnebutton_Subtitle(
+            'Error', '${e}', Icons.warning, Colors.orange, 'OK', () {
+          Navigator.pop(context);
+        }, false, false);
+        log('Request failed without a response.');
       }
     }
   }
@@ -348,7 +360,9 @@ class ID_Form extends StatefulWidget {
   final fname;
   final lname;
   final id_card;
-  const ID_Form({super.key, this.fname, this.lname, this.id_card});
+  final textFull;
+  const ID_Form(
+      {super.key, this.fname, this.lname, this.id_card, this.textFull});
 
   @override
   State<ID_Form> createState() => _ID_FormState();
@@ -387,6 +401,7 @@ class _ID_FormState extends State<ID_Form> {
               controller: id_card,
               decoration: InputDecoration(hintText: id_card.text),
             ),
+            Text(widget.textFull),
           ],
         ),
       ),

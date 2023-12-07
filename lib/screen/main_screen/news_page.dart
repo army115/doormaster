@@ -62,23 +62,17 @@ class _News_PageState extends State<News_Page>
 
         if (result["isSuccess"] == true) {
           print('saved image successfully!!!');
-          snackbar(context, Theme.of(context).primaryColor,
-              'capture_success'.tr, Icons.check_circle_outline_rounded);
+          snackbar(Get.theme.primaryColor, 'capture_success'.tr,
+              Icons.check_circle_outline_rounded);
         } else {
           print('saved image successfully!!!');
-          snackbar(context, Colors.red, 'capture_fail'.tr,
-              Icons.highlight_off_rounded);
+          snackbar(Colors.red, 'capture_fail'.tr, Icons.highlight_off_rounded);
         }
       }
     } catch (error) {
       print(error);
-      dialogOnebutton_Subtitle(
-          context,
-          'found_error'.tr,
-          'capture_fail_again'.tr,
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ok'.tr, () {
+      dialogOnebutton_Subtitle('found_error'.tr, 'capture_fail_again'.tr,
+          Icons.warning_amber_rounded, Colors.orange, 'ok'.tr, () {
         Navigator.of(context).pop();
       }, false, false);
     }
@@ -132,7 +126,7 @@ class _News_PageState extends State<News_Page>
                                   style: TextStyle(fontSize: 15, height: 1.3),
                                 ),
                                 Divider(
-                                  color: Theme.of(context).primaryColor,
+                                  color: Get.theme.primaryColor,
                                   thickness: 1,
                                 ),
                                 SizedBox(height: 3),
@@ -152,7 +146,7 @@ class _News_PageState extends State<News_Page>
                                   style: textStyle().body14,
                                 ),
                                 Divider(
-                                  color: Theme.of(context).primaryColor,
+                                  color: Get.theme.primaryColor,
                                   thickness: 1,
                                 ),
                                 Center(
@@ -168,8 +162,7 @@ class _News_PageState extends State<News_Page>
                                             ? 'see_more'.tr
                                             : 'see_less'.tr,
                                         style: TextStyle(
-                                            color:
-                                                Theme.of(context).primaryColor,
+                                            color: Get.theme.primaryColor,
                                             decoration:
                                                 TextDecoration.underline,
                                             fontSize: 14),

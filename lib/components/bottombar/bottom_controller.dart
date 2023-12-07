@@ -10,7 +10,7 @@ BottomController bottomController = BottomController();
 
 class BottomController extends GetxController
     with SingleGetTickerProviderMixin {
-  var selectedIndex = 0.obs;
+  RxInt selectedIndex = 0.obs;
   late TabController tabController;
 
   BottomController() {

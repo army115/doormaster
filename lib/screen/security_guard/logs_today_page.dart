@@ -144,7 +144,7 @@ class _Logs_TodayState extends State<Logs_Today>
                                     '${'date_report'.tr} : $dateNow',
                                     Icon(
                                       Icons.event_note,
-                                      color: Theme.of(context).primaryColor,
+                                      color: Get.theme.primaryColor,
                                       size: 25,
                                     ))),
                           ),

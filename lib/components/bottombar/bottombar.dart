@@ -6,6 +6,7 @@ import 'package:doormster/routes/menu/home_menu.dart';
 import 'package:doormster/routes/menu/news_menu.dart';
 import 'package:doormster/routes/menu/notification_menu.dart';
 import 'package:doormster/routes/menu/profile_menu.dart';
+import 'package:doormster/screen/main_screen/news_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -28,7 +29,7 @@ class _BottomBarState extends State<BottomBar>
     with SingleTickerProviderStateMixin {
   final buildBody = [
     Home_Menu(),
-    News_Menu(),
+    News_Page(),
     Notification_Menu(),
     Profile_Menu(),
   ];

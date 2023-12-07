@@ -69,7 +69,7 @@ class _LoadingState extends State<Loading> {
 //               mainAxisAlignment: MainAxisAlignment.center,
 //               children: [
 //                 CircularProgressIndicator(
-//                   color: Theme.of(context).primaryColor,
+//                   color: Get.theme.primaryColor,
 //                 ),
 //                 SizedBox(
 //                   height: 15,

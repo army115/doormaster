@@ -9,13 +9,8 @@ Future<void> permissionCamere(context, action) async {
   if (permission.isGranted) {
     await action();
   } else {
-    dialogOnebutton_Subtitle(
-        context,
-        'allow_access'.tr,
-        'need_access_camera'.tr,
-        Icons.warning_amber_rounded,
-        Colors.orange,
-        'ok'.tr, () {
+    dialogOnebutton_Subtitle('allow_access'.tr, 'need_access_camera'.tr,
+        Icons.warning_amber_rounded, Colors.orange, 'ok'.tr, () {
       openAppSettings();
       Navigator.of(context, rootNavigator: true).pop();
     }, true, true);

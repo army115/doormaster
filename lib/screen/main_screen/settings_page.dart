@@ -90,28 +90,23 @@ class _Settings_PageState extends State<Settings_Page> {
             'Accept': 'application/json',
           }),
           data: {"uuid": uuId, "Block": 1});
-      var _response = response.toString().split(',').first.split(':').last;
-      print(_response);
-      if (_response == '200') {
+      var _response = response.data['status'];
+      print("status code : ${_response}");
+      if (_response == 200) {
         print('block Success');
         print(response.data);
 
         _Logout();
 
-        snackbar(context, Theme.of(context).primaryColor,
-            'deactivation_success'.tr, Icons.check_circle_outline_rounded);
+        snackbar(Get.theme.primaryColor, 'deactivation_success'.tr,
+            Icons.check_circle_outline_rounded);
 
         setState(() {
           loading = false;
         });
       } else {
-        dialogOnebutton_Subtitle(
-            context,
-            'deactivation_fail'.tr,
-            'again_pls'.tr,
-            Icons.highlight_off_rounded,
-            Colors.red,
-            'ok'.tr, () {
+        dialogOnebutton_Subtitle('deactivation_fail'.tr, 'again_pls'.tr,
+            Icons.highlight_off_rounded, Colors.red, 'ok'.tr, () {
           Navigator.of(context, rootNavigator: true).pop();
         }, false, false);
         print('checkIn not Success!!');
@@ -136,7 +131,7 @@ class _Settings_PageState extends State<Settings_Page> {
       isScrollControlled: true,
       context: context,
       shape: RoundedRectangleBorder(
-          side: BorderSide(width: 3, color: Theme.of(context).primaryColor),
+          side: BorderSide(width: 3, color: Get.theme.primaryColor),
           borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(15), topRight: Radius.circular(15))),
       builder: (BuildContext context) {
@@ -161,7 +156,7 @@ class _Settings_PageState extends State<Settings_Page> {
                     child: Column(children: [
                       ListTile(
                         selectedTileColor: language == 'th'
-                            ? Theme.of(context).primaryColor
+                            ? Get.theme.primaryColor
                             : Colors.white,
                         selected: language == 'th' ? true : false,
                         title: Text(
@@ -184,7 +179,7 @@ class _Settings_PageState extends State<Settings_Page> {
                       ),
                       ListTile(
                         selectedTileColor: language == 'en'
-                            ? Theme.of(context).primaryColor
+                            ? Get.theme.primaryColor
                             : Colors.white,
                         selected: language == 'en' ? true : false,
                         title: Text(

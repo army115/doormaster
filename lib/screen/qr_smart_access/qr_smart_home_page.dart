@@ -52,13 +52,8 @@ class _QRSmart_HomePageState extends State<QRSmart_HomePage> {
     if (status.isGranted && status2.isGranted && status3.isGranted) {
       checkInternet(context, Opendoor_Page(), false);
     } else {
-      dialogOnebutton_Subtitle(
-          context,
-          'allow_access'.tr,
-          'need_access_device'.tr,
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ok'.tr, () {
+      dialogOnebutton_Subtitle('allow_access'.tr, 'need_access_device'.tr,
+          Icons.warning_amber_rounded, Colors.orange, 'ok'.tr, () {
         Navigator.of(context, rootNavigator: true).pop();
         openAppSettings();
       }, false, true);

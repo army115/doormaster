@@ -11,13 +11,8 @@ Future<void> permissionPhotos(context, action) async {
   if (permission.isGranted || permission.isLimited) {
     action;
   } else {
-    dialogOnebutton_Subtitle(
-        context,
-        'allow_access'.tr,
-        'need_access_picture'.tr,
-        Icons.warning_amber_rounded,
-        Colors.orange,
-        'ok'.tr, () {
+    dialogOnebutton_Subtitle('allow_access'.tr, 'need_access_picture'.tr,
+        Icons.warning_amber_rounded, Colors.orange, 'ok'.tr, () {
       Navigator.of(context, rootNavigator: true).pop();
       openAppSettings();
     }, true, true);
@@ -31,13 +26,8 @@ Future<void> permissionAddPhotos(context, action) async {
     if (permission.isGranted || permission.isLimited) {
       await action();
     } else {
-      dialogOnebutton_Subtitle(
-          context,
-          'allow_access'.tr,
-          'need_access_picture'.tr,
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ok'.tr, () {
+      dialogOnebutton_Subtitle('allow_access'.tr, 'need_access_picture'.tr,
+          Icons.warning_amber_rounded, Colors.orange, 'ok'.tr, () {
         Navigator.of(context, rootNavigator: true).pop();
         openAppSettings();
       }, true, true);

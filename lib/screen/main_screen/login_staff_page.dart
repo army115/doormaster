@@ -93,8 +93,8 @@ class _Login_StaffState extends State<Login_Staff> {
               Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => BottomBar()));
               bottomController.ontapItem(0);
-              snackbar(context, Theme.of(context).primaryColor,
-                  'login_success'.tr, Icons.check_circle_outline_rounded);
+              snackbar(Get.theme.primaryColor, 'login_success'.tr,
+                  Icons.check_circle_outline_rounded);
 
               // setState(() {
               //   loading = false;
@@ -103,7 +103,6 @@ class _Login_StaffState extends State<Login_Staff> {
               print(jsonRes.data);
               print('account block');
               dialogOnebutton_Subtitle(
-                  context,
                   'account_block'.tr,
                   'unblock_account'.tr,
                   Icons.warning_amber_rounded,
@@ -118,8 +117,8 @@ class _Login_StaffState extends State<Login_Staff> {
           } else {
             print(jsonRes.data);
             print('username หรือ password ไม่ถูกต้อง');
-            snackbar(context, Colors.red, 'wrong_username'.tr,
-                Icons.highlight_off_rounded);
+            snackbar(
+                Colors.red, 'wrong_username'.tr, Icons.highlight_off_rounded);
             setState(() {
               loading = false;
             });
@@ -127,8 +126,7 @@ class _Login_StaffState extends State<Login_Staff> {
         } else {
           print(response.statusCode);
           print('Connection Fail');
-          snackbar(context, Colors.red, 'login_failed'.tr,
-              Icons.highlight_off_rounded);
+          snackbar(Colors.red, 'login_failed'.tr, Icons.highlight_off_rounded);
           setState(() {
             loading = false;
           });
@@ -152,7 +150,7 @@ class _Login_StaffState extends State<Login_Staff> {
     return WillPopScope(
       onWillPop: () async => onBackButtonDoubleClicked(context),
       child: Scaffold(
-          // backgroundColor: Theme.of(context).primaryColor,
+          // backgroundColor: Get.theme.primaryColor,
           body: SingleChildScrollView(
         child: Form(
           key: _formkey,
@@ -161,7 +159,7 @@ class _Login_StaffState extends State<Login_Staff> {
               PhysicalModel(
                 // borderRadius: BorderRadius.circular(10),
                 elevation: 10,
-                color: Theme.of(context).primaryColor,
+                color: Get.theme.primaryColor,
                 child: Container(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height * 0.55,
@@ -245,7 +243,7 @@ class _Login_StaffState extends State<Login_Staff> {
                                         text: 'user'.tr,
                                         style: TextStyle(
                                           decoration: TextDecoration.underline,
-                                          color: Theme.of(context).primaryColor,
+                                          color: Get.theme.primaryColor,
                                         ),
                                         recognizer: TapGestureRecognizer()
                                           ..onTap = () {

@@ -87,23 +87,17 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
 
         if (result["isSuccess"] == true) {
           print('saved image successfully!!!');
-          snackbar(context, Theme.of(context).primaryColor,
-              'capture_success'.tr, Icons.check_circle_outline_rounded);
+          snackbar(Get.theme.primaryColor, 'capture_success'.tr,
+              Icons.check_circle_outline_rounded);
         } else {
           print('saved image successfully!!!');
-          snackbar(context, Colors.red, 'capture_fail'.tr,
-              Icons.highlight_off_rounded);
+          snackbar(Colors.red, 'capture_fail'.tr, Icons.highlight_off_rounded);
         }
       }
     } catch (error) {
       print(error);
-      dialogOnebutton_Subtitle(
-          context,
-          'found_error'.tr,
-          'capture_fail_again'.tr,
-          Icons.warning_amber_rounded,
-          Colors.orange,
-          'ok'.tr, () {
+      dialogOnebutton_Subtitle('found_error'.tr, 'capture_fail_again'.tr,
+          Icons.warning_amber_rounded, Colors.orange, 'ok'.tr, () {
         Navigator.of(context).pop();
       }, false, false);
     }
@@ -211,7 +205,7 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
                 Card(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
-                  color: Theme.of(context).primaryColor,
+                  color: Get.theme.primaryColor,
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Column(children: [
@@ -254,7 +248,7 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
                   child: Card(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
-                    color: Theme.of(context).primaryColor,
+                    color: Get.theme.primaryColor,
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Column(
