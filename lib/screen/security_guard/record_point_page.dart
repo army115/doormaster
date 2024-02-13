@@ -80,7 +80,7 @@ class _Record_PointState extends State<Record_Point> {
     } catch (error) {
       print(error);
       await Future.delayed(const Duration(milliseconds: 500));
-      error_connected(context, () {
+      error_connected(() {
         Navigator.of(context, rootNavigator: true).pop();
       });
       setState(() {
@@ -125,9 +125,9 @@ class _Record_PointState extends State<Record_Point> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                 decoration: BoxDecoration(
-                    border:
-                        Border.all(width: 2.5, color: Get.theme.primaryColor),
-                    color: Colors.white,
+                    border: Border.all(
+                        width: 2.5, color: Get.theme.primaryColorDark),
+                    color: Get.theme.cardTheme.color,
                     borderRadius: const BorderRadius.all(Radius.circular(10))),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,14 +136,14 @@ class _Record_PointState extends State<Record_Point> {
                         '${'date_report'.tr} : ${widget.dateTime}',
                         Icon(
                           Icons.calendar_month_rounded,
-                          color: Get.theme.primaryColor,
+                          color: Get.theme.primaryColorDark,
                           size: 25,
                         )),
                     textIcon(
                         '${'round'.tr} : ${widget.roundName}',
                         Icon(
                           Icons.map_rounded,
-                          color: Get.theme.primaryColor,
+                          color: Get.theme.primaryColorDark,
                           size: 25,
                         )),
                     widget.roundName == 'extra_round'.tr
@@ -152,7 +152,7 @@ class _Record_PointState extends State<Record_Point> {
                             '${'interval'.tr} : ${widget.roundStart} ${'to'.tr} ${widget.roundEnd}',
                             Icon(
                               Icons.access_time_rounded,
-                              color: Get.theme.primaryColor,
+                              color: Get.theme.primaryColorDark,
                               size: 25,
                             ))
                   ],
@@ -190,125 +190,121 @@ class _Record_PointState extends State<Record_Point> {
                               DateTime.parse('${fileList[index].date}');
 
                           return Card(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            margin: const EdgeInsets.symmetric(vertical: 5),
+                            margin: EdgeInsets.symmetric(vertical: 5),
                             elevation: 10,
+                            color: Colors.transparent,
                             child: ExpansionTile(
-                                textColor: Colors.black,
                                 title: Text(
-                                    '${'checkpoint'.tr} : ${fileList[index].checkpointName}'),
+                                  '${'checkpoint'.tr} : ${fileList[index].checkpointName}',
+                                  style: Get.textTheme.bodyText2,
+                                ),
                                 subtitle: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                        '${'event'.tr} : ${fileList[index].event}'),
+                                      '${'event'.tr} : ${fileList[index].event}',
+                                    ),
                                     Text(
-                                        '${'date'.tr} ${formatdate.format(date)} ${'time'.tr} ${formatTime.format(time)}'),
+                                      '${'date'.tr} ${formatdate.format(date)} ${'time'.tr} ${formatTime.format(time)}',
+                                    ),
                                   ],
                                 ),
                                 children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        borderRadius: const BorderRadius.only(
-                                            bottomLeft: Radius.circular(10),
-                                            bottomRight: Radius.circular(
-                                                10)), // Set the border radius here
-                                        color: Colors.grey.shade200),
-                                    padding: const EdgeInsets.fromLTRB(
-                                        10, 10, 10, 10),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        textIcon(
-                                            'checklist'.tr,
-                                            const Icon(
-                                              Icons.task_rounded,
-                                              size: 25,
-                                              color: Colors.black,
-                                            )),
-                                        ListView.builder(
-                                          shrinkWrap: true,
-                                          primary: false,
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 3, horizontal: 20),
-                                          itemCount: listcheck?.length,
-                                          itemBuilder: (BuildContext context,
-                                              int index) {
-                                            return listcheck?[index] == ''
-                                                ? Container()
-                                                : Text(
-                                                    '- ${listcheck?[index]}');
-                                          },
-                                        ),
-                                        fileList[index].desciption != ''
-                                            ? Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  textIcon(
-                                                      'desciption'.tr,
-                                                      const Icon(
-                                                        Icons
-                                                            .description_rounded,
-                                                        size: 25,
-                                                        color: Colors.black,
-                                                      )),
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 20,
-                                                        vertical: 3),
-                                                    child: Text(
-                                                      '- ${fileList[index].desciption}',
-                                                    ),
-                                                  ),
-                                                ],
-                                              )
-                                            : Container(),
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                                child: textIcon(
-                                                    'pictures'.tr,
-                                                    const Icon(
-                                                      Icons
-                                                          .photo_library_rounded,
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      textIcon(
+                                          'checklist'.tr,
+                                          color: Get.theme.dividerColor,
+                                          Icon(
+                                            Icons.task_rounded,
+                                            size: 25,
+                                            color: Get.theme.dividerColor,
+                                          )),
+                                      ListView.builder(
+                                        shrinkWrap: true,
+                                        primary: false,
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 3, horizontal: 20),
+                                        itemCount: listcheck?.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return listcheck?[index] == ''
+                                              ? Container()
+                                              : Text(
+                                                  '- ${listcheck?[index]}',
+                                                );
+                                        },
+                                      ),
+                                      fileList[index].desciption != ''
+                                          ? Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                textIcon(
+                                                    'desciption'.tr,
+                                                    Icon(
+                                                      Icons.description_rounded,
                                                       size: 25,
-                                                      color: Colors.black,
-                                                    ))),
-                                            button(
-                                                'view_pictures'.tr,
-                                                Get.theme.primaryColor,
-                                                Icons.photo, () {
-                                              _getLog(fileList[index].sId!);
-                                            })
-                                          ],
-                                        ),
-                                        const SizedBox(height: 3),
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                                child: textIcon(
-                                              'checkpoint_location'.tr,
-                                              Icon(
-                                                Icons.location_on_sharp,
-                                                size: 25,
-                                                color: Colors.red.shade600,
-                                              ),
-                                            )),
-                                            button(
-                                                'view_location'.tr,
-                                                Colors.red.shade600,
-                                                Icons.map, () {
-                                              showMap(fileList[index].lat!,
-                                                  fileList[index].lng!);
-                                            })
-                                          ],
-                                        ),
-                                      ],
-                                    ),
+                                                      color: Get
+                                                          .theme.dividerColor,
+                                                    )),
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 20,
+                                                      vertical: 3),
+                                                  child: Text(
+                                                    '- ${fileList[index].desciption}',
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                          : Container(),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                              child: textIcon(
+                                                  'pictures'.tr,
+                                                  Icon(
+                                                    Icons.photo_library_rounded,
+                                                    size: 25,
+                                                    color:
+                                                        Get.theme.dividerColor,
+                                                  ))),
+                                          button(
+                                              'view_pictures'.tr,
+                                              Get.textTheme.bodyText1?.color,
+                                              Get.theme.primaryColorDark,
+                                              Icons.photo, () {
+                                            _getLog(fileList[index].sId!);
+                                          })
+                                        ],
+                                      ),
+                                      const SizedBox(height: 3),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                              child: textIcon(
+                                            'checkpoint_location'.tr,
+                                            Icon(
+                                              Icons.location_on_sharp,
+                                              size: 25,
+                                              color: Colors.red.shade600,
+                                            ),
+                                          )),
+                                          button(
+                                              'view_location'.tr,
+                                              Colors.white,
+                                              Colors.red.shade600,
+                                              Icons.map, () {
+                                            showMap(fileList[index].lat!,
+                                                fileList[index].lng!);
+                                          })
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ]),
                           );
@@ -396,12 +392,13 @@ class _Record_PointState extends State<Record_Point> {
             ));
   }
 
-  Widget button(name, color, icon, press) {
+  Widget button(name, textColor, color, icon, press) {
     return ElevatedButton(
       style: TextButton.styleFrom(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        elevation: 10,
+        elevation: 5,
         backgroundColor: color,
+        primary: textColor,
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
       ),
       child: Row(
@@ -410,7 +407,7 @@ class _Record_PointState extends State<Record_Point> {
           const SizedBox(width: 3),
           Text(
             name,
-            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
           ),
         ],
       ),

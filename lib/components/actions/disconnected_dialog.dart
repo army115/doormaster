@@ -4,7 +4,7 @@ import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-void error_connected(context, navigator) {
+void error_connected(navigator) {
   dialogOnebutton_Subtitle(
       'found_error'.tr,
       'connect_fail'.tr,

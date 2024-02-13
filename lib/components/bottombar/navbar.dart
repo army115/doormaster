@@ -1,11 +1,14 @@
 import 'dart:async';
 import 'package:doormster/components/bottombar/bottom_controller.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
+import 'package:doormster/controller/home_controller.dart';
+import 'package:doormster/controller/profile_controller.dart';
 import 'package:doormster/screen/main_screen/home_page.dart';
 import 'package:doormster/screen/main_screen/news_page.dart';
 import 'package:doormster/screen/main_screen/notification_page.dart';
 import 'package:doormster/screen/main_screen/profile_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 NavbarNotifier navbarNotifier = NavbarNotifier();
 
@@ -55,11 +58,7 @@ class NavbarNotifier extends ChangeNotifier {
         if (homeKey.currentState != null && homeKey.currentState!.canPop()) {
           homeKey.currentState?.popUntil((route) => route.isFirst);
         } else if (bottomController.selectedIndex.value == 0) {
-          homeKey.currentState?.pushReplacement(
-            PageRouteBuilder(
-              pageBuilder: (context, animation, animation2) => Home_Page(),
-            ),
-          );
+          Homecontroller.GetMenu();
         }
         return;
       case 1:
@@ -67,9 +66,9 @@ class NavbarNotifier extends ChangeNotifier {
           newsKey.currentState!.popUntil((route) => route.isFirst);
         } else if (bottomController.selectedIndex.value == 1) {
           newsKey.currentState?.pushReplacement(
-            PageRouteBuilder(
-                pageBuilder: (BuildContext context, animation, animation2) =>
-                    const News_Page()),
+            GetPageRoute(
+                page: () => const News_Page(),
+                transitionDuration: Duration.zero),
           );
         }
         return;
@@ -79,9 +78,9 @@ class NavbarNotifier extends ChangeNotifier {
           notifyKey.currentState!.popUntil((route) => route.isFirst);
         } else if (bottomController.selectedIndex.value == 2) {
           notifyKey.currentState?.pushReplacement(
-            PageRouteBuilder(
-                pageBuilder: (BuildContext context, animation, animation2) =>
-                    const Notification_Page()),
+            GetPageRoute(
+                page: () => const Notification_Page(),
+                transitionDuration: Duration.zero),
           );
         }
         return;
@@ -90,11 +89,7 @@ class NavbarNotifier extends ChangeNotifier {
             profileKey.currentState!.canPop()) {
           profileKey.currentState!.popUntil((route) => route.isFirst);
         } else if (bottomController.selectedIndex.value == 3) {
-          profileKey.currentState?.pushReplacement(
-            PageRouteBuilder(
-                pageBuilder: (BuildContext context, animation, animation2) =>
-                    const Profile_Page()),
-          );
+          Profilecontroller.getInfo(500);
         }
         return;
       default:

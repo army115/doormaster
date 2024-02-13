@@ -107,7 +107,7 @@ Widget dialogmain(title, subtitle, icon, coloricon, button, press) {
           width: double.infinity,
           child: ElevatedButton(
             style: styleButtons(EdgeInsets.symmetric(vertical: 5), 10.0,
-                Color(0xFF0B4D9C), BorderRadius.circular(5)),
+                Get.theme.primaryColor, BorderRadius.circular(5)),
             child: Text(
               button,
               style: TextStyle(

@@ -46,35 +46,35 @@ dependencies:
   # flutter_rounded_date_picker: ^2.0.2
   checkbox_formfield: ^0.2.0
   share_files_and_screenshot_widgets: ^1.0.6
-  image_gallery_saver: ^1.7.1
-  connectivity_plus: ^3.0.4
+  image_gallery_saver: ^2.0.3
+  connectivity_plus: ^5.0.2
   flutter_launcher_icons: ^0.13.0
   flutter_native_splash: ^2.2.19
   # flutter_blue: ^0.8.0
-  geolocator: ^9.0.2
+  geolocator: ^10.1.0
   # location: ^4.4.0
   # app_settings: ^4.2.0
   flutter_phone_direct_caller: ^2.1.1
-  permission_handler: ^10.2.0
-  image_picker: ^0.8.6+1
+  permission_handler: ^11.0.1
+  image_picker: ^1.0.5
   flutter_swiper_plus: ^2.0.4
   intl: ^0.18.0
   dio: ^5.3.3
   get: ^4.6.5
   restart_app: ^1.1.2
   flutter_easyloading: ^3.0.5
-  google_maps_flutter: ^2.2.3
+  google_maps_flutter: ^2.5.3
   easy_loading_button: ^0.3.0
-  calendar_date_picker2: ^0.4.9
-  animated_custom_dropdown: ^1.5.0
-  flutter_local_notifications: ^15.1.0+1
+  calendar_date_picker2: ^0.5.3
+  animated_custom_dropdown: ^2.0.0
+  flutter_local_notifications: ^16.2.0
   flutter_phoenix: ^1.1.1
   flutter_datetime_picker_bdaya: ^3.0.1
   package_info_plus: ^4.1.0
   dotted_line: ^3.2.0
   local_auth: ^2.1.6
-  firebase_messaging: ^14.7.3
-  firebase_core: ^2.17.0
+  firebase_messaging: ^14.7.14
+  firebase_core: ^2.25.3
   # google_mlkit_text_recognition: ^0.10.0
   camera: ^0.10.5+5
 
@@ -106,7 +106,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.1
+  flutter_lints: ^3.0.1
   
 
   

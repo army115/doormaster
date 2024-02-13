@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:doormster/style/theme.dart';
+import 'package:doormster/style/textStyle.dart';
+import 'package:doormster/style/theme/light/theme_light.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:get/get.dart';
@@ -25,26 +26,52 @@ class Dropdown_NoBorder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: CustomDropdown(
-        excludeSelected: controller.text == (null) ? false : true,
-        hideSelectedFieldWhenOpen: false,
+        excludeSelected: false,
+        hideSelectedFieldWhenOpen: true,
         onChanged: onChanged,
         items: listItem,
         controller: controller,
-        fillColor: Colors.grey.shade200,
+        fillColor: Colors.transparent,
         fieldPrefixIcon: Icon(
           leftIcon,
-          size: 25,
+          size: 30,
         ),
+
+        fieldSuffixIcon: const Icon(
+          Icons.keyboard_arrow_down_rounded,
+          size: 30,
+        ),
+        suffixIconColor:
+            MaterialStateColor.resolveWith((Set<MaterialState> states) {
+          if (states.contains(MaterialState.focused)) {
+            return Get.theme.dividerColor;
+          }
+          return Get.theme.dividerColor.withOpacity(0.5);
+        }),
+        prefixIconColor:
+            MaterialStateColor.resolveWith((Set<MaterialState> states) {
+          if (states.contains(MaterialState.focused)) {
+            return Get.theme.primaryColorDark;
+          }
+          return Get.theme.dividerColor.withOpacity(0.5);
+        }),
+        listItemStyle: const TextStyle(color: Colors.black),
         errorText: error,
         errorStyle: textStyle().body14,
         hintText: title,
-        hintStyle: TextStyle(color: Colors.grey.shade600),
+        hintStyle: const TextStyle(color: Colors.grey),
+        selectedStyle: Get.textTheme.bodyText2,
         searchText: 'search'.tr,
         foundText: 'data_not_found'.tr,
+        focusedBorder: UnderlineInputBorder(
+            borderSide:
+                BorderSide(color: Get.theme.primaryColorDark, width: 2)),
+        enabledBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey, width: 1.5)),
         // borderRadiusItem: BorderRadius.circular(5),
-        contentPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 13),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 5, vertical: 13),
       ),
     );
   }

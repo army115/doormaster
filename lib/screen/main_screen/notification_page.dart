@@ -56,8 +56,8 @@ class _Notification_PageState extends State<Notification_Page>
                 children: [
                   Card(
                     shape: RoundedRectangleBorder(
-                        side:
-                            BorderSide(width: 2, color: Get.theme.primaryColor),
+                        side: BorderSide(
+                            width: 2, color: Theme.of(context).primaryColor),
                         borderRadius: BorderRadius.circular(10)),
                     elevation: 10,
                     margin: EdgeInsets.all(13),

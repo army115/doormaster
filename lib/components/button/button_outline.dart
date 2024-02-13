@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable, sort_child_properties_last, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Buttons_Outline extends StatelessWidget {
   String title;
@@ -11,11 +12,12 @@ class Buttons_Outline extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.5,
+      width: Get.mediaQuery.size.width * 0.5,
       height: 45,
       child: OutlinedButton(
           style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Colors.blue[800]),
+              backgroundColor:
+                  MaterialStateProperty.all(Get.theme.primaryColorLight),
               overlayColor: MaterialStateProperty.all(Colors.black26),
               shape: MaterialStateProperty.all(RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10))),

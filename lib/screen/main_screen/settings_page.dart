@@ -1,21 +1,11 @@
-// ignore_for_file: unused_field, use_build_context_synchronously
+// ignore_for_file: unused_field, use_build_context_synchronously, non_constant_identifier_names
 
-import 'dart:developer';
-import 'package:dio/dio.dart';
-import 'package:doormster/components/actions/disconnected_dialog.dart';
-import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_twobutton_subtext.dart';
-import 'package:doormster/components/bottombar/bottom_controller.dart';
-import 'package:doormster/components/snackbar/snackbar.dart';
-import 'package:doormster/screen/main_screen/login_page.dart';
-import 'package:doormster/screen/main_screen/login_staff_page.dart';
-import 'package:doormster/service/connected/connect_api.dart';
-import 'package:doormster/service/notify/notify_token.dart';
-import 'package:doormster/style/theme.dart';
+import 'package:doormster/components/button/button_theme.dart';
+import 'package:doormster/controller/setting_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:package_info_plus/package_info_plus.dart';
+import 'package:doormster/style/textStyle.dart';
 
 class Settings_Page extends StatefulWidget {
   const Settings_Page({super.key});
@@ -24,109 +14,12 @@ class Settings_Page extends StatefulWidget {
   State<Settings_Page> createState() => _Settings_PageState();
 }
 
-class menuItem {
-  IconData icon;
-  String title;
-  VoidCallback ontap;
-  Color color;
-  menuItem(this.icon, this.title, this.ontap, this.color);
-}
-
 class _Settings_PageState extends State<Settings_Page> {
-  late SharedPreferences prefs;
-  var uuId;
-  var security;
-  var language;
-  bool loading = false;
-  String? version;
+  List languageManu = ['ไทย', 'English'];
+  List languageLocal = ['th', 'en'];
 
-  Future getValueShared() async {
-    final info = await PackageInfo.fromPlatform();
-    prefs = await SharedPreferences.getInstance();
-    uuId = prefs.getString('uuId');
-    security = prefs.getBool('security');
-    language = prefs.getString('language');
-    print('uuId: ${uuId}');
-    setState(() {
-      version = info.version;
-    });
-  }
-
-  Future<void> _Logout() async {
-    //ลบ token device notify
-    await Notify_Token().deletenotifyToken();
-    //เรียก keys ที่แชร์ไว้มารวมกัน ใน allKeys
-    Set<String> allKeys = prefs.getKeys();
-
-    //loop keys เพื่อหา key ที่ไม่ต้องการ remove
-    for (String key in allKeys) {
-      if (key != 'notifyToken' && key != 'security' && key != 'language') {
-        prefs.remove(key);
-      }
-    }
-
-    log(allKeys.toString());
-    if (security == true) {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => Login_Staff()),
-          (Route<dynamic> route) => false);
-    } else {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => Login_Page()),
-          (Route<dynamic> route) => false);
-    }
-    print('logout success');
-  }
-
-  Future _blockUser() async {
-    try {
-      setState(() {
-        loading = true;
-      });
-      var url = '${Connect_api().domain}/blockUser';
-      var response = await Dio().post(url,
-          options: Options(headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-          }),
-          data: {"uuid": uuId, "Block": 1});
-      var _response = response.data['status'];
-      print("status code : ${_response}");
-      if (_response == 200) {
-        print('block Success');
-        print(response.data);
-
-        _Logout();
-
-        snackbar(Get.theme.primaryColor, 'deactivation_success'.tr,
-            Icons.check_circle_outline_rounded);
-
-        setState(() {
-          loading = false;
-        });
-      } else {
-        dialogOnebutton_Subtitle('deactivation_fail'.tr, 'again_pls'.tr,
-            Icons.highlight_off_rounded, Colors.red, 'ok'.tr, () {
-          Navigator.of(context, rootNavigator: true).pop();
-        }, false, false);
-        print('checkIn not Success!!');
-        print(response.data);
-        setState(() {
-          loading = false;
-        });
-      }
-    } catch (error) {
-      print(error);
-      error_connected(context, () {
-        Navigator.of(context, rootNavigator: true).pop();
-      });
-      setState(() {
-        loading = false;
-      });
-    }
-  }
-
-  void _openBottomSheet(BuildContext context) {
+  void _changeLanguage(BuildContext context) {
+    print(settingController.language);
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -152,56 +45,103 @@ class _Settings_PageState extends State<Settings_Page> {
                       style: textStyle().Header18,
                     ),
                   ),
-                  Expanded(
-                    child: Column(children: [
-                      ListTile(
-                        selectedTileColor: language == 'th'
-                            ? Get.theme.primaryColor
-                            : Colors.white,
-                        selected: language == 'th' ? true : false,
-                        title: Text(
-                          'ไทย',
-                          style: TextStyle(
-                              color: language == 'th'
-                                  ? Colors.white
-                                  : Colors.black),
-                        ),
-                        onTap: () async {
-                          if (language == 'th') {
-                            Get.back();
-                          } else {
-                            bottomController.ontapItem(0);
-                            Get.until((route) => route.isFirst);
-                            Get.updateLocale(Locale('th'));
-                            await prefs.setString("language", 'th');
-                          }
-                        },
-                      ),
-                      ListTile(
-                        selectedTileColor: language == 'en'
-                            ? Get.theme.primaryColor
-                            : Colors.white,
-                        selected: language == 'en' ? true : false,
-                        title: Text(
-                          'English',
-                          style: TextStyle(
-                              color: language == 'en'
-                                  ? Colors.white
-                                  : Colors.black),
-                        ),
-                        onTap: () async {
-                          if (language == 'en') {
-                            Get.back();
-                          } else {
-                            bottomController.ontapItem(0);
-                            Get.until((route) => route.isFirst);
-                            Get.updateLocale(Locale('en'));
-                            await prefs.setString("language", 'en');
-                          }
-                        },
-                      ),
-                    ]),
+                  Divider(
+                    height: 0,
+                    color: Get.theme.primaryColor,
+                    thickness: 1.5,
                   ),
+                  Expanded(
+                      child: ListView.builder(
+                    itemCount: languageManu.length,
+                    itemBuilder: (context, index) => ListTile(
+                      selectedTileColor:
+                          settingController.language == languageLocal[index]
+                              ? Get.theme.primaryColor
+                              : Colors.white,
+                      selected:
+                          settingController.language == languageLocal[index]
+                              ? true
+                              : false,
+                      title: Text(
+                        languageManu[index],
+                        style: TextStyle(
+                            color: settingController.language ==
+                                    languageLocal[index]
+                                ? Colors.white
+                                : Colors.black),
+                      ),
+                      onTap: () async {
+                        settingController.setLangauge(languageLocal[index]);
+                      },
+                    ),
+                  )),
+                ]),
+          ),
+        );
+      },
+    );
+  }
+
+  List themetitle = ['light'.tr, 'dark'.tr, 'system'.tr];
+  List themeMenu = [ThemeMode.light, ThemeMode.dark, ThemeMode.system];
+  List themeStatus = [false, true, null];
+
+  void _changeTheme(BuildContext context) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      shape: RoundedRectangleBorder(
+          side: BorderSide(width: 3, color: Get.theme.primaryColor),
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(15), topRight: Radius.circular(15))),
+      builder: (BuildContext context) {
+        return DraggableScrollableSheet(
+          expand: false,
+          initialChildSize: 0.4,
+          minChildSize: 0.3,
+          maxChildSize: 0.5,
+          builder: (context, scrollController) => Container(
+            padding: const EdgeInsets.symmetric(vertical: 5),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: Text(
+                      'select_theme'.tr,
+                      style: textStyle().Header18,
+                    ),
+                  ),
+                  Divider(
+                    height: 0,
+                    color: Get.theme.primaryColor,
+                    thickness: 1.5,
+                  ),
+                  Expanded(
+                      child: ListView.builder(
+                    itemCount: themeMenu.length,
+                    itemBuilder: (context, index) => ListTile(
+                      selectedTileColor:
+                          settingController.theme == themeStatus[index]
+                              ? Get.theme.primaryColor
+                              : Colors.white,
+                      selected: settingController.theme == themeStatus[index]
+                          ? true
+                          : false,
+                      title: Text(
+                        themetitle[index],
+                        style: TextStyle(
+                            color: settingController.theme == themeStatus[index]
+                                ? Colors.white
+                                : Colors.black),
+                      ),
+                      onTap: () async {
+                        setThemeMode(themeMenu[index]);
+                        settingController.getValueShared();
+                        Get.back();
+                      },
+                    ),
+                  )),
                 ]),
           ),
         );
@@ -210,72 +150,76 @@ class _Settings_PageState extends State<Settings_Page> {
   }
 
   @override
-  void initState() {
-    getValueShared();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final List<menuItem> _menu = [
+    final List<menuItem> menu = [
       menuItem(Icons.lock, 'change_password'.tr, () {
         Get.toNamed('/password');
-      }, Colors.black),
+      }, Get.theme.dividerColor),
       menuItem(Icons.translate_rounded, 'change_language'.tr, () {
-        _openBottomSheet(context);
-      }, Colors.black),
+        _changeLanguage(context);
+      }, Get.theme.dividerColor),
+      menuItem(Icons.brightness_4, 'change_theme'.tr, () {
+        _changeTheme(context);
+      }, Get.theme.dividerColor),
       menuItem(Icons.no_accounts_rounded, 'disable_account'.tr, () {
         dialogTwobutton_Subtitle(
-            context,
             'disable_account'.tr,
             'deactivate_confirm'.tr,
             Icons.warning_amber_rounded,
             Colors.orange,
             'no'.tr,
             () {
-              Navigator.pop(context);
+              Get.back();
             },
             'yes'.tr,
             () {
-              _blockUser();
+              settingController.blockUser();
+              Get.back();
             },
             true,
             true);
-      }, Colors.red),
-      menuItem(Icons.app_settings_alt_rounded, '${'version'.tr} ${version}',
-          () {}, Colors.grey.shade600)
-    ];
+      }, Colors.redAccent.shade400),
+      menuItem(
+          Icons.app_settings_alt_rounded,
+          '${'version'.tr} ${settingController.version.value}',
+          () {},
+          Get.theme.dividerColor.withOpacity(0.5))
+    ].obs;
     return Scaffold(
-      appBar: AppBar(title: Text('setting'.tr)),
-      body: Container(
-        child: ListView.separated(
-          physics: const ClampingScrollPhysics(),
-          itemCount: _menu.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              onTap: _menu[index].ontap,
-              leading: Icon(
-                _menu[index].icon,
-                size: 30,
-                color: Colors.grey.shade700,
-              ),
-              title: Text(
-                _menu[index].title,
-                style: TextStyle(
-                    letterSpacing: 0.5,
-                    color: _menu[index].color,
-                    fontSize: 16),
-              ),
-            );
-          },
-          separatorBuilder: (context, index) {
-            return const Divider(
-              color: Colors.black,
-              height: 10,
-            );
-          },
-        ),
-      ),
-    );
+        appBar: AppBar(title: Text('setting'.tr)),
+        body: Obx(() => ListView.separated(
+              physics: const ClampingScrollPhysics(),
+              itemCount: menu.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                    onTap: menu[index].ontap,
+                    leading: Icon(
+                      menu[index].icon,
+                      size: 30,
+                      color: Get.theme.dividerColor.withOpacity(0.7),
+                    ),
+                    title: Text(
+                      menu[index].title,
+                      style: TextStyle(
+                          letterSpacing: 0.5,
+                          color: menu[index].color,
+                          fontSize: 16),
+                    ));
+              },
+              separatorBuilder: (context, index) {
+                return Divider(
+                  color: Get.theme.dividerColor,
+                  height: 10,
+                );
+              },
+            )));
   }
+}
+
+class menuItem {
+  IconData icon;
+  String title;
+  VoidCallback ontap;
+  Color color;
+  menuItem(this.icon, this.title, this.ontap, this.color);
 }

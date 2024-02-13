@@ -80,7 +80,7 @@ class _Security_GuardState extends State<Security_Guard> {
       }
     } catch (error) {
       print(error);
-      error_connected(context, () {
+      error_connected(() {
         homeKey.currentState?.popUntil(
           (route) => route.isFirst,
         );
@@ -142,7 +142,7 @@ class _Security_GuardState extends State<Security_Guard> {
                             ? dialogOnebutton_Subtitle(
                                 'found_error'.tr,
                                 'check_later'.tr,
-                                Icons.person,
+                                Icons.warning_amber_rounded,
                                 Colors.orange,
                                 'ok'.tr, () {
                                 Navigator.of(context, rootNavigator: true)

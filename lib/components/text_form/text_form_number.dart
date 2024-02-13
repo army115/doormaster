@@ -1,8 +1,9 @@
 // ignore_for_file: avoid_unnecessary_containers, must_be_immutable, unused_import
-import 'package:doormster/style/theme.dart';
+import 'package:doormster/style/theme/light/theme_light.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:doormster/style/textStyle.dart';
 
 class TextForm_Number extends StatelessWidget {
   TextEditingController controller;

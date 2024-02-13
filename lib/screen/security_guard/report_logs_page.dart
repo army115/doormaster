@@ -82,14 +82,14 @@ class _Report_LogsState extends State<Report_Logs>
                 overlayColor: MaterialStatePropertyAll(Colors.transparent),
                 controller: _tabController,
                 padding: EdgeInsets.only(top: 10, right: 20.0, left: 20.0),
-                labelColor: Get.theme.primaryColor,
+                labelColor: Theme.of(context).primaryColorDark,
                 unselectedLabelColor: Colors.white,
                 indicatorSize: TabBarIndicatorSize.tab,
                 indicator: BoxDecoration(
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(8.0),
                         topRight: Radius.circular(8.0)),
-                    color: Colors.grey[200]),
+                    color: Theme.of(context).scaffoldBackgroundColor),
                 tabs: [
                   Tab(
                     child: Text(

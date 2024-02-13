@@ -106,7 +106,6 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
         setState(() {
           listWeigan = doorsWeigan.data!;
           detlist = listdet;
-          loading = false;
         });
         // วน loop เพื่อดึง Det จากแต่ละ DataWeigan
         for (int i = 0; i < listWeigan.length; i++) {
@@ -118,11 +117,12 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
       print(error);
       if (deviceId == null) {
       } else {
-        error_connected(context, () {
+        error_connected(() {
           homeKey.currentState?.popUntil(ModalRoute.withName('/qrsmart'));
           Navigator.of(context, rootNavigator: true).pop();
         });
       }
+    } finally {
       setState(() {
         loading = false;
       });
@@ -147,26 +147,17 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
           print('DeviceNumber : ${devSn}');
           print('OpenDoor Success');
           print('Status : ${jsonRes.data!.code}');
-          setState(() {
-            loading = false;
-          });
           snackbar(Get.theme.primaryColor, 'door_open_success'.tr,
               Icons.check_circle_outline_rounded);
         } else if (jsonRes.data!.code == 10000) {
           print('DeviceNumber : ${devSn}');
           print('Door Offline');
           print('Status : ${jsonRes.data!.code}');
-          setState(() {
-            loading = false;
-          });
           snackbar(Colors.red, 'door_offline'.tr, Icons.highlight_off_rounded);
         } else if (jsonRes.data!.code == 10400) {
           print('DeviceNumber : ${devSn}');
           print('Invalid Device');
           print('Status : ${jsonRes.data!.code}');
-          setState(() {
-            loading = false;
-          });
           snackbar(
               Colors.red, 'invalid_device'.tr, Icons.highlight_off_rounded);
         }
@@ -174,15 +165,13 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
         snackbar(Colors.red, 'door_open_fail'.tr, Icons.highlight_off_rounded);
         print('OpenDoor Fail!!');
         print(response.data);
-        setState(() {
-          loading = false;
-        });
       }
     } catch (error) {
       print(error);
-      error_connected(context, () async {
+      error_connected(() async {
         Navigator.of(context).pop();
       });
+    } finally {
       setState(() {
         loading = false;
       });
@@ -209,24 +198,19 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
         await Future.delayed(Duration(milliseconds: 400));
         print('OpenDoor Success');
         print('Status : ${response.data}');
-        setState(() {
-          loading = false;
-        });
         snackbar(Get.theme.primaryColor, 'door_open_success'.tr,
             Icons.check_circle_outline_rounded);
       } else {
         snackbar(Colors.red, 'door_open_fail'.tr, Icons.highlight_off_rounded);
         print('OpenDoor Fail!!');
         print(response.data);
-        setState(() {
-          loading = false;
-        });
       }
     } catch (error) {
       print(error);
-      error_connected(context, () {
+      error_connected(() {
         Navigator.of(context, rootNavigator: true).pop();
       });
+    } finally {
       setState(() {
         loading = false;
       });
@@ -308,33 +292,33 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
                                             itemBuilder: (context, index) {
                                               return Card(
                                                   shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10)),
+                                                      borderRadius: BorderRadius.circular(
+                                                          10)),
                                                   margin: EdgeInsets.symmetric(
                                                       vertical: 5),
                                                   elevation: 10,
-                                                  child: listDevice[index].connectionStatus == 1
+                                                  child: listDevice[index]
+                                                              .connectionStatus ==
+                                                          1
                                                       ? doorsButton(
                                                           '${listDevice[index].name}',
                                                           'open_door'.tr,
                                                           Icons
                                                               .meeting_room_rounded,
+                                                          Get.textTheme.bodyText1
+                                                              ?.color,
                                                           Theme.of(context)
-                                                              .primaryColor,
+                                                              .primaryColorDark,
                                                           () => _openDoors(
                                                               listDevice[index]
                                                                   .devSn))
                                                       : doorsButton(
                                                           '${listDevice[index].name}',
                                                           'offline_door'.tr,
-                                                          Icons
-                                                              .no_meeting_room_rounded,
+                                                          Icons.no_meeting_room_rounded,
+                                                          Colors.white,
                                                           Colors.red,
-                                                          () => snackbar(
-                                                              Colors.red,
-                                                              'door_offline'.tr,
-                                                              Icons.highlight_off_rounded)));
+                                                          () => snackbar(Colors.red, 'door_offline'.tr, Icons.highlight_off_rounded)));
                                             },
                                           ),
                                           ListView.builder(
@@ -355,8 +339,10 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
                                                       'open_door'.tr,
                                                       Icons
                                                           .meeting_room_rounded,
+                                                      Get.textTheme.bodyText1
+                                                          ?.color,
                                                       Theme.of(context)
-                                                          .primaryColor,
+                                                          .primaryColorDark,
                                                       () => _openDoorsWeigan(
                                                           listdet?[index]
                                                               .doorId,
@@ -378,16 +364,16 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
     );
   }
 
-  Widget doorsButton(name, button, icon, color, press) {
+  Widget doorsButton(name, button, icon, textColor, color, press) {
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      title: Text(name, style: TextStyle(fontSize: 17)),
+      title: Text(name, style: Theme.of(context).textTheme.bodyText2),
       trailing: ElevatedButton(
         style: TextButton.styleFrom(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           elevation: 5,
-          primary: Colors.white,
+          primary: textColor,
           backgroundColor: color,
           padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
         ),

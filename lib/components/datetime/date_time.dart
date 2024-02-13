@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:doormster/style/theme.dart';
+import 'package:doormster/style/textStyle.dart';
+import 'package:doormster/style/theme/light/theme_light.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -105,7 +106,7 @@ class _Date_timeState extends State<Date_time> {
                     letterSpacing: 0.5,
                     fontWeight: FontWeight.normal,
                     fontFamily: 'Prompt'),
-                containerHeight: MediaQuery.of(context).size.height * 0.4,
+                containerHeight: Get.mediaQuery.size.height * 0.4,
               ),
             );
           },

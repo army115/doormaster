@@ -53,7 +53,7 @@ void snackbar(
   title,
   icon,
 ) {
-  Get.rawSnackbar(
+  Get.showSnackbar(GetSnackBar(
     icon: Icon(
       icon,
       color: Colors.white,
@@ -80,5 +80,5 @@ void snackbar(
         offset: Offset(0, 2),
       ),
     ],
-  );
+  ));
 }

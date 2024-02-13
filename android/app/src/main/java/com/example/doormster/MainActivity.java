@@ -1,18 +1,13 @@
 package com.example.doormster;
 
-import androidx.annotation.NonNull;
-import androidx.core.view.WindowCompat;
-
-import io.flutter.embedding.android.FlutterActivity;
-import io.flutter.embedding.engine.FlutterEngine;
-import io.flutter.plugin.common.MethodChannel;
-
 import android.content.Intent;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.Toast;
 import android.window.SplashScreenView;
+
+import androidx.annotation.NonNull;
+import androidx.core.view.WindowCompat;
 
 import com.intelligoo.sdk.AutoOpenService;
 import com.intelligoo.sdk.LibDevModel;
@@ -20,10 +15,13 @@ import com.intelligoo.sdk.LibInterface;
 import com.intelligoo.sdk.ScanCallBackSort;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends FlutterActivity {
+import io.flutter.embedding.android.FlutterActivity;
+import io.flutter.embedding.engine.FlutterEngine;
+import io.flutter.plugin.common.MethodChannel;
+
+public class MainActivity extends FlutterActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // Aligns the Flutter view vertically with the window.

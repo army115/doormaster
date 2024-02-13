@@ -24,7 +24,7 @@ class Grid_Menu extends StatelessWidget {
       margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       elevation: 10,
-      color: color ?? Get.theme.primaryColor,
+      color: color ?? Theme.of(context).primaryColor,
       child: InkWell(
         borderRadius: BorderRadius.circular(20),
         splashColor: Colors.black12,

@@ -29,7 +29,7 @@ class Button_Animation extends StatelessWidget {
         elevation: 10,
         useWidthAnimation: true,
         useEqualLoadingStateWidgetDimension: true,
-        width: MediaQuery.of(context).size.width * 0.5,
+        width: Get.mediaQuery.size.width * 0.5,
         height: 45,
         borderRadius: 10.0,
         contentGap: 5.0,

@@ -7,11 +7,10 @@ import 'package:camera/camera.dart';
 import 'package:dio/dio.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/models/id_card.dart';
-import 'package:doormster/service/connected/connect_api.dart';
 import 'package:doormster/style/overlay_frame.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart' hide Response, FormData, MultipartFile;
 import 'package:image_picker/image_picker.dart';
-// import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
 class Scan_IDCard extends StatefulWidget {
   const Scan_IDCard({super.key});
@@ -114,7 +113,7 @@ class _Scan_IDCardState extends State<Scan_IDCard> {
           // ),
           Positioned(
             left: 10,
-            top: MediaQuery.of(context).size.height * 0.05,
+            top: Get.mediaQuery.size.height * 0.05,
             child: Container(
               decoration: const BoxDecoration(
                   shape: BoxShape.circle, color: Colors.white30),
@@ -128,7 +127,7 @@ class _Scan_IDCardState extends State<Scan_IDCard> {
             ),
           ),
           Positioned(
-            bottom: MediaQuery.of(context).size.height * 0.05,
+            bottom: Get.mediaQuery.size.height * 0.05,
             child: Container(
               decoration: const BoxDecoration(
                   shape: BoxShape.circle, color: Colors.white30),
@@ -314,7 +313,7 @@ class _Show_ImageState extends State<Show_Image> {
 
           Positioned(
             right: 10,
-            top: MediaQuery.of(context).size.height * 0.05,
+            top: Get.mediaQuery.size.height * 0.05,
             child: ElevatedButton(
                 onPressed: () {
                   // _scantext();
@@ -331,7 +330,7 @@ class _Show_ImageState extends State<Show_Image> {
           ),
           Positioned(
             left: 10,
-            top: MediaQuery.of(context).size.height * 0.05,
+            top: Get.mediaQuery.size.height * 0.05,
             child: Container(
               decoration: const BoxDecoration(
                   shape: BoxShape.circle, color: Colors.white30),

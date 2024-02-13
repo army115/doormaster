@@ -115,7 +115,7 @@ class _Round_CheckState extends State<Round_Check> {
     } catch (error) {
       print(error);
       await Future.delayed(Duration(milliseconds: 500));
-      error_connected(context, () {
+      error_connected(() {
         homeKey.currentState?.popUntil(ModalRoute.withName('/security'));
         Navigator.of(context, rootNavigator: true).pop();
       });

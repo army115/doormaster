@@ -1,4 +1,5 @@
-import 'package:doormster/style/theme.dart';
+import 'package:doormster/style/textStyle.dart';
+import 'package:doormster/style/theme/light/theme_light.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 // ignore_for_file: avoid_unnecessary_containers, must_be_immutable, unused_import

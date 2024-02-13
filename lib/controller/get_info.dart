@@ -34,14 +34,20 @@ Future get_Info() async {
 
       if (data.single.image != null) {
         await prefs.setString('image', data.single.image!);
+      } else {
+        prefs.remove('image');
       }
 
       if (data.single.devicegroupUuid != null && security != true) {
         await prefs.setString('deviceId', data.single.devicegroupUuid!);
+      } else {
+        prefs.remove('deviceId');
       }
 
       if (data.single.weigangroupUuid != null && security != true) {
         await prefs.setString('weiganId', data.single.weigangroupUuid!);
+      } else {
+        prefs.remove('weiganId');
       }
     }
   } catch (error) {

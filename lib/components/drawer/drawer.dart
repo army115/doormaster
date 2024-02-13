@@ -1,6 +1,5 @@
 // ignore_for_file: sort_child_properties_last, prefer_const_constructors, use_build_context_synchronously
 import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:doormster/components/actions/disconnected_dialog.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
@@ -8,6 +7,7 @@ import 'package:doormster/components/alertDialog/alert_dialog_twobutton_subtext.
 import 'package:doormster/components/bottombar/bottom_controller.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/button/button_outline.dart';
+import 'package:doormster/controller/logout_controller.dart';
 import 'package:doormster/models/get_multi_company.dart';
 import 'package:doormster/models/login_model.dart';
 import 'package:doormster/screen/main_screen/add_company_page.dart';
@@ -16,6 +16,7 @@ import 'package:doormster/screen/main_screen/login_staff_page.dart';
 import 'package:doormster/service/connected/connect_api.dart';
 import 'package:doormster/service/notify/notify_token.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as convert;
@@ -39,39 +40,39 @@ class _MyDrawerState extends State<MyDrawer> {
   List<Data> multiCompany = [];
   late SharedPreferences prefs;
 
-  Future<void> _Logout() async {
-    //ลบ token device notify
-    await Notify_Token().deletenotifyToken();
-    //เรียก keys ที่แชร์ไว้มารวมกัน ใน allKeys
-    Set<String> allKeys = prefs.getKeys();
+  // Future<void> _Logout() async {
+  //   //ลบ token device notify
+  //   await Notify_Token().deletenotifyToken();
+  //   //เรียก keys ที่แชร์ไว้มารวมกัน ใน allKeys
+  //   Set<String> allKeys = prefs.getKeys();
 
-    //loop keys เพื่อหา key ที่ไม่ต้องการ remove
-    if (security == true) {
-      for (String key in allKeys) {
-        if (key != 'notifyToken' && key != 'language') {
-          prefs.remove(key);
-        }
-      }
-      log(allKeys.toString());
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => Login_Staff()),
-          (Route<dynamic> route) => false);
-    } else {
-      prefs.remove('token');
-      prefs.remove('role');
-      prefs.remove('deviceId');
-      prefs.remove('weiganId');
-      prefs.remove('security');
-      prefs.remove('image');
-      prefs.remove('fname');
-      prefs.remove('lname');
-      log(allKeys.toString());
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => Login_Page()),
-          (Route<dynamic> route) => false);
-    }
-    print('logout success');
-  }
+  //   //loop keys เพื่อหา key ที่ไม่ต้องการ remove
+  //   if (security == true) {
+  //     for (String key in allKeys) {
+  //       if (key != 'notifyToken' && key != 'language') {
+  //         prefs.remove(key);
+  //       }
+  //     }
+  //     log(allKeys.toString());
+  //     Navigator.of(context).pushAndRemoveUntil(
+  //         MaterialPageRoute(builder: (BuildContext context) => Login_Staff()),
+  //         (Route<dynamic> route) => false);
+  //   } else {
+  //     prefs.remove('token');
+  //     prefs.remove('role');
+  //     prefs.remove('deviceId');
+  //     prefs.remove('weiganId');
+  //     prefs.remove('security');
+  //     prefs.remove('image');
+  //     prefs.remove('fname');
+  //     prefs.remove('lname');
+  //     log(allKeys.toString());
+  //     Navigator.of(context).pushAndRemoveUntil(
+  //         MaterialPageRoute(builder: (BuildContext context) => Login_Page()),
+  //         (Route<dynamic> route) => false);
+  //   }
+  //   print('logout success');
+  // }
 
   Future<void> getValueShared() async {
     prefs = await SharedPreferences.getInstance();
@@ -197,7 +198,7 @@ class _MyDrawerState extends State<MyDrawer> {
       }
     } catch (error) {
       print(error);
-      error_connected(context, () async {
+      error_connected(() async {
         Navigator.of(context).pop();
       });
       setState(() {
@@ -216,179 +217,190 @@ class _MyDrawerState extends State<MyDrawer> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Drawer(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            InkWell(
-                              borderRadius: BorderRadius.circular(30),
-                              onTap: () {
-                                Navigator.pop(context);
-                                bottomController.ontapItem(3);
-                                profileKey.currentState?.popAndPushNamed('/');
-                              },
-                              child: CircleAvatar(
-                                radius: 33,
-                                backgroundColor: Colors.white,
-                                child: CircleAvatar(
-                                  radius: 30,
-                                  backgroundColor: Colors.grey[100],
-                                  child: image != null
-                                      ? Container(
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            image: DecorationImage(
-                                                fit: BoxFit.cover,
-                                                image: MemoryImage(convert
-                                                    .base64Decode(image!))),
-                                          ),
-                                        )
-                                      : Container(
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            image: DecorationImage(
-                                                fit: BoxFit.cover,
-                                                image: AssetImage(
-                                                    'assets/images/HIP Smart Community Icon-03.png')),
-                                          ),
-                                        ),
-                                ),
-                              ),
-                            ),
-                            security == true
-                                ? Container()
-                                : IconButton(
-                                    constraints: BoxConstraints(),
-                                    splashRadius: 20,
-                                    padding: EdgeInsets.zero,
-                                    iconSize: 30,
-                                    color: Colors.white,
-                                    icon: const Icon(
-                                      Icons.more_vert_rounded,
-                                    ),
-                                    onPressed: () {
-                                      bottomsheet();
-                                    }),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          '${fname} ${lname}',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              letterSpacing: 0.5,
-                              color: Colors.white),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Divider(
-                    color: Colors.white,
-                    thickness: 1,
-                    height: 0,
-                  ),
-                  Expanded(
-                    child: Container(
-                      color: Colors.blue[800],
-                      child: Column(
-                        children: [
-                          ListTile(
-                            onTap: () {
-                              Navigator.pop(context);
-                              bottomController.ontapItem(3);
-                              profileKey.currentState?.popAndPushNamed('/');
-                            },
-                            leading: Icon(
-                              Icons.person,
-                              size: 25,
-                              color: Colors.white,
-                            ),
-                            title: Text(
-                              'info'.tr,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 0.5,
-                                  color: Colors.white),
-                            ),
-                            // tileColor: Colors.cyan,
-                          ),
-                          ListTile(
-                            onTap: () {
-                              Navigator.of(context).popAndPushNamed('/setting');
-                            },
-                            leading: Icon(
-                              Icons.settings,
-                              size: 30,
-                              color: Colors.white,
-                            ),
-                            title: Text(
-                              'setting'.tr,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 0.5,
-                                  color: Colors.white),
-                            ),
-                            // tileColor: Colors.cyan,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Divider(
-              color: Colors.white,
-              thickness: 1,
-              height: 0,
-            ),
-            ListTile(
-              onTap: () {
-                dialogTwobutton_Subtitle(
-                    context,
-                    'logout'.tr,
-                    'want_logout'.tr,
-                    Icons.warning_amber_rounded,
-                    Colors.orange,
-                    'yes'.tr,
-                    () {
-                      _Logout();
-                    },
-                    'no'.tr,
-                    () {
-                      Navigator.pop(context);
-                    },
-                    true,
-                    true);
-              },
-              leading: Icon(
-                Icons.logout,
+        child: Scaffold(
+          backgroundColor: Get.theme.primaryColorLight,
+          body: ListView(
+            physics: ClampingScrollPhysics(),
+            children: [
+              Header(),
+              Divider(
                 color: Colors.white,
-                size: 30,
+                thickness: 1,
+                height: 0,
               ),
-              title: Text('logout'.tr,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 0.5,
-                      color: Colors.white)),
-              // tileColor: Colors.cyan,
-            )
-          ],
+              Manu(),
+            ],
+          ),
+          bottomNavigationBar: Footer(),
         ),
+      ),
+    );
+  }
+
+  Widget Header() {
+    return Container(
+      color: Get.theme.primaryColor,
+      padding: EdgeInsets.fromLTRB(15, 15, 15, 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              InkWell(
+                borderRadius: BorderRadius.circular(30),
+                onTap: () {
+                  Navigator.pop(context);
+                  bottomController.ontapItem(3);
+                },
+                child: CircleAvatar(
+                  radius: 33,
+                  backgroundColor: Colors.white,
+                  child: CircleAvatar(
+                    radius: 30,
+                    backgroundColor: Colors.grey[100],
+                    child: image != null
+                        ? Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: MemoryImage(
+                                      convert.base64Decode(image!))),
+                            ),
+                          )
+                        : Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: AssetImage(
+                                      'assets/images/HIP Smart Community Icon-01.png')),
+                            ),
+                          ),
+                  ),
+                ),
+              ),
+              security == true
+                  ? Container()
+                  : IconButton(
+                      constraints: BoxConstraints(),
+                      splashRadius: 20,
+                      padding: EdgeInsets.zero,
+                      iconSize: 30,
+                      color: Colors.white,
+                      icon: const Icon(
+                        Icons.more_vert_rounded,
+                      ),
+                      onPressed: () {
+                        bottomsheet();
+                      }),
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Text(
+            '${fname} ${lname}',
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                letterSpacing: 0.5,
+                color: Colors.white),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget Manu() {
+    return Container(
+      color: Get.theme.primaryColorLight,
+      child: Column(
+        children: [
+          ListTile(
+            onTap: () {
+              Navigator.pop(context);
+              bottomController.ontapItem(3);
+            },
+            leading: Icon(
+              Icons.person,
+              size: 25,
+              color: Colors.white,
+            ),
+            title: Text(
+              'info'.tr,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 0.5,
+                  color: Colors.white),
+            ),
+            // tileColor: Colors.cyan,
+          ),
+          ListTile(
+            onTap: () {
+              Get.offAndToNamed('/setting');
+            },
+            leading: Icon(
+              Icons.settings,
+              size: 30,
+              color: Colors.white,
+            ),
+            title: Text(
+              'setting'.tr,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 0.5,
+                  color: Colors.white),
+            ),
+            // tileColor: Colors.cyan,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget Footer() {
+    return Container(
+      color: Get.theme.primaryColor,
+      child: Wrap(
+        children: [
+          Divider(
+            color: Colors.white,
+            thickness: 1,
+            height: 0,
+          ),
+          ListTile(
+            onTap: () {
+              dialogTwobutton_Subtitle(
+                  'logout'.tr,
+                  'want_logout'.tr,
+                  Icons.warning_amber_rounded,
+                  Colors.orange,
+                  'yes'.tr,
+                  () {
+                    logoutController.logout();
+                  },
+                  'no'.tr,
+                  () {
+                    Navigator.pop(context);
+                  },
+                  true,
+                  true);
+            },
+            leading: Icon(
+              Icons.logout,
+              color: Colors.white,
+              size: 30,
+            ),
+            title: Text('logout'.tr,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 0.5,
+                    color: Colors.white)),
+            // tileColor: Colors.cyan,
+          ),
+        ],
       ),
     );
   }

@@ -114,6 +114,11 @@ const Map<String, String> th_TH = {
   'change_password': 'เปลี่ยนรหัสผ่าน',
   'change_language': 'เปลี่ยนภาษา',
   'select_language': 'เลือกภาษา',
+  'change_theme': 'เปลี่ยนธีม',
+  'select_theme': 'เลือกธีม',
+  'light': 'สว่าง',
+  'dark': 'มืด',
+  'system': 'ระบบ',
   'disable_account': 'ปิดการใช้งานบัญชี',
   'version': 'เวอร์ชันปัจจุบัน',
 
@@ -226,6 +231,7 @@ const Map<String, String> th_TH = {
   //Error text form
   'enter_info': 'กรอกข้อมูล',
   'enter_info_pls': 'กรุณากรอกข้อมูล',
+  'enter_info_error': 'กรอกข้อมูลไม่สมบูรณ์',
   'enter_username_pls': 'กรุณากรอกชื่อผู้ใช้',
   'enter_password_pls': 'กรุณากรอกรหัสผ่าน',
   'enter_password_current': 'กรอกรหัสผ่านปัจจุบัน',

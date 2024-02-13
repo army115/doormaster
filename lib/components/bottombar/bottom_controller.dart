@@ -6,7 +6,7 @@ import 'package:doormster/components/snackbar/back_double.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-BottomController bottomController = BottomController();
+BottomController bottomController = Get.put(BottomController());
 
 class BottomController extends GetxController
     with SingleGetTickerProviderMixin {
@@ -22,9 +22,9 @@ class BottomController extends GetxController
   }
 
   @override
-  void onClose() {
+  void dispose() {
     tabController.dispose();
-    super.onClose();
+    super.dispose();
   }
 
   void ontapItem(int index) {

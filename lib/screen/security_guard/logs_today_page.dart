@@ -82,7 +82,7 @@ class _Logs_TodayState extends State<Logs_Today>
     } catch (error) {
       print(error);
       await Future.delayed(const Duration(milliseconds: 500));
-      error_connected(context, () {
+      error_connected(() {
         homeKey.currentState?.popUntil(ModalRoute.withName('/security'));
         Navigator.of(context, rootNavigator: true).pop();
       });
@@ -131,11 +131,11 @@ class _Logs_TodayState extends State<Logs_Today>
                       margin: const EdgeInsets.fromLTRB(20, 15, 20, 10),
                       child: Column(
                         children: [
-                          Material(
-                            color: Colors.white,
+                          Card(
                             elevation: 10,
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(10)),
+                            margin: EdgeInsets.zero,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
                             child: Container(
                                 width: double.infinity,
                                 padding: const EdgeInsets.symmetric(
@@ -144,7 +144,7 @@ class _Logs_TodayState extends State<Logs_Today>
                                     '${'date_report'.tr} : $dateNow',
                                     Icon(
                                       Icons.event_note,
-                                      color: Get.theme.primaryColor,
+                                      color: Get.theme.primaryColorDark,
                                       size: 25,
                                     ))),
                           ),
@@ -249,8 +249,12 @@ class _Logs_TodayState extends State<Logs_Today>
                                                             .ellipsis,
                                                       ),
                                                     ),
-                                                    Icon(Icons
-                                                        .arrow_forward_ios_rounded)
+                                                    Icon(
+                                                      Icons
+                                                          .arrow_forward_ios_rounded,
+                                                      color: Get.textTheme
+                                                          .bodyText2?.color,
+                                                    )
                                                   ],
                                                 ),
                                                 IntrinsicHeight(
@@ -281,7 +285,7 @@ class _Logs_TodayState extends State<Logs_Today>
                                                             style: TextStyle(
                                                                 color: Theme.of(
                                                                         context)
-                                                                    .primaryColor))
+                                                                    .primaryColorDark))
                                                         : Text(
                                                             '${'checked_incomplete'.tr} ($logsPoint/$checkPoint)',
                                                             style: TextStyle(

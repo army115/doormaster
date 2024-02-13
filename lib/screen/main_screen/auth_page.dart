@@ -1,7 +1,12 @@
+import 'package:doormster/components/button/button_language.dart';
+import 'package:doormster/components/button/button_theme.dart';
 import 'package:doormster/components/snackbar/back_double.dart';
+import 'package:doormster/controller/back_double.dart';
+import 'package:doormster/service/notify/notify_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Auth_Page extends StatefulWidget {
   Auth_Page({Key? key});
@@ -11,54 +16,56 @@ class Auth_Page extends StatefulWidget {
 }
 
 class _Auth_PageState extends State<Auth_Page> {
-  DateTime PressTime = DateTime.now();
-
-  Future<bool> _onBackButtonDoubleClicked() async {
-    int difference = DateTime.now().difference(PressTime).inMilliseconds;
-    PressTime = DateTime.now();
-    if (difference < 1500) {
-      SystemNavigator.pop(animated: true);
-      return true;
-    } else {
-      backDouble(context);
-      return false;
-    }
-  }
+  final Buttontheme controller = Get.put(Buttontheme());
+  DateTime pressTime = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () => _onBackButtonDoubleClicked(),
+      onWillPop: () => onBackButtonDoubleClicked(context, pressTime),
       child: Scaffold(
         backgroundColor: Get.theme.primaryColor,
         body: SafeArea(
-          child: Container(
-            padding: EdgeInsets.symmetric(vertical: 30, horizontal: 30),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'assets/images/HIP Smart Community Icon-03.png',
-                    // scale: 3,
-                    height: MediaQuery.of(context).size.height * 0.4,
-                  ),
-                  GridView.count(
-                    crossAxisCount: 2,
-                    primary: false,
-                    // maxCrossAxisExtent: 300,
-                    crossAxisSpacing: 20,
-                    shrinkWrap: true,
-                    children: [
-                      menuButton('user'.tr, Icons.person, () {
-                        Navigator.pushReplacementNamed(context, '/login');
-                      }),
-                      menuButton('employee'.tr, Icons.manage_accounts_rounded,
-                          () {
-                        Navigator.pushReplacementNamed(context, '/staff');
-                      })
-                    ],
-                  ),
-                ]),
+          child: SingleChildScrollView(
+            child: Stack(
+              children: [
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/images/Smart Logo White.png',
+                          // scale: 3,
+                          height: Get.mediaQuery.size.height * 0.4,
+                        ),
+                        GridView.count(
+                          crossAxisCount: 2,
+                          primary: false,
+                          // maxCrossAxisExtent: 300,
+                          crossAxisSpacing: 20,
+                          shrinkWrap: true,
+                          children: [
+                            menuButton('user'.tr, Icons.person, () {
+                              Navigator.pushReplacementNamed(context, '/login');
+                            }),
+                            menuButton(
+                                'employee'.tr, Icons.manage_accounts_rounded,
+                                () {
+                              Navigator.pushReplacementNamed(context, '/staff');
+                            })
+                          ],
+                        ),
+                      ]),
+                ),
+                Positioned(
+                  top: 40,
+                  right: 10,
+                  child: button_language(Colors.white, Get.theme.primaryColor),
+                ),
+              ],
+            ),
           ),
         ),
       ),

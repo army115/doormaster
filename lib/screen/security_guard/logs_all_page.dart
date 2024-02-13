@@ -81,7 +81,7 @@ class _Logs_AllState extends State<Logs_All>
     } catch (error) {
       print(error);
       await Future.delayed(const Duration(milliseconds: 500));
-      error_connected(context, () {
+      error_connected(() {
         homeKey.currentState?.popUntil(ModalRoute.withName('/security'));
         Navigator.of(context, rootNavigator: true).pop();
       });
@@ -263,8 +263,12 @@ class _Logs_AllState extends State<Logs_All>
                                                             .ellipsis,
                                                       ),
                                                     ),
-                                                    Icon(Icons
-                                                        .arrow_forward_ios_rounded)
+                                                    Icon(
+                                                      Icons
+                                                          .arrow_forward_ios_rounded,
+                                                      color: Get.textTheme
+                                                          .bodyText2?.color,
+                                                    )
                                                   ],
                                                 ),
                                                 listLog[index].roundName ==
@@ -294,9 +298,9 @@ class _Logs_AllState extends State<Logs_All>
                                                     ? Text(
                                                         '${'record'.tr} ${listLog[index].fileList?.length} ${'list'.tr}',
                                                         style: TextStyle(
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .primaryColor,
+                                                          color: Theme.of(
+                                                                  context)
+                                                              .primaryColorDark,
                                                         ),
                                                       )
                                                     : Text(
@@ -329,10 +333,13 @@ class _Logs_AllState extends State<Logs_All>
 
   void calendar(context) async {
     final datePicker = await showCalendarDatePicker2Dialog(
+      useSafeArea: false,
       context: context,
       value: _pickerValue,
       config: CalendarDatePicker2WithActionButtonsConfig(
-          yearTextStyle: const TextStyle(fontWeight: FontWeight.normal),
+          selectedYearTextStyle: TextStyle(color: Colors.white),
+          yearTextStyle: const TextStyle(
+              fontWeight: FontWeight.normal, color: Colors.black),
           firstDayOfWeek: 1,
           weekdayLabelTextStyle: TextStyle(
               fontWeight: FontWeight.bold,

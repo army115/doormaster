@@ -1,6 +1,7 @@
 // ignore_for_file: invalid_use_of_protected_member
 
 import 'package:dio/dio.dart';
+import 'package:doormster/components/actions/disconnected_dialog.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/models/profile_model.dart';
@@ -8,6 +9,8 @@ import 'package:doormster/service/connected/connect_api.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+final ProfileController Profilecontroller = Get.put(ProfileController());
 
 class ProfileController extends GetxController {
   Rx<bool> loading = false.obs;
@@ -17,16 +20,16 @@ class ProfileController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    getInfo();
+    getInfo(500);
   }
 
   @override
   void onClose() {
-    getInfo();
+    profileInfo.value.clear();
     super.onClose();
   }
 
-  Future getInfo() async {
+  Future getInfo(time) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var userId = prefs.getString('userId');
     print('userId: ${userId}');
@@ -34,7 +37,7 @@ class ProfileController extends GetxController {
     try {
       loading.value = true;
 
-      await Future.delayed(Duration(milliseconds: 500));
+      await Future.delayed(Duration(milliseconds: time));
 
       var url = '${Connect_api().domain}/get/profile/$userId';
       var response = await Dio().get(
@@ -54,14 +57,14 @@ class ProfileController extends GetxController {
       dialogOnebutton_Subtitle('found_error'.tr, 'connect_fail'.tr,
           Icons.warning_amber_rounded, Colors.orange, 'ok'.tr, () {
         Get.back();
-        getInfo();
+        getInfo(500);
       }, false, false);
     } finally {
       loading.value = false;
     }
   }
 
-  Future editProfile(Map<String, dynamic> values, context) async {
+  Future editProfile(Map<String, dynamic> values) async {
     try {
       loading.value = true;
 
@@ -79,10 +82,11 @@ class ProfileController extends GetxController {
 
       if (_response == 200) {
         print('edit Success');
-        snackbar(Get.theme.primaryColor, 'edit_success'.tr,
-            Icons.check_circle_outline_rounded);
         _sharedInfo(values['first_name'], values['sur_name'], values['image']);
         Get.back();
+        snackbar(Get.theme.primaryColor, 'edit_success'.tr,
+            Icons.check_circle_outline_rounded);
+        getInfo(0);
       } else {
         dialogOnebutton_Subtitle('found_error'.tr, 'connect_fail'.tr,
             Icons.warning_amber_rounded, Colors.orange, 'ok'.tr, () {
@@ -93,11 +97,10 @@ class ProfileController extends GetxController {
       }
     } on DioError catch (e) {
       print(e.response);
-      dialogOnebutton_Subtitle('found_error'.tr, 'connect_fail'.tr,
-          Icons.warning_amber_rounded, Colors.orange, 'ok'.tr, () {
+      error_connected(() async {
         Get.back();
-        getInfo();
-      }, false, false);
+        getInfo(500);
+      });
     } finally {
       loading.value = false;
     }

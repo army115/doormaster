@@ -1,13 +1,14 @@
-// ignore_for_file: avoid_unnecessary_containers, must_be_immutable, unused_import
+// ignore_for_file: avoid_unnecessary_containers, must_be_immutable, unused_import, prefer_const_constructors
 
-import 'package:doormster/style/theme.dart';
+import 'package:doormster/style/theme/light/theme_light.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:doormster/style/textStyle.dart';
 
 class Text_Form_NoBorder extends StatelessWidget {
   TextEditingController controller;
   String title;
-  IconData icon;
+  var icon;
   String error;
   var TypeInput;
   Text_Form_NoBorder(
@@ -21,30 +22,30 @@ class Text_Form_NoBorder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 8),
-      child: TextFormField(
-        autofocus: false,
-        // readOnly: true,
-        style: textStyle().title16,
-        controller: controller,
-        keyboardType: TypeInput,
-        decoration: InputDecoration(
-          contentPadding: EdgeInsets.fromLTRB(0, 0, 10, 10),
-          labelText: title,
-          hintText: "enter_info".tr,
-          hintStyle: textStyle().title16,
-          errorStyle: textStyle().body14,
-          icon: Icon(icon, size: 25),
-        ),
-        validator: (values) {
-          if (values!.isEmpty) {
-            return error;
-          } else {
-            return null;
-          }
-        },
+    return TextFormField(
+      controller: controller,
+      style: Get.textTheme.bodyText2,
+      cursorColor: Get.theme.primaryColorDark,
+      keyboardType: TypeInput,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.zero,
+        hintText: title,
+        hintStyle: TextStyle(fontSize: 16, color: Colors.grey),
+        errorStyle: textStyle().body14,
+        icon: icon,
+        focusedBorder: UnderlineInputBorder(
+            borderSide:
+                BorderSide(color: Get.theme.primaryColorDark, width: 2)),
+        enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey, width: 1.5)),
       ),
+      validator: (values) {
+        if (values!.isEmpty) {
+          return error;
+        } else {
+          return null;
+        }
+      },
     );
   }
 }

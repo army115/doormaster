@@ -1,9 +1,9 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_null_comparison, use_build_context_synchronously
 
 import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:doormster/components/actions/disconnected_dialog.dart';
+import 'package:doormster/components/actions/form_error_snackbar.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/button/buttonback_appbar.dart';
@@ -13,6 +13,7 @@ import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/map/map_page.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/components/text/text_icon.dart';
+import 'package:doormster/components/text_form/text_form_noborder.dart';
 import 'package:doormster/components/text_form/text_form_noborder_validator.dart';
 import 'package:doormster/screen/security_guard/report_logs_page.dart';
 import 'package:doormster/service/connected/connect_api.dart';
@@ -147,7 +148,7 @@ class _Extra_CheckState extends State<Extra_Check> {
       }
     } catch (error) {
       print(error);
-      error_connected(context, () {
+      error_connected(() {
         Navigator.of(context, rootNavigator: true).pop();
       });
       // snackbar( Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
@@ -213,6 +214,8 @@ class _Extra_CheckState extends State<Extra_Check> {
                         valuse['pic'] = listImage64;
                         log(valuse.toString());
                         _checkIn(valuse);
+                      } else {
+                        form_error_snackbar();
                       }
                     }),
             body: SafeArea(
@@ -231,6 +234,7 @@ class _Extra_CheckState extends State<Extra_Check> {
                                 color: Colors.red,
                                 Icon(
                                   Icons.edit_calendar_rounded,
+                                  color: Get.theme.dividerColor,
                                   size: 25,
                                 )),
                             SizedBox(height: 10),
@@ -238,27 +242,19 @@ class _Extra_CheckState extends State<Extra_Check> {
                                 '${'round'.tr} : ${widget.type == 0 ? 'extra_point'.tr : 'emergency'.tr}',
                                 Icon(
                                   Icons.calendar_month_rounded,
+                                  color: Get.theme.dividerColor,
                                   size: 25,
                                 )),
-                            TextFormField(
-                              controller: pointName,
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.zero,
-                                hintText: 'checkpoint_name'.tr,
-                                hintStyle: TextStyle(fontSize: 16),
-                                errorStyle: TextStyle(fontSize: 15),
+                            Text_Form_NoBorder(
+                                controller: pointName,
+                                title: 'checkpoint_name'.tr,
                                 icon: textIcon(
                                     '${'checkpoint'.tr} : ',
                                     Icon(Icons.maps_home_work_rounded,
-                                        size: 25, color: Colors.black)),
-                              ),
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'checkpoint_name'.tr;
-                                }
-                                return null;
-                              },
-                            ),
+                                        size: 25,
+                                        color: Get.theme.dividerColor)),
+                                error: 'checkpoint_name'.tr,
+                                TypeInput: TextInputType.text),
                             SizedBox(height: 10),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -268,11 +264,16 @@ class _Extra_CheckState extends State<Extra_Check> {
                                   'checklist'.tr,
                                   Icon(
                                     Icons.task_rounded,
+                                    color: Get.theme.dividerColor,
                                     size: 25,
                                   ),
                                 ),
                                 SizedBox(width: 10),
                                 ElevatedButton(
+                                    style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStatePropertyAll(
+                                                Get.theme.primaryColorDark)),
                                     onPressed: () {
                                       showDialog(
                                         context: context,
@@ -281,9 +282,11 @@ class _Extra_CheckState extends State<Extra_Check> {
                                     },
                                     child: textIcon(
                                       'add_checklist'.tr,
+                                      color: Get.textTheme.bodyText1?.color,
                                       fontsize: 14,
                                       Icon(
                                         Icons.add_box,
+                                        color: Get.textTheme.bodyText1?.color,
                                         size: 22,
                                       ),
                                     )),
@@ -318,13 +321,14 @@ class _Extra_CheckState extends State<Extra_Check> {
                               'illustration'.tr,
                               Icon(
                                 Icons.camera_alt_rounded,
+                                color: Get.theme.dividerColor,
                                 size: 25,
                               ),
                             ),
                             Container(
                               margin: EdgeInsets.symmetric(vertical: 10),
                               height: 200,
-                              width: MediaQuery.of(context).size.width,
+                              width: Get.mediaQuery.size.width,
                               child: ListView(
                                   primary: false,
                                   shrinkWrap: true,
@@ -333,6 +337,7 @@ class _Extra_CheckState extends State<Extra_Check> {
                                     listImage64?.length == 4
                                         ? Container()
                                         : Card(
+                                            color: Colors.white,
                                             elevation: 5,
                                             child: InkWell(
                                                 onTap: () {
@@ -427,6 +432,7 @@ class _Extra_CheckState extends State<Extra_Check> {
                               'event_record'.tr,
                               Icon(
                                 Icons.assignment_rounded,
+                                color: Get.theme.dividerColor,
                                 size: 25,
                               ),
                             ),
@@ -472,6 +478,8 @@ class _Extra_CheckState extends State<Extra_Check> {
                             ),
                             SizedBox(height: 10),
                             ExpansionTile(
+                              collapsedBackgroundColor: Colors.transparent,
+                              backgroundColor: Colors.transparent,
                               tilePadding: EdgeInsets.zero,
                               title: textIcon(
                                 'current_position'.tr,
@@ -528,6 +536,8 @@ class _Extra_CheckState extends State<Extra_Check> {
                     listcheck.add(fieldText.text);
                   });
                   Navigator.pop(context);
+                } else {
+                  form_error_snackbar();
                 }
               },
               child: Text(

@@ -77,8 +77,8 @@ class _Test_PageState extends State<Test_Page>
       //                   // constraints: BoxConstraints(
       //                   //   minHeight: 40,
       //                   //   maxHeight: 250,
-      //                   //   maxWidth: MediaQuery.of(context).size.width * 0.7,
-      //                   //   minWidth: MediaQuery.of(context).size.width * 0.1,
+      //                   //   maxWidth: Get.mediaQuery.size.width * 0.7,
+      //                   //   minWidth: Get.mediaQuery.size.width * 0.1,
       //                   // ),
       //                   decoration: BoxDecoration(
       //                       color:
@@ -189,8 +189,8 @@ class _Test_PageState extends State<Test_Page>
       //                   // constraints: BoxConstraints(
       //                   //   minHeight: 40,
       //                   //   maxHeight: 250,
-      //                   //   maxWidth: MediaQuery.of(context).size.width * 0.7,
-      //                   //   minWidth: MediaQuery.of(context).size.width * 0.1,
+      //                   //   maxWidth: Get.mediaQuery.size.width * 0.7,
+      //                   //   minWidth: Get.mediaQuery.size.width * 0.1,
       //                   // ),
       //                   decoration: BoxDecoration(
       //                       color:
@@ -272,3 +272,14 @@ class _Test_PageState extends State<Test_Page>
       //     ),
       //   ],
       // ),
+
+
+
+
+
+
+
+
+
+
+      

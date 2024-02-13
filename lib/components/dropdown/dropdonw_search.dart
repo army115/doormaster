@@ -1,7 +1,8 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, prefer_const_constructors
 
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
-import 'package:doormster/style/theme.dart';
+import 'package:doormster/style/textStyle.dart';
+import 'package:doormster/style/theme/light/theme_light.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -45,6 +46,8 @@ class Dropdown_Search extends StatelessWidget {
             foundText: 'data_not_found'.tr,
             hintStyle: TextStyle(color: Colors.grey.shade600),
             items: listItem,
+            selectedStyle: TextStyle(color: Colors.black),
+            listItemStyle: TextStyle(color: Colors.black),
             controller: controller,
             borderRadiusItem: BorderRadius.circular(10),
             contentPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 13),

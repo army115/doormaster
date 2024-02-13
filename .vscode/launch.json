@@ -35,10 +35,10 @@
             "deviceId": "a3971b4c1220"
         },
         {
-            "name": "iPhone 14 Pro",
+            "name": "iPhone 15 Pro Max",
             "request": "launch",
             "type": "dart",
-            "deviceId": "25940670-35F3-4BA6-BDA7-8842855E6C9C"
+            "deviceId": "1E237B3A-339C-4A6D-BD2D-0AF73274A002"
         },
         {
             "name": "iPhone 7",

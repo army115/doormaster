@@ -21,19 +21,21 @@ class Search_From extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.white,
+    return Card(
       elevation: 10,
-      borderRadius: BorderRadius.all(Radius.circular(10)),
+      margin: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10))),
       child: TextField(
+          cursorColor: Get.theme.primaryColorDark,
           controller: fieldText,
-          style: TextStyle(fontSize: 15),
+          style: Get.textTheme.bodyText2,
           decoration: InputDecoration(
             hintText: title,
-            hintStyle: TextStyle(color: Colors.black38, fontSize: 16),
+            hintStyle: TextStyle(color: Colors.grey),
             prefixIcon: Icon(
               Icons.search,
-              color: Get.theme.primaryColor,
+              color: Theme.of(context).primaryColorDark,
               size: 30,
             ),
             suffixIcon: fieldText.text.length > 0
@@ -42,6 +44,7 @@ class Search_From extends StatelessWidget {
                     icon: Icon(
                       Icons.close,
                       size: 30,
+                      color: Colors.red,
                     ))
                 : null,
             border: InputBorder.none,

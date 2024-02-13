@@ -114,6 +114,11 @@ const Map<String, String> en_US = {
   'change_password': 'Change Password',
   'change_language': 'Change Language',
   'select_language': 'Select Language',
+  'change_theme': 'Change Theme',
+  'select_theme': 'Select Theme',
+  'light': 'Light',
+  'dark': 'Dark',
+  'system': 'System',
   'disable_account': 'Disable Account',
   'version': 'Version',
 
@@ -233,6 +238,7 @@ const Map<String, String> en_US = {
   // Error text form
   'enter_info': 'Enter Info',
   'enter_info_pls': 'Please enter info.',
+  'enter_info_error': 'Incomplete information entered.',
   'enter_username_pls': 'Please enter a username.',
   'enter_password_pls': 'Please enter a password.',
   'enter_password_current': 'Please enter a current password.',

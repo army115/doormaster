@@ -1,4 +1,4 @@
-import 'package:doormster/style/theme.dart';
+import 'package:doormster/style/textStyle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -43,11 +43,9 @@ class TextForm_Ontap extends StatelessWidget {
               errorStyle: textStyle().body14,
               prefixIcon: Icon(
                 iconleft,
-                color: Colors.grey.shade600,
               ),
               suffixIcon: Icon(
                 iconright,
-                color: Colors.grey.shade600,
                 size: 30,
               ),
               focusedBorder: OutlineInputBorder(

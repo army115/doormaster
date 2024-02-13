@@ -20,10 +20,10 @@ class Search_Calendar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.white,
+    return Card(
+      margin: EdgeInsets.zero,
       elevation: 10,
-      borderRadius: BorderRadius.all(Radius.circular(10)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: TextField(
           readOnly: true,
           controller: fieldText,
@@ -32,14 +32,14 @@ class Search_Calendar extends StatelessWidget {
               color: fieldText.text.contains('วันที่') ||
                       fieldText.text.contains('Select')
                   ? Colors.grey
-                  : Colors.black),
+                  : Get.textTheme.bodyText2?.color),
           // cursorColor: Colors.cyan,
           decoration: InputDecoration(
             hintText: title,
             hintStyle: TextStyle(color: Colors.black38, fontSize: 16),
             prefixIcon: Icon(
               Icons.event_note,
-              color: Get.theme.primaryColor,
+              color: Get.theme.primaryColorDark,
               size: 30,
             ),
             suffixIcon: fieldText.text.contains('วันที่') ||
@@ -50,7 +50,7 @@ class Search_Calendar extends StatelessWidget {
                     icon: Icon(
                       Icons.close,
                       size: 30,
-                      color: Get.theme.primaryColor,
+                      color: Colors.red,
                     )),
             border: InputBorder.none,
           ),

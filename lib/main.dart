@@ -2,17 +2,13 @@
 
 import 'dart:io';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
-import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/language/translation.dart';
-import 'package:doormster/screen/main_screen/auth_page.dart';
-import 'package:doormster/screen/main_screen/home_page.dart';
-import 'package:doormster/screen/main_screen/login_page.dart';
-import 'package:doormster/screen/main_screen/change_password_page.dart';
-import 'package:doormster/screen/main_screen/login_staff_page.dart';
-import 'package:doormster/screen/main_screen/settings_page.dart';
-import 'package:doormster/screen/management_service/management_service_page.dart';
+import 'package:doormster/routes/page/pages_routes.dart';
 import 'package:doormster/service/notify/notify_service.dart';
-import 'package:doormster/style/theme.dart';
+import 'package:doormster/style/scroll_screen.dart';
+import 'package:doormster/style/textStyle.dart';
+import 'package:doormster/style/theme/dark/theme_dark.dart';
+import 'package:doormster/style/theme/light/theme_light.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,10 +18,6 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 import 'package:restart_app/restart_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:doormster/screen/parcel_service/parcel_service_page.dart';
-import 'package:doormster/screen/qr_smart_access/qr_smart_home_page.dart';
-import 'package:doormster/screen/security_guard/security_guard_page.dart';
-import 'package:doormster/screen/visitor_service/visitor_service_page.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
 Future<void> main() async {
@@ -41,15 +33,14 @@ Future<void> main() async {
   final prefs = await SharedPreferences.getInstance();
   final token = prefs.getString('token');
   final language = prefs.getString('language');
-  if (language == null) {
-    await prefs.setString("language", 'th');
-  }
+  final theme = prefs.getBool('theme');
   print(token == null ? 'login : false' : 'login : true');
   print('language : $language');
   runApp(MyApp(
     connect: result,
     token: token,
     language: language,
+    theme: theme,
   ));
 }
 
@@ -57,7 +48,9 @@ class MyApp extends StatelessWidget {
   final token;
   final language;
   final connect;
-  MyApp({Key? key, this.token, this.language, this.connect}) : super(key: key);
+  final theme;
+  MyApp({Key? key, this.token, this.language, this.connect, this.theme})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -65,8 +58,7 @@ class MyApp extends StatelessWidget {
           builder: (context, child) => myTextScale(
               context,
               myScrollScreen(
-                context,
-                child,
+                child!,
               ))),
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
@@ -81,28 +73,20 @@ class MyApp extends StatelessWidget {
       translations: Languages(),
       title: 'HIP Smart Community',
       debugShowCheckedModeBanner: false,
-      theme: mytheme(),
+      themeMode: theme != null
+          ? theme
+              ? ThemeMode.dark
+              : ThemeMode.light
+          : ThemeMode.system,
+      theme: themeLight,
+      darkTheme: themeDark,
       // home: token == null ? Login_Page() : BottomBar(),
       initialRoute: connect == ConnectivityResult.none
           ? '/check'
           : token == null
               ? '/auth'
               : '/bottom',
-      routes: {
-        '/check': (context) => Check_Connected(),
-        '/auth': (context) => Auth_Page(),
-        '/login': (context) => Login_Page(),
-        '/staff': (context) => Login_Staff(),
-        '/home': (context) => Home_Page(),
-        '/bottom': (context) => BottomBar(),
-        '/qrsmart': (context) => QRSmart_HomePage(),
-        '/parcel': (context) => Parcel_service(),
-        '/management': (context) => Management_Service(),
-        '/security': (context) => Security_Guard(),
-        '/visitor': (context) => Visitor_Service(),
-        '/password': (context) => Password_Page(),
-        '/setting': (context) => Settings_Page(),
-      },
+      routes: pages_routes,
     );
   }
 }
@@ -113,7 +97,7 @@ class Check_Connected extends StatelessWidget {
     return WillPopScope(
       onWillPop: (() async => false),
       child: Scaffold(
-        backgroundColor: const Color(0xFF0B4D9C),
+        backgroundColor: Get.theme.primaryColor,
         body: SafeArea(
           child: Stack(
             children: [
@@ -122,7 +106,7 @@ class Check_Connected extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Image.asset(
-                        'assets/images/HIP Smart Community Icon-03.png',
+                        'assets/images/Smart Logo White.png',
                         scale: 4,
                       ),
                     ),

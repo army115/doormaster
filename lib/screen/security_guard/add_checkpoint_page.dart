@@ -3,6 +3,7 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:doormster/components/actions/disconnected_dialog.dart';
+import 'package:doormster/components/actions/form_error_snackbar.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/button/button.dart';
@@ -97,8 +98,8 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
               Navigator.popUntil(context, (route) => route.isFirst);
             }, false, false);
           } else if (listdata[0].verify == 1) {
-            dialogOnebutton(context, 'checkpoint_regis'.tr,
-                Icons.warning_amber_rounded, Colors.orange, 'ok'.tr, () {
+            dialogOnebutton('checkpoint_regis'.tr, Icons.warning_amber_rounded,
+                Colors.orange, 'ok'.tr, () {
               Navigator.popUntil(context, (route) => route.isFirst);
             }, false, false);
           } else {
@@ -113,7 +114,7 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
       } catch (error) {
         print(error);
         await Future.delayed(Duration(milliseconds: 500));
-        error_connected(context, () {
+        error_connected(() {
           Navigator.popUntil(context, (route) => route.isFirst);
         });
         setState(() {
@@ -149,7 +150,7 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
         print(values);
         print(response.data);
 
-        dialogOnebutton(context, 'register_success'.tr,
+        dialogOnebutton('register_success'.tr,
             Icons.check_circle_outline_rounded, Colors.green, 'ok'.tr, () {
           Navigator.of(context).popUntil((route) => route.isFirst);
         }, false, false);
@@ -173,7 +174,7 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
       }
     } catch (error) {
       print(error);
-      error_connected(context, () {
+      error_connected(() {
         Navigator.of(context, rootNavigator: true).pop();
       });
 
@@ -224,6 +225,8 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
                             valuse['checkpoint_lat'] = widget.lat;
                             valuse['checkpoint_lng'] = widget.lng;
                             _AddcheckPoint(valuse);
+                          } else {
+                            form_error_snackbar();
                           }
                         }),
             body: SafeArea(

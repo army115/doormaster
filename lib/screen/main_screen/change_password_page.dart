@@ -2,6 +2,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:doormster/components/actions/disconnected_dialog.dart';
+import 'package:doormster/components/actions/form_error_snackbar.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottom_controller.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
@@ -36,6 +37,9 @@ class _Password_PageState extends State<Password_Page> {
   bool redEyeold = true;
   bool redEyenew = true;
   bool redEyecon = true;
+  bool focusColor = false;
+  bool focusColor2 = false;
+  bool focusColor3 = false;
   late SharedPreferences prefs;
 
   Future<void> _getUsername() async {
@@ -75,7 +79,7 @@ class _Password_PageState extends State<Password_Page> {
       }
     } catch (error) {
       print(error);
-      error_connected(context, () async {
+      error_connected(() async {
         Navigator.of(context).pop();
       });
       // snackbar( Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
@@ -186,30 +190,41 @@ class _Password_PageState extends State<Password_Page> {
 
   Widget textpass(controller, redeye, title, icon, press, value) {
     return TextFormField(
+        selectionControls: EmptyTextSelectionControls(),
         controller: controller,
         obscureText: redeye,
+        cursorColor: Get.theme.primaryColorDark,
+        style: TextStyle(fontSize: 17, color: Get.theme.dividerColor),
         decoration: InputDecoration(
           contentPadding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-          // labelText: title,
           hintText: title,
-          hintStyle: TextStyle(fontSize: 17),
+          hintStyle: TextStyle(
+              fontSize: 17, color: Get.theme.dividerColor.withOpacity(0.5)),
           errorStyle: TextStyle(fontSize: 15),
           prefixIcon: icon,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(5.0),
-          ),
+          prefixIconColor:
+              MaterialStateColor.resolveWith((Set<MaterialState> states) {
+            if (states.contains(MaterialState.focused)) {
+              return Get.theme.dividerColor;
+            }
+            return Get.theme.dividerColor.withOpacity(0.5);
+          }),
+          suffixIconColor:
+              MaterialStateColor.resolveWith((Set<MaterialState> states) {
+            if (states.contains(MaterialState.focused)) {
+              return Get.theme.dividerColor;
+            }
+            return Get.theme.dividerColor.withOpacity(0.5);
+          }),
           suffixIcon: IconButton(
             onPressed: press,
-            icon: redeye
-                ? Icon(
-                    Icons.visibility_off,
-                    // color: MyConstant.dark,
-                  )
-                : Icon(
-                    Icons.visibility,
-                    // color: MyConstant.dark,
-                  ),
+            icon: redeye ? Icon(Icons.visibility_off) : Icon(Icons.visibility),
           ),
+          focusedBorder: OutlineInputBorder(
+              borderSide:
+                  BorderSide(color: Get.theme.primaryColorDark, width: 2)),
+          enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey, width: 1.5)),
         ),
         validator: value);
   }
@@ -239,6 +254,8 @@ class _Password_PageState extends State<Password_Page> {
               valuse['old_password'] = _oldpass.text;
               valuse['new_password'] = _conpass.text;
               _changePassword(valuse);
+            } else {
+              form_error_snackbar();
             }
           },
           style: styleButtons(EdgeInsets.symmetric(horizontal: 40, vertical: 8),

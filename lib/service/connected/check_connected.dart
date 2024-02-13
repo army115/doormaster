@@ -16,7 +16,8 @@ Future<void> checkInternet(context, page, rootNavi) async {
   }
 }
 
-Future<void> checkInternetOnGoBack(context, page, rootNavi, onGoBack) async {
+Future<void> checkInternetOnGoBack(
+    context, Widget page, rootNavi, onGoBack) async {
   var result = await Connectivity().checkConnectivity();
   print(result);
   if (result == ConnectivityResult.none) {
@@ -26,7 +27,7 @@ Future<void> checkInternetOnGoBack(context, page, rootNavi, onGoBack) async {
   } else {
     Navigator.of(context, rootNavigator: rootNavi)
         .push(MaterialPageRoute(builder: (context) => page))
-        .then((onGoBack));
+        .then(onGoBack);
   }
 }
 

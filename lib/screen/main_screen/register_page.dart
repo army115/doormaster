@@ -2,8 +2,10 @@
 
 import 'package:dio/dio.dart';
 import 'package:doormster/components/actions/disconnected_dialog.dart';
+import 'package:doormster/components/actions/form_error_snackbar.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/button/button.dart';
+import 'package:doormster/components/button/button_theme.dart';
 import 'package:doormster/components/button/buttonback_appbar.dart';
 import 'package:doormster/components/checkBox/checkbox_formfield.dart';
 import 'package:doormster/components/dropdown/dropdonw_search.dart';
@@ -120,7 +122,7 @@ class _Register_PageState extends State<Register_Page> {
       }
     } catch (error) {
       print(error);
-      error_connected(context, () async {
+      error_connected(() async {
         Navigator.of(context).pop();
       });
       // snackbar( Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
@@ -175,116 +177,121 @@ class _Register_PageState extends State<Register_Page> {
                   valuse['company_id'] = onItemSelect;
                   valuse['user_password'] = passwordCon.text;
                   _register(valuse);
+                } else {
+                  form_error_snackbar();
                 }
               },
             ),
-            body: SafeArea(
-                child: SingleChildScrollView(
-              child: Container(
-                padding: EdgeInsets.fromLTRB(20, 20, 20, 80),
-                child: Form(
-                  key: _formkey,
-                  child: Column(
-                      // mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          'assets/images/Smart Community Logo.png',
-                          scale: 4.5,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text_Form(
-                          controller: username,
-                          title: 'username'.tr,
-                          icon: Icons.account_circle_rounded,
-                          error: 'enter_username_pls'.tr,
-                          TypeInput: TextInputType.name,
-                        ),
-                        Text_Form(
-                          controller: fname,
-                          title: 'fname'.tr,
-                          icon: Icons.person_outline_rounded,
-                          error: 'enter_name_pls'.tr,
-                          TypeInput: TextInputType.name,
-                        ),
-                        Text_Form(
-                          controller: lname,
-                          title: 'lname'.tr,
-                          icon: Icons.person,
-                          error: 'enter_lname_pls'.tr,
-                          TypeInput: TextInputType.name,
-                        ),
-                        TextForm_validator(
-                            controller: email,
-                            title: 'email'.tr,
-                            icon: Icons.email,
-                            TypeInput: TextInputType.emailAddress,
-                            error: (values) {
-                              if (values.isEmpty) {
-                                return 'enter_email_pls'.tr;
-                              } else if (values.isEmpty ||
-                                  !values.contains("@")) {
-                                return "email_error".tr;
-                              } else {
-                                return null;
-                              }
-                            }),
-                        Dropdown_Search(
-                          title: 'company'.tr,
-                          controller: company,
-                          leftIcon: Icons.home_work_rounded,
-                          onChanged: (value) {
-                            final index = listCompany.indexWhere(
-                                (item) => item.companyName == value);
-                            if (index > -1) {
-                              onItemSelect = listCompany[index].sId;
-                            }
-                            print(onItemSelect);
-                          },
-                          error: 'select_company_pls'.tr,
-                          listItem: listCompany
-                              .map((value) => value.companyName.toString())
-                              .toList(),
-                        ),
-                        TextForm_Password(
-                          controller: password,
-                          title: 'password'.tr,
-                          iconLaft: Icons.key,
-                          error: (values) {
-                            confirmPass = values;
-                            if (values.isEmpty) {
-                              return 'enter_password_pls'.tr;
-                            } else if (values.length < 8) {
-                              return "password_8char".tr;
-                            } else {
-                              return null;
-                            }
-                          },
-                        ),
-                        TextForm_Password(
-                          controller: passwordCon,
-                          title: 'confirm_password'.tr,
-                          iconLaft: Icons.key,
-                          error: (values) {
-                            if (values.isEmpty) {
-                              return 'confirm_password_pls'.tr;
-                            } else if (values != confirmPass) {
-                              return "password_no_match".tr;
-                            } else {
-                              return null;
-                            }
-                          },
-                        ),
-                        CheckBox_FormField(
-                          title: 'accept_terms'.tr,
-                          value: Checked,
-                          validator: 'accept_terms_pls'.tr,
-                        ),
-                      ]),
-                ),
-              ),
-            )),
+            body: Obx(() => SafeArea(
+                    child: SingleChildScrollView(
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(20, 20, 20, 80),
+                    child: Form(
+                      key: _formkey,
+                      child: Column(
+                          // mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              themeController.isDarkMode == true
+                                  ? 'assets/images/Smart Logo White.png'
+                                  : 'assets/images/Smart Community Logo.png',
+                              scale: 4.5,
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text_Form(
+                              controller: username,
+                              title: 'username'.tr,
+                              icon: Icons.account_circle_rounded,
+                              error: 'enter_username_pls'.tr,
+                              TypeInput: TextInputType.name,
+                            ),
+                            Text_Form(
+                              controller: fname,
+                              title: 'fname'.tr,
+                              icon: Icons.person_outline_rounded,
+                              error: 'enter_name_pls'.tr,
+                              TypeInput: TextInputType.name,
+                            ),
+                            Text_Form(
+                              controller: lname,
+                              title: 'lname'.tr,
+                              icon: Icons.person,
+                              error: 'enter_lname_pls'.tr,
+                              TypeInput: TextInputType.name,
+                            ),
+                            TextForm_validator(
+                                controller: email,
+                                title: 'email'.tr,
+                                icon: Icons.email,
+                                TypeInput: TextInputType.emailAddress,
+                                error: (values) {
+                                  if (values.isEmpty) {
+                                    return 'enter_email_pls'.tr;
+                                  } else if (!RegExp(
+                                          r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                                      .hasMatch(values)) {
+                                    return "email_error".tr;
+                                  } else {
+                                    return null;
+                                  }
+                                }),
+                            Dropdown_Search(
+                              title: 'company'.tr,
+                              controller: company,
+                              leftIcon: Icons.home_work_rounded,
+                              onChanged: (value) {
+                                final index = listCompany.indexWhere(
+                                    (item) => item.companyName == value);
+                                if (index > -1) {
+                                  onItemSelect = listCompany[index].sId;
+                                }
+                                print(onItemSelect);
+                              },
+                              error: 'select_company_pls'.tr,
+                              listItem: listCompany
+                                  .map((value) => value.companyName.toString())
+                                  .toList(),
+                            ),
+                            TextForm_Password(
+                              controller: password,
+                              title: 'password'.tr,
+                              iconLaft: Icons.key,
+                              error: (values) {
+                                confirmPass = values;
+                                if (values.isEmpty) {
+                                  return 'enter_password_pls'.tr;
+                                } else if (values.length < 8) {
+                                  return "password_8char".tr;
+                                } else {
+                                  return null;
+                                }
+                              },
+                            ),
+                            TextForm_Password(
+                              controller: passwordCon,
+                              title: 'confirm_password'.tr,
+                              iconLaft: Icons.key,
+                              error: (values) {
+                                if (values.isEmpty) {
+                                  return 'confirm_password_pls'.tr;
+                                } else if (values != confirmPass) {
+                                  return "password_no_match".tr;
+                                } else {
+                                  return null;
+                                }
+                              },
+                            ),
+                            CheckBox_FormField(
+                              title: 'accept_terms'.tr,
+                              value: Checked,
+                              validator: 'accept_terms_pls'.tr,
+                            ),
+                          ]),
+                    ),
+                  ),
+                ))),
           ),
           loading ? Loading() : Container()
         ],

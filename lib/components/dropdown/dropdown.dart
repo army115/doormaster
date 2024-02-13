@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:doormster/style/theme.dart';
+import 'package:doormster/style/textStyle.dart';
+import 'package:doormster/style/theme/light/theme_light.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:get/get.dart';
@@ -44,6 +45,8 @@ class Dropdown extends StatelessWidget {
             errorStyle: textStyle().body14,
             hintText: title,
             hintStyle: TextStyle(color: Colors.grey.shade600),
+            listItemStyle: TextStyle(color: Colors.black),
+            selectedStyle: TextStyle(color: Colors.black),
             searchText: 'search'.tr,
             foundText: 'data_not_found'.tr,
             borderRadiusItem: BorderRadius.circular(10),

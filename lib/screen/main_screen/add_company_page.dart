@@ -2,6 +2,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:doormster/components/actions/disconnected_dialog.dart';
+import 'package:doormster/components/actions/form_error_snackbar.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottom_controller.dart';
 import 'package:doormster/components/dropdown/dropdonw_search.dart';
@@ -95,7 +96,7 @@ class _Add_CompanyState extends State<Add_Company> {
       }
     } catch (error) {
       print(error);
-      error_connected(context, () {
+      error_connected(() {
         Navigator.of(context).popAndPushNamed('/bottom');
       });
       setState(() {
@@ -140,7 +141,7 @@ class _Add_CompanyState extends State<Add_Company> {
       }
     } catch (error) {
       print(error);
-      error_connected(context, () async {
+      error_connected(() async {
         Navigator.of(context).pop();
       });
       // snackbar( Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
@@ -219,7 +220,7 @@ class _Add_CompanyState extends State<Add_Company> {
       }
     } catch (error) {
       print(error);
-      error_connected(context, () async {
+      error_connected(() async {
         Navigator.of(context).pop();
       });
       setState(() {
@@ -323,6 +324,8 @@ class _Add_CompanyState extends State<Add_Company> {
                 valuse['company_id'] = onItemSelect;
                 _addCompany(valuse);
               }
+            } else {
+              form_error_snackbar();
             }
           },
           style: styleButtons(EdgeInsets.symmetric(horizontal: 40, vertical: 8),

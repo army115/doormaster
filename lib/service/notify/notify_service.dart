@@ -58,11 +58,24 @@ class NotificationService {
   }
 
   Future<void> notification() async {
-    await messaging.requestPermission(alert: true, badge: true, sound: true);
-    final fCMToken = await messaging.getToken();
+    await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+    final String? fCMToken;
+    if (Platform.isIOS) {
+      fCMToken = await messaging.getToken();
+    } else {
+      fCMToken = await messaging.getToken();
+    }
     log("Token : ${fCMToken}");
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString("notifyToken", fCMToken!);
+    await prefs.setString("notifyToken", fCMToken ?? '');
 
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(

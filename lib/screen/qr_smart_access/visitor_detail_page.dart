@@ -199,7 +199,7 @@ class _Visitor_DetailState extends State<Visitor_Detail> {
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             width: double.infinity,
-            // height: MediaQuery.of(context).size.height,
+            // height: Get.mediaQuery.size.height,
             child: Column(
               children: [
                 Card(

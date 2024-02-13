@@ -1,5 +1,6 @@
 // ignore_for_file: unrelated_type_equality_checks, prefer_const_constructors, use_build_context_synchronously, unused_import, prefer_typing_uninitialized_variables, camel_case_types
 
+import 'package:doormster/components/actions/form_error_snackbar.dart';
 import 'package:doormster/components/text_form/text_form.dart';
 import 'package:doormster/components/text_form/text_form_validator.dart';
 import 'package:doormster/controller/profile_controller.dart';
@@ -15,7 +16,6 @@ import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/drawer/drawer.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
-import 'package:doormster/components/text_form/text_form_noborder.dart';
 import 'package:doormster/models/profile_model.dart';
 import 'package:doormster/service/connected/connect_api.dart';
 import 'package:doormster/service/permission/permission_camera.dart';
@@ -34,7 +34,7 @@ class Profile_Update extends StatefulWidget {
 }
 
 class _Profile_UpdateState extends State<Profile_Update> {
-  final ProfileController controller = Get.put(ProfileController());
+  final ProfileController controller = Get.find<ProfileController>();
 
   final _formkey = GlobalKey<FormState>();
   TextEditingController fname = TextEditingController();
@@ -79,7 +79,6 @@ class _Profile_UpdateState extends State<Profile_Update> {
   void initState() {
     profileInfo = widget.infoProfile;
     Controller();
-    // TODO: implement initState
     super.initState();
   }
 
@@ -95,7 +94,34 @@ class _Profile_UpdateState extends State<Profile_Update> {
               FloatingActionButtonLocation.centerFloat,
           floatingActionButton: controller.loading.isTrue
               ? Container()
-              : Buttons(title: 'save'.tr, press: () {}),
+              : Buttons(
+                  title: 'save'.tr,
+                  press: () {
+                    if (_formkey.currentState!.validate()) {
+                      Map<String, dynamic> valuse = Map();
+                      valuse['uuid'] = uuId;
+                      valuse['first_name'] = fname.text;
+                      valuse['email'] = email.text;
+                      valuse['sur_name'] = lname.text;
+
+                      if (image != null) {
+                        valuse['image'] = image;
+                      } else {
+                        valuse['image'] = imageProfile;
+                      }
+
+                      if (fname.text != profileInfo.single.firstName ||
+                          lname.text != profileInfo.single.surName ||
+                          email.text != profileInfo.single.email ||
+                          image != null) {
+                        controller.editProfile(valuse);
+                      } else {
+                        Get.back();
+                      }
+                    } else {
+                      form_error_snackbar();
+                    }
+                  }),
           body: SingleChildScrollView(
             physics: ClampingScrollPhysics(),
             child: Form(
@@ -160,7 +186,7 @@ class _Profile_UpdateState extends State<Profile_Update> {
                                     color: Colors.white, width: 2.5)),
                             child: CircleAvatar(
                                 radius: 21,
-                                backgroundColor: Get.theme.primaryColor,
+                                backgroundColor: Theme.of(context).primaryColor,
                                 child: IconButton(
                                   splashRadius: 20,
                                   onPressed: () {
@@ -199,13 +225,22 @@ class _Profile_UpdateState extends State<Profile_Update> {
                       ),
                       SizedBox(height: 10),
                       Text('email'.tr),
-                      Text_Form(
-                        controller: email,
-                        title: 'email'.tr,
-                        icon: Icons.email_rounded,
-                        error: 'enter_email_pls'.tr,
-                        TypeInput: TextInputType.emailAddress,
-                      ),
+                      TextForm_validator(
+                          controller: email,
+                          title: 'email'.tr,
+                          icon: Icons.email,
+                          TypeInput: TextInputType.emailAddress,
+                          error: (values) {
+                            if (values.isEmpty) {
+                              return 'enter_email_pls'.tr;
+                            } else if (!RegExp(
+                                    r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                                .hasMatch(values)) {
+                              return "email_error".tr;
+                            } else {
+                              return null;
+                            }
+                          }),
                     ],
                   ),
                 ]),

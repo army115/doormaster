@@ -1,11 +1,14 @@
-// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, collection_methods_unrelated_type
 
 import 'dart:developer';
 import 'package:checkbox_formfield/checkbox_formfield.dart';
 import 'package:dio/dio.dart';
 import 'package:doormster/components/actions/disconnected_dialog.dart';
+import 'package:doormster/components/actions/form_error_snackbar.dart';
 import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/button/buttonback_appbar.dart';
+import 'package:doormster/components/checkBox/checkbox_formfield.dart';
+import 'package:doormster/components/checkBox/checkbox_listtile.dart';
 import 'package:doormster/components/datetime/date_time.dart';
 import 'package:doormster/components/dropdown/dropdown.dart';
 import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
@@ -131,7 +134,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
       });
     } catch (error) {
       print(error);
-      error_connected(context, () {
+      error_connected(() {
         Navigator.popUntil(context, (route) => route.isFirst);
       });
       setState(() {
@@ -196,7 +199,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
       }
     } catch (error) {
       print(error);
-      error_connected(context, () async {
+      error_connected(() async {
         Navigator.of(context).pop();
       });
       setState(() {
@@ -258,7 +261,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
       }
     } catch (error) {
       print(error);
-      error_connected(context, () async {
+      error_connected(() async {
         Navigator.of(context).pop();
       });
       setState(() {
@@ -437,6 +440,13 @@ class _Visitor_PageState extends State<Visitor_Page> {
               valuse['door_id'] = selectedItemsId;
               _createVisitorWiegand(valuse);
             }
+          } else {
+            form_error_snackbar();
+            Scrollable.ensureVisible(
+              _kye.currentContext!,
+              alignment: 0.5,
+              duration: Duration.zero,
+            );
           }
         });
   }
@@ -499,7 +509,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
     );
   }
 
-  List<bool> selectedItems = [];
+  // List<bool> selectedItems = [];
   List<String> selectedItemsName = [];
   List<String> selectedItemsId = [];
 
@@ -514,10 +524,10 @@ class _Visitor_PageState extends State<Visitor_Page> {
       });
     }
 
-    if (selectedItems.isEmpty) {
-      //set ค่า ใน list ให้เป็น bool = false
-      selectedItems = List<bool>.filled(listdet!.length, false);
-    }
+    // if (selectedItems.isEmpty) {
+    //   //set ค่า ใน list ให้เป็น bool = false
+    //   selectedItems = List<bool>.filled(listdet!.length, false);
+    // }
     return ClipRRect(
       borderRadius: BorderRadius.circular(7),
       child: Scaffold(
@@ -556,36 +566,11 @@ class _Visitor_PageState extends State<Visitor_Page> {
                       itemBuilder: (BuildContext context, int index) {
                         final String? item = listdet![index].doorName;
                         final String? id = listdet![index].doorId;
-
-                        return CheckboxListTileFormField(
-                          // dense: true,
-                          activeColor: Get.theme.primaryColor,
-                          title: Text(
-                            item!,
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          initialValue: selectedItems[index],
-                          onChanged: (value) {
-                            setState(() {
-                              selectedItems[index] = value;
-                              if (selectedItemsName.contains(item)) {
-                                selectedItemsName.remove(item);
-                                selectedItemsId.remove(id);
-                                selectDevices.text =
-                                    selectedItemsName.join(',');
-                              } else {
-                                selectedItemsName.add(item);
-                                selectedItemsId.add(id!);
-                                selectDevices.text =
-                                    selectedItemsName.join(',');
-                              }
-
-                              log(selectedItems.toString());
-                              log("devicesName : ${selectedItemsName}");
-                              log("devicesId : ${selectedItemsId}");
-                            });
-                          },
-                        );
+                        return CheckBox_FormField(
+                            title: item,
+                            value: selectedItemsName.contains(item),
+                            onChanged: (value) =>
+                                _updateSelectedItems(index, item!, id, value));
                       },
                     ),
             ),
@@ -593,5 +578,19 @@ class _Visitor_PageState extends State<Visitor_Page> {
         ),
       ),
     );
+  }
+
+  void _updateSelectedItems(int index, String item, String? id, bool value) {
+    setState(() {
+      if (selectedItemsName.contains(item)) {
+        selectedItemsName.remove(item);
+        selectedItemsId.remove(id);
+        selectDevices.text = selectedItemsName.join(',');
+      } else {
+        selectedItemsName.add(item);
+        selectedItemsId.add(id!);
+        selectDevices.text = selectedItemsName.join(',');
+      }
+    });
   }
 }

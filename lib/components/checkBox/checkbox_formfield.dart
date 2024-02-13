@@ -2,40 +2,40 @@ import 'package:checkbox_formfield/checkbox_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class CheckBox_FormField extends StatefulWidget {
+class CheckBox_FormField extends StatelessWidget {
   final title;
   final value;
+  final onChanged;
   final validator;
   final secondary;
   const CheckBox_FormField(
-      {Key? key, this.title, this.value, this.validator, this.secondary});
+      {Key? key,
+      this.title,
+      this.value,
+      this.validator,
+      this.secondary,
+      this.onChanged});
 
-  @override
-  State<CheckBox_FormField> createState() => _CheckBox_FormFieldState();
-}
-
-class _CheckBox_FormFieldState extends State<CheckBox_FormField> {
   @override
   Widget build(BuildContext context) {
     return CheckboxListTileFormField(
-      secondary: widget.secondary,
+      side: BorderSide(color: Get.theme.dividerColor, width: 2),
+      checkColor: Get.textTheme.bodyText1?.color,
+      secondary: secondary,
       dense: true,
-      activeColor: Get.theme.primaryColor,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      activeColor: Get.theme.primaryColorDark,
       title: Text(
-        widget.title,
-        style: TextStyle(fontSize: 16),
+        title,
+        style: Get.textTheme.bodyText2,
       ),
-      initialValue: widget.value,
-      onChanged: (value) {
-        setState(() {
-          value = widget.value;
-        });
-      },
+      initialValue: value,
+      onChanged: onChanged,
       validator: (values) {
         if (values!) {
           return null;
         } else {
-          return widget.validator;
+          return validator;
         }
       },
     );

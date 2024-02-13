@@ -4,12 +4,13 @@ import 'dart:typed_data';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
-import 'package:doormster/style/theme.dart';
+import 'package:doormster/style/theme/light/theme_light.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'dart:ui' as ui;
+import 'package:doormster/style/textStyle.dart';
 
 class News_Page extends StatefulWidget {
   const News_Page({super.key});

@@ -156,7 +156,7 @@ class _ScanQR_CheckState extends State<ScanQR_Check> {
                   ),
                 ),
                 Positioned(
-                    top: MediaQuery.of(context).size.height * 0.05,
+                    top: Get.mediaQuery.size.height * 0.05,
                     child: Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10, vertical: 5),
@@ -165,7 +165,7 @@ class _ScanQR_CheckState extends State<ScanQR_Check> {
                                 TextStyle(color: Colors.white, fontSize: 20)))),
                 Positioned(
                   left: 10,
-                  top: MediaQuery.of(context).size.height * 0.05,
+                  top: Get.mediaQuery.size.height * 0.05,
                   child: Container(
                     decoration: BoxDecoration(
                         shape: BoxShape.circle, color: Colors.white30),
@@ -180,7 +180,7 @@ class _ScanQR_CheckState extends State<ScanQR_Check> {
                 ),
                 Positioned(
                     right: 15,
-                    top: MediaQuery.of(context).size.height * 0.04,
+                    top: Get.mediaQuery.size.height * 0.04,
                     child: IconButton(
                       onPressed: () async {
                         await controller?.toggleFlash();

@@ -3,6 +3,7 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:doormster/components/actions/disconnected_dialog.dart';
+import 'package:doormster/components/actions/form_error_snackbar.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/button/button.dart';
 import 'package:doormster/components/button/buttonback_appbar.dart';
@@ -164,7 +165,7 @@ class _Check_InState extends State<Check_In> {
       } catch (error) {
         print(error);
         await Future.delayed(Duration(milliseconds: 500));
-        error_connected(context, () {
+        error_connected(() {
           Navigator.popUntil(context, (route) => route.isFirst);
         });
         setState(() {
@@ -182,9 +183,9 @@ class _Check_InState extends State<Check_In> {
 
   Future _checkIn(Map<String, dynamic> values) async {
     try {
-      setState(() {
-        loading = true;
-      });
+      // setState(() {
+      //   loading = true;
+      // });
       var url = '${Connect_api().domain}/created/checkin';
       var response = await Dio().post(url,
           options: Options(headers: {
@@ -228,11 +229,9 @@ class _Check_InState extends State<Check_In> {
       }
     } catch (error) {
       print(error);
-      error_connected(context, () {
+      error_connected(() {
         Navigator.of(context, rootNavigator: true).pop();
       });
-      // snackbar( Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
-      //     Icons.warning_amber_rounded);
       setState(() {
         loading = false;
       });
@@ -295,6 +294,8 @@ class _Check_InState extends State<Check_In> {
                         valuse['pic'] = listImage64;
                         print(valuse);
                         _checkIn(valuse);
+                      } else {
+                        form_error_snackbar();
                       }
                     }),
             body: SafeArea(
@@ -313,6 +314,7 @@ class _Check_InState extends State<Check_In> {
                                 color: Colors.red,
                                 Icon(
                                   Icons.edit_calendar_rounded,
+                                  color: Get.theme.dividerColor,
                                   size: 25,
                                 )),
                             SizedBox(height: 10),
@@ -320,6 +322,7 @@ class _Check_InState extends State<Check_In> {
                                 '${'round'.tr} : ${widget.roundName}',
                                 Icon(
                                   Icons.calendar_month_rounded,
+                                  color: Get.theme.dividerColor,
                                   size: 25,
                                 )),
                             widget.roundId != null
@@ -332,6 +335,7 @@ class _Check_InState extends State<Check_In> {
                                           '${'interval'.tr} : ${widget.roundStart} ${'to'.tr} ${widget.roundEnd}',
                                           Icon(
                                             Icons.access_time_rounded,
+                                            color: Get.theme.dividerColor,
                                             size: 25,
                                           )),
                                     ],
@@ -342,6 +346,7 @@ class _Check_InState extends State<Check_In> {
                                 '${'checkpoint'.tr} : $checkpointName',
                                 Icon(
                                   Icons.maps_home_work_rounded,
+                                  color: Get.theme.dividerColor,
                                   size: 25,
                                 )),
                             SizedBox(height: 10),
@@ -349,6 +354,7 @@ class _Check_InState extends State<Check_In> {
                               'checklist'.tr,
                               Icon(
                                 Icons.task_rounded,
+                                color: Get.theme.dividerColor,
                                 size: 25,
                               ),
                             ),
@@ -370,13 +376,14 @@ class _Check_InState extends State<Check_In> {
                               'illustration'.tr,
                               Icon(
                                 Icons.camera_alt_rounded,
+                                color: Get.theme.dividerColor,
                                 size: 25,
                               ),
                             ),
                             Container(
                               margin: EdgeInsets.symmetric(vertical: 10),
                               height: 200,
-                              width: MediaQuery.of(context).size.width,
+                              width: Get.mediaQuery.size.width,
                               child: ListView(
                                   primary: false,
                                   shrinkWrap: true,
@@ -385,6 +392,7 @@ class _Check_InState extends State<Check_In> {
                                     listImage64?.length == 4
                                         ? Container()
                                         : Card(
+                                            color: Colors.white,
                                             elevation: 5,
                                             child: InkWell(
                                                 onTap: () {
@@ -478,6 +486,7 @@ class _Check_InState extends State<Check_In> {
                               'event_record'.tr,
                               Icon(
                                 Icons.assignment_rounded,
+                                color: Get.theme.dividerColor,
                                 size: 25,
                               ),
                             ),
@@ -521,6 +530,8 @@ class _Check_InState extends State<Check_In> {
                             ),
                             SizedBox(height: 10),
                             ExpansionTile(
+                              collapsedBackgroundColor: Colors.transparent,
+                              backgroundColor: Colors.transparent,
                               tilePadding: EdgeInsets.zero,
                               title: textIcon(
                                 'checkpoint_location'.tr,

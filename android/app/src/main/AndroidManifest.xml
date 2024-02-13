@@ -26,7 +26,8 @@
    <application
         android:label="HIP Smart Community"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:enableOnBackInvokedCallback="true">
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -73,7 +74,8 @@
     <receiver
         android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
     <receiver
-        android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
+        android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver"
+        android:exported="false">
         <intent-filter>
             <action
               android:name="android.intent.action.BOOT_COMPLETED"></action>
