@@ -15,7 +15,21 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> handleBackgroundMessage(RemoteMessage message) async {
   log("BackgroundMessage ");
-  // : ${"Title : ${message.notification?.title}, \n" "Body : ${message.notification?.body}, \n" "Data : ${message.data}"}");
+  if (message != null) {
+    notifyKey.currentState?.push(
+      GetPageRoute(
+          page: () => Notification_Page(
+                title: message.notification?.title,
+                body: message.notification?.body,
+              ),
+          transitionDuration: Duration.zero),
+    );
+  }
+}
+
+void notificationTapBackground(NotificationResponse notificationResponse) {
+  log('Selact_Background');
+  bottomController.ontapItem(2);
 }
 
 class NotificationService {
@@ -54,7 +68,17 @@ class NotificationService {
         message.notification?.body, platformChannel,
         payload: message.data['body']);
     log("ForegroundMessage");
-    //  : ${"Title : ${message.notification?.title}, \n" "Body : ${message.notification?.body}, \n" "Data : ${message.data}"}");
+
+    if (message != null) {
+      notifyKey.currentState?.pushReplacement(
+        GetPageRoute(
+            page: () => Notification_Page(
+                  title: message.notification?.title,
+                  body: message.notification?.body,
+                ),
+            transitionDuration: Duration.zero),
+      );
+    }
   }
 
   Future<void> notification() async {
@@ -67,13 +91,8 @@ class NotificationService {
       provisional: false,
       sound: true,
     );
-    final String? fCMToken;
-    if (Platform.isIOS) {
-      fCMToken = await messaging.getToken();
-    } else {
-      fCMToken = await messaging.getToken();
-    }
-    log("Token : ${fCMToken}");
+    final String? fCMToken = await messaging.getToken();
+    log("TokenNotify : ${fCMToken}");
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString("notifyToken", fCMToken ?? '');
 
@@ -99,23 +118,22 @@ class NotificationService {
       android: initializationSettingsAndroid,
       iOS: initializationSettingsIOS,
     );
+
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
-      // onDidReceiveBackgroundNotificationResponse: (details) {
-      //   log('BackgroundNotificationResponse');
-      //   bottomController.ontapItem(2);
-      // },
+      onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
       onDidReceiveNotificationResponse: (details) {
-        log('${details.notificationResponseType}');
+        log('Selact_Foreground');
         bottomController.ontapItem(2);
       },
     );
 
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
-    if (Platform.isIOS) {
-      FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
-    } else {
-      FirebaseMessaging.onMessage.listen(handleMessage);
-    }
+    FirebaseMessaging.onMessage.listen(handleMessage);
+    // if (Platform.isAndroid) {
+    //   FirebaseMessaging.onMessage.listen(handleMessage);
+    // } else {
+    //   FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
+    // }
   }
 }

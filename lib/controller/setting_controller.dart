@@ -22,7 +22,6 @@ class SettingController extends GetxController {
   var language;
   var theme;
   RxBool loading = false.obs;
-  RxString version = ''.obs;
 
   @override
   void onInit() async {
@@ -31,13 +30,11 @@ class SettingController extends GetxController {
   }
 
   Future getValueShared() async {
-    final info = await PackageInfo.fromPlatform();
     final prefs = await SharedPreferences.getInstance();
     uuId = prefs.getString('uuId');
     security = prefs.getBool('security');
     language = prefs.getString('language') ?? 'th';
     theme = prefs.getBool('theme');
-    version.value = info.version;
   }
 
   Future blockUser() async {

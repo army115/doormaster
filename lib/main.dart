@@ -24,8 +24,6 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await NotificationService().notification();
-  // FlutterNativeSplash.preserve(
-  //     widgetsBinding: WidgetsFlutterBinding.ensureInitialized());
   FlutterNativeSplash.remove();
   final result = await Connectivity().checkConnectivity();
   SystemChrome.setPreferredOrientations(
@@ -36,6 +34,7 @@ Future<void> main() async {
   final theme = prefs.getBool('theme');
   print(token == null ? 'login : false' : 'login : true');
   print('language : $language');
+  print('theme : $theme');
   runApp(MyApp(
     connect: result,
     token: token,
@@ -82,10 +81,10 @@ class MyApp extends StatelessWidget {
       darkTheme: themeDark,
       // home: token == null ? Login_Page() : BottomBar(),
       initialRoute: connect == ConnectivityResult.none
-          ? '/check'
+          ? '/check'.tr
           : token == null
-              ? '/auth'
-              : '/bottom',
+              ? '/auth'.tr
+              : '/bottom'.tr,
       routes: pages_routes,
     );
   }

@@ -16,13 +16,12 @@ class Auth_Page extends StatefulWidget {
 }
 
 class _Auth_PageState extends State<Auth_Page> {
-  final Buttontheme controller = Get.put(Buttontheme());
   DateTime pressTime = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () => onBackButtonDoubleClicked(context, pressTime),
+      onWillPop: () => onBackDoubleClicked(context, pressTime),
       child: Scaffold(
         backgroundColor: Get.theme.primaryColor,
         body: SafeArea(

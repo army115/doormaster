@@ -26,7 +26,7 @@ class Menu_Security extends StatelessWidget {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           // borderRadius: BorderRadius.circular(20),
           elevation: 10,
-          color: Get.theme.primaryColor,
+          color: Theme.of(context).primaryColor,
           child: InkWell(
             borderRadius: BorderRadius.circular(10),
             splashColor: Colors.black12,
@@ -46,10 +46,11 @@ class Menu_Security extends StatelessWidget {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
-                height: 1.3,
-                color: Colors.black,
-                fontSize: 12,
-                fontWeight: FontWeight.normal),
+              height: 1.3,
+              fontSize: 12,
+              // color: Colors.black,
+              // fontWeight: FontWeight.normal
+            ),
           ),
         ),
       ],

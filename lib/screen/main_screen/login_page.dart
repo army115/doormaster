@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors_in_immutables, avoid_single_cascade_in_expression_statements, avoid_print, use_build_context_synchronously, unused_local_variable, unused_import, prefer_const_constructors, unrelated_type_equality_checks
+// ignore_for_file: prefer_const_constructors_in_immutables, avoid_single_cascade_in_expression_statements, avoid_print, use_build_context_synchronously, unused_local_variable, unused_import, prefer_const_constructors, unrelated_type_equality_checks, deprecated_member_use
 import 'package:doormster/components/button/button_animation.dart';
 import 'package:doormster/components/button/button_language.dart';
 import 'package:doormster/components/button/button_theme.dart';
@@ -25,7 +25,7 @@ class _Login_PageState extends State<Login_Page> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-        onWillPop: () async => onBackButtonDoubleClicked(context, pressTime),
+        onWillPop: () async => false,
         child: Obx(
           () => Scaffold(
             body: SafeArea(

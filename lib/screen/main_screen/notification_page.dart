@@ -23,22 +23,12 @@ class Notification_Page extends StatefulWidget {
 
 class _Notification_PageState extends State<Notification_Page>
     with AutomaticKeepAliveClientMixin {
-  final TextEditingController _textController = TextEditingController();
-  final List<String> _messages = [];
-
-  void _handleSubmitted(String text) {
-    if (_textController.text.isEmpty) return;
-    _textController.clear();
-    setState(() {
-      _messages.insert(0, text);
-    });
-  }
-
   @override
   bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
+    final message = ModalRoute.of(context)!.settings.arguments;
     super.build(context);
     return Scaffold(
       appBar: AppBar(

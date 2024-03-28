@@ -34,9 +34,9 @@ flutter_native_splash:
   # parameters from above. If the image_dark parameter is specified, color_dark or
   # background_image_dark must be specified.  color_dark and background_image_dark cannot both be
   # set.
-  color_dark: "#0B4D9C"
+  color_dark: "#212121"
   #background_image_dark: "assets/dark-background.png"
-  image_dark: assets/images/HIP Smart Community Icon-03.png
+  image_dark: assets/images/HIP Smart Community Icon-04.png
   branding_dark: assets/images/banner.png
 
   # Android 12 handles the splash screen differently than previous versions.  Please visit
@@ -45,8 +45,8 @@ flutter_native_splash:
   android_12:
     image: assets/images/HIP Smart Community Icon-a12.png
     icon_background_color: "#0B4D9C"
-    image_dark: assets/images/HIP Smart Community Icon-a12.png
-    icon_background_color_dark: "#0B4D9C"
+    image_dark: assets/images/HIP Smart Community Icon-a13.png
+    icon_background_color_dark: "#212121"
     # branding: assets/images/banner.png
   # android_12:
     # The image parameter sets the splash screen icon image.  If this parameter is not specified,
@@ -77,7 +77,7 @@ flutter_native_splash:
   # The android, ios and web parameters can be used to disable generating a splash screen on a given
   # platform.
   # android: false
-  ios: false
+  # ios: false
   web: false
 
   # Platform specific images can be specified with the following parameters, which will override

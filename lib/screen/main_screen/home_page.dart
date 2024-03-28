@@ -30,14 +30,13 @@ class Home_Page extends StatefulWidget {
 }
 
 class _Home_PageState extends State<Home_Page>
-// with AutomaticKeepAliveClientMixin
-{
+    with AutomaticKeepAliveClientMixin {
   final Connectivity _connectivity = Connectivity();
 
   StreamSubscription<ConnectivityResult>? _subscription;
 
-  // @override
-  // bool get wantKeepAlive => true;
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -77,7 +76,7 @@ class _Home_PageState extends State<Home_Page>
 
   @override
   Widget build(BuildContext context) {
-    // super.build(context);
+    super.build(context);
     return Obx(() => Stack(
           children: [
             Scaffold(

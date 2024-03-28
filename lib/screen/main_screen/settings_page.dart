@@ -6,6 +6,7 @@ import 'package:doormster/controller/setting_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:doormster/style/textStyle.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class Settings_Page extends StatefulWidget {
   const Settings_Page({super.key});
@@ -17,6 +18,20 @@ class Settings_Page extends StatefulWidget {
 class _Settings_PageState extends State<Settings_Page> {
   List languageManu = ['ไทย', 'English'];
   List languageLocal = ['th', 'en'];
+  String? version = '';
+
+  Future getVersion() async {
+    final info = await PackageInfo.fromPlatform();
+    setState(() {
+      version = info.version;
+    });
+  }
+
+  @override
+  void initState() {
+    getVersion();
+    super.initState();
+  }
 
   void _changeLanguage(BuildContext context) {
     print(settingController.language);
@@ -179,11 +194,8 @@ class _Settings_PageState extends State<Settings_Page> {
             true,
             true);
       }, Colors.redAccent.shade400),
-      menuItem(
-          Icons.app_settings_alt_rounded,
-          '${'version'.tr} ${settingController.version.value}',
-          () {},
-          Get.theme.dividerColor.withOpacity(0.5))
+      menuItem(Icons.app_settings_alt_rounded, '${'version'.tr} ${version}',
+          () {}, Get.theme.dividerColor.withOpacity(0.5))
     ].obs;
     return Scaffold(
         appBar: AppBar(title: Text('setting'.tr)),

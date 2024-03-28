@@ -4,10 +4,13 @@ import 'package:dio/dio.dart';
 import 'package:doormster/components/actions/disconnected_dialog.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_twobutton_subtext.dart';
+import 'package:doormster/components/bottomSheet/bottom_sheet.dart';
 import 'package:doormster/components/bottombar/bottom_controller.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
 import 'package:doormster/components/button/button_outline.dart';
+import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/controller/logout_controller.dart';
+import 'package:doormster/controller/multi_company_controller.dart';
 import 'package:doormster/models/get_multi_company.dart';
 import 'package:doormster/models/login_model.dart';
 import 'package:doormster/screen/main_screen/add_company_page.dart';
@@ -40,40 +43,6 @@ class _MyDrawerState extends State<MyDrawer> {
   List<Data> multiCompany = [];
   late SharedPreferences prefs;
 
-  // Future<void> _Logout() async {
-  //   //ลบ token device notify
-  //   await Notify_Token().deletenotifyToken();
-  //   //เรียก keys ที่แชร์ไว้มารวมกัน ใน allKeys
-  //   Set<String> allKeys = prefs.getKeys();
-
-  //   //loop keys เพื่อหา key ที่ไม่ต้องการ remove
-  //   if (security == true) {
-  //     for (String key in allKeys) {
-  //       if (key != 'notifyToken' && key != 'language') {
-  //         prefs.remove(key);
-  //       }
-  //     }
-  //     log(allKeys.toString());
-  //     Navigator.of(context).pushAndRemoveUntil(
-  //         MaterialPageRoute(builder: (BuildContext context) => Login_Staff()),
-  //         (Route<dynamic> route) => false);
-  //   } else {
-  //     prefs.remove('token');
-  //     prefs.remove('role');
-  //     prefs.remove('deviceId');
-  //     prefs.remove('weiganId');
-  //     prefs.remove('security');
-  //     prefs.remove('image');
-  //     prefs.remove('fname');
-  //     prefs.remove('lname');
-  //     log(allKeys.toString());
-  //     Navigator.of(context).pushAndRemoveUntil(
-  //         MaterialPageRoute(builder: (BuildContext context) => Login_Page()),
-  //         (Route<dynamic> route) => false);
-  //   }
-  //   print('logout success');
-  // }
-
   Future<void> getValueShared() async {
     prefs = await SharedPreferences.getInstance();
     uuId = prefs.getString('uuId');
@@ -87,7 +56,9 @@ class _MyDrawerState extends State<MyDrawer> {
     print('companyId: ${companyId}');
     print('security: ${security}');
 
-    _getMultiCompany();
+    setState(() {});
+
+    // _getMultiCompany();
   }
 
   Future<void> _getMultiCompany() async {
@@ -95,6 +66,9 @@ class _MyDrawerState extends State<MyDrawer> {
       setState(() {
         loading = true;
       });
+
+      await Future.delayed(Duration(seconds: 3));
+
       var url = '${Connect_api().domain}/get/multicompanymobile/$uuId';
       var response = await Dio().get(
         url,
@@ -105,107 +79,105 @@ class _MyDrawerState extends State<MyDrawer> {
       );
 
       if (response.statusCode == 200) {
-        getMultiCompany company = getMultiCompany.fromJson(response.data);
-        setState(() {
-          multiCompany = company.data!;
-          loading = false;
-        });
+        multiCompany.assignAll(getMultiCompany.fromJson(response.data).data!);
       }
-    } catch (error) {
+    } on DioError catch (error) {
       print(error);
       // dialogOnebutton_Subtitle(context, 'พบข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อได้',
       //     Icons.warning_amber_rounded, Colors.orange, 'ตกลง', () {
       //   Navigator.popUntil(context, (route) => route.isFirst);
       // }, false);
+    } finally {
+      print(loading);
       setState(() {
         loading = false;
       });
     }
   }
 
-  Future<void> _selectCompany(uId, comId) async {
-    try {
-      setState(() {
-        loading = true;
-      });
-      var url = '${Connect_api().domain}/loginmulticompany';
-      var response = await Dio().post(url,
-          options: Options(headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-          }),
-          data: {
-            "_id": uId,
-            "company_id": comId,
-          });
-      var jsonRes = LoginModel.fromJson(response.data);
-      print(response.data);
-      if (jsonRes.status == 200) {
-        var token = jsonRes.accessToken;
-        List<User> data = jsonRes.user!; //ตัวแปร List จาก model
+  // Future<void> _selectCompany(uId, comId) async {
+  //   try {
+  //     setState(() {
+  //       loading = true;
+  //     });
+  //     var url = '${Connect_api().domain}/loginmulticompany';
+  //     var response = await Dio().post(url,
+  //         options: Options(headers: {
+  //           'Content-Type': 'application/json',
+  //           'Accept': 'application/json',
+  //         }),
+  //         data: {
+  //           "_id": uId,
+  //           "company_id": comId,
+  //         });
+  //     var jsonRes = LoginModel.fromJson(response.data);
+  //     print(response.data);
+  //     if (jsonRes.status == 200) {
+  //       var token = jsonRes.accessToken;
+  //       List<User> data = jsonRes.user!; //ตัวแปร List จาก model
 
-        //ลบค่า device token ของบริษัทก่อนหน้า
-        Notify_Token().deletenotifyToken();
+  //       //ลบค่า device token ของบริษัทก่อนหน้า
+  //       Notify_Token().deletenotifyToken();
 
-        // ส่งค่าตัวแปร
-        await prefs.setString('token', token!);
-        await prefs.setString('userId', data.single.sId!);
-        await prefs.setString('companyId', data.single.companyId!);
-        await prefs.setString('fname', data.single.firstName!);
-        await prefs.setString('lname', data.single.surName!);
-        await prefs.setInt('role', data.single.mobile!);
-        await prefs.setString('uuId', data.single.userUuid!);
+  //       // ส่งค่าตัวแปร
+  //       await prefs.setString('token', token!);
+  //       await prefs.setString('userId', data.single.sId!);
+  //       await prefs.setString('companyId', data.single.companyId!);
+  //       await prefs.setString('fname', data.single.firstName!);
+  //       await prefs.setString('lname', data.single.surName!);
+  //       await prefs.setInt('role', data.single.mobile!);
+  //       await prefs.setString('uuId', data.single.userUuid!);
 
-        if (data.single.image != null) {
-          await prefs.setString('image', data.single.image!);
-        }
+  //       if (data.single.image != null) {
+  //         await prefs.setString('image', data.single.image!);
+  //       }
 
-        if (data.single.devicegroupUuid != null) {
-          await prefs.setString('deviceId', data.single.devicegroupUuid!);
-        }
-        if (data.single.weigangroupUuid != null) {
-          await prefs.setString('weiganId', data.single.weigangroupUuid!);
-        }
+  //       if (data.single.devicegroupUuid != null) {
+  //         await prefs.setString('deviceId', data.single.devicegroupUuid!);
+  //       }
+  //       if (data.single.weigangroupUuid != null) {
+  //         await prefs.setString('weiganId', data.single.weigangroupUuid!);
+  //       }
 
-        print('userId: ${data.single.sId}');
-        print('Select Success');
+  //       print('userId: ${data.single.sId}');
+  //       print('Select Success');
 
-        //เพิ่ม device token ของบริษัทนี้
-        Notify_Token()
-            .create_notifyToken(data.single.companyId, data.single.sId);
+  //       //เพิ่ม device token ของบริษัทนี้
+  //       Notify_Token()
+  //           .create_notifyToken(data.single.companyId, data.single.sId);
 
-        Navigator.of(context).pop();
-        Navigator.of(context).pop();
+  //       Navigator.of(context).pop();
+  //       Navigator.of(context).pop();
 
-        bottomController.ontapItem(0);
+  //       bottomController.ontapItem(0);
 
-        setState(() {
-          loading = false;
-        });
+  //       setState(() {
+  //         loading = false;
+  //       });
 
-        // snackbar( Get.theme.primaryColor, 'เลือกสำเร็จ',
-        //     Icons.check_circle_outline_rounded);
-      } else {
-        dialogOnebutton_Subtitle('select_fail'.tr, '${jsonRes.data}',
-            Icons.highlight_off_rounded, Colors.red, 'ok'.tr, () {
-          Navigator.of(context).pop();
-        }, false, false);
-        print('Select fail!!');
-        print(response.data);
-        setState(() {
-          loading = false;
-        });
-      }
-    } catch (error) {
-      print(error);
-      error_connected(() async {
-        Navigator.of(context).pop();
-      });
-      setState(() {
-        loading = false;
-      });
-    }
-  }
+  //       // snackbar( Get.theme.primaryColor, 'เลือกสำเร็จ',
+  //       //     Icons.check_circle_outline_rounded);
+  //     } else {
+  //       dialogOnebutton_Subtitle('select_fail'.tr, '${jsonRes.data}',
+  //           Icons.highlight_off_rounded, Colors.red, 'ok'.tr, () {
+  //         Navigator.of(context).pop();
+  //       }, false, false);
+  //       print('Select fail!!');
+  //       print(response.data);
+  //       setState(() {
+  //         loading = false;
+  //       });
+  //     }
+  //   } catch (error) {
+  //     print(error);
+  //     error_connected(() async {
+  //       Navigator.of(context).pop();
+  //     });
+  //     setState(() {
+  //       loading = false;
+  //     });
+  //   }
+  // }
 
   @override
   void initState() {
@@ -265,8 +237,8 @@ class _MyDrawerState extends State<MyDrawer> {
                               shape: BoxShape.circle,
                               image: DecorationImage(
                                   fit: BoxFit.cover,
-                                  image: MemoryImage(
-                                      convert.base64Decode(image!))),
+                                  image:
+                                      MemoryImage(convert.base64Decode(image))),
                             ),
                           )
                         : Container(
@@ -293,7 +265,7 @@ class _MyDrawerState extends State<MyDrawer> {
                         Icons.more_vert_rounded,
                       ),
                       onPressed: () {
-                        bottomsheet();
+                        bottomSheet();
                       }),
             ],
           ),
@@ -405,7 +377,7 @@ class _MyDrawerState extends State<MyDrawer> {
     );
   }
 
-  void bottomsheet() {
+  void bottomSheet() {
     showModalBottomSheet<void>(
       isScrollControlled: true,
       backgroundColor: Get.theme.primaryColor,
@@ -414,116 +386,7 @@ class _MyDrawerState extends State<MyDrawer> {
               topLeft: Radius.circular(25), topRight: Radius.circular(25))),
       context: context,
       builder: (context) {
-        return DraggableScrollableSheet(
-            expand: false,
-            initialChildSize: multiCompany.isEmpty ? 0.25 : 0.5,
-            minChildSize: multiCompany.isEmpty ? 0.25 : 0.5,
-            maxChildSize: 0.7,
-            builder: (context, scrollController) => Scaffold(
-                  appBar: AppBar(
-                    backgroundColor: Colors.transparent,
-                    toolbarHeight: 45,
-                    automaticallyImplyLeading: false,
-                    centerTitle: false,
-                    title: Container(
-                      width: double.infinity,
-                      child: SingleChildScrollView(
-                          physics: ClampingScrollPhysics(),
-                          primary: false,
-                          controller: scrollController,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Center(
-                                child: Container(
-                                    height: 4,
-                                    width: 40,
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius:
-                                            BorderRadius.circular(10))),
-                              ),
-                              Text('switch_company'.tr)
-                            ],
-                          )),
-                    ),
-                    elevation: 0,
-                  ),
-                  backgroundColor: Colors.transparent,
-                  body: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                    child: multiCompany.isEmpty
-                        ? Center(
-                            child: Text('check_connect'.tr,
-                                style: TextStyle(color: Colors.white)),
-                          )
-                        : ListView.builder(
-                            controller: scrollController,
-                            shrinkWrap: true,
-                            itemCount: multiCompany.length,
-                            itemBuilder: (context, index) => InkWell(
-                                child: Container(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 10),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Icon(
-                                        Icons.home_work_sharp,
-                                        size: 20,
-                                        color: Colors.white,
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                            '${multiCompany[index].companyName}',
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.white)),
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      companyId == multiCompany[index].companyId
-                                          ? Icon(
-                                              Icons.check_circle_rounded,
-                                              size: 20,
-                                              color: Colors.white,
-                                            )
-                                          : Container()
-                                    ],
-                                  ),
-                                ),
-                                onTap:
-                                    companyId == multiCompany[index].companyId
-                                        ? () {
-                                            Navigator.of(context).pop();
-                                            Navigator.of(context).pop();
-                                          }
-                                        : () {
-                                            _selectCompany(
-                                              multiCompany[index].sId,
-                                              multiCompany[index].companyId,
-                                            );
-                                          }),
-                          ),
-                  ),
-                  bottomNavigationBar: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 30),
-                    child: Buttons_Outline(
-                        title: 'add_company'.tr,
-                        press: () {
-                          Navigator.pop(context);
-                          Navigator.of(context)
-                              .pushReplacement(MaterialPageRoute(
-                            builder: (context) => Add_Company(),
-                          ));
-                        }),
-                  ),
-                ));
+        return BottomSheetContent();
       },
     );
   }

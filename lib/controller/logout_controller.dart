@@ -43,7 +43,7 @@ class LogoutController extends GetxController {
 
     if (security == true) {
       for (String key in allKeys) {
-        if (key != 'notifyToken' && key != 'language') {
+        if (key != 'notifyToken' && key != 'language' && key != 'theme') {
           prefs.remove(key);
         }
       }

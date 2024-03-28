@@ -73,8 +73,8 @@ dependencies:
   package_info_plus: ^4.1.0
   dotted_line: ^3.2.0
   local_auth: ^2.1.6
-  firebase_messaging: ^14.7.14
-  firebase_core: ^2.25.3
+  firebase_messaging: ^14.7.16
+  firebase_core: ^2.25.4
   # google_mlkit_text_recognition: ^0.10.0
   camera: ^0.10.5+5
 

@@ -52,10 +52,10 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
     deviceId = prefs.getString('deviceId');
     weiganId = prefs.getString('weiganId');
 
-    print('token: ${token}');
-    print('companyId: ${companyId}');
-    print('deviceId: ${deviceId}');
-    print('weiganId: ${weiganId}');
+    // print('token: ${token}');
+    // print('companyId: ${companyId}');
+    // print('deviceId: ${deviceId}');
+    // print('weiganId: ${weiganId}');
 
     _getDoorDevice();
   }
@@ -239,128 +239,119 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        // CallNativeJava(false, null, null, null);
-        Navigator.pop(context);
-        return false;
-      },
-      child: Stack(
-        children: [
-          Scaffold(
-            appBar: AppBar(
-              title: Text('open_door'.tr),
-            ),
-            body: loading
-                ? Container()
-                : deviceId == null && weiganId == null
-                    ? Logo_Opacity(title: 'contact_admin_door'.tr)
-                    : Column(
-                        children: [
-                          Container(
-                              padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
-                              child: Search_From(
-                                title: 'search_door'.tr,
-                                fieldText: fieldText,
-                                clear: () {
-                                  setState(() {
-                                    fieldText.clear();
-                                    listdet = detlist;
-                                    listDevice = devicelidt;
-                                  });
-                                },
-                                changed: (value) {
-                                  _searchData(value);
-                                },
-                              )),
-                          Expanded(
-                            child: listDevice.isEmpty && listdet!.isEmpty
-                                ? Logo_Opacity(title: 'door_not_found'.tr)
-                                : RefreshIndicator(
-                                    onRefresh: () async {
-                                      getValueShared();
-                                    },
-                                    child: SingleChildScrollView(
-                                      padding:
-                                          EdgeInsets.fromLTRB(20, 0, 20, 5),
-                                      child: Column(
-                                        children: [
-                                          ListView.builder(
-                                            shrinkWrap: true,
-                                            primary: false,
-                                            itemCount: listDevice.length,
-                                            itemBuilder: (context, index) {
-                                              return Card(
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius.circular(
-                                                          10)),
-                                                  margin: EdgeInsets.symmetric(
-                                                      vertical: 5),
-                                                  elevation: 10,
-                                                  child: listDevice[index]
-                                                              .connectionStatus ==
-                                                          1
-                                                      ? doorsButton(
-                                                          '${listDevice[index].name}',
-                                                          'open_door'.tr,
-                                                          Icons
-                                                              .meeting_room_rounded,
-                                                          Get.textTheme.bodyText1
-                                                              ?.color,
-                                                          Theme.of(context)
-                                                              .primaryColorDark,
-                                                          () => _openDoors(
-                                                              listDevice[index]
-                                                                  .devSn))
-                                                      : doorsButton(
-                                                          '${listDevice[index].name}',
-                                                          'offline_door'.tr,
-                                                          Icons.no_meeting_room_rounded,
-                                                          Colors.white,
-                                                          Colors.red,
-                                                          () => snackbar(Colors.red, 'door_offline'.tr, Icons.highlight_off_rounded)));
-                                            },
-                                          ),
-                                          ListView.builder(
-                                            shrinkWrap: true,
-                                            primary: false,
-                                            itemCount: listdet?.length,
-                                            itemBuilder: (context, index) {
-                                              return Card(
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10)),
-                                                  margin: EdgeInsets.symmetric(
-                                                      vertical: 5),
-                                                  elevation: 5,
-                                                  child: doorsButton(
-                                                      '${listdet?[index].doorName}',
-                                                      'open_door'.tr,
-                                                      Icons
-                                                          .meeting_room_rounded,
-                                                      Get.textTheme.bodyText1
-                                                          ?.color,
-                                                      Theme.of(context)
-                                                          .primaryColorDark,
-                                                      () => _openDoorsWeigan(
-                                                          listdet?[index]
-                                                              .doorId,
-                                                          listdet?[index]
-                                                              .doorNum)));
-                                            },
-                                          ),
-                                        ],
-                                      ),
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: AppBar(
+            title: Text('open_door'.tr),
+          ),
+          body: loading
+              ? Container()
+              : deviceId == null && weiganId == null
+                  ? Logo_Opacity(title: 'contact_admin_door'.tr)
+                  : Column(
+                      children: [
+                        Container(
+                            padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
+                            child: Search_From(
+                              title: 'search_door'.tr,
+                              fieldText: fieldText,
+                              clear: () {
+                                setState(() {
+                                  fieldText.clear();
+                                  listdet = detlist;
+                                  listDevice = devicelidt;
+                                });
+                              },
+                              changed: (value) {
+                                _searchData(value);
+                              },
+                            )),
+                        Expanded(
+                          child: listDevice.isEmpty && listdet!.isEmpty
+                              ? Logo_Opacity(title: 'door_not_found'.tr)
+                              : RefreshIndicator(
+                                  onRefresh: () async {
+                                    getValueShared();
+                                  },
+                                  child: SingleChildScrollView(
+                                    padding: EdgeInsets.fromLTRB(20, 0, 20, 5),
+                                    child: Column(
+                                      children: [
+                                        ListView.builder(
+                                          shrinkWrap: true,
+                                          primary: false,
+                                          itemCount: listDevice.length,
+                                          itemBuilder: (context, index) {
+                                            return Card(
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(
+                                                        10)),
+                                                margin: EdgeInsets.symmetric(
+                                                    vertical: 5),
+                                                elevation: 10,
+                                                child: listDevice[index].connectionStatus == 1
+                                                    ? doorsButton(
+                                                        '${listDevice[index].name}',
+                                                        'open_door'.tr,
+                                                        Icons
+                                                            .meeting_room_rounded,
+                                                        Get
+                                                            .textTheme.bodyText1?.color,
+                                                        Theme.of(context)
+                                                            .primaryColorDark,
+                                                        () => _openDoors(listDevice[index]
+                                                            .devSn))
+                                                    : doorsButton(
+                                                        '${listDevice[index].name}',
+                                                        'offline_door'.tr,
+                                                        Icons
+                                                            .no_meeting_room_rounded,
+                                                        Colors.white,
+                                                        Colors.red,
+                                                        () => snackbar(
+                                                            Colors.red,
+                                                            'door_offline'.tr,
+                                                            Icons.highlight_off_rounded)));
+                                          },
+                                        ),
+                                        ListView.builder(
+                                          shrinkWrap: true,
+                                          primary: false,
+                                          itemCount: listdet?.length,
+                                          itemBuilder: (context, index) {
+                                            return Card(
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                                margin: EdgeInsets.symmetric(
+                                                    vertical: 5),
+                                                elevation: 5,
+                                                child: doorsButton(
+                                                    '${listdet?[index].doorName}',
+                                                    'open_door'.tr,
+                                                    Icons.meeting_room_rounded,
+                                                    Get.textTheme.bodyText1
+                                                        ?.color,
+                                                    Theme.of(context)
+                                                        .primaryColorDark,
+                                                    () => _openDoorsWeigan(
+                                                        listdet?[index].doorId,
+                                                        listdet?[index]
+                                                            .doorNum)));
+                                          },
+                                        ),
+                                      ],
                                     ),
                                   ),
-                          ),
-                        ],
-                      ),
-          ),
-          loading ? Loading() : Container()
-        ],
-      ),
+                                ),
+                        ),
+                      ],
+                    ),
+        ),
+        loading ? Loading() : Container()
+      ],
     );
   }
 

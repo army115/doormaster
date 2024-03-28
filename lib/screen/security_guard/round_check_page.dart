@@ -53,14 +53,14 @@ class _Round_CheckState extends State<Round_Check> {
               now.isAtSameMomentAs(timeStart!)
           //  ||now.isAtSameMomentAs(timeEnd!)
           ) {
-        containerColor = Get.theme.primaryColor;
-        textColor = Colors.white;
-        line = Colors.white;
+        containerColor = Get.theme.primaryColorDark;
+        textColor = Get.theme.cardTheme.color;
+        line = Get.theme.cardTheme.color;
         round = 1;
       } else {
         round = 0;
-        containerColor = Colors.white;
-        textColor = Colors.black;
+        containerColor = Get.theme.cardTheme.color;
+        textColor = Get.theme.dividerColor;
         line = Colors.grey;
       }
     } else {
@@ -68,14 +68,14 @@ class _Round_CheckState extends State<Round_Check> {
               now.isAtSameMomentAs(timeStart!)
           // || now.isAtSameMomentAs(timeEnd!)
           ) {
-        containerColor = Get.theme.primaryColor;
-        textColor = Colors.white;
-        line = Colors.white;
+        containerColor = Get.theme.primaryColorDark;
+        textColor = Get.theme.cardTheme.color;
+        line = Get.theme.cardTheme.color;
         round = 1;
       } else {
         round = 0;
-        containerColor = Colors.white;
-        textColor = Colors.black;
+        containerColor = Get.theme.cardTheme.color;
+        textColor = Get.theme.dividerColor;
         line = Colors.grey;
       }
     }
@@ -237,8 +237,10 @@ class _Round_CheckState extends State<Round_Check> {
                                                       color: textColor),
                                                 )),
                                                 round == 1
-                                                    ? button('checkIn'.tr,
-                                                        Colors.white, () {
+                                                    ? button(
+                                                        'checkIn'.tr,
+                                                        Get.theme.cardTheme
+                                                            .color, () {
                                                         permissionCamere(
                                                             context,
                                                             () => permissionLocation(
@@ -336,7 +338,9 @@ class _Round_CheckState extends State<Round_Check> {
       child: Text(
         name,
         style: TextStyle(
-            fontSize: 16, color: Colors.black, fontWeight: FontWeight.normal),
+            fontSize: 16,
+            color: Get.theme.dividerColor,
+            fontWeight: FontWeight.normal),
       ),
       onPressed: press,
     );

@@ -15,10 +15,9 @@ class Profile_Page extends StatefulWidget {
 }
 
 class _Profile_PageState extends State<Profile_Page>
-// with AutomaticKeepAliveClientMixin
-{
-  // @override
-  // bool get wantKeepAlive => true;
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {

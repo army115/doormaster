@@ -36,7 +36,7 @@ class _BottomBarState extends State<BottomBar>
     Profile_Menu(),
   ];
 
-  final Buttontheme controller = Get.put(Buttontheme());
+  // final Buttontheme controller = Get.put(Buttontheme());
 
   @override
   Widget build(BuildContext context) {

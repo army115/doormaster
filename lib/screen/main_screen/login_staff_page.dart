@@ -36,7 +36,7 @@ class _Login_StaffState extends State<Login_Staff> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => onBackButtonDoubleClicked(context, pressTime),
+      onWillPop: () async => onBackDoubleClicked(context, pressTime),
       child: Obx(
         () => Scaffold(
             // backgroundColor: Get.theme.primaryColor,

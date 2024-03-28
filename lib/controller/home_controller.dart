@@ -77,7 +77,7 @@ class HomeController extends GetxController {
         listMenu.value.assignAll(getMenu.fromJson(response.data).data!);
         listAds.value.assignAll(getAdsCompany.fromJson(responseAds.data).data!);
       }
-    } catch (error) {
+    } on DioError catch (error) {
       print(error);
       error_connected(() {
         Get.back();

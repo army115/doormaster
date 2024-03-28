@@ -5,6 +5,7 @@ import 'package:doormster/screen/main_screen/home_page.dart';
 import 'package:doormster/screen/main_screen/login_page.dart';
 import 'package:doormster/screen/main_screen/change_password_page.dart';
 import 'package:doormster/screen/main_screen/login_staff_page.dart';
+import 'package:doormster/screen/main_screen/notification_page.dart';
 import 'package:doormster/screen/main_screen/settings_page.dart';
 import 'package:doormster/screen/management_service/management_service_page.dart';
 import 'package:doormster/screen/parcel_service/parcel_service_page.dart';
@@ -27,4 +28,5 @@ Map<String, Widget Function(BuildContext)> pages_routes = {
   '/visitor': (context) => Visitor_Service(),
   '/password': (context) => Password_Page(),
   '/setting': (context) => Settings_Page(),
+  '/notification': (context) => Notification_Page(),
 };

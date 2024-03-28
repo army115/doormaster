@@ -1,26 +1,81 @@
 // ignore_for_file: sort_child_properties_last, prefer_const_constructors, unused_import
-
-import 'package:doormster/components/drawer/drawer.dart';
+import 'package:dio/dio.dart';
 import 'package:doormster/components/button/button_outline.dart';
 import 'package:doormster/screen/main_screen/add_company_page.dart';
+import 'package:doormster/service/connected/connect_api.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
+import 'dart:convert' as convert;
+import 'package:doormster/models/get_multi_company.dart';
 
-void bottomsheet(context, companyId, multiCompany) {
-  showModalBottomSheet<void>(
-    isScrollControlled: true,
-    backgroundColor: Get.theme.primaryColor,
-    shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(25), topRight: Radius.circular(25))),
-    context: context,
-    builder: (context) {
-      return DraggableScrollableSheet(
-          expand: false,
-          initialChildSize: multiCompany.length == 0 ? 0.25 : 0.5,
-          minChildSize: multiCompany.length == 0 ? 0.25 : 0.5,
-          maxChildSize: 0.7,
-          builder: (context, scrollController) => Scaffold(
+class BottomSheetContent extends StatefulWidget {
+  @override
+  BottomSheetContentState createState() => BottomSheetContentState();
+}
+
+class BottomSheetContentState extends State<BottomSheetContent> {
+  bool loading = true;
+  List<Data> multiCompany = [];
+  var companyId;
+
+  @override
+  void initState() {
+    super.initState();
+    _getMultiCompany();
+  }
+
+  Future<void> _getMultiCompany() async {
+    final prefs = await SharedPreferences.getInstance();
+    final uuId = prefs.getString('uuId');
+    companyId = prefs.getString('companyId');
+    try {
+      setState(() {
+        loading = true;
+      });
+
+      await Future.delayed(Duration(milliseconds: 700));
+
+      var url = '${Connect_api().domain}/get/multicompanymobile/$uuId';
+      var response = await Dio().get(
+        url,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        multiCompany.assignAll(getMultiCompany.fromJson(response.data).data!);
+      }
+    } on DioError catch (error) {
+      print(error);
+      // dialogOnebutton_Subtitle(context, 'พบข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อได้',
+      //     Icons.warning_amber_rounded, Colors.orange, 'ตกลง', () {
+      //   Navigator.popUntil(context, (route) => route.isFirst);
+      // }, false);
+    } finally {
+      print(loading);
+      setState(() {
+        loading = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DraggableScrollableSheet(
+        expand: false,
+        initialChildSize: 0.5,
+        minChildSize: 0.5,
+        maxChildSize: 0.7,
+        builder: (context, scrollController) => loading
+            ? Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
+              )
+            : Scaffold(
                 appBar: AppBar(
                   backgroundColor: Colors.transparent,
                   toolbarHeight: 45,
@@ -43,7 +98,9 @@ void bottomsheet(context, companyId, multiCompany) {
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(10))),
                             ),
-                            Text('สลับโครงการ')
+                            multiCompany.isEmpty
+                                ? Container()
+                                : Text('switch_company'.tr)
                           ],
                         )),
                   ),
@@ -52,9 +109,9 @@ void bottomsheet(context, companyId, multiCompany) {
                 backgroundColor: Colors.transparent,
                 body: Container(
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                  child: multiCompany.length == 0
+                  child: multiCompany.isEmpty
                       ? Center(
-                          child: Text('โปรดตรวจสอบการเชื่อมต่อ',
+                          child: Text('check_connect'.tr,
                               style: TextStyle(color: Colors.white)),
                         )
                       : ListView.builder(
@@ -111,17 +168,19 @@ void bottomsheet(context, companyId, multiCompany) {
                         ),
                 ),
                 bottomNavigationBar: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                  child: Buttons_Outline(
-                      title: 'เพิ่มโครงการใหม่',
-                      press: () {
-                        Navigator.pop(context);
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => Add_Company(),
-                        ));
-                      }),
+                  padding: EdgeInsets.fromLTRB(20, 0, 20, 30),
+                  child: multiCompany.isEmpty
+                      ? Container(height: 0)
+                      : Buttons_Outline(
+                          title: 'add_company'.tr,
+                          press: () {
+                            Navigator.pop(context);
+                            Navigator.of(context)
+                                .pushReplacement(MaterialPageRoute(
+                              builder: (context) => Add_Company(),
+                            ));
+                          }),
                 ),
               ));
-    },
-  );
+  }
 }
