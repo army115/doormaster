@@ -54,7 +54,7 @@ class _Profile_PageState extends State<Profile_Page>
                       Card(
                         shape: Border(),
                         margin: EdgeInsets.zero,
-                        color: Get.theme.primaryColor.withAlpha(200),
+                        color: Theme.of(context).primaryColor.withAlpha(200),
                         elevation: 5,
                         shadowColor: Colors.black,
                         child: Container(

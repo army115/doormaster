@@ -7,6 +7,7 @@ import 'package:doormster/components/text_form/text_form.dart';
 import 'package:doormster/components/text_form/text_form_password.dart';
 import 'package:doormster/controller/back_double.dart';
 import 'package:doormster/controller/login_controller.dart';
+import 'package:doormster/screen/main_screen/login_staff_page.dart';
 import 'package:doormster/screen/main_screen/register_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ class _Login_PageState extends State<Login_Page> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-        onWillPop: () async => false,
+        onWillPop: () async => onBackDoubleClicked(context, pressTime),
         child: Obx(
           () => Scaffold(
             body: SafeArea(
@@ -89,7 +90,8 @@ class _Login_PageState extends State<Login_Page> {
                                       text: 'register'.tr,
                                       style: TextStyle(
                                         decoration: TextDecoration.underline,
-                                        color: Get.theme.primaryColorDark,
+                                        color:
+                                            Theme.of(context).primaryColorDark,
                                       ),
                                       recognizer: TapGestureRecognizer()
                                         ..onTap = () {
@@ -116,12 +118,19 @@ class _Login_PageState extends State<Login_Page> {
                                       text: 'employee'.tr,
                                       style: TextStyle(
                                         decoration: TextDecoration.underline,
-                                        color: Get.theme.primaryColorDark,
+                                        color:
+                                            Theme.of(context).primaryColorDark,
                                       ),
                                       recognizer: TapGestureRecognizer()
                                         ..onTap = () {
-                                          Navigator.pushReplacementNamed(
-                                              context, '/staff');
+                                          Navigator.pushReplacement(
+                                              context,
+                                              GetPageRoute(
+                                                  page: () => Login_Staff(),
+                                                  transitionDuration:
+                                                      Duration.zero));
+                                          // Navigator.pushReplacementNamed(
+                                          //     context, '/staff');
                                         })
                                 ],
                               ))
@@ -130,8 +139,8 @@ class _Login_PageState extends State<Login_Page> {
                   Positioned(
                     top: 20,
                     right: 10,
-                    child:
-                        button_language(Get.theme.primaryColor, Colors.white),
+                    child: button_language(
+                        Theme.of(context).primaryColor, Colors.white),
                   ),
                 ],
               )),

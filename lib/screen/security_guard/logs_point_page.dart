@@ -132,7 +132,7 @@ class _Logs_PointState extends State<Logs_Point> {
   void _searchData(String text) {
     setState(() {
       listdata = listlogs.where((item) {
-        var name = item.checkpointName!.toLowerCase();
+        var name = item.checkpointName!;
         return name.contains(text);
       }).toList();
     });
@@ -162,8 +162,9 @@ class _Logs_PointState extends State<Logs_Point> {
                           vertical: 10, horizontal: 10),
                       decoration: BoxDecoration(
                           border: Border.all(
-                              width: 2.5, color: Get.theme.primaryColorDark),
-                          color: Get.theme.cardTheme.color,
+                              width: 2.5,
+                              color: Theme.of(context).primaryColorDark),
+                          color: Theme.of(context).cardTheme.color,
                           borderRadius:
                               const BorderRadius.all(Radius.circular(10))),
                       child: Column(
@@ -173,21 +174,21 @@ class _Logs_PointState extends State<Logs_Point> {
                               '${'date_report'.tr} : $dateNow',
                               Icon(
                                 Icons.calendar_month_rounded,
-                                color: Get.theme.primaryColorDark,
+                                color: Theme.of(context).primaryColorDark,
                                 size: 25,
                               )),
                           textIcon(
                               '${'round'.tr} : ${widget.roundName}',
                               Icon(
                                 Icons.map_rounded,
-                                color: Get.theme.primaryColorDark,
+                                color: Theme.of(context).primaryColorDark,
                                 size: 25,
                               )),
                           textIcon(
                               '${'interval'.tr} : ${widget.roundStart} ${'to'.tr} ${widget.roundEnd}',
                               Icon(
                                 Icons.access_time_rounded,
-                                color: Get.theme.primaryColorDark,
+                                color: Theme.of(context).primaryColorDark,
                                 size: 25,
                               )),
                         ],
@@ -281,8 +282,9 @@ class _Logs_PointState extends State<Logs_Point> {
                                                         'event'.tr,
                                                         Icon(
                                                           Icons.edit_document,
-                                                          color: Get.theme
-                                                              .dividerColor,
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .dividerColor,
                                                           size: 25,
                                                         ),
                                                       ),
@@ -299,8 +301,9 @@ class _Logs_PointState extends State<Logs_Point> {
                                                         'checklist'.tr,
                                                         Icon(
                                                           Icons.task_rounded,
-                                                          color: Get.theme
-                                                              .dividerColor,
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .dividerColor,
                                                           size: 25,
                                                         ),
                                                       ),
@@ -368,7 +371,8 @@ class _Logs_PointState extends State<Logs_Point> {
                                                               Icon(
                                                                 Icons
                                                                     .photo_library_rounded,
-                                                                color: Get.theme
+                                                                color: Theme.of(
+                                                                        context)
                                                                     .dividerColor,
                                                                 size: 25,
                                                               ),
@@ -507,6 +511,7 @@ class _Logs_PointState extends State<Logs_Point> {
                 height: double.infinity,
                 lat: lat,
                 lng: lng,
+                myLocation: false,
               ),
             ));
   }

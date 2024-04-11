@@ -46,7 +46,8 @@ class _Date_timeState extends State<Date_time> {
             // filled: true, พื้นหลังช่อง
             // fillColor: Colors.white,
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Get.theme.primaryColor, width: 2),
+              borderSide:
+                  BorderSide(color: Theme.of(context).primaryColor, width: 2),
               borderRadius: BorderRadius.circular(10.0),
             ),
             enabledBorder: OutlineInputBorder(
@@ -87,7 +88,7 @@ class _Date_timeState extends State<Date_time> {
                   : LocaleType.th,
               theme: DatePickerThemeBdaya(
                 titleHeight: 45,
-                headerColor: Get.theme.primaryColor,
+                headerColor: Theme.of(context).primaryColor,
                 cancelStyle: TextStyle(
                     color: Colors.white,
                     fontSize: 17,

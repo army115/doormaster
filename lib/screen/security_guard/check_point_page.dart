@@ -75,7 +75,7 @@ class _Check_PointState extends State<Check_Point> {
   void _searchData(String text) {
     setState(() {
       listdata = listPoint.where((item) {
-        var name = item.checkpointName!.toLowerCase();
+        var name = item.checkpointName!;
         return name.contains(text);
       }).toList();
     });
@@ -144,7 +144,7 @@ class _Check_PointState extends State<Check_Point> {
                                           ),
                                           subtitle: textDoubleColors(
                                               'status'.tr,
-                                              Get.theme.dividerColor,
+                                              Theme.of(context).dividerColor,
                                               listdata[index].verify == 0
                                                   ? 'no_regis'.tr
                                                   : 'registered'.tr,
@@ -169,7 +169,8 @@ class _Check_PointState extends State<Check_Point> {
                                                       textIcon(
                                                         'checklist'.tr,
                                                         Icon(Icons.task_rounded,
-                                                            color: Get.theme
+                                                            color: Theme.of(
+                                                                    context)
                                                                 .dividerColor,
                                                             size: 25),
                                                       ),
@@ -228,6 +229,12 @@ class _Check_PointState extends State<Check_Point> {
                                                                           .checkpointLat!,
                                                                       listdata[
                                                                               index]
+                                                                          .checkpointLng!,
+                                                                      listdata[
+                                                                              index]
+                                                                          .checkpointLat!,
+                                                                      listdata[
+                                                                              index]
                                                                           .checkpointLng!);
                                                                 })
                                                               ],
@@ -247,7 +254,7 @@ class _Check_PointState extends State<Check_Point> {
     );
   }
 
-  void showMap(lat, lng) {
+  void showMap(lat, lng, area_lat, area_lng) {
     showDialog(
         useRootNavigator: true,
         context: context,
@@ -259,6 +266,10 @@ class _Check_PointState extends State<Check_Point> {
                 height: double.infinity,
                 lat: lat,
                 lng: lng,
+                area_lat: area_lat,
+                area_lng: area_lng,
+                myLocation: false,
+                radius: 20.0,
               ),
             ));
   }

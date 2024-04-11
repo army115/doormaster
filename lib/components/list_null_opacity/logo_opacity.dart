@@ -11,28 +11,27 @@ class Logo_Opacity extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: Obx(
-      () => Opacity(
-        opacity: 0.5,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                  themeController.isDarkMode == true
-                      ? 'assets/images/Smart Logo White.png'
-                      : 'assets/images/Smart Community Logo.png',
-                  scale: 5),
-              Text(
-                title,
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18),
-              )
-            ],
-          ),
-        ),
-      ),
-    ));
+      child: Container(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          child: Obx(
+            () => Opacity(
+              opacity: 0.5,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    themeController.imageTheme(scale: 5.0),
+                    Text(
+                      title,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 18),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          )),
+    );
   }
 }

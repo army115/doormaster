@@ -39,7 +39,7 @@ class Search_Calendar extends StatelessWidget {
             hintStyle: TextStyle(color: Colors.black38, fontSize: 16),
             prefixIcon: Icon(
               Icons.event_note,
-              color: Get.theme.primaryColorDark,
+              color: Theme.of(context).primaryColorDark,
               size: 30,
             ),
             suffixIcon: fieldText.text.contains('วันที่') ||

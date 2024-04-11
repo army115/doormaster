@@ -53,14 +53,14 @@ class _Round_CheckState extends State<Round_Check> {
               now.isAtSameMomentAs(timeStart!)
           //  ||now.isAtSameMomentAs(timeEnd!)
           ) {
-        containerColor = Get.theme.primaryColorDark;
-        textColor = Get.theme.cardTheme.color;
-        line = Get.theme.cardTheme.color;
+        containerColor = Theme.of(context).primaryColorDark;
+        textColor = Theme.of(context).cardTheme.color;
+        line = Theme.of(context).cardTheme.color;
         round = 1;
       } else {
         round = 0;
-        containerColor = Get.theme.cardTheme.color;
-        textColor = Get.theme.dividerColor;
+        containerColor = Theme.of(context).cardTheme.color;
+        textColor = Theme.of(context).dividerColor;
         line = Colors.grey;
       }
     } else {
@@ -68,14 +68,14 @@ class _Round_CheckState extends State<Round_Check> {
               now.isAtSameMomentAs(timeStart!)
           // || now.isAtSameMomentAs(timeEnd!)
           ) {
-        containerColor = Get.theme.primaryColorDark;
-        textColor = Get.theme.cardTheme.color;
-        line = Get.theme.cardTheme.color;
+        containerColor = Theme.of(context).primaryColorDark;
+        textColor = Theme.of(context).cardTheme.color;
+        line = Theme.of(context).cardTheme.color;
         round = 1;
       } else {
         round = 0;
-        containerColor = Get.theme.cardTheme.color;
-        textColor = Get.theme.dividerColor;
+        containerColor = Theme.of(context).cardTheme.color;
+        textColor = Theme.of(context).dividerColor;
         line = Colors.grey;
       }
     }
@@ -134,7 +134,7 @@ class _Round_CheckState extends State<Round_Check> {
   void _searchData(String text) {
     setState(() {
       listdata = listRound.where((item) {
-        var name = item.roundName!.toLowerCase();
+        var name = item.roundName!;
         return name.contains(text);
       }).toList();
     });
@@ -239,7 +239,8 @@ class _Round_CheckState extends State<Round_Check> {
                                                 round == 1
                                                     ? button(
                                                         'checkIn'.tr,
-                                                        Get.theme.cardTheme
+                                                        Theme.of(context)
+                                                            .cardTheme
                                                             .color, () {
                                                         permissionCamere(
                                                             context,
@@ -339,7 +340,7 @@ class _Round_CheckState extends State<Round_Check> {
         name,
         style: TextStyle(
             fontSize: 16,
-            color: Get.theme.dividerColor,
+            color: Theme.of(context).dividerColor,
             fontWeight: FontWeight.normal),
       ),
       onPressed: press,

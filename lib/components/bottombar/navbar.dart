@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:doormster/components/bottombar/bottom_controller.dart';
 import 'package:doormster/components/bottombar/bottombar.dart';
+import 'package:doormster/controller/get_info.dart';
 import 'package:doormster/controller/home_controller.dart';
 import 'package:doormster/controller/profile_controller.dart';
 import 'package:doormster/screen/main_screen/home_page.dart';
@@ -58,7 +59,7 @@ class NavbarNotifier extends ChangeNotifier {
         if (homeKey.currentState != null && homeKey.currentState!.canPop()) {
           homeKey.currentState?.popUntil((route) => route.isFirst);
         } else if (bottomController.selectedIndex.value == 0) {
-          Homecontroller.GetMenu();
+          get_Info().then((value) => Homecontroller.GetMenu());
         }
         return;
       case 1:

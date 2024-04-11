@@ -209,7 +209,7 @@ class LoginController extends GetxController {
                   .create_notifyToken(data.single.companyId, data.single.sId);
 
               Get.off(BottomBar());
-              bottomController.ontapItem(0);
+              // bottomController.ontapItem(0);
               snackbar(Get.theme.primaryColor, 'login_success'.tr,
                   Icons.check_circle_outline_rounded);
               print('login success');

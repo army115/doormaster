@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable, prefer_collection_literals
+// ignore_for_file: must_be_immutable, prefer_collection_literals, prefer_typing_uninitialized_variables, non_constant_identifier_names
 
 import 'dart:io';
 import 'package:flutter/foundation.dart';
@@ -10,17 +10,23 @@ import 'package:get/get.dart';
 class Map_Page extends StatefulWidget {
   final lat;
   final lng;
+  final area_lat;
+  final area_lng;
+  final radius;
+  bool myLocation;
   double width;
   double height;
-  final extra;
 
   Map_Page({
     Key? key,
-    this.lat,
-    this.lng,
+    required this.lat,
+    required this.lng,
+    this.area_lat,
+    this.area_lng,
     required this.width,
     required this.height,
-    this.extra,
+    required this.myLocation,
+    this.radius,
   });
 
   @override
@@ -67,7 +73,7 @@ class _Map_PageState extends State<Map_Page> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CircularProgressIndicator(
-                      color: Get.theme.primaryColor,
+                      color: Theme.of(context).primaryColor,
                     ),
                     SizedBox(
                       height: 15,
@@ -102,20 +108,24 @@ class _Map_PageState extends State<Map_Page> {
                       },
                       // scrollGesturesEnabled: false,
                       mapType: maptype,
-                      markers: widget.extra == null ? _markers : {},
+                      markers: widget.myLocation == false ? _markers : {},
                       zoomControlsEnabled: true,
                       myLocationButtonEnabled: false,
                       //สร้างวงกลมรัศมี
-                      // circles: Set<Circle>.of([
-                      //   Circle(
-                      //       circleId: CircleId('1'),
-                      //       fillColor: Colors.blue.withOpacity(0.5),
-                      //       center: LatLng(widget.lat, widget.lng),
-                      //       strokeColor: Colors.blue,
-                      //       strokeWidth: 2,
-                      //       radius: 20)
-                      // ]),6
-                      myLocationEnabled: widget.extra == null ? false : true,
+                      circles: widget.radius != null
+                          ? // _buildCircles()
+                          Set<Circle>.of([
+                              Circle(
+                                  circleId: CircleId('1'),
+                                  fillColor: Colors.green.withOpacity(0.5),
+                                  center:
+                                      LatLng(widget.area_lat, widget.area_lng),
+                                  strokeColor: Colors.green,
+                                  strokeWidth: 2,
+                                  radius: widget.radius)
+                            ])
+                          : {},
+                      myLocationEnabled: widget.myLocation,
                       initialCameraPosition: CameraPosition(
                         target: LatLng(widget.lat, widget.lng),
                         zoom: 20.0,
@@ -266,4 +276,36 @@ class _Map_PageState extends State<Map_Page> {
         context: context,
         builder: (_) => Dialog(child: map(null, null, 'full')));
   }
+}
+
+Set<Circle> _buildCircles() {
+  Set<Circle> circles = Set<Circle>();
+  List<latlng> list_latlng = [
+    latlng(lat: 13.695321842625534, lng: 100.64140477910816),
+    latlng(lat: 13.695564638190184, lng: 100.64242752114824),
+    latlng(lat: 13.695124009017109, lng: 100.6429689728165),
+    latlng(lat: 13.69447205617483, lng: 100.64178425805514)
+  ];
+  for (var lat_lng in list_latlng) {
+    circles.add(
+      Circle(
+        circleId: CircleId('1'),
+        center: LatLng(lat_lng.lat, lat_lng.lng),
+        radius: 20,
+        fillColor: Colors.blue.withOpacity(0.3),
+        strokeWidth: 2,
+        strokeColor: Colors.blue,
+      ),
+    );
+  }
+  print(circles);
+
+  return circles;
+}
+
+class latlng {
+  double lat;
+  double lng;
+
+  latlng({required this.lat, required this.lng});
 }

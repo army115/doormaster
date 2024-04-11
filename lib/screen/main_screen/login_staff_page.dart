@@ -14,6 +14,7 @@ import 'package:doormster/components/text_form/text_form_password.dart';
 import 'package:doormster/controller/back_double.dart';
 import 'package:doormster/controller/login_controller.dart';
 import 'package:doormster/models/login_model.dart';
+import 'package:doormster/screen/main_screen/login_page.dart';
 import 'package:doormster/service/connected/connect_api.dart';
 import 'package:doormster/service/notify/notify_token.dart';
 import 'package:flutter/gestures.dart';
@@ -39,7 +40,7 @@ class _Login_StaffState extends State<Login_Staff> {
       onWillPop: () async => onBackDoubleClicked(context, pressTime),
       child: Obx(
         () => Scaffold(
-            // backgroundColor: Get.theme.primaryColor,
+            // backgroundColor: Theme.of(context).primaryColor,
             body: SingleChildScrollView(
           child: Form(
             key: loginController.key,
@@ -48,7 +49,7 @@ class _Login_StaffState extends State<Login_Staff> {
                 PhysicalModel(
                   // borderRadius: BorderRadius.circular(10),
                   elevation: 10,
-                  color: Get.theme.primaryColor,
+                  color: Theme.of(context).primaryColor,
                   child: Container(
                     width: Get.mediaQuery.size.width,
                     height: Get.mediaQuery.size.height * 0.55,
@@ -138,12 +139,19 @@ class _Login_StaffState extends State<Login_Staff> {
                                           style: TextStyle(
                                             decoration:
                                                 TextDecoration.underline,
-                                            color: Get.theme.primaryColor,
+                                            color:
+                                                Theme.of(context).primaryColor,
                                           ),
                                           recognizer: TapGestureRecognizer()
                                             ..onTap = () {
-                                              Navigator.pushReplacementNamed(
-                                                  context, '/login');
+                                              Navigator.pushReplacement(
+                                                  context,
+                                                  GetPageRoute(
+                                                      page: () => Login_Page(),
+                                                      transitionDuration:
+                                                          Duration.zero));
+                                              // Navigator.pushReplacementNamed(
+                                              //     context, '/login');
                                             })
                                     ],
                                   ))
@@ -157,7 +165,8 @@ class _Login_StaffState extends State<Login_Staff> {
                 Positioned(
                   top: 40,
                   right: 10,
-                  child: button_language(Colors.white, Get.theme.primaryColor),
+                  child: button_language(
+                      Colors.white, Theme.of(context).primaryColor),
                 ),
               ],
             ),

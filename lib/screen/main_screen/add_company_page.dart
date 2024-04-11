@@ -126,7 +126,7 @@ class _Add_CompanyState extends State<Add_Company> {
         setState(() {
           loading = false;
         });
-        snackbar(Get.theme.primaryColor, 'add_success'.tr,
+        snackbar(Theme.of(context).primaryColor, 'add_success'.tr,
             Icons.check_circle_outline_rounded);
       } else {
         dialogOnebutton_Subtitle('add_fail'.tr, '${jsonRes.status}',
@@ -205,7 +205,7 @@ class _Add_CompanyState extends State<Add_Company> {
         setState(() {
           loading = false;
         });
-        // snackbar( Get.theme.primaryColor, 'เลือกสำเร็จ',
+        // snackbar( Theme.of(context).primaryColor, 'เลือกสำเร็จ',
         //     Icons.check_circle_outline_rounded);
       } else {
         dialogOnebutton_Subtitle('add_fail'.tr, 'again_pls'.tr,
@@ -329,7 +329,7 @@ class _Add_CompanyState extends State<Add_Company> {
             }
           },
           style: styleButtons(EdgeInsets.symmetric(horizontal: 40, vertical: 8),
-              10.0, Get.theme.primaryColor, BorderRadius.circular(10)),
+              10.0, Theme.of(context).primaryColor, BorderRadius.circular(10)),
           child: Text(
             "save".tr,
             style: TextStyle(

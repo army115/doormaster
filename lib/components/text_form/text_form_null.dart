@@ -40,7 +40,8 @@ class TextForm_Null extends StatelessWidget {
                 size: 30,
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Get.theme.primaryColor, width: 2),
+                borderSide:
+                    BorderSide(color: Theme.of(context).primaryColor, width: 2),
                 borderRadius: BorderRadius.circular(10.0),
               ),
               enabledBorder: OutlineInputBorder(

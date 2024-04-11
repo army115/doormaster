@@ -147,7 +147,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
           print('DeviceNumber : ${devSn}');
           print('OpenDoor Success');
           print('Status : ${jsonRes.data!.code}');
-          snackbar(Get.theme.primaryColor, 'door_open_success'.tr,
+          snackbar(Theme.of(context).primaryColor, 'door_open_success'.tr,
               Icons.check_circle_outline_rounded);
         } else if (jsonRes.data!.code == 10000) {
           print('DeviceNumber : ${devSn}');
@@ -198,7 +198,7 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
         await Future.delayed(Duration(milliseconds: 400));
         print('OpenDoor Success');
         print('Status : ${response.data}');
-        snackbar(Get.theme.primaryColor, 'door_open_success'.tr,
+        snackbar(Theme.of(context).primaryColor, 'door_open_success'.tr,
             Icons.check_circle_outline_rounded);
       } else {
         snackbar(Colors.red, 'door_open_fail'.tr, Icons.highlight_off_rounded);
@@ -227,11 +227,11 @@ class _Opendoor_PageState extends State<Opendoor_Page> {
   void _searchData(String text) {
     setState(() {
       listdet = detlist?.where((item) {
-        var date = item.doorName!.toLowerCase();
+        var date = item.doorName!;
         return date.contains(text);
       }).toList();
       listDevice = devicelidt.where((item) {
-        var date = item.name!.toLowerCase();
+        var date = item.name!;
         return date.contains(text);
       }).toList();
     });

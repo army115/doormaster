@@ -92,10 +92,10 @@ class _Record_PointState extends State<Record_Point> {
   void _searchData(String text) {
     setState(() {
       fileList = logsList.where((item) {
-        String name = item.checkpointName!.toLowerCase();
+        String name = item.checkpointName!;
         String dates = formatdate.format(DateTime.parse(item.date!));
         String times = formatTime.format(DateTime.parse(item.checktimeReal!));
-        String event = item.event!.toLowerCase();
+        String event = item.event!;
         return name.contains(text) ||
             dates.contains(text) ||
             times.contains(text) ||
@@ -126,8 +126,8 @@ class _Record_PointState extends State<Record_Point> {
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                 decoration: BoxDecoration(
                     border: Border.all(
-                        width: 2.5, color: Get.theme.primaryColorDark),
-                    color: Get.theme.cardTheme.color,
+                        width: 2.5, color: Theme.of(context).primaryColorDark),
+                    color: Theme.of(context).cardTheme.color,
                     borderRadius: const BorderRadius.all(Radius.circular(10))),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,14 +136,14 @@ class _Record_PointState extends State<Record_Point> {
                         '${'date_report'.tr} : ${widget.dateTime}',
                         Icon(
                           Icons.calendar_month_rounded,
-                          color: Get.theme.primaryColorDark,
+                          color: Theme.of(context).primaryColorDark,
                           size: 25,
                         )),
                     textIcon(
                         '${'round'.tr} : ${widget.roundName}',
                         Icon(
                           Icons.map_rounded,
-                          color: Get.theme.primaryColorDark,
+                          color: Theme.of(context).primaryColorDark,
                           size: 25,
                         )),
                     widget.roundName == 'extra_round'.tr
@@ -152,7 +152,7 @@ class _Record_PointState extends State<Record_Point> {
                             '${'interval'.tr} : ${widget.roundStart} ${'to'.tr} ${widget.roundEnd}',
                             Icon(
                               Icons.access_time_rounded,
-                              color: Get.theme.primaryColorDark,
+                              color: Theme.of(context).primaryColorDark,
                               size: 25,
                             ))
                   ],
@@ -216,11 +216,12 @@ class _Record_PointState extends State<Record_Point> {
                                     children: [
                                       textIcon(
                                           'checklist'.tr,
-                                          color: Get.theme.dividerColor,
+                                          color: Theme.of(context).dividerColor,
                                           Icon(
                                             Icons.task_rounded,
                                             size: 25,
-                                            color: Get.theme.dividerColor,
+                                            color:
+                                                Theme.of(context).dividerColor,
                                           )),
                                       ListView.builder(
                                         shrinkWrap: true,
@@ -270,13 +271,14 @@ class _Record_PointState extends State<Record_Point> {
                                                   Icon(
                                                     Icons.photo_library_rounded,
                                                     size: 25,
-                                                    color:
-                                                        Get.theme.dividerColor,
+                                                    color: Theme.of(context)
+                                                        .dividerColor,
                                                   ))),
                                           button(
                                               'view_pictures'.tr,
                                               Get.textTheme.bodyText1?.color,
-                                              Get.theme.primaryColorDark,
+                                              Theme.of(context)
+                                                  .primaryColorDark,
                                               Icons.photo, () {
                                             _getLog(fileList[index].sId!);
                                           })
@@ -388,6 +390,7 @@ class _Record_PointState extends State<Record_Point> {
                 height: double.infinity,
                 lat: lat,
                 lng: lng,
+                myLocation: false,
               ),
             ));
   }

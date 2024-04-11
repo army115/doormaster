@@ -19,12 +19,12 @@ class CheckBox_FormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CheckboxListTileFormField(
-      side: BorderSide(color: Get.theme.dividerColor, width: 2),
+      side: BorderSide(color: Theme.of(context).dividerColor, width: 2),
       checkColor: Get.textTheme.bodyText1?.color,
       secondary: secondary,
       dense: true,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      activeColor: Get.theme.primaryColorDark,
+      activeColor: Theme.of(context).primaryColorDark,
       title: Text(
         title,
         style: Get.textTheme.bodyText2,

@@ -186,7 +186,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
         setState(() {
           loading = false;
         });
-        snackbar(Get.theme.primaryColor, 'create_qrcode_success'.tr,
+        snackbar(Theme.of(context).primaryColor, 'create_qrcode_success'.tr,
             Icons.check_circle_outline_rounded);
       } else {
         snackbar(
@@ -248,7 +248,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
         setState(() {
           loading = false;
         });
-        snackbar(Get.theme.primaryColor, 'create_qrcode_success'.tr,
+        snackbar(Theme.of(context).primaryColor, 'create_qrcode_success'.tr,
             Icons.check_circle_outline_rounded);
       } else {
         snackbar(
@@ -518,7 +518,7 @@ class _Visitor_PageState extends State<Visitor_Page> {
     void _searchData(String text) {
       setState(() {
         listdet = detlist?.where((item) {
-          var name = item.doorName!.toLowerCase();
+          var name = item.doorName!;
           return name.contains(text);
         }).toList();
       });

@@ -68,7 +68,7 @@ class _Password_PageState extends State<Password_Page> {
         await prefs.setBool("remember", false);
         Get.until((route) => route.isFirst);
         bottomController.ontapItem(0);
-        snackbar(Get.theme.primaryColor, 'password_success'.tr,
+        snackbar(Theme.of(context).primaryColor, 'password_success'.tr,
             Icons.check_circle_outline_rounded);
       } else {
         print('Change Fail!!');
@@ -193,36 +193,37 @@ class _Password_PageState extends State<Password_Page> {
         selectionControls: EmptyTextSelectionControls(),
         controller: controller,
         obscureText: redeye,
-        cursorColor: Get.theme.primaryColorDark,
-        style: TextStyle(fontSize: 17, color: Get.theme.dividerColor),
+        cursorColor: Theme.of(context).primaryColorDark,
+        style: TextStyle(fontSize: 17, color: Theme.of(context).dividerColor),
         decoration: InputDecoration(
           contentPadding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
           hintText: title,
           hintStyle: TextStyle(
-              fontSize: 17, color: Get.theme.dividerColor.withOpacity(0.5)),
+              fontSize: 17,
+              color: Theme.of(context).dividerColor.withOpacity(0.5)),
           errorStyle: TextStyle(fontSize: 15),
           prefixIcon: icon,
           prefixIconColor:
               MaterialStateColor.resolveWith((Set<MaterialState> states) {
             if (states.contains(MaterialState.focused)) {
-              return Get.theme.dividerColor;
+              return Theme.of(context).dividerColor;
             }
-            return Get.theme.dividerColor.withOpacity(0.5);
+            return Theme.of(context).dividerColor.withOpacity(0.5);
           }),
           suffixIconColor:
               MaterialStateColor.resolveWith((Set<MaterialState> states) {
             if (states.contains(MaterialState.focused)) {
-              return Get.theme.dividerColor;
+              return Theme.of(context).dividerColor;
             }
-            return Get.theme.dividerColor.withOpacity(0.5);
+            return Theme.of(context).dividerColor.withOpacity(0.5);
           }),
           suffixIcon: IconButton(
             onPressed: press,
             icon: redeye ? Icon(Icons.visibility_off) : Icon(Icons.visibility),
           ),
           focusedBorder: OutlineInputBorder(
-              borderSide:
-                  BorderSide(color: Get.theme.primaryColorDark, width: 2)),
+              borderSide: BorderSide(
+                  color: Theme.of(context).primaryColorDark, width: 2)),
           enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.grey, width: 1.5)),
         ),
@@ -259,7 +260,7 @@ class _Password_PageState extends State<Password_Page> {
             }
           },
           style: styleButtons(EdgeInsets.symmetric(horizontal: 40, vertical: 8),
-              10.0, Get.theme.primaryColor, BorderRadius.circular(10)),
+              10.0, Theme.of(context).primaryColor, BorderRadius.circular(10)),
           child: Text(
             "save".tr,
             style: TextStyle(

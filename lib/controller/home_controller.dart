@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:doormster/components/actions/disconnected_dialog.dart';
+import 'package:doormster/controller/get_info.dart';
 import 'package:doormster/models/get_ads_company.dart';
 import 'package:doormster/models/get_menu.dart';
 import 'package:doormster/models/profile_model.dart';
@@ -26,7 +27,7 @@ class HomeController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    GetMenu();
+    get_Info().then((value) => GetMenu());
   }
 
   @override

@@ -27,7 +27,7 @@ class Search_From extends StatelessWidget {
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10))),
       child: TextField(
-          cursorColor: Get.theme.primaryColorDark,
+          cursorColor: Theme.of(context).primaryColorDark,
           controller: fieldText,
           style: Get.textTheme.bodyText2,
           decoration: InputDecoration(

@@ -101,7 +101,7 @@ class _Logs_TodayState extends State<Logs_Today>
   void _searchData(String text) {
     setState(() {
       listdata = listlogs.where((item) {
-        var name = item.roundName!.toLowerCase();
+        var name = item.roundName!;
         return name.contains(text);
       }).toList();
     });
@@ -144,7 +144,7 @@ class _Logs_TodayState extends State<Logs_Today>
                                     '${'date_report'.tr} : $dateNow',
                                     Icon(
                                       Icons.event_note,
-                                      color: Get.theme.primaryColorDark,
+                                      color: Theme.of(context).primaryColorDark,
                                       size: 25,
                                     ))),
                           ),

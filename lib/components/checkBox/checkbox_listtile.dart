@@ -11,14 +11,14 @@ class Checkbox_Listtile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CheckboxListTile(
-      side: BorderSide(color: Get.theme.dividerColor, width: 2),
+      side: BorderSide(color: Theme.of(context).dividerColor, width: 2),
       contentPadding: EdgeInsets.zero,
       title: Text(
         title,
         style: Get.textTheme.bodyText2,
       ),
       checkColor: Get.textTheme.bodyText1?.color,
-      activeColor: Get.theme.primaryColorDark,
+      activeColor: Theme.of(context).primaryColorDark,
       value: value,
       onChanged: onChanged,
       controlAffinity: ListTileControlAffinity.leading, // Checkbox position

@@ -155,7 +155,7 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
           Navigator.of(context).popUntil((route) => route.isFirst);
         }, false, false);
 
-        // snackbar( Get.theme.primaryColor, 'ลงทะเบียนสำเร็จ',
+        // snackbar( Theme.of(context).primaryColor, 'ลงทะเบียนสำเร็จ',
         //     Icons.check_circle_outline_rounded);
 
         setState(() {
@@ -297,6 +297,7 @@ class _Add_CheckPointState extends State<Add_CheckPoint> {
                                     : Map_Page(
                                         lat: widget.lat,
                                         lng: widget.lng,
+                                        myLocation: true,
                                         width: double.infinity,
                                         height: 300,
                                       )

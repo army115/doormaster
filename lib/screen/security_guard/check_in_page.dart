@@ -98,15 +98,8 @@ class _Check_InState extends State<Check_In> {
     companyId = prefs.getString('companyId');
     userId = prefs.getString('userId');
     language = prefs.getString('language');
-    print('companyId: $companyId');
-    print('userId: $userId');
-    print('timeCheck: ${widget.timeCheck}');
-    print('roundId: ${widget.roundId}');
-    print('lat: ${widget.lat}');
-    print('lng: ${widget.lng}');
 
     String checkpointId;
-    print('idCheck: ${widget.checkpointId}');
 
     if (widget.checkpointId.contains('http')) {
       checkpointId = 'error';
@@ -206,7 +199,7 @@ class _Check_InState extends State<Check_In> {
           ),
         );
         // Navigator.popUntil(context, (route) => route.isFirst);
-        snackbar(Get.theme.primaryColor, 'checkin_success'.tr,
+        snackbar(Theme.of(context).primaryColor, 'checkin_success'.tr,
             Icons.check_circle_outline_rounded);
 
         setState(() {
@@ -314,7 +307,7 @@ class _Check_InState extends State<Check_In> {
                                 color: Colors.red,
                                 Icon(
                                   Icons.edit_calendar_rounded,
-                                  color: Get.theme.dividerColor,
+                                  color: Theme.of(context).dividerColor,
                                   size: 25,
                                 )),
                             SizedBox(height: 10),
@@ -322,7 +315,7 @@ class _Check_InState extends State<Check_In> {
                                 '${'round'.tr} : ${widget.roundName}',
                                 Icon(
                                   Icons.calendar_month_rounded,
-                                  color: Get.theme.dividerColor,
+                                  color: Theme.of(context).dividerColor,
                                   size: 25,
                                 )),
                             widget.roundId != null
@@ -335,7 +328,8 @@ class _Check_InState extends State<Check_In> {
                                           '${'interval'.tr} : ${widget.roundStart} ${'to'.tr} ${widget.roundEnd}',
                                           Icon(
                                             Icons.access_time_rounded,
-                                            color: Get.theme.dividerColor,
+                                            color:
+                                                Theme.of(context).dividerColor,
                                             size: 25,
                                           )),
                                     ],
@@ -346,7 +340,7 @@ class _Check_InState extends State<Check_In> {
                                 '${'checkpoint'.tr} : $checkpointName',
                                 Icon(
                                   Icons.maps_home_work_rounded,
-                                  color: Get.theme.dividerColor,
+                                  color: Theme.of(context).dividerColor,
                                   size: 25,
                                 )),
                             SizedBox(height: 10),
@@ -354,7 +348,7 @@ class _Check_InState extends State<Check_In> {
                               'checklist'.tr,
                               Icon(
                                 Icons.task_rounded,
-                                color: Get.theme.dividerColor,
+                                color: Theme.of(context).dividerColor,
                                 size: 25,
                               ),
                             ),
@@ -376,7 +370,7 @@ class _Check_InState extends State<Check_In> {
                               'illustration'.tr,
                               Icon(
                                 Icons.camera_alt_rounded,
-                                color: Get.theme.dividerColor,
+                                color: Theme.of(context).dividerColor,
                                 size: 25,
                               ),
                             ),
@@ -486,7 +480,7 @@ class _Check_InState extends State<Check_In> {
                               'event_record'.tr,
                               Icon(
                                 Icons.assignment_rounded,
-                                color: Get.theme.dividerColor,
+                                color: Theme.of(context).dividerColor,
                                 size: 25,
                               ),
                             ),
@@ -547,6 +541,10 @@ class _Check_InState extends State<Check_In> {
                                     : Map_Page(
                                         lat: widget.lat,
                                         lng: widget.lng,
+                                        area_lat: listdata[0].checkpointLat,
+                                        area_lng: listdata[0].checkpointLng,
+                                        radius: 20.0,
+                                        myLocation: true,
                                         width: double.infinity,
                                         height: 300,
                                       )

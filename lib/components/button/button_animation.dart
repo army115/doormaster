@@ -33,7 +33,7 @@ class Button_Animation extends StatelessWidget {
         height: 45,
         borderRadius: 10.0,
         contentGap: 5.0,
-        buttonColor: Get.theme.primaryColor,
+        buttonColor: Theme.of(context).primaryColor,
         onPressed: press);
   }
 }

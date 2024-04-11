@@ -129,7 +129,7 @@ class _Extra_CheckState extends State<Extra_Check> {
             builder: (BuildContext context) => Report_Logs(tapIndex: 1),
           ),
         );
-        snackbar(Get.theme.primaryColor, 'save_success'.tr,
+        snackbar(Theme.of(context).primaryColor, 'save_success'.tr,
             Icons.check_circle_outline_rounded);
 
         setState(() {
@@ -234,7 +234,7 @@ class _Extra_CheckState extends State<Extra_Check> {
                                 color: Colors.red,
                                 Icon(
                                   Icons.edit_calendar_rounded,
-                                  color: Get.theme.dividerColor,
+                                  color: Theme.of(context).dividerColor,
                                   size: 25,
                                 )),
                             SizedBox(height: 10),
@@ -242,7 +242,7 @@ class _Extra_CheckState extends State<Extra_Check> {
                                 '${'round'.tr} : ${widget.type == 0 ? 'extra_point'.tr : 'emergency'.tr}',
                                 Icon(
                                   Icons.calendar_month_rounded,
-                                  color: Get.theme.dividerColor,
+                                  color: Theme.of(context).dividerColor,
                                   size: 25,
                                 )),
                             Text_Form_NoBorder(
@@ -252,7 +252,7 @@ class _Extra_CheckState extends State<Extra_Check> {
                                     '${'checkpoint'.tr} : ',
                                     Icon(Icons.maps_home_work_rounded,
                                         size: 25,
-                                        color: Get.theme.dividerColor)),
+                                        color: Theme.of(context).dividerColor)),
                                 error: 'checkpoint_name'.tr,
                                 TypeInput: TextInputType.text),
                             SizedBox(height: 10),
@@ -264,7 +264,7 @@ class _Extra_CheckState extends State<Extra_Check> {
                                   'checklist'.tr,
                                   Icon(
                                     Icons.task_rounded,
-                                    color: Get.theme.dividerColor,
+                                    color: Theme.of(context).dividerColor,
                                     size: 25,
                                   ),
                                 ),
@@ -273,7 +273,8 @@ class _Extra_CheckState extends State<Extra_Check> {
                                     style: ButtonStyle(
                                         backgroundColor:
                                             MaterialStatePropertyAll(
-                                                Get.theme.primaryColorDark)),
+                                                Theme.of(context)
+                                                    .primaryColorDark)),
                                     onPressed: () {
                                       showDialog(
                                         context: context,
@@ -321,7 +322,7 @@ class _Extra_CheckState extends State<Extra_Check> {
                               'illustration'.tr,
                               Icon(
                                 Icons.camera_alt_rounded,
-                                color: Get.theme.dividerColor,
+                                color: Theme.of(context).dividerColor,
                                 size: 25,
                               ),
                             ),
@@ -432,7 +433,7 @@ class _Extra_CheckState extends State<Extra_Check> {
                               'event_record'.tr,
                               Icon(
                                 Icons.assignment_rounded,
-                                color: Get.theme.dividerColor,
+                                color: Theme.of(context).dividerColor,
                                 size: 25,
                               ),
                             ),
@@ -490,13 +491,15 @@ class _Extra_CheckState extends State<Extra_Check> {
                                 ),
                               ),
                               children: [
-                                Map_Page(
-                                  extra: 'extra',
-                                  lat: lat,
-                                  lng: lng,
-                                  width: double.infinity,
-                                  height: 300,
-                                )
+                                lat == null
+                                    ? Container()
+                                    : Map_Page(
+                                        lat: lat!,
+                                        lng: lng!,
+                                        myLocation: true,
+                                        width: double.infinity,
+                                        height: 300,
+                                      )
                               ],
                             ),
                           ],

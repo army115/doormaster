@@ -113,7 +113,7 @@ class _Logs_AllState extends State<Logs_All>
   void _searchData(String text) {
     setState(() {
       listLog = listData.where((item) {
-        var name = item.roundName!.toLowerCase();
+        var name = item.roundName!;
         return name.contains(text);
       }).toList();
     });
@@ -344,19 +344,21 @@ class _Logs_AllState extends State<Logs_All>
           weekdayLabelTextStyle: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 15,
-              color: Get.theme.primaryColor),
+              color: Theme.of(context).primaryColor),
           centerAlignModePicker: true,
           lastDate: DateTime.now(),
           calendarType: CalendarDatePicker2Type.range,
           cancelButton: Text(
             'cancel'.tr,
             style: TextStyle(
-                fontWeight: FontWeight.bold, color: Get.theme.primaryColor),
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).primaryColor),
           ),
           okButton: Text(
             'ok'.tr,
             style: TextStyle(
-                fontWeight: FontWeight.bold, color: Get.theme.primaryColor),
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).primaryColor),
           )),
       dialogSize: const Size(300, 400),
       borderRadius: BorderRadius.circular(10),

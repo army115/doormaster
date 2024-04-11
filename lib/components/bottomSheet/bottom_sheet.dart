@@ -1,8 +1,13 @@
 // ignore_for_file: sort_child_properties_last, prefer_const_constructors, unused_import
 import 'package:dio/dio.dart';
+import 'package:doormster/components/actions/disconnected_dialog.dart';
+import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
+import 'package:doormster/components/bottombar/bottom_controller.dart';
 import 'package:doormster/components/button/button_outline.dart';
+import 'package:doormster/models/login_model.dart';
 import 'package:doormster/screen/main_screen/add_company_page.dart';
 import 'package:doormster/service/connected/connect_api.dart';
+import 'package:doormster/service/notify/notify_token.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
@@ -56,6 +61,91 @@ class BottomSheetContentState extends State<BottomSheetContent> {
       // }, false);
     } finally {
       print(loading);
+      setState(() {
+        loading = false;
+      });
+    }
+  }
+
+  Future<void> _selectCompany(uId, comId) async {
+    try {
+      setState(() {
+        loading = true;
+      });
+      var url = '${Connect_api().domain}/loginmulticompany';
+      var response = await Dio().post(url,
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          }),
+          data: {
+            "_id": uId,
+            "company_id": comId,
+          });
+      var jsonRes = LoginModel.fromJson(response.data);
+      print(response.data);
+      if (jsonRes.status == 200) {
+        var token = jsonRes.accessToken;
+        List<User> data = jsonRes.user!; //ตัวแปร List จาก model
+
+        //ลบค่า device token ของบริษัทก่อนหน้า
+        Notify_Token().deletenotifyToken();
+
+        // ส่งค่าตัวแปร
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('token', token!);
+        await prefs.setString('userId', data.single.sId!);
+        await prefs.setString('companyId', data.single.companyId!);
+        await prefs.setString('fname', data.single.firstName!);
+        await prefs.setString('lname', data.single.surName!);
+        await prefs.setInt('role', data.single.mobile!);
+        await prefs.setString('uuId', data.single.userUuid!);
+
+        if (data.single.image != null) {
+          await prefs.setString('image', data.single.image!);
+        }
+
+        if (data.single.devicegroupUuid != null) {
+          await prefs.setString('deviceId', data.single.devicegroupUuid!);
+        }
+        if (data.single.weigangroupUuid != null) {
+          await prefs.setString('weiganId', data.single.weigangroupUuid!);
+        }
+
+        print('userId: ${data.single.sId}');
+        print('Select Success');
+
+        //เพิ่ม device token ของบริษัทนี้
+        Notify_Token()
+            .create_notifyToken(data.single.companyId, data.single.sId);
+
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
+
+        bottomController.ontapItem(0);
+
+        setState(() {
+          loading = false;
+        });
+
+        // snackbar( Theme.of(context).primaryColor, 'เลือกสำเร็จ',
+        //     Icons.check_circle_outline_rounded);
+      } else {
+        dialogOnebutton_Subtitle('select_fail'.tr, '${jsonRes.data}',
+            Icons.highlight_off_rounded, Colors.red, 'ok'.tr, () {
+          Navigator.of(context).pop();
+        }, false, false);
+        print('Select fail!!');
+        print(response.data);
+        setState(() {
+          loading = false;
+        });
+      }
+    } catch (error) {
+      print(error);
+      error_connected(() async {
+        Navigator.of(context).pop();
+      });
       setState(() {
         loading = false;
       });
@@ -160,10 +250,10 @@ class BottomSheetContentState extends State<BottomSheetContent> {
                                       Navigator.of(context).pop();
                                     }
                                   : () {
-                                      // _selectCompany(
-                                      //   multiCompany[index].sId,
-                                      //   multiCompany[index].companyId,
-                                      // );
+                                      _selectCompany(
+                                        multiCompany[index].sId,
+                                        multiCompany[index].companyId,
+                                      );
                                     }),
                         ),
                 ),

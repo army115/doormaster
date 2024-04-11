@@ -52,7 +52,8 @@ class Dropdown_Search extends StatelessWidget {
             borderRadiusItem: BorderRadius.circular(10),
             contentPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 13),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Get.theme.primaryColor, width: 2),
+              borderSide:
+                  BorderSide(color: Theme.of(context).primaryColor, width: 2),
               borderRadius: BorderRadius.circular(10.0),
             ),
             enabledBorder: OutlineInputBorder(

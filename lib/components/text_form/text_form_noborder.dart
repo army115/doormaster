@@ -25,7 +25,7 @@ class Text_Form_NoBorder extends StatelessWidget {
     return TextFormField(
       controller: controller,
       style: Get.textTheme.bodyText2,
-      cursorColor: Get.theme.primaryColorDark,
+      cursorColor: Theme.of(context).primaryColorDark,
       keyboardType: TypeInput,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.zero,
@@ -34,8 +34,8 @@ class Text_Form_NoBorder extends StatelessWidget {
         errorStyle: textStyle().body14,
         icon: icon,
         focusedBorder: UnderlineInputBorder(
-            borderSide:
-                BorderSide(color: Get.theme.primaryColorDark, width: 2)),
+            borderSide: BorderSide(
+                color: Theme.of(context).primaryColorDark, width: 2)),
         enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.grey, width: 1.5)),
       ),

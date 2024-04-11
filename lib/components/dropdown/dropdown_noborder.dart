@@ -46,16 +46,16 @@ class Dropdown_NoBorder extends StatelessWidget {
         suffixIconColor:
             MaterialStateColor.resolveWith((Set<MaterialState> states) {
           if (states.contains(MaterialState.focused)) {
-            return Get.theme.dividerColor;
+            return Theme.of(context).dividerColor;
           }
-          return Get.theme.dividerColor.withOpacity(0.5);
+          return Theme.of(context).dividerColor.withOpacity(0.5);
         }),
         prefixIconColor:
             MaterialStateColor.resolveWith((Set<MaterialState> states) {
           if (states.contains(MaterialState.focused)) {
-            return Get.theme.primaryColorDark;
+            return Theme.of(context).primaryColorDark;
           }
-          return Get.theme.dividerColor.withOpacity(0.5);
+          return Theme.of(context).dividerColor.withOpacity(0.5);
         }),
         listItemStyle: const TextStyle(color: Colors.black),
         errorText: error,
@@ -66,8 +66,8 @@ class Dropdown_NoBorder extends StatelessWidget {
         searchText: 'search'.tr,
         foundText: 'data_not_found'.tr,
         focusedBorder: UnderlineInputBorder(
-            borderSide:
-                BorderSide(color: Get.theme.primaryColorDark, width: 2)),
+            borderSide: BorderSide(
+                color: Theme.of(context).primaryColorDark, width: 2)),
         enabledBorder: const UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.grey, width: 1.5)),
         // borderRadiusItem: BorderRadius.circular(5),

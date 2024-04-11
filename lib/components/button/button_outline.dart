@@ -16,8 +16,8 @@ class Buttons_Outline extends StatelessWidget {
       height: 45,
       child: OutlinedButton(
           style: ButtonStyle(
-              backgroundColor:
-                  MaterialStateProperty.all(Get.theme.primaryColorLight),
+              backgroundColor: MaterialStateProperty.all(
+                  Theme.of(context).primaryColorLight),
               overlayColor: MaterialStateProperty.all(Colors.black26),
               shape: MaterialStateProperty.all(RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10))),

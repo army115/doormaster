@@ -54,7 +54,8 @@ class TextForm_Number extends StatelessWidget {
               // filled: true, พื้นหลังช่อง
               // fillColor: Colors.white,
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Get.theme.primaryColor, width: 2),
+                borderSide:
+                    BorderSide(color: Theme.of(context).primaryColor, width: 2),
                 borderRadius: BorderRadius.circular(10.0),
               ),
               enabledBorder: OutlineInputBorder(

@@ -40,9 +40,6 @@ class _Report_LogsState extends State<Report_Logs>
       length: 2,
       vsync: this,
       initialIndex: widget.tapIndex,
-      // animationDuration: Duration(
-      //   seconds: 0,
-      // ),
     );
   }
 

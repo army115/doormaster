@@ -53,7 +53,7 @@ class NotificationService {
       icon: 'icon_app',
       channelShowBadge: true,
       styleInformation: bigTextStyleInformation,
-      // color: Get.theme.primaryColor,
+      // color: Theme.of(context).primaryColor,
       // largeIcon: DrawableResourceAndroidBitmap('circle_icon'),
     );
     DarwinNotificationDetails iosChannel = const DarwinNotificationDetails(
@@ -69,16 +69,16 @@ class NotificationService {
         payload: message.data['body']);
     log("ForegroundMessage");
 
-    if (message != null) {
-      notifyKey.currentState?.pushReplacement(
-        GetPageRoute(
-            page: () => Notification_Page(
-                  title: message.notification?.title,
-                  body: message.notification?.body,
-                ),
-            transitionDuration: Duration.zero),
-      );
-    }
+    // if (message != null) {
+    //   notifyKey.currentState?.pushReplacement(
+    //     GetPageRoute(
+    //         page: () => Notification_Page(
+    //               title: message.notification?.title,
+    //               body: message.notification?.body,
+    //             ),
+    //         transitionDuration: Duration.zero),
+    //   );
+    // }
   }
 
   Future<void> notification() async {

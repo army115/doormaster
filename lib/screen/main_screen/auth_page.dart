@@ -23,7 +23,7 @@ class _Auth_PageState extends State<Auth_Page> {
     return WillPopScope(
       onWillPop: () => onBackDoubleClicked(context, pressTime),
       child: Scaffold(
-        backgroundColor: Get.theme.primaryColor,
+        backgroundColor: Theme.of(context).primaryColor,
         body: SafeArea(
           child: SingleChildScrollView(
             child: Stack(
@@ -61,7 +61,8 @@ class _Auth_PageState extends State<Auth_Page> {
                 Positioned(
                   top: 40,
                   right: 10,
-                  child: button_language(Colors.white, Get.theme.primaryColor),
+                  child: button_language(
+                      Colors.white, Theme.of(context).primaryColor),
                 ),
               ],
             ),
@@ -88,7 +89,7 @@ class _Auth_PageState extends State<Auth_Page> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 50, color: Get.theme.primaryColor),
+            Icon(icon, size: 50, color: Theme.of(context).primaryColor),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Text(
@@ -97,7 +98,7 @@ class _Auth_PageState extends State<Auth_Page> {
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                    color: Get.theme.primaryColor,
+                    color: Theme.of(context).primaryColor,
                     fontSize: 16,
                     letterSpacing: 0.5,
                     fontWeight: FontWeight.bold),

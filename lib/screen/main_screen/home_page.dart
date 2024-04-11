@@ -91,7 +91,7 @@ class _Home_PageState extends State<Home_Page>
                 body: RefreshIndicator(
                   onRefresh: () async {
                     get_Info();
-                    Homecontroller.GetMenu();
+                    // Homecontroller.GetMenu();
                   },
                   child: Homecontroller.loading.isTrue ||
                           Homecontroller.mobileRole == null

@@ -67,17 +67,16 @@ class _Register_PageState extends State<Register_Page> {
         getCompany company = getCompany.fromJson(response.data);
         setState(() {
           listCompany = company.data!;
-          loading = false;
         });
       }
     } catch (error) {
       print(error);
-      dialogOnebutton_Subtitle('found_error', 'connect_fail'.tr,
-          Icons.warning_amber_rounded, Colors.orange, 'ok'.tr, () {
+      error_connected(() {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (BuildContext context) => Login_Page()),
             (Route<dynamic> route) => false);
-      }, false, false);
+      });
+    } finally {
       setState(() {
         loading = false;
       });

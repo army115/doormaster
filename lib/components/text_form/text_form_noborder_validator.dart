@@ -31,12 +31,13 @@ class TextForm_NoBorder_Validator extends StatelessWidget {
         style: Get.textTheme.bodyText2,
         controller: controller,
         keyboardType: typeInput,
-        cursorColor: Get.theme.primaryColorDark,
+        cursorColor: Theme.of(context).primaryColorDark,
         decoration: InputDecoration(
           contentPadding: EdgeInsets.fromLTRB(0, 0, 10, 10),
           labelText: title,
           labelStyle: TextStyle(color: Colors.grey),
-          floatingLabelStyle: TextStyle(color: Get.theme.primaryColorDark),
+          floatingLabelStyle:
+              TextStyle(color: Theme.of(context).primaryColorDark),
           hintText: "enter_info".tr,
           hintStyle: TextStyle(fontSize: 16, color: Colors.grey),
           errorStyle: textStyle().body14,
@@ -44,23 +45,24 @@ class TextForm_NoBorder_Validator extends StatelessWidget {
           prefixIconColor:
               MaterialStateColor.resolveWith((Set<MaterialState> states) {
             if (states.contains(MaterialState.focused)) {
-              return Get.theme.primaryColorDark;
+              return Theme.of(context).primaryColorDark;
             }
-            return Get.theme.dividerColor.withOpacity(0.5);
+            return Theme.of(context).dividerColor.withOpacity(0.5);
           }),
           suffixIconColor:
               MaterialStateColor.resolveWith((Set<MaterialState> states) {
             if (states.contains(MaterialState.focused)) {
-              return Get.theme.primaryColorDark;
+              return Theme.of(context).primaryColorDark;
             }
-            return Get.theme.dividerColor.withOpacity(0.5);
+            return Theme.of(context).dividerColor.withOpacity(0.5);
           }),
           focusedBorder: UnderlineInputBorder(
-              borderSide:
-                  BorderSide(color: Get.theme.primaryColorDark, width: 2)),
+              borderSide: BorderSide(
+                  color: Theme.of(context).primaryColorDark, width: 2)),
           enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(
-                  color: Get.theme.dividerColor.withOpacity(0.5), width: 1.5)),
+                  color: Theme.of(context).dividerColor.withOpacity(0.5),
+                  width: 1.5)),
         ),
         validator: validator,
       ),

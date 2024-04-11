@@ -95,90 +95,6 @@ class _MyDrawerState extends State<MyDrawer> {
     }
   }
 
-  // Future<void> _selectCompany(uId, comId) async {
-  //   try {
-  //     setState(() {
-  //       loading = true;
-  //     });
-  //     var url = '${Connect_api().domain}/loginmulticompany';
-  //     var response = await Dio().post(url,
-  //         options: Options(headers: {
-  //           'Content-Type': 'application/json',
-  //           'Accept': 'application/json',
-  //         }),
-  //         data: {
-  //           "_id": uId,
-  //           "company_id": comId,
-  //         });
-  //     var jsonRes = LoginModel.fromJson(response.data);
-  //     print(response.data);
-  //     if (jsonRes.status == 200) {
-  //       var token = jsonRes.accessToken;
-  //       List<User> data = jsonRes.user!; //ตัวแปร List จาก model
-
-  //       //ลบค่า device token ของบริษัทก่อนหน้า
-  //       Notify_Token().deletenotifyToken();
-
-  //       // ส่งค่าตัวแปร
-  //       await prefs.setString('token', token!);
-  //       await prefs.setString('userId', data.single.sId!);
-  //       await prefs.setString('companyId', data.single.companyId!);
-  //       await prefs.setString('fname', data.single.firstName!);
-  //       await prefs.setString('lname', data.single.surName!);
-  //       await prefs.setInt('role', data.single.mobile!);
-  //       await prefs.setString('uuId', data.single.userUuid!);
-
-  //       if (data.single.image != null) {
-  //         await prefs.setString('image', data.single.image!);
-  //       }
-
-  //       if (data.single.devicegroupUuid != null) {
-  //         await prefs.setString('deviceId', data.single.devicegroupUuid!);
-  //       }
-  //       if (data.single.weigangroupUuid != null) {
-  //         await prefs.setString('weiganId', data.single.weigangroupUuid!);
-  //       }
-
-  //       print('userId: ${data.single.sId}');
-  //       print('Select Success');
-
-  //       //เพิ่ม device token ของบริษัทนี้
-  //       Notify_Token()
-  //           .create_notifyToken(data.single.companyId, data.single.sId);
-
-  //       Navigator.of(context).pop();
-  //       Navigator.of(context).pop();
-
-  //       bottomController.ontapItem(0);
-
-  //       setState(() {
-  //         loading = false;
-  //       });
-
-  //       // snackbar( Get.theme.primaryColor, 'เลือกสำเร็จ',
-  //       //     Icons.check_circle_outline_rounded);
-  //     } else {
-  //       dialogOnebutton_Subtitle('select_fail'.tr, '${jsonRes.data}',
-  //           Icons.highlight_off_rounded, Colors.red, 'ok'.tr, () {
-  //         Navigator.of(context).pop();
-  //       }, false, false);
-  //       print('Select fail!!');
-  //       print(response.data);
-  //       setState(() {
-  //         loading = false;
-  //       });
-  //     }
-  //   } catch (error) {
-  //     print(error);
-  //     error_connected(() async {
-  //       Navigator.of(context).pop();
-  //     });
-  //     setState(() {
-  //       loading = false;
-  //     });
-  //   }
-  // }
-
   @override
   void initState() {
     super.initState();
@@ -190,7 +106,7 @@ class _MyDrawerState extends State<MyDrawer> {
     return SafeArea(
       child: Drawer(
         child: Scaffold(
-          backgroundColor: Get.theme.primaryColorLight,
+          backgroundColor: Theme.of(context).primaryColorLight,
           body: ListView(
             physics: ClampingScrollPhysics(),
             children: [
@@ -211,7 +127,7 @@ class _MyDrawerState extends State<MyDrawer> {
 
   Widget Header() {
     return Container(
-      color: Get.theme.primaryColor,
+      color: Theme.of(context).primaryColor,
       padding: EdgeInsets.fromLTRB(15, 15, 15, 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -287,7 +203,7 @@ class _MyDrawerState extends State<MyDrawer> {
 
   Widget Manu() {
     return Container(
-      color: Get.theme.primaryColorLight,
+      color: Theme.of(context).primaryColorLight,
       child: Column(
         children: [
           ListTile(
@@ -334,7 +250,7 @@ class _MyDrawerState extends State<MyDrawer> {
 
   Widget Footer() {
     return Container(
-      color: Get.theme.primaryColor,
+      color: Theme.of(context).primaryColor,
       child: Wrap(
         children: [
           Divider(
@@ -380,7 +296,7 @@ class _MyDrawerState extends State<MyDrawer> {
   void bottomSheet() {
     showModalBottomSheet<void>(
       isScrollControlled: true,
-      backgroundColor: Get.theme.primaryColor,
+      backgroundColor: Theme.of(context).primaryColor,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(25), topRight: Radius.circular(25))),

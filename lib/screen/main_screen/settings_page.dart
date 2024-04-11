@@ -39,7 +39,7 @@ class _Settings_PageState extends State<Settings_Page> {
       isScrollControlled: true,
       context: context,
       shape: RoundedRectangleBorder(
-          side: BorderSide(width: 3, color: Get.theme.primaryColor),
+          side: BorderSide(width: 3, color: Theme.of(context).primaryColor),
           borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(15), topRight: Radius.circular(15))),
       builder: (BuildContext context) {
@@ -62,7 +62,7 @@ class _Settings_PageState extends State<Settings_Page> {
                   ),
                   Divider(
                     height: 0,
-                    color: Get.theme.primaryColor,
+                    color: Theme.of(context).primaryColor,
                     thickness: 1.5,
                   ),
                   Expanded(
@@ -71,7 +71,7 @@ class _Settings_PageState extends State<Settings_Page> {
                     itemBuilder: (context, index) => ListTile(
                       selectedTileColor:
                           settingController.language == languageLocal[index]
-                              ? Get.theme.primaryColor
+                              ? Theme.of(context).primaryColor
                               : Colors.white,
                       selected:
                           settingController.language == languageLocal[index]
@@ -106,7 +106,7 @@ class _Settings_PageState extends State<Settings_Page> {
       isScrollControlled: true,
       context: context,
       shape: RoundedRectangleBorder(
-          side: BorderSide(width: 3, color: Get.theme.primaryColor),
+          side: BorderSide(width: 3, color: Theme.of(context).primaryColor),
           borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(15), topRight: Radius.circular(15))),
       builder: (BuildContext context) {
@@ -129,7 +129,7 @@ class _Settings_PageState extends State<Settings_Page> {
                   ),
                   Divider(
                     height: 0,
-                    color: Get.theme.primaryColor,
+                    color: Theme.of(context).primaryColor,
                     thickness: 1.5,
                   ),
                   Expanded(
@@ -138,7 +138,7 @@ class _Settings_PageState extends State<Settings_Page> {
                     itemBuilder: (context, index) => ListTile(
                       selectedTileColor:
                           settingController.theme == themeStatus[index]
-                              ? Get.theme.primaryColor
+                              ? Theme.of(context).primaryColor
                               : Colors.white,
                       selected: settingController.theme == themeStatus[index]
                           ? true
@@ -169,13 +169,13 @@ class _Settings_PageState extends State<Settings_Page> {
     final List<menuItem> menu = [
       menuItem(Icons.lock, 'change_password'.tr, () {
         Get.toNamed('/password');
-      }, Get.theme.dividerColor),
+      }, Theme.of(context).dividerColor),
       menuItem(Icons.translate_rounded, 'change_language'.tr, () {
         _changeLanguage(context);
-      }, Get.theme.dividerColor),
+      }, Theme.of(context).dividerColor),
       menuItem(Icons.brightness_4, 'change_theme'.tr, () {
         _changeTheme(context);
-      }, Get.theme.dividerColor),
+      }, Theme.of(context).dividerColor),
       menuItem(Icons.no_accounts_rounded, 'disable_account'.tr, () {
         dialogTwobutton_Subtitle(
             'disable_account'.tr,
@@ -195,7 +195,7 @@ class _Settings_PageState extends State<Settings_Page> {
             true);
       }, Colors.redAccent.shade400),
       menuItem(Icons.app_settings_alt_rounded, '${'version'.tr} ${version}',
-          () {}, Get.theme.dividerColor.withOpacity(0.5))
+          () {}, Theme.of(context).dividerColor.withOpacity(0.5))
     ].obs;
     return Scaffold(
         appBar: AppBar(title: Text('setting'.tr)),
@@ -208,7 +208,7 @@ class _Settings_PageState extends State<Settings_Page> {
                     leading: Icon(
                       menu[index].icon,
                       size: 30,
-                      color: Get.theme.dividerColor.withOpacity(0.7),
+                      color: Theme.of(context).dividerColor.withOpacity(0.7),
                     ),
                     title: Text(
                       menu[index].title,
@@ -220,7 +220,7 @@ class _Settings_PageState extends State<Settings_Page> {
               },
               separatorBuilder: (context, index) {
                 return Divider(
-                  color: Get.theme.dividerColor,
+                  color: Theme.of(context).dividerColor,
                   height: 10,
                 );
               },

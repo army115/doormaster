@@ -9,7 +9,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 final Buttontheme themeController = Get.put(Buttontheme());
 
 class Buttontheme extends GetxController {
-  final brightness = Get.mediaQuery.platformBrightness;
   RxBool isDarkMode = false.obs;
   var theme;
 
@@ -20,10 +19,12 @@ class Buttontheme extends GetxController {
   }
 
   void loadTheme() async {
+    final brightness = Get.mediaQuery.platformBrightness;
     final prefs = await SharedPreferences.getInstance();
     final darkModeOn = (brightness == Brightness.dark);
+    print("darkModeOn: $darkModeOn");
     theme = prefs.get('theme');
-    print(theme);
+    print("theme :$theme");
     if (theme != null) {
       isDarkMode.value = theme;
     } else {

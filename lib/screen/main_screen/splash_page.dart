@@ -37,7 +37,7 @@ class _Splash_PageState extends State<Splash_Page> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Get.theme.primaryColor,
+      backgroundColor: Theme.of(context).primaryColor,
       body: Container(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

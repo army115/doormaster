@@ -20,7 +20,7 @@ class Buttons extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10)),
               elevation: 10,
               primary: Colors.black,
-              backgroundColor: Get.theme.primaryColor),
+              backgroundColor: Theme.of(context).primaryColor),
           child: Text(
             title,
             style: TextStyle(

@@ -3,11 +3,13 @@
 import 'dart:typed_data';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
+import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/style/theme/light/theme_light.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'dart:ui' as ui;
 import 'package:doormster/style/textStyle.dart';
@@ -21,7 +23,7 @@ class News_Page extends StatefulWidget {
 
 class _News_PageState extends State<News_Page>
     with AutomaticKeepAliveClientMixin {
-  GlobalKey _keyScreenshot = GlobalKey();
+  bool loading = false;
   List<bool> showtext = [];
   List<getdata> data = [
     getdata(
@@ -45,12 +47,23 @@ class _News_PageState extends State<News_Page>
   ];
 
   @override
-  bool get wantKeepAlive => false;
+  bool get wantKeepAlive => true;
+
+  void _londing() async {
+    setState(() {
+      loading = true;
+    });
+    await Future.delayed(Duration(seconds: 2));
+    setState(() {
+      loading = false;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     showtext = List<bool>.filled(data.length, true);
+    _londing();
   }
 
   @override
@@ -67,81 +80,89 @@ class _News_PageState extends State<News_Page>
                   Scaffold.of(context).openDrawer();
                 }),
           ),
-          body: RepaintBoundary(
-            key: _keyScreenshot,
-            child: Container(
-              child: data.isEmpty
-                  ? Logo_Opacity(title: 'no_news'.tr)
-                  : ListView.builder(
-                      itemCount: data.length,
-                      padding: EdgeInsets.all(15),
-                      itemBuilder: (context, index) {
-                        return Card(
-                          margin: EdgeInsets.only(bottom: 10),
-                          // color: Get.theme.primaryColorDark,
-                          elevation: 10,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Container(
-                            padding: EdgeInsets.all(10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${data[index].title}',
-                                  style: TextStyle(fontSize: 15, height: 1.3),
-                                ),
-                                Divider(
-                                  color: Get.theme.primaryColor,
-                                  thickness: 1,
-                                ),
-                                SizedBox(height: 3),
-                                Image.network(
-                                  '${data[index].images}',
-                                  height: showtext[index] ? 150 : null,
-                                  width: double.infinity,
-                                  fit: BoxFit.cover,
-                                ),
-                                SizedBox(height: 10),
-                                Text(
-                                  '${data[index].details}',
-                                  maxLines: showtext[index] ? 4 : null,
-                                  overflow: showtext[index]
-                                      ? TextOverflow.ellipsis
-                                      : null,
-                                  style: textStyle().body14,
-                                ),
-                                Divider(
-                                  color: Get.theme.primaryColor,
-                                  thickness: 1,
-                                ),
-                                Center(
-                                  child: GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          showtext[index] = !showtext[index];
-                                        });
-                                        print(showtext);
-                                      },
-                                      child: Text(
-                                        showtext[index]
-                                            ? 'see_more'.tr
-                                            : 'see_less'.tr,
+          body: loading
+              ? Loading()
+              : RefreshIndicator(
+                  onRefresh: () async {
+                    _londing();
+                  },
+                  child: Container(
+                    child: data.isEmpty
+                        ? Logo_Opacity(title: 'no_news'.tr)
+                        : ListView.builder(
+                            itemCount: data.length,
+                            padding: EdgeInsets.all(15),
+                            itemBuilder: (context, index) {
+                              return Card(
+                                margin: EdgeInsets.only(bottom: 10),
+                                // color: Theme.of(context).primaryColorDark,
+                                elevation: 10,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Container(
+                                  padding: EdgeInsets.all(10),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '${data[index].title}',
                                         style: TextStyle(
-                                            color: Get.theme.primaryColor,
-                                            decoration:
-                                                TextDecoration.underline,
-                                            fontSize: 14),
-                                      )),
-                                )
-                              ],
-                            ),
+                                            fontSize: 15, height: 1.3),
+                                      ),
+                                      Divider(
+                                        color: Theme.of(context).primaryColor,
+                                        thickness: 1,
+                                      ),
+                                      SizedBox(height: 3),
+                                      Image.network(
+                                        '${data[index].images}',
+                                        height: showtext[index] ? 150 : null,
+                                        width: double.infinity,
+                                        fit: BoxFit.cover,
+                                      ),
+                                      SizedBox(height: 10),
+                                      Text(
+                                        '${data[index].details}',
+                                        maxLines: showtext[index] ? 4 : null,
+                                        overflow: showtext[index]
+                                            ? TextOverflow.ellipsis
+                                            : null,
+                                        style: textStyle().body14,
+                                      ),
+                                      Divider(
+                                        color: Theme.of(context).primaryColor,
+                                        thickness: 1,
+                                      ),
+                                      Center(
+                                        child: GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                showtext[index] =
+                                                    !showtext[index];
+                                              });
+                                              print(showtext);
+                                            },
+                                            child: Text(
+                                              showtext[index]
+                                                  ? 'see_more'.tr
+                                                  : 'see_less'.tr,
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
+                                                  decoration:
+                                                      TextDecoration.underline,
+                                                  fontSize: 14),
+                                            )),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
-            ),
-          ),
+                  ),
+                ),
         ),
       ],
     );
