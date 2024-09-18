@@ -1,17 +1,12 @@
-import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:doormster/components/actions/disconnected_dialog.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottom_controller.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/controller/logout_controller.dart';
-import 'package:doormster/screen/main_screen/login_page.dart';
-import 'package:doormster/screen/main_screen/login_staff_page.dart';
-import 'package:doormster/service/connected/connect_api.dart';
-import 'package:doormster/service/notify/notify_token.dart';
+import 'package:doormster/service/connected/ip_address.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final SettingController settingController = Get.put(SettingController());
@@ -33,7 +28,7 @@ class SettingController extends GetxController {
     final prefs = await SharedPreferences.getInstance();
     uuId = prefs.getString('uuId');
     security = prefs.getBool('security');
-    language = prefs.getString('language') ?? 'th';
+    language = prefs.getString('language');
     theme = prefs.getBool('theme');
   }
 
@@ -41,7 +36,7 @@ class SettingController extends GetxController {
     try {
       loading.value = true;
 
-      var url = '${Connect_api().domain}/blockUser';
+      var url = '${IP_Address.old_IP}blockUser';
       var response = await Dio().post(url,
           options: Options(headers: {
             'Content-Type': 'application/json',
@@ -59,16 +54,24 @@ class SettingController extends GetxController {
         snackbar(Get.theme.primaryColor, 'deactivation_success'.tr,
             Icons.check_circle_outline_rounded);
       } else {
-        dialogOnebutton_Subtitle('deactivation_fail'.tr, 'again_pls'.tr,
-            Icons.highlight_off_rounded, Colors.red, 'ok'.tr, () {
-          Get.back();
-        }, false, false);
+        dialogOnebutton_Subtitle(
+            title: 'deactivation_fail'.tr,
+            subtitle: 'again_pls'.tr,
+            icon: Icons.highlight_off_rounded,
+            colorIcon: Colors.red,
+            textButton: 'ok'.tr,
+            press: () {
+              Get.back();
+            },
+            click: false,
+            backBtn: false,
+            willpop: false);
         print('checkIn not Success!!');
         print(response.data);
       }
     } on DioError catch (e) {
       print(e);
-      error_connected(() {
+      error_Connected(() {
         Get.back();
       });
     } finally {

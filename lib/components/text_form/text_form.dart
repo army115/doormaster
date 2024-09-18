@@ -1,22 +1,29 @@
 // ignore_for_file: avoid_unnecessary_containers, must_be_immutable, unused_import
+import 'dart:ffi';
+
 import 'package:doormster/style/textStyle.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:doormster/style/theme/light/theme_light.dart';
 import 'package:flutter/material.dart';
 
 class Text_Form extends StatelessWidget {
   TextEditingController controller;
-  String title;
-  IconData icon;
-  String error;
-  var TypeInput;
+  String? title;
+  IconData? icon;
+  String? error;
+  TextInputType? TypeInput;
+  int? minLines;
+  int? maxLines;
   Text_Form(
       {Key? key,
       required this.controller,
-      required this.title,
-      required this.icon,
-      required this.error,
-      required this.TypeInput})
+      this.title,
+      this.icon,
+      this.error,
+      this.TypeInput,
+      this.minLines,
+      this.maxLines})
       : super(key: key);
 
   @override
@@ -32,15 +39,14 @@ class Text_Form extends StatelessWidget {
           style: textStyle().title16,
           controller: controller,
           keyboardType: TypeInput,
+          minLines: minLines ?? 1,
+          maxLines: maxLines ?? 1,
           decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 13),
-            // labelText: 'Username',
             hintText: title,
             hintStyle: textStyle().title16,
             errorStyle: textStyle().body14,
-            prefixIcon: Icon(icon, size: 25),
-            // filled: true, พื้นหลังช่อง
-            // fillColor: Colors.white,
+            prefixIcon: icon == null ? null : Icon(icon, size: 25),
             focusedBorder: OutlineInputBorder(
               borderSide:
                   BorderSide(color: Theme.of(context).primaryColor, width: 2),

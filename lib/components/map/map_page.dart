@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:get/get.dart';
 
 class Map_Page extends StatefulWidget {
   final lat;
@@ -122,7 +121,7 @@ class _Map_PageState extends State<Map_Page> {
                                       LatLng(widget.area_lat, widget.area_lng),
                                   strokeColor: Colors.green,
                                   strokeWidth: 2,
-                                  radius: widget.radius)
+                                  radius: widget.radius + .0)
                             ])
                           : {},
                       myLocationEnabled: widget.myLocation,
@@ -306,6 +305,5 @@ Set<Circle> _buildCircles() {
 class latlng {
   double lat;
   double lng;
-
   latlng({required this.lat, required this.lng});
 }

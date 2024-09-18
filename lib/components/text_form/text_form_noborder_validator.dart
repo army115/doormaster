@@ -28,7 +28,7 @@ class TextForm_NoBorder_Validator extends StatelessWidget {
         minLines: 1,
         maxLines: 5,
         autofocus: false,
-        style: Get.textTheme.bodyText2,
+        style: Get.textTheme.bodySmall,
         controller: controller,
         keyboardType: typeInput,
         cursorColor: Theme.of(context).primaryColorDark,

@@ -10,6 +10,6 @@ BottomNavigationBarThemeData Light_BottomBar = BottomNavigationBarThemeData(
     selectedItemColor: Colors.white,
     unselectedItemColor: Colors.grey[400],
     selectedIconTheme: IconThemeData(size: 30),
-    unselectedIconTheme: IconThemeData(size: 25),
+    unselectedIconTheme: IconThemeData(size: 30),
     selectedLabelStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-    unselectedLabelStyle: TextStyle(fontSize: 14));
+    unselectedLabelStyle: TextStyle(fontSize: 16));

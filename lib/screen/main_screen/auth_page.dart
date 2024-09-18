@@ -1,12 +1,8 @@
 import 'package:doormster/components/button/button_language.dart';
-import 'package:doormster/components/button/button_theme.dart';
-import 'package:doormster/components/snackbar/back_double.dart';
 import 'package:doormster/controller/back_double.dart';
-import 'package:doormster/service/notify/notify_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Auth_Page extends StatefulWidget {
   Auth_Page({Key? key});

@@ -6,7 +6,7 @@ import 'package:doormster/components/actions/form_error_snackbar.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/bottombar/bottom_controller.dart';
 import 'package:doormster/components/snackbar/snackbar.dart';
-import 'package:doormster/service/connected/connect_api.dart';
+import 'package:doormster/service/connected/ip_address.dart';
 import 'package:doormster/style/styleButton/ButtonStyle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -54,7 +54,7 @@ class _Password_PageState extends State<Password_Page> {
       setState(() {
         loading = true;
       });
-      String url = '${Connect_api().domain}/changpassword';
+      String url = '${IP_Address.old_IP}changpassword';
       var jsonRes = await Dio().post(url,
           options: Options(headers: {
             'Content-Type': 'application/json',
@@ -72,15 +72,23 @@ class _Password_PageState extends State<Password_Page> {
             Icons.check_circle_outline_rounded);
       } else {
         print('Change Fail!!');
-        dialogOnebutton_Subtitle('found_error'.tr, 'wrong_password'.tr,
-            Icons.highlight_off_rounded, Colors.red, 'ok'.tr, () {
-          Navigator.of(context).pop();
-        }, false, false);
+        dialogOnebutton_Subtitle(
+            title: 'occur_error'.tr,
+            subtitle: 'wrong_password'.tr,
+            icon: Icons.highlight_off_rounded,
+            colorIcon: Colors.red,
+            textButton: 'ok'.tr,
+            press: () {
+              Get.back();
+            },
+            click: false,
+            backBtn: false,
+            willpop: false);
       }
     } catch (error) {
       print(error);
-      error_connected(() async {
-        Navigator.of(context).pop();
+      error_Connected(() async {
+        Get.back();
       });
       // snackbar( Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
       //     Icons.warning_amber_rounded);
@@ -206,14 +214,14 @@ class _Password_PageState extends State<Password_Page> {
           prefixIconColor:
               MaterialStateColor.resolveWith((Set<MaterialState> states) {
             if (states.contains(MaterialState.focused)) {
-              return Theme.of(context).dividerColor;
+              return Theme.of(context).primaryColorDark;
             }
             return Theme.of(context).dividerColor.withOpacity(0.5);
           }),
           suffixIconColor:
               MaterialStateColor.resolveWith((Set<MaterialState> states) {
             if (states.contains(MaterialState.focused)) {
-              return Theme.of(context).dividerColor;
+              return Theme.of(context).primaryColorDark;
             }
             return Theme.of(context).dividerColor.withOpacity(0.5);
           }),
@@ -226,6 +234,8 @@ class _Password_PageState extends State<Password_Page> {
                   color: Theme.of(context).primaryColorDark, width: 2)),
           enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.grey, width: 1.5)),
+          focusedErrorBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.red, width: 2)),
         ),
         validator: value);
   }
@@ -238,7 +248,7 @@ class _Password_PageState extends State<Password_Page> {
           style: styleButtons(EdgeInsets.symmetric(horizontal: 40, vertical: 8),
               10.0, Colors.white, BorderRadius.circular(10)),
           onPressed: () {
-            Navigator.pop(context);
+            Get.back();
           },
           child: Text("cancel".tr,
               style: TextStyle(
@@ -250,11 +260,11 @@ class _Password_PageState extends State<Password_Page> {
         ElevatedButton(
           onPressed: () async {
             if (_formkey.currentState!.validate()) {
-              Map<String, dynamic> valuse = Map();
-              valuse['user_name'] = username;
-              valuse['old_password'] = _oldpass.text;
-              valuse['new_password'] = _conpass.text;
-              _changePassword(valuse);
+              Map<String, dynamic> values = Map();
+              values['user_name'] = username;
+              values['old_password'] = _oldpass.text;
+              values['new_password'] = _conpass.text;
+              _changePassword(values);
             } else {
               form_error_snackbar();
             }

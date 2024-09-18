@@ -4,14 +4,28 @@ import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-void error_connected(navigator) {
+void error_Connected(navigator, {click, back_btn}) {
   dialogOnebutton_Subtitle(
-      'found_error'.tr,
-      'connect_fail'.tr,
-      Icons.warning_amber_rounded,
-      Colors.orange,
-      'ok'.tr,
-      navigator,
-      false,
-      false);
+      title: 'occur_error'.tr,
+      subtitle: 'connect_error'.tr,
+      icon: Icons.warning_rounded,
+      colorIcon: Colors.orange,
+      textButton: 'ok'.tr,
+      press: navigator,
+      click: click ?? false,
+      backBtn: back_btn ?? false,
+      willpop: click ?? false);
+}
+
+void error_Timeout(navigator, {click, back_btn}) {
+  dialogOnebutton_Subtitle(
+      title: 'error_timeout'.tr,
+      subtitle: 'connect_timeout'.tr,
+      icon: Icons.error,
+      colorIcon: Colors.red,
+      textButton: 'ok'.tr,
+      press: navigator,
+      click: click ?? false,
+      backBtn: back_btn ?? false,
+      willpop: click);
 }

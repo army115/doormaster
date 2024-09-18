@@ -1,10 +1,23 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-
 import 'package:flutter/material.dart';
 
 PageTransitionsTheme transitionsTheme = PageTransitionsTheme(
   builders: {
-    TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-    TargetPlatform.android: FadeUpwardsPageTransitionsBuilder()
+    TargetPlatform.iOS: FadeInPageTransitionBuilder(),
+    TargetPlatform.android: FadeInPageTransitionBuilder()
   },
 );
+
+class FadeInPageTransitionBuilder extends PageTransitionsBuilder {
+  @override
+  Widget buildTransitions<T>(
+      PageRoute<T> route,
+      BuildContext context,
+      Animation<double> animation,
+      Animation<double> secondaryAnimation,
+      Widget child) {
+    return FadeTransition(
+      opacity: animation,
+      child: child,
+    );
+  }
+}

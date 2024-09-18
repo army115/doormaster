@@ -1,42 +1,25 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, library_private_types_in_public_api
 
 import 'package:doormster/components/bottombar/bottom_controller.dart';
-import 'package:doormster/components/button/button_theme.dart';
 import 'package:doormster/components/drawer/drawer.dart';
 import 'package:doormster/routes/menu/home_menu.dart';
 import 'package:doormster/routes/menu/news_menu.dart';
 import 'package:doormster/routes/menu/notification_menu.dart';
 import 'package:doormster/routes/menu/profile_menu.dart';
-import 'package:doormster/screen/main_screen/news_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-final GlobalKey<NavigatorState> homeKey = GlobalKey<NavigatorState>();
-final GlobalKey<NavigatorState> newsKey = GlobalKey<NavigatorState>();
-final GlobalKey<NavigatorState> notifyKey = GlobalKey<NavigatorState>();
-final GlobalKey<NavigatorState> profileKey = GlobalKey<NavigatorState>();
 
-class BottomBar extends StatefulWidget {
-  BottomBar({
-    Key? key,
-  });
+class BottomBar extends StatelessWidget {
+  BottomBar({super.key});
 
-  @override
-  State<BottomBar> createState() => _BottomBarState();
-}
-
-class _BottomBarState extends State<BottomBar>
-// with SingleTickerProviderStateMixin
-{
   final buildBody = [
     Home_Menu(),
-    News_Page(),
+    News_Menu(),
     Notification_Menu(),
     Profile_Menu(),
   ];
-
-  // final Buttontheme controller = Get.put(Buttontheme());
 
   @override
   Widget build(BuildContext context) {
@@ -51,12 +34,6 @@ class _BottomBarState extends State<BottomBar>
               controller: bottomController.tabController,
               children: buildBody,
             ),
-            //     IndexedStack(
-            //   index: bottomController.tabController.index,
-            //   children: buildBody,
-            // ),
-            // buildBody[bottomController.tabController
-            //     .index], //จะไม่ค้างอยู่หน้าปัจจุบัน เวลากดปุ่มเมนูกลับมา
             bottomNavigationBar: BottomNavigationBar(
               currentIndex: bottomController.selectedIndex.value,
               onTap: bottomController.ontapItem,
@@ -73,7 +50,17 @@ class _BottomBarState extends State<BottomBar>
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.notifications_none_rounded),
-                  activeIcon: Icon(Icons.notifications_rounded),
+                  // Badge(
+                  //   // label: Text('10'),
+                  //   largeSize: 20,
+                  //   child: Icon(Icons.notifications_none_rounded),
+                  // ),
+                  activeIcon: Icon(Icons.notifications),
+                  // Badge(
+                  //   label: Text('10'),
+                  //   largeSize: 20,
+                  //   child: Icon(Icons.notifications),
+                  // ),
                   label: 'notification'.tr,
                 ),
                 BottomNavigationBarItem(

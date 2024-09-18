@@ -1,0 +1,88 @@
+showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => StatefulBuilder(builder: (context, setState) {
+            return WillPopScope(
+              onWillPop: (() async => false),
+              child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 25, vertical: 80),
+                  child: SelectableItems(setState)),
+            );
+          }),
+        );
+
+          Widget SelectableItems(setState) {
+    void searchData(String text) {
+      setState(() {
+        listdet = detlist?.where((item) {
+          var name = item.doorName!;
+          return name.contains(text);
+        }).toList();
+      });
+    }
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(7),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('device'.tr),
+          leading: button_back(() {
+            fieldText.clear();
+            listdet = detlist;
+            Get.back();
+          }),
+        ),
+        body: Column(
+          children: [
+            Container(
+                padding: EdgeInsets.all(10),
+                child:
+                    Search_From(
+                  title: 'ค้นหาประตู',
+                  searchText: fieldText,
+                  clear: () {
+                    setState(() {
+                      fieldText.clear();
+                      listdet = detlist;
+                    });
+                  },
+                  changed: (value) {
+                    searchData(value);
+                  },
+                  // )
+                )),
+            Expanded(
+              child: listdet!.isEmpty
+                  ? Logo_Opacity(title: 'device_not_found'.tr)
+                  : ListView.builder(
+                      padding: EdgeInsets.only(bottom: 10),
+                      itemCount: listdet?.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final String? item = listdet![index].doorName;
+                        final String? id = listdet![index].doorId;
+                        return CheckBox_FormField(
+                            title: item,
+                            value: selectedItemsName.contains(item),
+                            onChanged: (value) =>
+                                _updateSelectedItems(index, item!, id, value));
+                      },
+                    ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+    void _updateSelectedItems(int index, String item, String? id, bool value) {
+    setState(() {
+      if (selectedItemsName.contains(item)) {
+        selectedItemsName.remove(item);
+        selectedItemsId.remove(id);
+        selectDevices.text = selectedItemsName.join(',');
+      } else {
+        selectedItemsName.add(item);
+        selectedItemsId.add(id!);
+        selectDevices.text = selectedItemsName.join(',');
+      }
+    });
+  }

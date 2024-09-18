@@ -1,26 +1,16 @@
 // ignore_for_file: prefer_const_constructors_in_immutables, avoid_single_cascade_in_expression_statements, avoid_print, use_build_context_synchronously, unused_local_variable, prefer_const_constructors
-import 'package:dio/dio.dart';
-import 'package:doormster/components/actions/disconnected_dialog.dart';
-import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
-import 'package:doormster/components/bottombar/bottom_controller.dart';
-import 'package:doormster/components/bottombar/bottombar.dart';
+
 import 'package:doormster/components/button/button_animation.dart';
 import 'package:doormster/components/button/button_language.dart';
-import 'package:doormster/components/button/button_theme.dart';
 import 'package:doormster/components/checkBox/checkbox_listtile.dart';
-import 'package:doormster/components/snackbar/snackbar.dart';
 import 'package:doormster/components/text_form/text_form.dart';
 import 'package:doormster/components/text_form/text_form_password.dart';
 import 'package:doormster/controller/back_double.dart';
 import 'package:doormster/controller/login_controller.dart';
-import 'package:doormster/models/login_model.dart';
 import 'package:doormster/screen/main_screen/login_page.dart';
-import 'package:doormster/service/connected/connect_api.dart';
-import 'package:doormster/service/notify/notify_token.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:http/http.dart' as http;
 // import 'dart:async';
 // import 'dart:convert' as convert;
@@ -103,6 +93,10 @@ class _Login_StaffState extends State<Login_Staff> {
                               ),
                               Checkbox_Listtile(
                                 title: 'remember'.tr,
+                                textColor: Colors.black,
+                                borderColor: Colors.black,
+                                checkColor: Colors.white,
+                                activeColor: Get.theme.primaryColor,
                                 value: loginController.remember.value,
                                 onChanged: loginController.rememberme,
                               ),
@@ -144,14 +138,7 @@ class _Login_StaffState extends State<Login_Staff> {
                                           ),
                                           recognizer: TapGestureRecognizer()
                                             ..onTap = () {
-                                              Navigator.pushReplacement(
-                                                  context,
-                                                  GetPageRoute(
-                                                      page: () => Login_Page(),
-                                                      transitionDuration:
-                                                          Duration.zero));
-                                              // Navigator.pushReplacementNamed(
-                                              //     context, '/login');
+                                              Get.off(() => Login_Page());
                                             })
                                     ],
                                   ))
@@ -163,7 +150,7 @@ class _Login_StaffState extends State<Login_Staff> {
                   ),
                 ),
                 Positioned(
-                  top: 40,
+                  top: 60,
                   right: 10,
                   child: button_language(
                       Colors.white, Theme.of(context).primaryColor),
@@ -173,31 +160,6 @@ class _Login_StaffState extends State<Login_Staff> {
           ),
         )),
       ),
-    );
-  }
-
-  Widget btnSubmit(String title, VoidCallback press) {
-    return Container(
-      width: Get.mediaQuery.size.width * 0.5,
-      height: 45,
-      child: ElevatedButton(
-          style: TextButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
-              elevation: 10,
-              // shadowColor: Colors.white,
-              primary: Colors.black,
-              backgroundColor: Colors.white),
-          child: Text(
-            title,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 16,
-              fontWeight: FontWeight.normal,
-              letterSpacing: 1,
-            ),
-          ),
-          onPressed: press),
     );
   }
 }

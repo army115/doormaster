@@ -1,14 +1,12 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:doormster/style/textStyle.dart';
-import 'package:doormster/style/theme/light/theme_light.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
-import 'package:get/get.dart';
 
 class Dropdown_NoBorder extends StatelessWidget {
   String title;
-  TextEditingController controller;
+  // TextEditingController controller;
   IconData? leftIcon;
   String? error;
   final onChanged;
@@ -16,7 +14,7 @@ class Dropdown_NoBorder extends StatelessWidget {
   Dropdown_NoBorder(
       {Key? key,
       required this.title,
-      required this.controller,
+      // required this.controller,
       required this.listItem,
       this.error,
       this.leftIcon,
@@ -27,51 +25,71 @@ class Dropdown_NoBorder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8),
-      child: CustomDropdown(
-        excludeSelected: false,
-        hideSelectedFieldWhenOpen: true,
-        onChanged: onChanged,
-        items: listItem,
-        controller: controller,
-        fillColor: Colors.transparent,
-        fieldPrefixIcon: Icon(
-          leftIcon,
-          size: 30,
+      child: PhysicalModel(
+        borderRadius: BorderRadius.circular(10),
+        elevation: 3,
+        color: Colors.white,
+        child: CustomDropdown(
+          excludeSelected: false,
+          hideSelectedFieldWhenExpanded: true,
+          onChanged: onChanged,
+          items: listItem,
+          hintText: title,
+          validator: (value) {
+            if (value == null) {
+              return "  $error";
+            } else {
+              return null;
+            }
+          },
+          maxlines: 2,
+          listItemPadding:
+              const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          expandedHeaderPadding:
+              const EdgeInsets.symmetric(horizontal: 5, vertical: 13),
+          closedHeaderPadding:
+              const EdgeInsets.symmetric(horizontal: 5, vertical: 13),
+          decoration: CustomDropdownDecoration(
+            errorStyle: textStyle().body14,
+            prefixIcon: leftIcon == null
+                ? null
+                : Icon(
+                    leftIcon,
+                    size: 25,
+                  ),
+            closedSuffixIcon: Icon(
+              Icons.keyboard_arrow_down_rounded,
+              size: 25,
+              color: Theme.of(context).dividerColor,
+            ),
+            expandedSuffixIcon: const Icon(
+              Icons.keyboard_arrow_up_rounded,
+              size: 25,
+            ),
+            // closedBorder:
+            //     Border.all(color: Theme.of(context).primaryColor, width: 2),
+            // closedErrorBorder:
+            //     Border.fromBorderSide(BorderSide(color: Colors.red)),
+            expandedBorder: Border.fromBorderSide(
+              BorderSide(color: Theme.of(context).primaryColor),
+            ),
+          ),
+          // suffixIconColor:
+          //     MaterialStateColor.resolveWith((Set<MaterialState> states) {
+          //   if (states.contains(MaterialState.focused)) {
+          //     return Theme.of(context).dividerColor;
+          //   }
+          //   return Theme.of(context).dividerColor.withOpacity(0.5);
+          // }),
+          // prefixIconColor:
+          //     MaterialStateColor.resolveWith((Set<MaterialState> states) {
+          //   if (states.contains(MaterialState.focused)) {
+          //     return Theme.of(context).primaryColorDark;
+          //   }
+          //   return Theme.of(context).dividerColor.withOpacity(0.5);
+          // }),
+          // listItemStyle: const TextStyle(color: Colors.black),
         ),
-
-        fieldSuffixIcon: const Icon(
-          Icons.keyboard_arrow_down_rounded,
-          size: 30,
-        ),
-        suffixIconColor:
-            MaterialStateColor.resolveWith((Set<MaterialState> states) {
-          if (states.contains(MaterialState.focused)) {
-            return Theme.of(context).dividerColor;
-          }
-          return Theme.of(context).dividerColor.withOpacity(0.5);
-        }),
-        prefixIconColor:
-            MaterialStateColor.resolveWith((Set<MaterialState> states) {
-          if (states.contains(MaterialState.focused)) {
-            return Theme.of(context).primaryColorDark;
-          }
-          return Theme.of(context).dividerColor.withOpacity(0.5);
-        }),
-        listItemStyle: const TextStyle(color: Colors.black),
-        errorText: error,
-        errorStyle: textStyle().body14,
-        hintText: title,
-        hintStyle: const TextStyle(color: Colors.grey),
-        selectedStyle: Get.textTheme.bodyText2,
-        searchText: 'search'.tr,
-        foundText: 'data_not_found'.tr,
-        focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(
-                color: Theme.of(context).primaryColorDark, width: 2)),
-        enabledBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey, width: 1.5)),
-        // borderRadiusItem: BorderRadius.circular(5),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 5, vertical: 13),
       ),
     );
   }

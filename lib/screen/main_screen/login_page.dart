@@ -8,7 +8,6 @@ import 'package:doormster/components/text_form/text_form_password.dart';
 import 'package:doormster/controller/back_double.dart';
 import 'package:doormster/controller/login_controller.dart';
 import 'package:doormster/screen/main_screen/login_staff_page.dart';
-import 'package:doormster/screen/main_screen/register_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -24,6 +23,12 @@ class Login_Page extends StatefulWidget {
 class _Login_PageState extends State<Login_Page> {
   DateTime pressTime = DateTime.now();
   @override
+  void initState() {
+    loginController.loadUsernamePassword();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return WillPopScope(
         onWillPop: () async => onBackDoubleClicked(context, pressTime),
@@ -36,11 +41,9 @@ class _Login_PageState extends State<Login_Page> {
                   child: Stack(
                 children: [
                   Container(
-                      // height: Get.mediaQuery.size.height * 0.7,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 30, vertical: 30),
                       child: Column(
-                        // mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           themeController.imageTheme(scale: 3.5),
                           SizedBox(
@@ -67,6 +70,10 @@ class _Login_PageState extends State<Login_Page> {
                           ),
                           Checkbox_Listtile(
                             title: 'remember'.tr,
+                            textColor: Get.theme.dividerColor,
+                            borderColor: Get.theme.dividerColor,
+                            checkColor: Get.theme.cardTheme.color!,
+                            activeColor: Get.theme.primaryColorDark,
                             value: loginController.remember.value,
                             onChanged: loginController.rememberme,
                           ),
@@ -79,29 +86,11 @@ class _Login_PageState extends State<Login_Page> {
                               await loginController.loginUser();
                             },
                           ),
-                          const SizedBox(height: 20),
-                          RichText(
-                              textAlign: TextAlign.center,
-                              text: TextSpan(
-                                style: Get.textTheme.headline1,
-                                text: 'no_account'.tr,
-                                children: [
-                                  TextSpan(
-                                      text: 'register'.tr,
-                                      style: TextStyle(
-                                        decoration: TextDecoration.underline,
-                                        color:
-                                            Theme.of(context).primaryColorDark,
-                                      ),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-                                          Navigator.of(context).pushReplacement(
-                                              MaterialPageRoute(
-                                                  builder: ((context) =>
-                                                      Register_Page())));
-                                        })
-                                ],
-                              )),
+                          const SizedBox(height: 15),
+                          Text(
+                            'no_account'.tr,
+                            textAlign: TextAlign.center,
+                          ),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 6),
                             child: Divider(
@@ -111,7 +100,7 @@ class _Login_PageState extends State<Login_Page> {
                           RichText(
                               textAlign: TextAlign.center,
                               text: TextSpan(
-                                style: Get.textTheme.headline1,
+                                style: Get.textTheme.headlineMedium,
                                 text: 'login_for'.tr,
                                 children: [
                                   TextSpan(
@@ -123,14 +112,9 @@ class _Login_PageState extends State<Login_Page> {
                                       ),
                                       recognizer: TapGestureRecognizer()
                                         ..onTap = () {
-                                          Navigator.pushReplacement(
-                                              context,
-                                              GetPageRoute(
-                                                  page: () => Login_Staff(),
-                                                  transitionDuration:
-                                                      Duration.zero));
-                                          // Navigator.pushReplacementNamed(
-                                          //     context, '/staff');
+                                          Get.off(
+                                            Login_Staff(),
+                                          );
                                         })
                                 ],
                               ))

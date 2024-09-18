@@ -1,6 +1,5 @@
 // ignore_for_file: unused_field, use_build_context_synchronously, non_constant_identifier_names
 
-import 'package:doormster/components/alertDialog/alert_dialog_twobutton_subtext.dart';
 import 'package:doormster/components/button/button_theme.dart';
 import 'package:doormster/controller/setting_controller.dart';
 import 'package:flutter/material.dart';
@@ -30,11 +29,11 @@ class _Settings_PageState extends State<Settings_Page> {
   @override
   void initState() {
     getVersion();
+    settingController.getValueShared();
     super.initState();
   }
 
   void _changeLanguage(BuildContext context) {
-    print(settingController.language);
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -176,29 +175,12 @@ class _Settings_PageState extends State<Settings_Page> {
       menuItem(Icons.brightness_4, 'change_theme'.tr, () {
         _changeTheme(context);
       }, Theme.of(context).dividerColor),
-      menuItem(Icons.no_accounts_rounded, 'disable_account'.tr, () {
-        dialogTwobutton_Subtitle(
-            'disable_account'.tr,
-            'deactivate_confirm'.tr,
-            Icons.warning_amber_rounded,
-            Colors.orange,
-            'no'.tr,
-            () {
-              Get.back();
-            },
-            'yes'.tr,
-            () {
-              settingController.blockUser();
-              Get.back();
-            },
-            true,
-            true);
-      }, Colors.redAccent.shade400),
       menuItem(Icons.app_settings_alt_rounded, '${'version'.tr} ${version}',
           () {}, Theme.of(context).dividerColor.withOpacity(0.5))
     ].obs;
     return Scaffold(
-        appBar: AppBar(title: Text('setting'.tr)),
+        appBar:
+            AppBar(automaticallyImplyLeading: true, title: Text('setting'.tr)),
         body: Obx(() => ListView.separated(
               physics: const ClampingScrollPhysics(),
               itemCount: menu.length,

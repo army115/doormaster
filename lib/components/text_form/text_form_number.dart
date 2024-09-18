@@ -7,19 +7,19 @@ import 'package:doormster/style/textStyle.dart';
 
 class TextForm_Number extends StatelessWidget {
   TextEditingController controller;
-  String title;
-  IconData icon;
+  String? title;
+  IconData? icon;
   var error;
-  int maxLength;
-  TextInputType type;
+  int? maxLength;
+  TextInputType? type;
   TextForm_Number(
       {Key? key,
       required this.controller,
-      required this.title,
-      required this.icon,
-      required this.error,
-      required this.type,
-      required this.maxLength})
+      this.title,
+      this.icon,
+      this.error,
+      this.type,
+      this.maxLength})
       : super(key: key);
 
   @override
@@ -46,13 +46,12 @@ class TextForm_Number extends StatelessWidget {
               hintText: title,
               hintStyle: textStyle().title16,
               errorStyle: textStyle().body14,
-              // ignore: prefer_const_constructors
-              prefixIcon: Icon(
-                icon,
-                size: 25,
-              ),
-              // filled: true, พื้นหลังช่อง
-              // fillColor: Colors.white,
+              prefixIcon: icon == null
+                  ? null
+                  : Icon(
+                      icon,
+                      size: 25,
+                    ),
               focusedBorder: OutlineInputBorder(
                 borderSide:
                     BorderSide(color: Theme.of(context).primaryColor, width: 2),

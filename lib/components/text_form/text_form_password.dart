@@ -7,18 +7,12 @@ class TextForm_Password extends StatefulWidget {
   String title;
   IconData iconLaft;
   var error;
-  // bool redEye;
-  // var iconRight;
-  // var change;
   TextForm_Password({
     Key? key,
     required this.controller,
     required this.title,
     required this.iconLaft,
     required this.error,
-    // required this.redEye,
-    // required this.iconRight,
-    // required this.change
   }) : super(key: key);
 
   @override
@@ -43,7 +37,6 @@ class _TextForm_PasswordState extends State<TextForm_Password> {
             decoration: InputDecoration(
               contentPadding:
                   EdgeInsets.symmetric(horizontal: 10, vertical: 13),
-              // labelText: 'Username',
               hintText: widget.title,
               hintStyle: TextStyle(fontSize: 16),
               errorStyle: TextStyle(fontSize: 15),
@@ -52,7 +45,7 @@ class _TextForm_PasswordState extends State<TextForm_Password> {
                 widget.iconLaft,
                 size: 25,
               ),
-              suffixIcon: widget.controller.text.length > 0
+              suffixIcon: widget.controller.text.isNotEmpty
                   ? IconButton(
                       onPressed: () {
                         setState(() {
@@ -60,16 +53,14 @@ class _TextForm_PasswordState extends State<TextForm_Password> {
                         });
                       },
                       icon: redEye
-                          ? Icon(
+                          ? const Icon(
                               Icons.visibility_off,
                             )
-                          : Icon(
+                          : const Icon(
                               Icons.visibility,
                             ),
                     )
                   : null,
-              // filled: true, พื้นหลังช่อง
-              // fillColor: Colors.white,
               focusedBorder: OutlineInputBorder(
                 borderSide:
                     BorderSide(color: Theme.of(context).primaryColor, width: 2),

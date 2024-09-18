@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_import
 
 import 'package:doormster/style/colorSwatch.dart';
+import 'package:doormster/style/theme/dark/theme_dark.dart';
 import 'package:doormster/style/theme/light/light_components/light_appbar.dart';
 import 'package:doormster/style/theme/light/light_components/light_bottomBar.dart';
 import 'package:doormster/style/theme/light/light_components/light_dialog.dart';

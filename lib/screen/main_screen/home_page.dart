@@ -1,22 +1,17 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously, unused_field, non_constant_identifier_names
 import 'dart:async';
-import 'dart:developer';
-import 'package:dio/dio.dart';
-import 'package:doormster/components/actions/disconnected_dialog.dart';
 import 'package:doormster/components/girdManu/menu_home.dart';
 import 'package:doormster/components/girdManu/menu_security.dart';
 import 'package:doormster/components/list_null_opacity/icon_opacity.dart';
 import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
 import 'package:doormster/components/loading/loading.dart';
+import 'package:doormster/controller/branch_controller.dart';
 import 'package:doormster/controller/home_controller.dart';
-import 'package:doormster/models/get_ads_company.dart';
-import 'package:doormster/models/get_menu.dart';
-import 'package:doormster/controller/get_info.dart';
-import 'package:doormster/service/connected/connect_api.dart';
+import 'package:doormster/controller/profile_controller.dart';
+import 'package:doormster/models/main_models/get_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper_plus/flutter_swiper_plus.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'dart:convert' as convert;
 
@@ -41,7 +36,11 @@ class _Home_PageState extends State<Home_Page>
   @override
   void initState() {
     super.initState();
-    get_Info();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      profileController.get_Profile(loadingTime: 0).then(
+            (value) => branchController.get_Branch(),
+          );
+    });
     // _subscription =
     //     _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
     //   if (result == ConnectivityResult.none) {
@@ -62,18 +61,6 @@ class _Home_PageState extends State<Home_Page>
     // });
   }
 
-  Future onGoBack(dynamic value) async {
-    setState(() {
-      get_Info();
-    });
-  }
-
-  // @override
-  // void dispose() {
-  //   _subscription?.cancel();
-  //   super.dispose();
-  // }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -90,15 +77,17 @@ class _Home_PageState extends State<Home_Page>
                 ),
                 body: RefreshIndicator(
                   onRefresh: () async {
-                    get_Info();
+                    // get_Info();
                     // Homecontroller.GetMenu();
                   },
-                  child: Homecontroller.loading.isTrue ||
-                          Homecontroller.mobileRole == null
-                      ? Container()
-                      : Homecontroller.security == true
-                          ? Security()
-                          : normalUser(),
+                  child:
+                      // Homecontroller.loading.isTrue ||
+                      //         Homecontroller.mobileRole == null
+                      //     ? Container()
+                      //     : Homecontroller.security == true
+                      //         ? Security()
+                      //         :
+                      normalUser(),
                 )),
             Homecontroller.loading.isTrue ? Loading() : Container(),
           ],
@@ -106,93 +95,93 @@ class _Home_PageState extends State<Home_Page>
   }
 
   Widget normalUser() {
-    return Homecontroller.mobileRole == 0
-        ? Logo_Opacity(title: 'contact_admin_approve'.tr)
-        : SingleChildScrollView(
-            physics:
-                ClampingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-            child: Column(
-              children: [
-                Container(
-                    height: Get.mediaQuery.size.width * 0.6,
-                    width: double.infinity,
-                    child: Homecontroller.listAds.isEmpty
-                        ? Swiper(
-                            autoplay: false,
-                            loop: false,
-                            itemCount: 1,
-                            itemBuilder: (context, index) {
-                              return Image.asset(
-                                'assets/images/ads.png',
-                                fit: BoxFit.cover,
-                              );
-                            },
-                          )
-                        : Swiper(
-                            autoplay: Homecontroller.listAds.length == 1
-                                ? false
-                                : true,
-                            loop: Homecontroller.listAds.length == 1
-                                ? false
-                                : true,
-                            pagination: SwiperPagination(
-                                builder: DotSwiperPaginationBuilder(
-                                    size: 8,
-                                    activeSize: 8,
-                                    color: Colors.grey,
-                                    activeColor: Colors.white)),
-                            itemCount: Homecontroller.listAds.length,
-                            itemBuilder: (context, index) {
-                              var _Images = convert.base64Decode(
-                                  ('${Homecontroller.listAds[index].adsversitingPic}')
-                                      .split(',')
-                                      .last);
-                              return InkWell(
-                                  // onTap: () {
-                                  //   launchUrlString('https://hipglobal.co.th/');
-                                  // },
-                                  child: Image.memory(
-                                _Images,
-                                fit: BoxFit.cover,
-                              ));
-                            },
-                          )),
-                Container(
-                  child: Homecontroller.listMenu.isEmpty
-                      ? Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: Get.mediaQuery.size.height * 0.13),
-                          child: Icon_Opacity(title: 'contact_admin_manu'.tr),
-                        )
-                      : Container(
-                          padding: EdgeInsets.fromLTRB(
-                              20, 20, 20, Get.mediaQuery.size.width * 0.15),
-                          child: GridView.builder(
-                            shrinkWrap: true,
-                            primary: false,
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                    // childAspectRatio: 0.65,
-                                    crossAxisCount: 4,
-                                    crossAxisSpacing: 30,
-                                    // mainAxisSpacing: 5,
-                                    mainAxisExtent: 120),
-                            itemCount: Homecontroller.listMenu.length,
-                            itemBuilder: (context, index) {
-                              return Menu_Home(
-                                title: '${Homecontroller.listMenu[index].name}',
-                                icon: Homecontroller.listMenu[index].icon,
-                                press: Homecontroller.listMenu[index].page,
-                                type: '${Homecontroller.listMenu[index].type}',
-                                goBack: onGoBack,
-                              );
-                            },
-                          ),
-                        ),
-                ),
-              ],
-            ),
-          );
+    getMenu getmenu = getMenu.fromJson(dataMenu);
+    List<DataMenu> listMenu = getmenu.data!;
+
+    return SingleChildScrollView(
+      physics: ClampingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+      child: Column(
+        children: [
+          SizedBox(
+              height: Get.mediaQuery.size.width * 0.6,
+              width: double.infinity,
+              child: Homecontroller.listAds.isEmpty
+                  ? Swiper(
+                      autoplay: false,
+                      loop: false,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: 1,
+                      itemBuilder: (context, index) {
+                        return Image.asset(
+                          'assets/images/ads.png',
+                          fit: BoxFit.cover,
+                        );
+                      },
+                    )
+                  : Swiper(
+                      autoplay:
+                          Homecontroller.listAds.length == 1 ? false : true,
+                      loop: Homecontroller.listAds.length == 1 ? false : true,
+                      physics: Homecontroller.listAds.length == 1
+                          ? NeverScrollableScrollPhysics()
+                          : ClampingScrollPhysics(),
+                      pagination: SwiperPagination(
+                          builder: DotSwiperPaginationBuilder(
+                              size: 8,
+                              activeSize: 8,
+                              color: Colors.grey,
+                              activeColor: Colors.white)),
+                      itemCount: Homecontroller.listAds.length,
+                      itemBuilder: (context, index) {
+                        var _Images = convert.base64Decode(
+                            ('${Homecontroller.listAds[index].adsversitingPic}')
+                                .split(',')
+                                .last);
+                        return InkWell(
+                            // onTap: () {
+                            //   launchUrlString('https://hipglobal.co.th/');
+                            // },
+                            child: Image.memory(
+                          _Images,
+                          fit: BoxFit.cover,
+                        ));
+                      },
+                    )),
+          Container(
+            child: listMenu.isEmpty
+                ? Padding(
+                    padding: EdgeInsets.symmetric(
+                        vertical: Get.mediaQuery.size.height * 0.13),
+                    child: Icon_Opacity(title: 'contact_admin_manu'.tr),
+                  )
+                : Container(
+                    padding: EdgeInsets.fromLTRB(
+                        20, 20, 20, Get.mediaQuery.size.width * 0.15),
+                    child: GridView.builder(
+                      physics: ClampingScrollPhysics(),
+                      shrinkWrap: true,
+                      primary: false,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          // childAspectRatio: 0.65,
+                          crossAxisCount: 4,
+                          crossAxisSpacing: 20,
+                          // mainAxisSpacing: 5,
+                          mainAxisExtent: 120),
+                      itemCount: listMenu.length,
+                      itemBuilder: (context, index) {
+                        return Menu_Home(
+                          title: '${listMenu[index].name}',
+                          icon: listMenu[index].icon,
+                          press: listMenu[index].page,
+                          type: '${listMenu[index].type}',
+                        );
+                      },
+                    ),
+                  ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget Security() {
@@ -200,7 +189,7 @@ class _Home_PageState extends State<Home_Page>
       physics: ClampingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       child: Column(
         children: [
-          Container(
+          SizedBox(
             height: Get.mediaQuery.size.width * 0.6,
             width: double.infinity,
             child: Homecontroller.listAds.isNotEmpty
@@ -264,3 +253,54 @@ class _Home_PageState extends State<Home_Page>
     );
   }
 }
+
+Map<String, dynamic> dataMenu = {
+  "status": 200,
+  "data": [
+    {
+      "_id": "6409606bf97bd54444efbc63",
+      "icon": "0xf78c",
+      "name": "QR Smart",
+      "page": "/qrsmart",
+      "company_id": "6409606bf97bd54444efbc57",
+      "modulename": "qrsmartAccess",
+      "type": "cuper"
+    },
+    {
+      "_id": "6461b90259a06334fa0fb909",
+      "icon": "0xf61c",
+      "name": "Parcel",
+      "page": "/parcel",
+      "company_id": "6409606bf97bd54444efbc57",
+      "modulename": "Parcel",
+      "type": "cuper"
+    },
+    {
+      "_id": "6461b92559a06334fa0fb90c",
+      "icon": "0xf89e",
+      "name": "Management",
+      "page": "/management",
+      "company_id": "6409606bf97bd54444efbc57",
+      "modulename": "Management",
+      "type": "normal"
+    },
+    {
+      "_id": "6461ba9359a06334fa0fb90e",
+      "icon": "0xf02e2",
+      "name": "Visitor",
+      "page": "/visitor",
+      "company_id": "6409606bf97bd54444efbc57",
+      "modulename": "Visitor",
+      "type": "normal"
+    },
+    {
+      "_id": "64759f2383ea8daab8170cc1",
+      "icon": "0xf0630",
+      "name": "Security",
+      "page": "/security",
+      "company_id": "6409606bf97bd54444efbc57",
+      "modulename": "Security",
+      "type": "normal"
+    }
+  ]
+};

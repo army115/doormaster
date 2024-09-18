@@ -4,15 +4,15 @@ import 'package:doormster/style/styleButton/ButtonStyle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-void dialogOnebutton(
-  title,
-  icon,
-  coloricon,
-  button,
-  press,
-  click,
-  willpop,
-) {
+void dialogOnebutton({
+  required title,
+  required icon,
+  required colorIcon,
+  required textButton,
+  required press,
+  required click,
+  required willpop,
+}) {
   Get.dialog(
       transitionDuration: Duration.zero,
       barrierDismissible: click,
@@ -29,7 +29,7 @@ void dialogOnebutton(
                   Icon(
                     icon,
                     size: 60,
-                    color: coloricon,
+                    color: colorIcon,
                   ),
                   SizedBox(
                     height: 5,
@@ -51,7 +51,7 @@ void dialogOnebutton(
                           Get.theme.primaryColor,
                           BorderRadius.circular(5)),
                       child: Text(
-                        button,
+                        textButton,
                         style: TextStyle(
                             fontSize: 16,
                             letterSpacing: 1,

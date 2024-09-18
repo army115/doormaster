@@ -1,11 +1,14 @@
-// ignore_for_file: prefer_const_constructors, prefer_typing_uninitialized_variables, unused_import
+// ignore_for_file: prefer_const_constructors, prefer_typing_uninitialized_variables, unused_import, non_constant_identifier_names
 
 import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/components/text/text_double_colors.dart';
-import 'package:doormster/models/get_log.dart';
-import 'package:doormster/screen/security_guard/add_checkpoint_page.dart';
-import 'package:doormster/screen/security_guard/check_in_page.dart';
+import 'package:doormster/models/secarity_models/get_round_all.dart'
+    as new_round;
+import 'package:doormster/models/secarity_models/get_round_now.dart'
+    as get_round_now;
+import 'package:doormster/screen/security_guard/checkin_addpoint_page/add_checkpoint_page.dart';
+import 'package:doormster/screen/security_guard/checkin_addpoint_page/check_in_page.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -17,15 +20,19 @@ class ScanQR_Check extends StatefulWidget {
   final roundName;
   final roundStart;
   final roundEnd;
-  final checkpointId;
-  ScanQR_Check(
+  final page;
+  final inspectDetail;
+  final logs;
+  const ScanQR_Check(
       {Key? key,
       this.name,
       this.roundId,
       this.roundName,
       this.roundStart,
       this.roundEnd,
-      this.checkpointId})
+      this.page,
+      this.inspectDetail,
+      this.logs})
       : super(key: key);
 
   @override
@@ -39,6 +46,9 @@ class _ScanQR_CheckState extends State<ScanQR_Check> {
   bool open = true;
   bool loading = false;
   Position? position;
+  List<get_round_now.InspectDetail> inspectDetail_Now = [];
+  List<new_round.InspectDetail> inspectDetail_Round = [];
+  List<get_round_now.Logs> logs = [];
 
   // @override
   // void reassemble() {
@@ -49,66 +59,6 @@ class _ScanQR_CheckState extends State<ScanQR_Check> {
   //     controller!.resumeCamera();
   //   }
   // }
-
-  void _onQRViewCreated(QRViewController controller) {
-    this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
-      setState(() {
-        result = scanData;
-        controller.pauseCamera();
-      });
-      if (widget.name == 'check') {
-        if (widget.roundId == null) {
-          dialogOnebutton_Subtitle('found_error'.tr, 'check_later'.tr,
-              Icons.highlight_off_rounded, Colors.red, 'ok'.tr, () {
-            Navigator.popUntil(context, (route) => route.isFirst);
-          }, false, false);
-        } else if (widget.checkpointId.contains(result?.code)) {
-          dialogOnebutton_Subtitle('repeat_checkpoint'.tr, 'data_checkpoint'.tr,
-              Icons.warning_amber_rounded, Colors.orange, 'ok'.tr, () {
-            Navigator.popUntil(context, (route) => route.isFirst);
-          }, false, false);
-        } else {
-          Navigator.of(context).push(
-            MaterialPageRoute<void>(
-              builder: (BuildContext context) => Check_In(
-                  title: 'checkIn'.tr,
-                  timeCheck: DateTime.now(),
-                  checkpointId: '${result?.code}',
-                  lat: position?.latitude,
-                  lng: position?.longitude,
-                  roundId: widget.roundId,
-                  roundName: widget.roundName,
-                  roundStart: widget.roundStart,
-                  roundEnd: widget.roundEnd),
-            ),
-          );
-        }
-      } else if (widget.name == 'extra') {
-        Navigator.of(context).push(
-          MaterialPageRoute<void>(
-            builder: (BuildContext context) => Check_In(
-                title: 'check_extra_round'.tr,
-                timeCheck: DateTime.now(),
-                checkpointId: '${result?.code}',
-                roundName: widget.roundName,
-                lat: position?.latitude,
-                lng: position?.longitude),
-          ),
-        );
-      } else if (widget.name == 'add') {
-        Navigator.of(context).push(
-          MaterialPageRoute<void>(
-            builder: (BuildContext context) => Add_CheckPoint(
-                timeCheck: DateTime.now(),
-                checkpointId: '${result?.code}',
-                lat: position?.latitude,
-                lng: position?.longitude),
-          ),
-        );
-      }
-    });
-  }
 
   Future getLocation() async {
     try {
@@ -173,7 +123,7 @@ class _ScanQR_CheckState extends State<ScanQR_Check> {
                         color: Colors.white,
                         iconSize: 30,
                         onPressed: () {
-                          Navigator.pop(context);
+                          Get.back();
                         },
                         icon: Icon(Icons.arrow_back_ios_new_rounded)),
                   ),
@@ -204,5 +154,98 @@ class _ScanQR_CheckState extends State<ScanQR_Check> {
         ],
       ),
     );
+  }
+
+  void _onQRViewCreated(QRViewController controller) {
+    this.controller = controller;
+    controller.scannedDataStream.listen((scanData) {
+      setState(() {
+        result = scanData;
+        controller.pauseCamera();
+      });
+
+      if (widget.name == 'check') {
+        logs = widget.logs;
+        //เช็คตรวจจุดซ้ำ
+        bool checkLogsid =
+            logs.any((element) => element.checkpointId == result?.code);
+        //เช็คจุดตรวจไม่ตรงรอบ
+        bool? checkInspectdetail;
+        if (widget.page == 'now') {
+          inspectDetail_Now = widget.inspectDetail;
+          checkInspectdetail = inspectDetail_Now
+              .any((element) => element.checkpointId == result?.code);
+        } else {
+          inspectDetail_Round = widget.inspectDetail;
+          checkInspectdetail = inspectDetail_Round
+              .any((element) => element.checkpointId == result?.code);
+        }
+
+        if (widget.roundId == null) {
+          dialogOnebutton_Subtitle(
+              title: 'occur_error'.tr,
+              subtitle: 'check_later'.tr,
+              icon: Icons.highlight_off_rounded,
+              colorIcon: Colors.red,
+              textButton: 'ok'.tr,
+              press: () {
+                Navigator.popUntil(context, (route) => route.isFirst);
+              },
+              click: false,
+              backBtn: false,
+              willpop: false);
+        } else if (checkLogsid) {
+          dialogOnebutton_Subtitle(
+              title: 'repeat_checkpoint'.tr,
+              subtitle: 'data_checkpoint'.tr,
+              icon: Icons.warning_amber_rounded,
+              colorIcon: Colors.orange,
+              textButton: 'ok'.tr,
+              press: () {
+                Navigator.popUntil(context, (route) => route.isFirst);
+              },
+              click: false,
+              backBtn: false,
+              willpop: false);
+        } else if (!checkInspectdetail) {
+          dialogOnebutton_Subtitle(
+              title: 'checkpoint_found'.tr,
+              subtitle: 'checkpoint_found_round'.tr,
+              icon: Icons.warning_amber_rounded,
+              colorIcon: Colors.orange,
+              textButton: 'ok'.tr,
+              press: () {
+                Navigator.popUntil(context, (route) => route.isFirst);
+              },
+              click: false,
+              backBtn: false,
+              willpop: false);
+        } else {
+          print("result : ${result?.code}");
+          Get.to(() => Check_In(
+              title: 'checkIn'.tr,
+              checkpointId: '${result?.code}',
+              lat: position?.latitude,
+              lng: position?.longitude,
+              roundId: widget.roundId,
+              roundName: widget.roundName,
+              roundStart: widget.roundStart,
+              roundEnd: widget.roundEnd));
+        }
+      } else if (widget.name == 'extra') {
+        Get.to(() => Check_In(
+            title: 'check_extra_round'.tr,
+            checkpointId: '${result?.code}',
+            roundName: widget.roundName,
+            lat: position?.latitude,
+            lng: position?.longitude));
+      } else if (widget.name == 'add') {
+        Get.to(() => Add_CheckPoint(
+            timeCheck: DateTime.now(),
+            checkpointId: '${result?.code}',
+            lat: position?.latitude,
+            lng: position?.longitude));
+      }
+    });
   }
 }

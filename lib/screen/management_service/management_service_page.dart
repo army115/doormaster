@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 
 class Management_Service extends StatefulWidget {
   Management_Service({Key? key});
-  static const String route = '/management';
 
   @override
   State<Management_Service> createState() => _Management_ServiceState();

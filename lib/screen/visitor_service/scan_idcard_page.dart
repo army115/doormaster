@@ -121,7 +121,7 @@ class _Scan_IDCardState extends State<Scan_IDCard> {
                   color: Colors.white,
                   iconSize: 30,
                   onPressed: () {
-                    Navigator.pop(context);
+                    Get.back();
                   },
                   icon: const Icon(Icons.arrow_back_ios_new_rounded)),
             ),
@@ -159,47 +159,6 @@ class _Show_ImageState extends State<Show_Image> {
   String? fname;
   String? lname;
   String? id_number;
-
-  // void _scantext() async {
-  //   try {
-  //     final inputImage = InputImage.fromFilePath(widget.imagepath.path);
-  //     final textRecognizer =
-  //         TextRecognizer(script: TextRecognitionScript.chinese);
-  //     final RecognizedText recognizedText =
-  //         await textRecognizer.processImage(inputImage);
-  //     if (text == '' || data.isEmpty) {
-  //       for (TextBlock block in recognizedText.blocks) {
-  //         for (TextLine line in block.lines) {
-  //           for (TextElement element in line.elements) {
-  //             setState(() {});
-  //             text = text + element.text + ' ';
-  //             data.add(element.text);
-  //             print(text);
-  //           }
-  //         }
-  //       }
-  //     }
-  //     if (data.isNotEmpty) {
-  //       Navigator.push(
-  //           context,
-  //           MaterialPageRoute(
-  //             builder: (context) => ID_Form(
-  //               fname: data[0],
-  //               lname: data[1],
-  //               id_card: data[2],
-  //               textFull: text,
-  //             ),
-  //           ));
-  //     } else {
-  //       dialogOnebutton_Subtitle(context, 'Error', 'ข้อมูลบัตรไม่ถูกต้อง',
-  //           Icons.warning, Colors.orange, 'OK', () {
-  //         Navigator.pop(context);
-  //       }, false, false);
-  //     }
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
 
   Future<void> _sendID(XFile file) async {
     try {
@@ -249,25 +208,49 @@ class _Show_ImageState extends State<Show_Image> {
         print(response.statusCode);
         ID_Card error = ID_Card.fromJson(response.data);
         // Error error = Error.fromJson(convert.jsonDecode(responseBody));
-        dialogOnebutton_Subtitle('Error', '${error.errorMessage}',
-            Icons.warning, Colors.orange, 'OK', () {
-          Navigator.pop(context);
-        }, false, false);
+        dialogOnebutton_Subtitle(
+            title: 'Error',
+            subtitle: '${error.errorMessage}',
+            icon: Icons.warning,
+            colorIcon: Colors.orange,
+            textButton: 'OK',
+            press: () {
+              Get.back();
+            },
+            click: false,
+            backBtn: false,
+            willpop: false);
       }
     } on DioError catch (e) {
       if (e.response != null) {
         print('Error status code: ${e.response!.statusCode}');
         print('Error response data: ${e.response!.data}');
         ID_Card error = ID_Card.fromJson(e.response?.data);
-        dialogOnebutton_Subtitle('Error', '${error.errorMessage}',
-            Icons.check_circle, Colors.green, 'OK', () {
-          Navigator.pop(context);
-        }, false, false);
+        dialogOnebutton_Subtitle(
+            title: 'Error',
+            subtitle: '${error.errorMessage}',
+            icon: Icons.check_circle,
+            colorIcon: Colors.green,
+            textButton: 'OK',
+            press: () {
+              Get.back();
+            },
+            click: false,
+            backBtn: false,
+            willpop: false);
       } else {
         dialogOnebutton_Subtitle(
-            'Error', '${e}', Icons.warning, Colors.orange, 'OK', () {
-          Navigator.pop(context);
-        }, false, false);
+            title: 'Error',
+            subtitle: '${e}',
+            icon: Icons.warning,
+            colorIcon: Colors.orange,
+            textButton: 'OK',
+            press: () {
+              Get.back();
+            },
+            click: false,
+            backBtn: false,
+            willpop: false);
         log('Request failed without a response.');
       }
     }
@@ -338,7 +321,7 @@ class _Show_ImageState extends State<Show_Image> {
                   color: Colors.white,
                   iconSize: 30,
                   onPressed: () {
-                    Navigator.pop(context);
+                    Get.back();
                   },
                   icon: const Icon(Icons.arrow_back_ios_new_rounded)),
             ),
@@ -373,7 +356,6 @@ class _ID_FormState extends State<ID_Form> {
   TextEditingController id_card = TextEditingController();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     fname.text = widget.fname;
     lname.text = widget.lname;

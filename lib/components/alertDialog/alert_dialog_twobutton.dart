@@ -2,17 +2,17 @@ import 'package:doormster/style/styleButton/ButtonStyle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-void dialogTwobutton(
-  title,
-  icon,
-  coloricon,
-  button1,
-  press1,
-  button2,
-  press2,
-  click,
-  willpop,
-) {
+void dialogTwobutton({
+  required title,
+  required icon,
+  required colorIcon,
+  required textButton1,
+  required press1,
+  required textButton2,
+  required press2,
+  required click,
+  required willpop,
+}) {
   Get.dialog(
       transitionDuration: Duration.zero,
       barrierDismissible: click,
@@ -29,7 +29,7 @@ void dialogTwobutton(
                   Icon(
                     icon,
                     size: 60,
-                    color: coloricon,
+                    color: colorIcon,
                   ),
                   SizedBox(
                     height: 5,
@@ -54,7 +54,7 @@ void dialogTwobutton(
                               Get.theme.primaryColor,
                               BorderRadius.circular(5)),
                           child: Text(
-                            button1,
+                            textButton1,
                             style: TextStyle(
                                 fontSize: 16,
                                 letterSpacing: 1,
@@ -70,7 +70,7 @@ void dialogTwobutton(
                               Get.theme.primaryColor,
                               BorderRadius.circular(5)),
                           child: Text(
-                            button2,
+                            textButton2,
                             style: TextStyle(
                                 fontSize: 16,
                                 letterSpacing: 1,

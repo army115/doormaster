@@ -24,7 +24,7 @@ class Text_Form_NoBorder extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      style: Get.textTheme.bodyText2,
+      style: Get.textTheme.bodySmall,
       cursorColor: Theme.of(context).primaryColorDark,
       keyboardType: TypeInput,
       decoration: InputDecoration(

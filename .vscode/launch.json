@@ -4,7 +4,6 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        
         {
             "name": "doormaster",
             "request": "launch",
@@ -33,6 +32,12 @@
             "request": "launch",
             "type": "dart",
             "deviceId": "a3971b4c1220"
+        },
+        {
+            "name": "iPhone 15 Pro",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "0E12EDEF-32AA-4179-ABA0-AE9B21CC3BDF"
         },
         {
             "name": "iPhone 15 Pro Max",
@@ -75,14 +80,11 @@
         {
             "name": "All Devices",
             "configurations": [
-                "Pixel 4a API 30",
                 "note 8 pro",
                 "redmi 9t",
-                "LD Player",
-                "iPhone 14 Pro",
                 "iPhone 7",
-                "pixel3",
-                "pixel4",
+                "iPhone 15 Pro",
+                "iPhone 15 Pro Max",
             ],
         }
     ]

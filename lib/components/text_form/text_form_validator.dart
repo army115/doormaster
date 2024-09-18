@@ -43,8 +43,6 @@ class TextForm_validator extends StatelessWidget {
                 icon,
                 size: 25,
               ),
-              // filled: true, พื้นหลังช่อง
-              // fillColor: Colors.white,
               focusedBorder: OutlineInputBorder(
                 borderSide:
                     BorderSide(color: Theme.of(context).primaryColor, width: 2),

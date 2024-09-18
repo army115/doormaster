@@ -1,7 +1,5 @@
 // ignore_for_file: non_constant_identifier_names, prefer_const_constructors, sort_child_properties_last
 
-import 'package:doormster/style/theme/dark/theme_dark.dart';
-import 'package:doormster/style/theme/light/theme_light.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,9 +20,9 @@ class Buttontheme extends GetxController {
     final brightness = Get.mediaQuery.platformBrightness;
     final prefs = await SharedPreferences.getInstance();
     final darkModeOn = (brightness == Brightness.dark);
-    print("darkModeOn: $darkModeOn");
+    // print("darkModeOn: $darkModeOn");
     theme = prefs.get('theme');
-    print("theme :$theme");
+    // print("theme :$theme");
     if (theme != null) {
       isDarkMode.value = theme;
     } else {

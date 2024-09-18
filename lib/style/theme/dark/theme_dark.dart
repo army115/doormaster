@@ -12,8 +12,8 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 
 ThemeData themeDark = ThemeData(
-  useMaterial3: false,
   pageTransitionsTheme: transitionsTheme,
+  useMaterial3: false,
   primarySwatch: colorSwatch(Color(0xDD000000)),
   primaryColor: Colors.grey[900],
   primaryColorLight: Colors.grey[700],

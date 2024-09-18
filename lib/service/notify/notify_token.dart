@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
-import 'package:doormster/service/connected/connect_api.dart';
+import 'package:doormster/service/connected/ip_address.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Notify_Token {
@@ -8,7 +8,7 @@ class Notify_Token {
   Future<void> create_notifyToken(companyId, sId) async {
     var prefs = await SharedPreferences.getInstance();
     var deviceToken = prefs.getString('notifyToken');
-    String url = '${Connect_api().domain}/create/notifyToken';
+    String url = '${IP_Address.old_IP}create/notifyToken';
     var response = await Dio().post(url,
         options: Options(headers: {
           'Content-Type': 'application/json',
@@ -28,7 +28,7 @@ class Notify_Token {
     var deviceToken = prefs.getString('notifyToken');
     var companyId = prefs.getString('companyId');
     var sId = prefs.getString('userId');
-    String url = '${Connect_api().domain}/delete/notifyToken';
+    String url = '${IP_Address.old_IP}delete/notifyToken';
     var response = await Dio().delete(url,
         options: Options(headers: {
           'Content-Type': 'application/json',
@@ -39,9 +39,9 @@ class Notify_Token {
           "company_id": companyId,
           "user_id": sId,
         });
-    print(deviceToken);
-    print("companyId : $companyId");
-    print("sId: $sId");
-    log("Notify: ${response.data}");
+    // print(deviceToken);
+    // print("companyId : $companyId");
+    // print("sId: $sId");
+    // log("Notify: ${response.data}");
   }
 }

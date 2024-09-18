@@ -2,7 +2,6 @@
 
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:doormster/style/textStyle.dart';
-import 'package:doormster/style/theme/light/theme_light.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,14 +13,13 @@ class Dropdown_Search extends StatelessWidget {
   final onChanged;
   final listItem;
   Dropdown_Search(
-      {Key? key,
+      {super.key,
       required this.title,
       required this.controller,
       required this.listItem,
       this.error,
       this.leftIcon,
-      this.onChanged})
-      : super(key: key);
+      this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -33,40 +31,43 @@ class Dropdown_Search extends StatelessWidget {
           color: Colors.white,
           child: CustomDropdown.search(
             excludeSelected: false,
-            hideSelectedFieldWhenOpen: false,
             onChanged: onChanged,
-            fieldPrefixIcon: Icon(
-              leftIcon,
-              size: 25,
-            ),
-            errorText: error,
-            errorStyle: textStyle().body14,
             hintText: title,
-            searchText: 'search'.tr,
-            foundText: 'data_not_found'.tr,
-            hintStyle: TextStyle(color: Colors.grey.shade600),
             items: listItem,
-            selectedStyle: TextStyle(color: Colors.black),
-            listItemStyle: TextStyle(color: Colors.black),
-            controller: controller,
-            borderRadiusItem: BorderRadius.circular(10),
-            contentPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 13),
-            focusedBorder: OutlineInputBorder(
-              borderSide:
-                  BorderSide(color: Theme.of(context).primaryColor, width: 2),
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide.none,
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.red, width: 2),
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            errorBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.red, width: 2),
-              borderRadius: BorderRadius.circular(10.0),
+            searchHintText: 'search'.tr,
+            noResultFoundText: 'data_not_found'.tr,
+            validator: (value) {
+              if (value == null) {
+                return "  $error";
+              } else {
+                return null;
+              }
+            },
+            maxlines: 2,
+            listItemPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            expandedHeaderPadding:
+                EdgeInsets.symmetric(horizontal: 10, vertical: 13),
+            closedHeaderPadding:
+                EdgeInsets.symmetric(horizontal: 10, vertical: 13),
+            decoration: CustomDropdownDecoration(
+              errorStyle: textStyle().body14,
+              closedSuffixIcon:
+                  const Icon(Icons.keyboard_arrow_down_rounded, size: 25),
+              expandedSuffixIcon:
+                  const Icon(Icons.keyboard_arrow_up_rounded, size: 25),
+              prefixIcon: leftIcon == null
+                  ? null
+                  : Icon(
+                      leftIcon,
+                      size: 25,
+                    ),
+              // closedBorder:
+              //     Border.all(color: Theme.of(context).primaryColor, width: 2),
+              // closedErrorBorder:
+              //     Border.fromBorderSide(BorderSide(color: Colors.red)),
+              expandedBorder: Border.fromBorderSide(
+                BorderSide(color: Theme.of(context).primaryColor, width: 1.5),
+              ),
             ),
           )),
     );

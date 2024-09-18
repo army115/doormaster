@@ -35,7 +35,7 @@ class BottomController extends GetxController
     selectedIndex.value = index;
   }
 
-  DateTime PressTime = DateTime.now();
+  DateTime pressTime = DateTime.now();
 
   Future<bool> onBackButtonDoubleClicked(context) async {
     if (scaffoldKey.currentState!.isDrawerOpen) {
@@ -49,8 +49,8 @@ class BottomController extends GetxController
           tabController.animateTo(0);
           selectedIndex.value = 0;
         } else {
-          int difference = DateTime.now().difference(PressTime).inMilliseconds;
-          PressTime = DateTime.now();
+          int difference = DateTime.now().difference(pressTime).inMilliseconds;
+          pressTime = DateTime.now();
 
           if (difference < 1500) {
             return isExitingApp;

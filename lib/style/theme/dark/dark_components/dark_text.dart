@@ -3,7 +3,9 @@
 import 'package:flutter/material.dart';
 
 TextTheme Dark_Text = TextTheme(
-  headline1: TextStyle(fontSize: 19, letterSpacing: 0.5, color: Colors.white),
-  bodyText1: TextStyle(fontSize: 16, letterSpacing: 0.5, color: Colors.black),
-  bodyText2: TextStyle(fontSize: 16, letterSpacing: 0.5, color: Colors.white),
+  headlineMedium:
+      TextStyle(fontSize: 19, letterSpacing: 0.5, color: Colors.white),
+  bodyMedium: TextStyle(fontSize: 16, letterSpacing: 0.5, color: Colors.white),
+  bodyLarge: TextStyle(fontSize: 16, letterSpacing: 0.5, color: Colors.black),
+  bodySmall: TextStyle(fontSize: 16, letterSpacing: 0.5, color: Colors.white),
 );

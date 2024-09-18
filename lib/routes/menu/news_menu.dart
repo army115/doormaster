@@ -1,5 +1,6 @@
 // ignore_for_file: use_key_in_widget_constructors, unused_import
 
+import 'package:doormster/components/bottombar/navigation_ids.dart';
 import 'package:doormster/screen/main_screen/news_page.dart';
 import 'package:doormster/screen/main_screen/notification_page.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,7 @@ class _News_MenuState extends State<News_Menu> {
   @override
   Widget build(BuildContext context) {
     return Navigator(
-      key: newsKey,
+      key: Keys.news,
       onGenerateRoute: (routeSettings) {
         WidgetBuilder builder;
         switch (routeSettings.name) {

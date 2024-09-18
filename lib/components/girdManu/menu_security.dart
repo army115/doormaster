@@ -3,7 +3,6 @@
 import 'package:doormster/service/connected/check_connected.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class Menu_Security extends StatelessWidget {
   String title;
@@ -31,7 +30,7 @@ class Menu_Security extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             splashColor: Colors.black12,
             highlightColor: Colors.transparent,
-            onTap: () => checkInternetName(context, press, false),
+            onTap: () => checkInternetName(page: press),
             child: Padding(
               padding: const EdgeInsets.all(5),
               child: Icon(icon, size: 45, color: Colors.white),

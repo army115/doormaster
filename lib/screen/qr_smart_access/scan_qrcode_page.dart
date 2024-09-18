@@ -78,7 +78,7 @@ class _ScannerState extends State<Scanner> {
                   color: Colors.white,
                   iconSize: 30,
                   onPressed: () {
-                    Navigator.pop(context);
+                    Get.back();
                   },
                   icon: Icon(Icons.arrow_back_ios_new_rounded)),
             ),

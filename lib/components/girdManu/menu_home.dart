@@ -1,24 +1,21 @@
-// ignore_for_file: prefer_const_constructors, must_be_immutable
+// ignore_for_file: prefer_const_constructors, must_be_immutable, use_super_parameters
 
 import 'package:doormster/service/connected/check_connected.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class Menu_Home extends StatelessWidget {
   String title;
   final press;
   final icon;
   String type;
-  final goBack;
-  Menu_Home(
-      {Key? key,
-      required this.title,
-      required this.press,
-      required this.icon,
-      required this.type,
-      this.goBack})
-      : super(key: key);
+  Menu_Home({
+    Key? key,
+    required this.title,
+    required this.press,
+    required this.icon,
+    required this.type,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +32,7 @@ class Menu_Home extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             splashColor: Colors.black12,
             highlightColor: Colors.transparent,
-            onTap: () =>
-                checkInternetNameOnGoBack(context, press, false, goBack),
+            onTap: () => checkInternetName(page: press),
             child: Padding(
               padding: const EdgeInsets.all(5),
               child: Icon(

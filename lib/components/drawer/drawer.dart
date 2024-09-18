@@ -1,28 +1,13 @@
 // ignore_for_file: sort_child_properties_last, prefer_const_constructors, use_build_context_synchronously
-import 'dart:developer';
-import 'package:dio/dio.dart';
-import 'package:doormster/components/actions/disconnected_dialog.dart';
-import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:doormster/components/alertDialog/alert_dialog_twobutton_subtext.dart';
 import 'package:doormster/components/bottomSheet/bottom_sheet.dart';
 import 'package:doormster/components/bottombar/bottom_controller.dart';
-import 'package:doormster/components/bottombar/bottombar.dart';
-import 'package:doormster/components/button/button_outline.dart';
-import 'package:doormster/components/loading/loading.dart';
 import 'package:doormster/controller/logout_controller.dart';
-import 'package:doormster/controller/multi_company_controller.dart';
-import 'package:doormster/models/get_multi_company.dart';
-import 'package:doormster/models/login_model.dart';
-import 'package:doormster/screen/main_screen/add_company_page.dart';
-import 'package:doormster/screen/main_screen/login_page.dart';
-import 'package:doormster/screen/main_screen/login_staff_page.dart';
-import 'package:doormster/service/connected/connect_api.dart';
-import 'package:doormster/service/notify/notify_token.dart';
+import 'package:doormster/screen/main_screen/settings_page.dart';
+import 'package:doormster/service/connected/ip_address.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert' as convert;
 
 class MyDrawer extends StatefulWidget {
   MyDrawer({Key? key});
@@ -32,73 +17,22 @@ class MyDrawer extends StatefulWidget {
 }
 
 class _MyDrawerState extends State<MyDrawer> {
-  var uuId;
-  var companyId;
-  var security;
-  var image;
-  var fname;
-  var lname;
+  String image = '';
+  String fname = '';
+  String lname = '';
 
-  bool loading = false;
-  List<Data> multiCompany = [];
-  late SharedPreferences prefs;
-
-  Future<void> getValueShared() async {
-    prefs = await SharedPreferences.getInstance();
-    uuId = prefs.getString('uuId');
-    companyId = prefs.getString('companyId');
-    security = prefs.getBool('security');
-    image = prefs.getString('image');
-    fname = prefs.getString('fname');
-    lname = prefs.getString('lname');
-
-    print('uuId: ${uuId}');
-    print('companyId: ${companyId}');
-    print('security: ${security}');
-
+  Future<void> getInfo() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    image = prefs.getString('image')!;
+    fname = prefs.getString('fname')!;
+    lname = prefs.getString('lname')!;
     setState(() {});
-
-    // _getMultiCompany();
-  }
-
-  Future<void> _getMultiCompany() async {
-    try {
-      setState(() {
-        loading = true;
-      });
-
-      await Future.delayed(Duration(seconds: 3));
-
-      var url = '${Connect_api().domain}/get/multicompanymobile/$uuId';
-      var response = await Dio().get(
-        url,
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        }),
-      );
-
-      if (response.statusCode == 200) {
-        multiCompany.assignAll(getMultiCompany.fromJson(response.data).data!);
-      }
-    } on DioError catch (error) {
-      print(error);
-      // dialogOnebutton_Subtitle(context, 'พบข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อได้',
-      //     Icons.warning_amber_rounded, Colors.orange, 'ตกลง', () {
-      //   Navigator.popUntil(context, (route) => route.isFirst);
-      // }, false);
-    } finally {
-      print(loading);
-      setState(() {
-        loading = false;
-      });
-    }
   }
 
   @override
   void initState() {
     super.initState();
-    getValueShared();
+    getInfo();
   }
 
   @override
@@ -127,78 +61,84 @@ class _MyDrawerState extends State<MyDrawer> {
 
   Widget Header() {
     return Container(
-      color: Theme.of(context).primaryColor,
-      padding: EdgeInsets.fromLTRB(15, 15, 15, 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              InkWell(
-                borderRadius: BorderRadius.circular(30),
-                onTap: () {
-                  Navigator.pop(context);
-                  bottomController.ontapItem(3);
-                },
-                child: CircleAvatar(
+        color: Theme.of(context).primaryColor,
+        padding: EdgeInsets.fromLTRB(15, 15, 15, 10),
+        child: ListTile(
+          contentPadding: EdgeInsets.only(),
+          titleAlignment: ListTileTitleAlignment.titleHeight,
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Row(
+              children: [
+                CircleAvatar(
                   radius: 33,
                   backgroundColor: Colors.white,
-                  child: CircleAvatar(
-                    radius: 30,
-                    backgroundColor: Colors.grey[100],
-                    child: image != null
-                        ? Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image:
-                                      MemoryImage(convert.base64Decode(image))),
-                            ),
-                          )
-                        : Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: AssetImage(
-                                      'assets/images/HIP Smart Community Icon-01.png')),
-                            ),
-                          ),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(30),
+                    onTap: () {
+                      Get.back();
+                      bottomController.ontapItem(3);
+                    },
+                    child: CircleAvatar(
+                      radius: 33,
+                      backgroundColor: Colors.white,
+                      child: CircleAvatar(
+                        radius: 30,
+                        backgroundColor: Colors.grey[100],
+                        child: image != ''
+                            ? Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: NetworkImage(imageDomain + image),
+                                      onError: (exception, stackTrace) => Icon(
+                                          Icons.broken_image_rounded,
+                                          size: 140,
+                                          color: Colors.grey)),
+                                ),
+                              )
+                            : Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: AssetImage(
+                                          'assets/images/HIP Smart Community Icon-01.png')),
+                                ),
+                              ),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-              security == true
-                  ? Container()
-                  : IconButton(
-                      constraints: BoxConstraints(),
-                      splashRadius: 20,
-                      padding: EdgeInsets.zero,
-                      iconSize: 30,
-                      color: Colors.white,
-                      icon: const Icon(
-                        Icons.more_vert_rounded,
-                      ),
-                      onPressed: () {
-                        bottomSheet();
-                      }),
-            ],
+              ],
+            ),
           ),
-          const SizedBox(
-            height: 10,
-          ),
-          Text(
-            '${fname} ${lname}',
+          subtitle: Text(
+            '$fname $lname',
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
                 letterSpacing: 0.5,
                 color: Colors.white),
           ),
-        ],
-      ),
-    );
+          trailing:
+              // security == true
+              //     ? Container()
+              //     :
+              IconButton(
+                  constraints: BoxConstraints(),
+                  splashRadius: 20,
+                  padding: EdgeInsets.zero,
+                  iconSize: 30,
+                  color: Colors.white,
+                  icon: const Icon(
+                    Icons.more_vert_rounded,
+                  ),
+                  onPressed: () {
+                    bottomSheet();
+                  }),
+        ));
   }
 
   Widget Manu() {
@@ -208,7 +148,7 @@ class _MyDrawerState extends State<MyDrawer> {
         children: [
           ListTile(
             onTap: () {
-              Navigator.pop(context);
+              Get.back();
               bottomController.ontapItem(3);
             },
             leading: Icon(
@@ -227,7 +167,8 @@ class _MyDrawerState extends State<MyDrawer> {
           ),
           ListTile(
             onTap: () {
-              Get.offAndToNamed('/setting');
+              Get.back();
+              Get.toNamed('/setting');
             },
             leading: Icon(
               Icons.settings,
@@ -261,20 +202,20 @@ class _MyDrawerState extends State<MyDrawer> {
           ListTile(
             onTap: () {
               dialogTwobutton_Subtitle(
-                  'logout'.tr,
-                  'want_logout'.tr,
-                  Icons.warning_amber_rounded,
-                  Colors.orange,
-                  'yes'.tr,
-                  () {
+                  title: 'logout'.tr,
+                  subtitle: 'want_logout'.tr,
+                  icon: Icons.warning_amber_rounded,
+                  colorIcon: Colors.orange,
+                  textButton1: 'yes'.tr,
+                  press1: () {
                     logoutController.logout();
                   },
-                  'no'.tr,
-                  () {
-                    Navigator.pop(context);
+                  textButton2: 'no'.tr,
+                  press2: () {
+                    Get.back();
                   },
-                  true,
-                  true);
+                  click: true,
+                  willpop: true);
             },
             leading: Icon(
               Icons.logout,

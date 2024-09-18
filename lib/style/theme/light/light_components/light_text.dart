@@ -3,7 +3,9 @@
 import 'package:flutter/material.dart';
 
 TextTheme Light_Text = TextTheme(
-  headline1: TextStyle(fontSize: 19, letterSpacing: 0.5, color: Colors.black),
-  bodyText1: TextStyle(fontSize: 16, letterSpacing: 0.5, color: Colors.white),
-  bodyText2: TextStyle(fontSize: 16, letterSpacing: 0.5, color: Colors.black),
+  headlineMedium:
+      TextStyle(fontSize: 19, letterSpacing: 0.5, color: Colors.black),
+  bodyMedium: TextStyle(fontSize: 16, letterSpacing: 0.5, color: Colors.black),
+  bodyLarge: TextStyle(fontSize: 16, letterSpacing: 0.5, color: Colors.white),
+  bodySmall: TextStyle(fontSize: 16, letterSpacing: 0.5, color: Colors.black),
 );
