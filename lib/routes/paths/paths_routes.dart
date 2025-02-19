@@ -1,5 +1,8 @@
 // ignore_for_file: constant_identifier_names
 
+import 'package:doormster/screen/main_screen/auth_page.dart';
+import 'package:flutter/material.dart';
+
 abstract class Routes {
   Routes._();
   static const auth = _Paths.auth;
@@ -17,6 +20,7 @@ abstract class Routes {
   static const management = _Paths.management;
   static const security = _Paths.security;
   static const visitor = _Paths.visitor;
+  static const estamp = _Paths.estamp;
 }
 
 abstract class _Paths {
@@ -36,4 +40,25 @@ abstract class _Paths {
   static const management = '/management';
   static const security = '/security';
   static const visitor = '/visitor';
+  static const estamp = '/estamp';
+}
+
+abstract class Pages {
+  Pages._();
+  static Widget auth = Auth_Page();
+  static const login_user = '/login';
+  static const login_staff = '/staff';
+  static const check = '/check';
+  static const bottom = '/bottom';
+  static const profile = '/profile';
+  static const home = '/home';
+  static const setting = '/setting';
+  static const password = '/password';
+  static const notification = '/notification';
+  static const qrsmart = '/qrsmart';
+  static const parcel = '/parcel';
+  static const management = '/management';
+  static const security = '/security';
+  static const visitor = '/visitor';
+  static const estamp = '/estamp';
 }

@@ -1,66 +1,60 @@
-class getMenu {
-  int? status;
-  List<DataMenu>? data;
+class GetMenu {
+  final dynamic page;
+  final String icon;
+  final String iconType;
+  final String name;
+  final int rowId;
+  final bool permission;
 
-  getMenu({this.status, this.data});
+  GetMenu({
+    required this.page,
+    required this.icon,
+    required this.iconType,
+    required this.name,
+    required this.rowId,
+    required this.permission,
+  });
+  GetMenu copyWith({
+    dynamic page,
+    String? icon,
+    String? iconType,
+    String? name,
+    int? rowId,
+    bool? permission,
+  }) {
+    return GetMenu(
+      page: page ?? this.page,
+      icon: icon ?? this.icon,
+      iconType: iconType ?? this.iconType,
+      name: name ?? this.name,
+      rowId: rowId ?? this.rowId,
+      permission: permission ?? this.permission,
+    );
+  }
 
-  getMenu.fromJson(Map<String, dynamic> json) {
-    status = json['status'];
-    if (json['data'] != null) {
-      data = <DataMenu>[];
-      json['data'].forEach((v) {
-        data!.add(new DataMenu.fromJson(v));
-      });
-    }
+  factory GetMenu.fromJson(Map<String, dynamic> json) {
+    return GetMenu(
+      page: json['page'],
+      icon: json['icon'],
+      iconType: json['icon_type'],
+      name: json['name'],
+      rowId: json['row_id'],
+      permission: json['permission'],
+    );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
-    }
-    return data;
+    return {
+      'page': page,
+      'icon': icon,
+      'icon_type': iconType,
+      'name': name,
+      'row_id': rowId,
+      'permission': permission,
+    };
   }
 }
 
-class DataMenu {
-  String? sId;
-  String? icon;
-  String? name;
-  String? page;
-  String? companyId;
-  String? modulename;
-  String? type;
-
-  DataMenu(
-      {this.sId,
-      this.icon,
-      this.name,
-      this.page,
-      this.companyId,
-      this.modulename,
-      this.type});
-
-  DataMenu.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
-    icon = json['icon'];
-    name = json['name'];
-    page = json['page'];
-    companyId = json['company_id'];
-    modulename = json['modulename'];
-    type = json['type'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
-    data['icon'] = this.icon;
-    data['name'] = this.name;
-    data['page'] = this.page;
-    data['company_id'] = this.companyId;
-    data['modulename'] = this.modulename;
-    data['type'] = this.type;
-    return data;
-  }
+List<GetMenu> parseGetMenuList(List<dynamic> jsonList) {
+  return jsonList.map((json) => GetMenu.fromJson(json)).toList();
 }

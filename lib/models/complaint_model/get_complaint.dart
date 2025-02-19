@@ -1,9 +1,9 @@
-class get_complaint {
+class getComplaint {
   List<Data>? data;
 
-  get_complaint({this.data});
+  getComplaint({this.data});
 
-  get_complaint.fromJson(Map<String, dynamic> json) {
+  getComplaint.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {

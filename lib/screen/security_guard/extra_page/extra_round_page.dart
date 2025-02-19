@@ -1,4 +1,4 @@
-import 'package:doormster/components/girdManu/grid_menu.dart';
+import 'package:doormster/widgets/girdManu/grid_menu.dart';
 import 'package:doormster/screen/security_guard/extra_page/extra_check_page.dart';
 import 'package:doormster/screen/security_guard/scan_qr_check_page.dart';
 import 'package:doormster/service/connected/check_connected.dart';

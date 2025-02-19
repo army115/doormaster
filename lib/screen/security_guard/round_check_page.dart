@@ -2,14 +2,16 @@
 
 import 'dart:developer';
 import 'package:dio/dio.dart';
-import 'package:doormster/components/actions/disconnected_dialog.dart';
-import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
-import 'package:doormster/components/bottombar/bottombar.dart';
-import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
-import 'package:doormster/components/loading/loading.dart';
-import 'package:doormster/components/searchbar/search_from.dart';
-import 'package:doormster/components/text/text_double_colors.dart';
-import 'package:doormster/controller/security_controller/round_controller.dart';
+import 'package:doormster/controller/security_controller/round_all_controller.dart';
+import 'package:doormster/widgets/actions/disconnected_dialog.dart';
+import 'package:doormster/widgets/alertDialog/alert_dialog_onebutton_subtext.dart';
+import 'package:doormster/widgets/bottombar/bottombar.dart';
+import 'package:doormster/widgets/list_null_opacity/logo_opacity.dart';
+import 'package:doormster/widgets/loading/circle_loading.dart';
+import 'package:doormster/widgets/loading/loading.dart';
+import 'package:doormster/widgets/searchbar/search_from.dart';
+import 'package:doormster/widgets/text/text_double_colors.dart';
+import 'package:doormster/controller/security_controller/round_now_controller.dart';
 import 'package:doormster/models/secarity_models/get_round_all.dart';
 import 'package:doormster/screen/security_guard/scan_qr_check_page.dart';
 import 'package:doormster/service/connected/check_connected.dart';
@@ -21,7 +23,6 @@ import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Round_Check extends StatefulWidget {
   final logs;
@@ -32,12 +33,11 @@ class Round_Check extends StatefulWidget {
 }
 
 class _Round_CheckState extends State<Round_Check> {
+  final RoundAllController roundController = Get.put(RoundAllController());
   TextEditingController fieldText = TextEditingController();
-  List<roundAll> listRound1 = roundController.listRound_All;
-  List<roundAll> listRound2 = roundController.listRound_All;
 
   ScrollController scrollController = ScrollController();
-  int count = 6;
+  int count = 10;
   bool _hasMore = false;
 
   Color? containerColor;
@@ -88,21 +88,9 @@ class _Round_CheckState extends State<Round_Check> {
     roundController.get_roundAll(loadingTime: 0);
   }
 
-  void _searchData(String text) {
-    setState(() {
-      listRound1 = listRound2.where((item) {
-        var name = item.inspectName!;
-        return name.contains(text);
-      }).toList();
-    });
-  }
-
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      roundController.get_roundAll(loadingTime: 100);
-    });
     scrollController.addListener(
       () async {
         if (scrollController.position.pixels ==
@@ -113,10 +101,10 @@ class _Round_CheckState extends State<Round_Check> {
               _hasMore = true;
             });
           }
-          await Future.delayed(const Duration(milliseconds: 800));
+          await Future.delayed(const Duration(milliseconds: 500));
           if (mounted) {
             setState(() {
-              count = count + 4;
+              count = count + 5;
               _hasMore = false;
             });
           }
@@ -137,190 +125,166 @@ class _Round_CheckState extends State<Round_Check> {
     return Obx(
       () => Scaffold(
         appBar: AppBar(title: Text('list_round'.tr)),
-        body: connectApi.loading.isTrue
-            ? Loading()
-            : Column(
-                children: [
-                  listRound2.length > 10
-                      ? Container(
-                          padding: const EdgeInsets.fromLTRB(20, 15, 20, 10),
-                          child: Search_From(
-                            title: 'search_round'.tr,
-                            searchText: fieldText,
-                            clear: () {
-                              setState(() {
-                                fieldText.clear();
-                                listRound1 = listRound2;
-                              });
-                            },
-                            changed: (value) {
-                              _searchData(value);
-                            },
-                          ),
-                        )
-                      : Container(),
-                  Expanded(
-                    child: listRound1.isEmpty
-                        ? Logo_Opacity(title: 'no_data'.tr)
-                        : RefreshIndicator(
-                            onRefresh: () async {
-                              await roundController.get_roundAll(
-                                  loadingTime: 100);
-                            },
-                            child: ListView.builder(
-                                padding: listRound1.length > 10
-                                    ? const EdgeInsets.fromLTRB(20, 0, 20, 10)
-                                    : const EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 20),
-                                controller: scrollController,
-                                itemCount: count < listRound1.length
-                                    ? count + (_hasMore ? 1 : 0)
-                                    : listRound1.length,
-                                itemBuilder: (context, index) {
-                                  if (index >= count) {
-                                    return const Padding(
-                                      padding: EdgeInsets.only(top: 20),
-                                      child: Center(
-                                          child: CircularProgressIndicator()),
-                                    );
-                                  }
-                                  timeStart = DateTime.parse(
-                                      '$date ${listRound1[index].startDate}');
-                                  timeEnd = DateTime.parse(
-                                      '$date ${listRound1[index].endDate}');
-                                  _setColor();
-                                  return Card(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10)),
-                                    margin: EdgeInsets.symmetric(vertical: 5),
-                                    elevation: 10,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          color: containerColor,
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      padding: EdgeInsets.all(10),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          round == 1
-                                              ? Column(
-                                                  children: [
-                                                    Text(
-                                                      'need_check'.tr,
-                                                      style: TextStyle(
-                                                          color: textColor),
-                                                    ),
-                                                    Divider(
-                                                        height: 15,
-                                                        thickness: 1.5,
-                                                        color: line),
-                                                  ],
-                                                )
-                                              : Container(),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
+        body: Column(
+          children: [
+            roundController.filterRound.length > 10
+                ? Container(
+                    padding: const EdgeInsets.fromLTRB(15, 15, 15, 10),
+                    child: Search_From(
+                      title: 'search_round'.tr,
+                      searchText: fieldText,
+                      clear: () {
+                        setState(() {
+                          fieldText.clear();
+                          roundController.listRound
+                              .assignAll(roundController.filterRound);
+                        });
+                      },
+                      changed: (value) {
+                        roundController.searchData(value);
+                      },
+                    ),
+                  )
+                : Container(),
+            Expanded(
+              child: roundController.listRound.isEmpty
+                  ? Logo_Opacity(title: 'no_data'.tr)
+                  : RefreshIndicator(
+                      onRefresh: () async {
+                        await roundController.get_roundAll(loadingTime: 100);
+                      },
+                      child: ListView.builder(
+                          padding: roundController.listRound.length > 10
+                              ? const EdgeInsets.fromLTRB(15, 0, 15, 10)
+                              : const EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 15),
+                          controller: scrollController,
+                          itemCount: count < roundController.listRound.length
+                              ? count + (_hasMore ? 1 : 0)
+                              : roundController.listRound.length,
+                          itemBuilder: (context, index) {
+                            if (index >= count) {
+                              return Padding(
+                                padding: const EdgeInsets.only(top: 20),
+                                child: CircleLoading(),
+                              );
+                            }
+                            timeStart = DateTime.parse(
+                                '$date ${roundController.listRound[index].startDate}');
+                            timeEnd = DateTime.parse(
+                                '$date ${roundController.listRound[index].endDate}');
+                            _setColor();
+                            return Card(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              margin: EdgeInsets.symmetric(vertical: 5),
+                              elevation: 10,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: containerColor,
+                                    borderRadius: BorderRadius.circular(10)),
+                                padding: EdgeInsets.all(10),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    round == 1
+                                        ? Column(
                                             children: [
-                                              Expanded(
-                                                  child: Text(
-                                                '${'round'.tr} : ${listRound1[index].inspectName}',
+                                              Text(
+                                                'need_check'.tr,
                                                 style:
                                                     TextStyle(color: textColor),
-                                              )),
-                                              round == 1
-                                                  ? button(
-                                                      'checkIn'.tr,
-                                                      Theme.of(context)
-                                                          .cardTheme
-                                                          .color, () {
-                                                      listRound1[index]
-                                                          .inspectDetail;
-                                                      permissionCamere(
-                                                          context,
-                                                          () => permissionLocation(
-                                                              context,
-                                                              () => checkInternet(
-                                                                  page: ScanQR_Check(
-                                                                      name:
-                                                                          'check',
-                                                                      roundId:
-                                                                          listRound1[index]
-                                                                              .inspectId!,
-                                                                      roundName:
-                                                                          listRound1[index]
-                                                                              .inspectName!,
-                                                                      roundStart:
-                                                                          listRound1[index]
-                                                                              .startDate!,
-                                                                      roundEnd:
-                                                                          listRound1[index]
-                                                                              .endDate!,
-                                                                      page:
-                                                                          'round',
-                                                                      inspectDetail:
-                                                                          listRound1[index].inspectDetail ??
-                                                                              [],
-                                                                      logs: widget
-                                                                          .logs),
-                                                                  onGoBack:
-                                                                      onGoBack)));
-                                                      // : dialogOnebutton_Subtitle(
-                                                      //     context,
-                                                      //     'ไม่สามารถตรวจได้',
-                                                      //     'เลยเวลาเดินตรวจรอบนี้แล้ว',
-                                                      //     Icons
-                                                      //         .warning_amber_rounded,
-                                                      //     Colors.orange,
-                                                      //     'ตกลง', () {
-                                                      //     Navigator.of(
-                                                      //             context,
-                                                      //             rootNavigator:
-                                                      //                 true)
-                                                      //         .pop();
-                                                      //   }, false, false);
-                                                    })
-                                                  : Container()
+                                              ),
+                                              Divider(
+                                                  height: 15,
+                                                  thickness: 1.5,
+                                                  color: line),
                                             ],
-                                          ),
-                                          Divider(
-                                              height: 15,
-                                              thickness: 1.5,
-                                              color: line),
-                                          IntrinsicHeight(
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  '${'start'.tr} : ${listRound1[index].startDate!.substring(0, 5)}',
-                                                  style: TextStyle(
-                                                      color: textColor),
-                                                ),
-                                                VerticalDivider(
-                                                    thickness: 1.5,
-                                                    color: line,
-                                                    width: 1),
-                                                Text(
-                                                  '${'end'.tr} : ${listRound1[index].endDate!.substring(0, 5)}',
-                                                  style: TextStyle(
-                                                      color: textColor),
-                                                ),
-                                              ],
-                                            ),
                                           )
+                                        : Container(),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                            child: Text(
+                                          '${'round'.tr} : ${roundController.listRound[index].inspectName}',
+                                          style: TextStyle(color: textColor),
+                                        )),
+                                        round == 1
+                                            ? button(
+                                                'checkIn'.tr,
+                                                Theme.of(context)
+                                                    .cardTheme
+                                                    .color, () {
+                                                roundController.listRound[index]
+                                                    .inspectDetail;
+                                                permissionCamere(
+                                                    context,
+                                                    () => permissionLocation(
+                                                        context,
+                                                        () => checkInternet(
+                                                            page: ScanQR_Check(
+                                                                name: 'check',
+                                                                roundId: roundController
+                                                                    .listRound[
+                                                                        index]
+                                                                    .inspectId!,
+                                                                roundName: roundController
+                                                                    .listRound[
+                                                                        index]
+                                                                    .inspectName!,
+                                                                roundStart:
+                                                                    '${date}T${roundController.listRound[index].startDate!}',
+                                                                roundEnd:
+                                                                    '${date}T${roundController.listRound[index].endDate!}',
+                                                                page: 'round',
+                                                                inspectDetail: roundController
+                                                                        .listRound[
+                                                                            index]
+                                                                        .inspectDetail ??
+                                                                    [],
+                                                                logs: widget
+                                                                    .logs),
+                                                            onGoBack:
+                                                                onGoBack)));
+                                              })
+                                            : Container()
+                                      ],
+                                    ),
+                                    Divider(
+                                        height: 15,
+                                        thickness: 1.5,
+                                        color: line),
+                                    IntrinsicHeight(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            '${'start'.tr} : ${roundController.listRound[index].startDate!.substring(0, 5)}',
+                                            style: TextStyle(color: textColor),
+                                          ),
+                                          VerticalDivider(
+                                              thickness: 1.5,
+                                              color: line,
+                                              width: 1),
+                                          Text(
+                                            '${'end'.tr} : ${roundController.listRound[index].endDate!.substring(0, 5)}',
+                                            style: TextStyle(color: textColor),
+                                          ),
                                         ],
                                       ),
-                                    ),
-                                  );
-                                }),
-                          ),
-                  ),
-                ],
-              ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            );
+                          }),
+                    ),
+            ),
+          ],
+        ),
       ),
     );
   }

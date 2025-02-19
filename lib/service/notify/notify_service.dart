@@ -1,167 +1,130 @@
 // ignore_for_file: unused_import
 
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-
-import 'package:doormster/components/bottombar/bottom_controller.dart';
-import 'package:doormster/components/bottombar/bottombar.dart';
-import 'package:doormster/components/bottombar/navigation_ids.dart';
+import 'package:doormster/utils/secure_storage.dart';
+import 'package:doormster/widgets/bottombar/bottom_controller.dart';
+import 'package:doormster/widgets/bottombar/bottombar.dart';
+import 'package:doormster/widgets/bottombar/navigation_ids.dart';
 import 'package:doormster/routes/menu/notification_menu.dart';
 import 'package:doormster/screen/main_screen/notification_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> handleBackgroundMessage(RemoteMessage message) async {
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-  log("BackgroundMessage ");
-  BigTextStyleInformation bigTextStyleInformation = BigTextStyleInformation(
-    message.notification!.body.toString(),
-    htmlFormatBigText: true,
-    contentTitle: message.notification!.title.toString(),
-    htmlFormatContentTitle: true,
-  );
-  AndroidNotificationDetails androidChannel = AndroidNotificationDetails(
-    'high_importance_channel', // id
-    'High Importance Notifications', // title
-    importance: Importance.max,
-    priority: Priority.high,
-    ticker: 'ticker',
-    icon: 'icon_app',
-    channelShowBadge: true,
-    styleInformation: bigTextStyleInformation,
-    // color: Theme.of(context).primaryColor,
-    // largeIcon: DrawableResourceAndroidBitmap('circle_icon'),
-  );
-  DarwinNotificationDetails iosChannel = const DarwinNotificationDetails(
-    presentAlert: true,
-    presentBadge: true,
-    presentSound: true,
-  );
-  NotificationDetails platformChannel =
-      NotificationDetails(android: androidChannel, iOS: iosChannel);
-
-  await flutterLocalNotificationsPlugin.show(1, message.notification?.title,
-      message.notification?.body, platformChannel,
-      payload: message.data['body']);
-  Keys.notify?.currentState?.push(
-    GetPageRoute(
-        page: () => Notification_Page(
-              title: message.notification?.title,
-              body: message.notification?.body,
-            ),
-        transitionDuration: Duration.zero),
-  );
-}
-
-void notificationTapBackground(NotificationResponse notificationResponse) {
-  log('Selact_Background');
-  bottomController.ontapItem(2);
+  log("Background Message: ${message.notification?.title}");
 }
 
 class NotificationService {
-  final messaging = FirebaseMessaging.instance;
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  final FirebaseMessaging _messaging = FirebaseMessaging.instance;
+  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  Future<void> handleMessage(RemoteMessage message) async {
-    BigTextStyleInformation bigTextStyleInformation = BigTextStyleInformation(
-      message.notification!.body.toString(),
-      htmlFormatBigText: true,
-      contentTitle: message.notification!.title.toString(),
-      htmlFormatContentTitle: true,
+  Future<void> initializeNotification() async {
+    await _messaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
     );
-    AndroidNotificationDetails androidChannel = AndroidNotificationDetails(
-      'high_importance_channel', // id
-      'High Importance Notifications', // title
+
+    final fcmToken = await _messaging.getToken();
+    log("FCM Token: $fcmToken");
+
+    await SecureStorageUtils.writeString("notifyToken", fcmToken ?? '');
+
+    await FirebaseMessaging.instance
+        .setForegroundNotificationPresentationOptions(
+      alert: false,
+      badge: true,
+      sound: true,
+    );
+
+    await _initializeLocalNotifications();
+
+    _setupFirebaseListeners();
+  }
+
+  Future<void> _initializeLocalNotifications() async {
+    const AndroidInitializationSettings androidSettings =
+        AndroidInitializationSettings('icon_app');
+    const DarwinInitializationSettings iosSettings =
+        DarwinInitializationSettings();
+
+    const InitializationSettings settings = InitializationSettings(
+      android: androidSettings,
+      iOS: iosSettings,
+    );
+
+    await _flutterLocalNotificationsPlugin.initialize(
+      settings,
+      onDidReceiveNotificationResponse: (details) {
+        onNotificationTap(details.payload);
+        // final payloadData = jsonDecode(details.payload!);
+        // log("payloadData: ${payloadData['route']}");
+        // log("payloadData: ${payloadData['route']}");
+        // Get.toNamed(payloadData['route'], arguments: payloadData['data']);
+        // _onNotificationTap(details.payload);
+      },
+    );
+  }
+
+  void _setupFirebaseListeners() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      log("Foreground Message: ${message.notification?.title}");
+      log("Data Message: ${message.data}");
+      _showLocalNotification(message);
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      log("Notification Clicked: ${message.notification?.title}");
+      // String payload = jsonEncode(message.data);
+      Get.toNamed(message.data['route'], arguments: message.data['data']);
+      // _onNotificationTap(payload);
+    });
+
+    FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
+  }
+
+  Future<void> _showLocalNotification(RemoteMessage message) async {
+    const AndroidNotificationDetails androidDetails =
+        AndroidNotificationDetails(
+      'high_importance_channel',
+      'High Importance Notifications',
       importance: Importance.max,
       priority: Priority.high,
       ticker: 'ticker',
       icon: 'icon_app',
-      channelShowBadge: true,
-      styleInformation: bigTextStyleInformation,
-      // color: Theme.of(context).primaryColor,
-      // largeIcon: DrawableResourceAndroidBitmap('circle_icon'),
     );
-    DarwinNotificationDetails iosChannel = const DarwinNotificationDetails(
-      presentAlert: true,
-      presentBadge: true,
-      presentSound: true,
-    );
-    NotificationDetails platformChannel =
-        NotificationDetails(android: androidChannel, iOS: iosChannel);
 
-    await flutterLocalNotificationsPlugin.show(1, message.notification?.title,
-        message.notification?.body, platformChannel,
-        payload: message.data['body']);
-    log("ForegroundMessage");
-
-    Keys.notify?.currentState?.pushReplacement(
-      GetPageRoute(
-          page: () => Notification_Page(
-                title: message.notification?.title,
-                body: message.notification?.body,
-              ),
-          transitionDuration: Duration.zero),
+    const NotificationDetails platformDetails = NotificationDetails(
+      android: androidDetails,
+      iOS: DarwinNotificationDetails(presentAlert: true, presentSound: true),
     );
+
+    String payloadData = jsonEncode(message.data);
+
+    await _flutterLocalNotificationsPlugin.show(
+      message.hashCode,
+      message.notification?.title ?? '',
+      message.notification?.body ?? '',
+      platformDetails,
+      payload: payloadData,
+    );
+    if (bottomController.selectedIndex == 2) {
+      bottomController.notificationCount.value = 0;
+    } else {
+      bottomController.notificationCount++;
+    }
+    bottomController.notifications.add(message.data['data']);
   }
 
-  Future<void> notification() async {
-    await messaging.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    );
-    final String? fCMToken = await messaging.getToken();
-    log("TokenNotify : ${fCMToken}");
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString("notifyToken", fCMToken ?? '');
-
-    await FirebaseMessaging.instance
-        .setForegroundNotificationPresentationOptions(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
-
-    AndroidInitializationSettings initializationSettingsAndroid =
-        const AndroidInitializationSettings('icon_app');
-
-    DarwinInitializationSettings initializationSettingsIOS =
-        const DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
-      requestCriticalPermission: true,
-    );
-    final InitializationSettings initializationSettings =
-        InitializationSettings(
-      android: initializationSettingsAndroid,
-      iOS: initializationSettingsIOS,
-    );
-
-    await flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
-      onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
-      onDidReceiveNotificationResponse: (details) {
-        log('Selact_Foreground');
-        bottomController.ontapItem(2);
-      },
-    );
-
-    FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
-    FirebaseMessaging.onMessage.listen(handleMessage);
-    // if (Platform.isAndroid) {
-    //   FirebaseMessaging.onMessage.listen(handleMessage);
-    // } else {
-    //   FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
-    // }
+  void onNotificationTap(payload) {
+    final payloadData = jsonDecode(payload);
+    log("route: ${payloadData['route']}");
+    log("data: ${payloadData['data']}");
+    Get.offNamed(payload['route'], arguments: payload['data']);
   }
 }

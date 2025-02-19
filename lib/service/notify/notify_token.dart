@@ -1,14 +1,13 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:doormster/service/connected/ip_address.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:doormster/utils/secure_storage.dart';
 
 class Notify_Token {
   //บันทึก token device เพื่อส่ง notify
   Future<void> create_notifyToken(companyId, sId) async {
-    var prefs = await SharedPreferences.getInstance();
-    var deviceToken = prefs.getString('notifyToken');
-    String url = '${IP_Address.old_IP}create/notifyToken';
+    var deviceToken = await SecureStorageUtils.readString('notifyToken');
+    String url = '${IP_Address}create/notifyToken';
     var response = await Dio().post(url,
         options: Options(headers: {
           'Content-Type': 'application/json',
@@ -24,11 +23,10 @@ class Notify_Token {
 
   //ลบ token device ออกเมื่อ logout
   Future<void> deletenotifyToken() async {
-    var prefs = await SharedPreferences.getInstance();
-    var deviceToken = prefs.getString('notifyToken');
-    var companyId = prefs.getString('companyId');
-    var sId = prefs.getString('userId');
-    String url = '${IP_Address.old_IP}delete/notifyToken';
+    var deviceToken = await SecureStorageUtils.readString('notifyToken');
+    var companyId = await SecureStorageUtils.readString('companyId');
+    var sId = await SecureStorageUtils.readString('userId');
+    String url = '${IP_Address}delete/notifyToken';
     var response = await Dio().delete(url,
         options: Options(headers: {
           'Content-Type': 'application/json',
@@ -39,9 +37,9 @@ class Notify_Token {
           "company_id": companyId,
           "user_id": sId,
         });
-    // print(deviceToken);
-    // print("companyId : $companyId");
-    // print("sId: $sId");
+    // debugPrint(deviceToken);
+    // debugPrint("companyId : $companyId");
+    // debugPrint("sId: $sId");
     // log("Notify: ${response.data}");
   }
 }

@@ -50,11 +50,12 @@ const Map<String, String> en_US = {
   //Qr smart
   'visitor': 'Visitor',
   'scan': 'Scan',
-  'open_door': 'Open Door',
-  'offline_door': 'Offline Door',
-  'emergancy_call': 'Emergancy Call',
+  'open_door': 'Open door',
+  'offline_door': 'Offline door',
+  'emergancy_call': 'Emergancy call',
 
   //Register visitor
+  'title_name': 'Title',
   'visitor_info': 'Visitor information',
   'create_visitor': 'Register visitor',
   'visitor_name': 'Visitor name',
@@ -75,6 +76,9 @@ const Map<String, String> en_US = {
   'create_qrcode': 'Create QRCode',
   'house_number': 'House number',
   'place_meet': 'Place to meet',
+  'no_item': 'No items to select.',
+  'vehicle_type': 'Vehicle type',
+  'list_vehicle_type': 'Choose vehicle type',
 
   //Security guard
   'checkIn': 'Check in',
@@ -112,9 +116,13 @@ const Map<String, String> en_US = {
   'normal': 'Normal',
   'abnormal': 'Abnormal',
   'description': 'Description',
+  'purpose': 'Purpose',
   'add_image': 'Add images',
+  'card_image': 'ID card photo',
   'pictures': 'Pictures',
   'view_pictures': 'View pictures',
+  'ocr_idcard': 'OCR ID card',
+  'cap_idcard': 'Capture ID card',
   'no_regis': 'Not yet registered',
   'registered': 'Registered',
   'no_regis_checkpoint': 'This checkpoint has not been registered yet.',
@@ -148,11 +156,25 @@ const Map<String, String> en_US = {
   'type_complaint': 'Complaint type',
   'resolved': '*If the issue has been resolved.',
 
+  //E-Stamp
+  'parking_details': 'Parking details',
+  'start_time': 'Start time',
+  'current_time': 'Current time',
+  'license_plate': 'License plate',
+  'parking_duration': 'Parking duration',
+  'hours': 'Hours',
+  'minutes': 'Minutes',
+  'discount': 'Discount',
+  'select_discount': 'Select discount',
+  'add_discount': 'Add discount',
+  'previous_discounts': 'Previous discounts',
+
   //Search
   'search': 'Search',
   'search_door': 'Search door',
   'search_round': 'Search round',
   'search_checkpoint': 'Search checkpoint',
+  'search_house': 'Search house',
 
   //Title appbar
   'news_feed': 'News feed',
@@ -178,7 +200,7 @@ const Map<String, String> en_US = {
   'image_error': 'Unable to load image.',
 
   //Button
-  'ok': 'Done',
+  'ok': 'OK',
   'yes': 'Yes',
   'no': 'No',
   'submit': 'Submit',
@@ -191,6 +213,7 @@ const Map<String, String> en_US = {
   'today': 'Today',
   'all': 'All',
   'to': 'to',
+  'next': 'Next',
 
   // Text action
   'login_success': 'Login successful.',
@@ -203,12 +226,14 @@ const Map<String, String> en_US = {
 
   'occur_error': 'Error occurred.',
   'connect_error': 'Unable to connect. Please try again.',
+  'process_error': 'Unable to proceed. Please try again.',
   'error_timeout': 'Connection timeout.',
   'connect_timeout':
       'Unable to connect within the time limit. Please try again.',
   'invalid_data': 'Invalid data. Please try again.',
   'connect_internet_pls': 'Please connect to the internet.',
   'again_pls': 'Please try again.',
+  'manu_permission': "You don't have permission to access this menu.",
   'account_block': 'This account has been suspended.',
   'deactivation_success': 'Deactivation successful.',
   'deactivation_fail': 'Deactivation failed.',
@@ -224,6 +249,10 @@ const Map<String, String> en_US = {
   'add_fail': 'Addition failed.',
   'cannot_add': 'Cannot add.',
   'have_company': 'You already have this company.',
+
+  'share_success': 'Sharing succeeded.',
+  'share_fail': 'Sharing failed.',
+  'share_error': 'Failed to share QR Code.',
 
   'door_open_success': 'Door opened successfully.',
   'door_open_fail': 'Failed to open door.',
@@ -256,6 +285,8 @@ const Map<String, String> en_US = {
   'create_qrcode_success': 'Create QR Code successfully.',
   'create_qrcode_fail': 'Create QR Code failed.',
   'invalid_qrcode': 'Invalid QR Code, please try again.',
+  'qrcode_not_found': 'QR Code not found.',
+  'no_read_qrcode': 'Unable to read the QR Code.',
 
   'invalid_location': 'Invalid location.',
   'location_checkpoint':
@@ -268,6 +299,11 @@ const Map<String, String> en_US = {
   'capture_fail_again': 'Image save failed, please try again.',
   'wrong_date': 'Invalid date',
   'end_start': 'End date must not be earlier than the start date',
+
+  "file_large": "The file size is too large.",
+  "idcard_not_found": "ID card not found.",
+  "idcard_not_clear": "Unable to read ID card number clearly.",
+  "can_not_scan": "Unable to scan at the moment. Please try again later.",
 
   // Error text form
   'enter_title': 'Please enter a title.',
@@ -282,6 +318,7 @@ const Map<String, String> en_US = {
   'password_8char': 'Password must be at least 8 characters.',
   'same_password': 'Same as the current password. Please enter a new password.',
   'accept_terms_pls': 'Please accept the terms of service.',
+  'enter_titlename_pls': 'Please add a title',
   'enter_name_pls': 'Please enter your first name.',
   'enter_lname_pls': 'Please enter your last name.',
   'enter_email_pls': 'Please enter an email.',
@@ -290,6 +327,8 @@ const Map<String, String> en_US = {
 
   'enter_name_visitor': 'Please enter the visitor name.',
   'enter_name_contacts': 'Please enter the name of the person to contact.',
+  'enter_idcard': 'Please enter national ID card number.',
+  'idcard_13char': 'Please enter a 13-digit national ID card number.',
   'enter_phone': 'Please enter a phone number.',
   'phone_10char': 'Please enter a 10-digit phone number.',
   'select_type': 'Please select a type.',
@@ -302,6 +341,9 @@ const Map<String, String> en_US = {
   'select_event_pls': 'Please select an event.',
   'ab_enter_description': 'Abnormal event, please add description.',
   'enter_description': 'Please add description.',
+  'enter_purpose': 'Please add purpose.',
+  'enter_plate': 'Please add license plate.',
+  'select_vehicle_type': 'Please select the vehicle type.',
 
   //Complaint staus
   '1cp': 'Pending receipt',

@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
+import 'package:doormster/widgets/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -9,8 +9,8 @@ import 'package:url_launcher/url_launcher.dart';
 Future<void> permissionLocation(context, action) async {
   final permission = await Permission.location.request();
   final location = await Geolocator.isLocationServiceEnabled();
-  print(permission);
-  print("location : $location");
+  debugPrint(permission.toString());
+  debugPrint("location : $location");
 
   if (Platform.isAndroid) {
     if (permission.isGranted) {
@@ -24,7 +24,7 @@ Future<void> permissionLocation(context, action) async {
           textButton: 'ok'.tr,
           press: () {
             openAppSettings();
-            Navigator.of(context, rootNavigator: true).pop();
+            Get.back();
           },
           click: true,
           backBtn: true,
@@ -43,7 +43,7 @@ Future<void> permissionLocation(context, action) async {
           press: () async {
             await launch('App-Prefs:LOCATION_SERVICES');
 
-            Navigator.of(context, rootNavigator: true).pop();
+            Get.back();
           },
           click: true,
           backBtn: true,
@@ -56,10 +56,10 @@ Future<void> permissionLocation(context, action) async {
           colorIcon: Colors.orange,
           textButton: 'ok'.tr,
           press: () {
-            print('setting');
+            debugPrint('setting');
             openAppSettings();
 
-            Navigator.of(context, rootNavigator: true).pop();
+            Get.back();
           },
           click: true,
           backBtn: true,

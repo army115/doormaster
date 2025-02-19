@@ -1,11 +1,11 @@
-import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
+import 'package:doormster/widgets/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 Future<void> permissionCamere(context, action) async {
   final permission = await Permission.camera.request();
-  print(permission);
+  debugPrint(permission.toString());
   if (permission.isGranted) {
     await action();
   } else {
@@ -17,7 +17,7 @@ Future<void> permissionCamere(context, action) async {
         textButton: 'ok'.tr,
         press: () {
           openAppSettings();
-          Navigator.of(context, rootNavigator: true).pop();
+          Get.back();
         },
         click: true,
         backBtn: true,

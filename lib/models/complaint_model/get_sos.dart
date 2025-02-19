@@ -1,9 +1,9 @@
-class get_sos {
+class getSOS {
   List<Data>? data;
 
-  get_sos({this.data});
+  getSOS({this.data});
 
-  get_sos.fromJson(Map<String, dynamic> json) {
+  getSOS.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {

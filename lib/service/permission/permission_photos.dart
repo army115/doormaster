@@ -1,13 +1,13 @@
 import 'dart:io';
 
-import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
+import 'package:doormster/widgets/alertDialog/alert_dialog_onebutton_subtext.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 Future<void> permissionPhotos(context, action) async {
   final permission = await Permission.photos.request();
-  print(permission);
+  debugPrint(permission.toString());
   if (permission.isGranted || permission.isLimited) {
     action;
   } else {
@@ -18,7 +18,7 @@ Future<void> permissionPhotos(context, action) async {
         colorIcon: Colors.orange,
         textButton: 'ok'.tr,
         press: () {
-          Navigator.of(context, rootNavigator: true).pop();
+          Get.back();
           openAppSettings();
         },
         click: true,
@@ -29,7 +29,7 @@ Future<void> permissionPhotos(context, action) async {
 
 Future<void> permissionAddPhotos(context, action) async {
   final permission = await Permission.photosAddOnly.request();
-  print(permission);
+  debugPrint(permission.toString());
   if (Platform.isIOS) {
     if (permission.isGranted || permission.isLimited) {
       await action();
@@ -41,7 +41,7 @@ Future<void> permissionAddPhotos(context, action) async {
           colorIcon: Colors.orange,
           textButton: 'ok'.tr,
           press: () {
-            Navigator.of(context, rootNavigator: true).pop();
+            Get.back();
             openAppSettings();
           },
           click: true,

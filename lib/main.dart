@@ -1,5 +1,7 @@
 // ignore_for_file: constant_identifier_names, prefer_const_constructors, prefer_const_constructors_in_immutables, avoid_print, prefer_typing_uninitialized_variables
-import 'package:doormster/controller/login_controller.dart';
+import 'dart:developer';
+
+import 'package:doormster/controller/main_controller/login_controller.dart';
 import 'package:doormster/language/translation.dart';
 import 'package:doormster/routes/page/pages_routes.dart';
 import 'package:doormster/routes/paths/paths_routes.dart';
@@ -8,6 +10,7 @@ import 'package:doormster/style/scroll_screen.dart';
 import 'package:doormster/style/textStyle.dart';
 import 'package:doormster/style/theme/dark/theme_dark.dart';
 import 'package:doormster/style/theme/light/theme_light.dart';
+import 'package:doormster/utils/secure_storage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,7 +18,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
 Future<void> main() async {
@@ -30,24 +32,25 @@ Future<void> main() async {
 
   if (result.contains(ConnectivityResult.none)) {
   } else {
-    await NotificationService().notification();
+    await NotificationService().initializeNotification();
   }
 
-  final prefs = await SharedPreferences.getInstance();
-  String? getlanguage = prefs.getString('language');
+  String? getlanguage = await SecureStorageUtils.readString('language');
   if (getlanguage == null) {
-    await prefs.setString("language", 'th');
+    await SecureStorageUtils.writeString("language", 'th');
   }
 
-  final token = prefs.getString('token');
-  final language = prefs.getString('language');
-  final theme = prefs.getBool('theme');
+  final token = await SecureStorageUtils.readString('token');
+  final language = await SecureStorageUtils.readString('language');
+  final theme = await SecureStorageUtils.readBool('theme');
+
+  final LoginController loginController = Get.put(LoginController());
   if (token != null) {
     loginController.refreshToken();
   }
-  print(token == null ? 'login : false' : 'login : true');
-  print('language : $language');
-  print('theme : $theme');
+  debugPrint(token == null ? 'login : false' : 'login : true');
+  debugPrint('language : $language');
+  debugPrint('theme : $theme');
   runApp(MyApp(
     connect: result,
     token: token,
@@ -95,7 +98,7 @@ class MyApp extends StatelessWidget {
       initialRoute: connect.contains(ConnectivityResult.none)
           ? Routes.check
           : token == null
-              ? Routes.auth
+              ? Routes.login_user
               : Routes.bottom,
       getPages: PagesRoutes.routes,
     );

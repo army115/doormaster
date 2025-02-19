@@ -28,6 +28,8 @@ ThemeData themeLight = ThemeData(
   dialogTheme: Light_Dialog,
   bottomNavigationBarTheme: Light_BottomBar,
   scaffoldBackgroundColor: Colors.grey[200],
+  floatingActionButtonTheme:
+      FloatingActionButtonThemeData(backgroundColor: Color(0xFF0B4D9C)),
   appBarTheme: Light_Appbar,
   fontFamily: 'Prompt',
 );

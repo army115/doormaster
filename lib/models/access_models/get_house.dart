@@ -1,13 +1,13 @@
-class get_house {
-  List<Data>? data;
+class getHouse {
+  List<HouseData>? data;
 
-  get_house({this.data});
+  getHouse({this.data});
 
-  get_house.fromJson(Map<String, dynamic> json) {
+  getHouse.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
-      data = <Data>[];
+      data = <HouseData>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(new HouseData.fromJson(v));
       });
     }
   }
@@ -21,13 +21,13 @@ class get_house {
   }
 }
 
-class Data {
+class HouseData {
   String? value;
   String? label;
 
-  Data({this.value, this.label});
+  HouseData({this.value, this.label});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  HouseData.fromJson(Map<String, dynamic> json) {
     value = json['value'];
     label = json['label'];
   }

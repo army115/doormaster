@@ -1,6 +1,6 @@
 // ignore_for_file: avoid_unnecessary_containers, must_be_immutable, unused_import
-import 'package:doormster/components/bottombar/bottombar.dart';
-import 'package:doormster/components/bottombar/navigation_ids.dart';
+import 'package:doormster/widgets/bottombar/bottombar.dart';
+import 'package:doormster/widgets/bottombar/navigation_ids.dart';
 import 'package:doormster/screen/main_screen/profile_page.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +20,7 @@ class _Profile_MenuState extends State<Profile_Menu> {
         WidgetBuilder builder;
         switch (routeSettings.name) {
           case '/':
-            builder = (BuildContext context) => Profile_Page();
+            builder = (BuildContext context) => const Profile_Page();
             break;
           default:
             throw Exception('Invalid route: ${routeSettings.name}');

@@ -1,23 +1,16 @@
 // ignore_for_file: prefer_const_constructors, avoid_print, use_build_context_synchronously
 
-import 'package:dio/dio.dart';
-import 'package:doormster/components/actions/disconnected_dialog.dart';
-import 'package:doormster/components/actions/form_error_snackbar.dart';
-import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
-import 'package:doormster/components/bottombar/bottom_controller.dart';
-import 'package:doormster/components/snackbar/snackbar.dart';
-import 'package:doormster/service/connected/ip_address.dart';
+import 'package:doormster/widgets/actions/form_error_snackbar.dart';
+import 'package:doormster/widgets/text_form/text_form_password.dart';
+import 'package:doormster/controller/main_controller/change_password_controller.dart';
 import 'package:doormster/style/styleButton/ButtonStyle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:http/http.dart' as http;
-// import 'dart:convert' as convert;
 
 class Password_Page extends StatefulWidget {
-  final userpass;
-
-  Password_Page({Key? key, this.userpass}) : super(key: key);
+  Password_Page({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<Password_Page> createState() => _Password_PageState();
@@ -28,10 +21,9 @@ class _Password_PageState extends State<Password_Page> {
   final _oldpass = TextEditingController();
   final _newpass = TextEditingController();
   final _conpass = TextEditingController();
-
+  final List<GlobalKey<FormFieldState>> _fieldKeys =
+      List.generate(3, (index) => GlobalKey<FormFieldState>());
   var confirmPass;
-  var token;
-  var username;
   bool loading = false;
 
   bool redEyeold = true;
@@ -40,69 +32,6 @@ class _Password_PageState extends State<Password_Page> {
   bool focusColor = false;
   bool focusColor2 = false;
   bool focusColor3 = false;
-  late SharedPreferences prefs;
-
-  Future<void> _getUsername() async {
-    prefs = await SharedPreferences.getInstance();
-    token = prefs.getString('token');
-    username = prefs.getString('username');
-    print(username);
-  }
-
-  Future<void> _changePassword(Map<String, dynamic> values) async {
-    try {
-      setState(() {
-        loading = true;
-      });
-      String url = '${IP_Address.old_IP}changpassword';
-      var jsonRes = await Dio().post(url,
-          options: Options(headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-          }),
-          data: values);
-      var _response = jsonRes.data['data'];
-      print("status code : ${_response}");
-      if (_response != 400) {
-        print('Change Success!');
-        await prefs.setBool("remember", false);
-        Get.until((route) => route.isFirst);
-        bottomController.ontapItem(0);
-        snackbar(Theme.of(context).primaryColor, 'password_success'.tr,
-            Icons.check_circle_outline_rounded);
-      } else {
-        print('Change Fail!!');
-        dialogOnebutton_Subtitle(
-            title: 'occur_error'.tr,
-            subtitle: 'wrong_password'.tr,
-            icon: Icons.highlight_off_rounded,
-            colorIcon: Colors.red,
-            textButton: 'ok'.tr,
-            press: () {
-              Get.back();
-            },
-            click: false,
-            backBtn: false,
-            willpop: false);
-      }
-    } catch (error) {
-      print(error);
-      error_Connected(() async {
-        Get.back();
-      });
-      // snackbar( Colors.orange, 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
-      //     Icons.warning_amber_rounded);
-      setState(() {
-        loading = false;
-      });
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _getUsername();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,72 +48,52 @@ class _Password_PageState extends State<Password_Page> {
           child: Column(
             children: [
               // รหัสผ่านปัจจุบัน*****************************************************************************
-              textpass(
-                _oldpass,
-                redEyeold,
-                'current_password'.tr,
-                Icon(
-                  Icons.lock_open_rounded,
-                  size: 30,
-                ),
-                () => setState(() {
-                  redEyeold = !redEyeold;
-                }),
-                (values) {
-                  if (values!.isEmpty) {
-                    return 'enter_password_current'.tr;
-                  } else {
-                    return null;
-                  }
-                },
-              ),
-              SizedBox(
-                height: 10,
-              ),
+              TextForm_Password(
+                  controller: _oldpass,
+                  title: 'current_password'.tr,
+                  iconLaft: Icons.lock_open_rounded,
+                  error: (values) {
+                    if (values!.isEmpty) {
+                      return 'enter_password_current'.tr;
+                    } else {
+                      return null;
+                    }
+                  },
+                  fieldKey: _fieldKeys[0]),
               // รหัสผ่านใหม่*****************************************************************************
-              textpass(
-                _newpass,
-                redEyenew,
-                'new_password'.tr,
-                Icon(Icons.key_rounded, size: 30),
-                () => setState(() {
-                  redEyenew = !redEyenew;
-                }),
-                (values) {
-                  confirmPass = values;
-                  if (values.isEmpty) {
-                    return 'enter_password_pls'.tr;
-                  } else if (values == widget.userpass) {
-                    return "same_password".tr;
-                  } else if (values.length < 8) {
-                    return "password_8char".tr;
-                  } else {
-                    return null;
-                  }
-                },
-              ),
-              SizedBox(
-                height: 10,
-              ),
+              TextForm_Password(
+                  controller: _newpass,
+                  title: 'new_password'.tr,
+                  iconLaft: Icons.key_rounded,
+                  error: (values) {
+                    confirmPass = values;
+                    if (values.isEmpty) {
+                      return 'enter_password_pls'.tr;
+                      // } else if (values == widget.userpass) {
+                      //   return "same_password".tr;
+                      // } else if (values.length < 8) {
+                      //   return "password_8char".tr;
+                    } else {
+                      return null;
+                    }
+                  },
+                  fieldKey: _fieldKeys[1]),
+
               // ยืนยันรหัสผ่าน*****************************************************************************
-              textpass(
-                _conpass,
-                redEyecon,
-                'confirm_password'.tr,
-                Icon(Icons.key_rounded, size: 30),
-                () => setState(() {
-                  redEyecon = !redEyecon;
-                }),
-                (values) {
-                  if (values.isEmpty) {
-                    return 'enter_password_pls'.tr;
-                  } else if (values != confirmPass) {
-                    return "password_no_match".tr;
-                  } else {
-                    return null;
-                  }
-                },
-              ),
+              TextForm_Password(
+                  controller: _conpass,
+                  title: 'confirm_password'.tr,
+                  iconLaft: Icons.key_rounded,
+                  error: (values) {
+                    if (values.isEmpty) {
+                      return 'enter_password_pls'.tr;
+                    } else if (values != confirmPass) {
+                      return "password_no_match".tr;
+                    } else {
+                      return null;
+                    }
+                  },
+                  fieldKey: _fieldKeys[1]),
               SizedBox(
                 height: 20,
               ),
@@ -194,50 +103,6 @@ class _Password_PageState extends State<Password_Page> {
         ),
       )),
     );
-  }
-
-  Widget textpass(controller, redeye, title, icon, press, value) {
-    return TextFormField(
-        selectionControls: EmptyTextSelectionControls(),
-        controller: controller,
-        obscureText: redeye,
-        cursorColor: Theme.of(context).primaryColorDark,
-        style: TextStyle(fontSize: 17, color: Theme.of(context).dividerColor),
-        decoration: InputDecoration(
-          contentPadding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-          hintText: title,
-          hintStyle: TextStyle(
-              fontSize: 17,
-              color: Theme.of(context).dividerColor.withOpacity(0.5)),
-          errorStyle: TextStyle(fontSize: 15),
-          prefixIcon: icon,
-          prefixIconColor:
-              MaterialStateColor.resolveWith((Set<MaterialState> states) {
-            if (states.contains(MaterialState.focused)) {
-              return Theme.of(context).primaryColorDark;
-            }
-            return Theme.of(context).dividerColor.withOpacity(0.5);
-          }),
-          suffixIconColor:
-              MaterialStateColor.resolveWith((Set<MaterialState> states) {
-            if (states.contains(MaterialState.focused)) {
-              return Theme.of(context).primaryColorDark;
-            }
-            return Theme.of(context).dividerColor.withOpacity(0.5);
-          }),
-          suffixIcon: IconButton(
-            onPressed: press,
-            icon: redeye ? Icon(Icons.visibility_off) : Icon(Icons.visibility),
-          ),
-          focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                  color: Theme.of(context).primaryColorDark, width: 2)),
-          enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey, width: 1.5)),
-          focusedErrorBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.red, width: 2)),
-        ),
-        validator: value);
   }
 
   Widget button() {
@@ -261,10 +126,9 @@ class _Password_PageState extends State<Password_Page> {
           onPressed: () async {
             if (_formkey.currentState!.validate()) {
               Map<String, dynamic> values = Map();
-              values['user_name'] = username;
               values['old_password'] = _oldpass.text;
               values['new_password'] = _conpass.text;
-              _changePassword(values);
+              passwordController.change_Passord(value: values);
             } else {
               form_error_snackbar();
             }

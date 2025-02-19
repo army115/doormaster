@@ -1,12 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.doormster">
+    package="com.hip.doormaster">
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
-    <!-- <activity android:name="io.github.edufolly.fluttermobilevision.ocr.OcrCaptureActivity"/> -->
 
     <uses-permission android:name="android.permission.BLUETOOTH" />  
 	  <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -15,7 +14,6 @@
     <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/> 
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <!-- <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/> -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/> 
     
@@ -27,7 +25,8 @@
         android:label="HIP Smart Community"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:enableOnBackInvokedCallback="true">
+        android:requestLegacyExternalStorage="true"
+        android:enableOnBackInvokedCallback="false">
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -52,7 +51,7 @@
               android:name="io.flutter.embedding.android.LaunchTheme"
               android:resource="@style/LaunchTheme"
               />
-
+              
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -70,6 +69,10 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="high_importance_channel"/>
+
+        <meta-data
+            android:name="firebase_messaging_auto_init_enabled"
+            android:value="false" />
 
     <receiver
         android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
@@ -90,9 +93,7 @@
 
         <meta-data android:name="com.google.android.geo.API_KEY"
                android:value="AIzaSyCtHPbBuAM2ktRSLYB07NADmKUIrYVpqPI"/>
-
-        <service android:name="com.intelligoo.sdk.BluetoothLeService" android:enabled="true" />
-        <service android:name="com.intelligoo.sdk.AutoOpenService" android:enabled="true" />
+        
     </application>
     <!-- <queries>
     <intent>

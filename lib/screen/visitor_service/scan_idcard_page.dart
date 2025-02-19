@@ -1,16 +1,12 @@
 // ignore_for_file: use_build_context_synchronously, unnecessary_null_comparison, deprecated_member_use, avoid_print
 
-import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
 import 'package:camera/camera.dart';
-import 'package:dio/dio.dart';
-import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
-import 'package:doormster/models/id_card.dart';
+import 'package:doormster/widgets/loading/loading.dart';
+import 'package:doormster/controller/visitor_controller/scan_idcard_controller.dart';
 import 'package:doormster/style/overlay_frame.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response, FormData, MultipartFile;
-import 'package:image_picker/image_picker.dart';
 
 class Scan_IDCard extends StatefulWidget {
   const Scan_IDCard({super.key});
@@ -20,31 +16,34 @@ class Scan_IDCard extends StatefulWidget {
 }
 
 class _Scan_IDCardState extends State<Scan_IDCard> {
+  final ScanIDCardController scanIDCardController =
+      Get.put(ScanIDCardController());
   CameraController? controller;
+  List<CameraDescription> camera = [];
   XFile? image;
-  String? imagePath;
-  final StreamController<String> _controller = StreamController<String>();
-  bool _isInitialized = false;
+
+  Future<void> _initializeCamera() async {
+    try {
+      camera = await availableCameras();
+      if (camera.isEmpty) {
+        debugPrint("No cameras found.");
+        return;
+      }
+      controller = CameraController(
+        camera[0],
+        ResolutionPreset.high,
+      );
+      await controller!.initialize();
+      setState(() {});
+    } catch (e) {
+      debugPrint("Error initializing camera: $e");
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    availableCameras().then((cameras) {
-      if (cameras.length > 0) {
-        setState(() {
-          controller = CameraController(cameras[0], ResolutionPreset.high,
-              enableAudio: false);
-          controller!.initialize().then((_) {
-            if (!mounted) {
-              return;
-            }
-            setState(() {
-              _isInitialized = true;
-            });
-          });
-        });
-      }
-    });
+    _initializeCamera();
   }
 
   @override
@@ -53,339 +52,141 @@ class _Scan_IDCardState extends State<Scan_IDCard> {
     super.dispose();
   }
 
-  void _capture() async {
-    // if (!controller!.value.isTakingPicture) {
-    try {
-      // await controller?.setFlashMode(FlashMode.off);
-      // await controller?.setFocusMode(FocusMode.auto);
-      // final image = await controller!.takePicture();
-      // print(image.path);
-      // setState(() {
-      //   imagePath = image.path;
-      // });
-      final ImagePicker imgpicker = ImagePicker();
-      final images = await imgpicker.pickImage(
-          source: ImageSource.gallery, maxHeight: 1080, maxWidth: 1080);
-      if (images != null) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Show_Image(
-                imagepath: images,
-              ),
-            ));
-      }
-      // Get.to(Show_Image(
-      //   imagepath: image,
-      // ));
-    } catch (e) {
-      print("Error: $e");
-    }
-    // }
-  }
-
   @override
   Widget build(BuildContext context) {
-    // if (controller == null || !controller!.value.isInitialized) {
-    //   return Container();
-    // }
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Stack(
-        alignment: Alignment.center,
-        // fit: StackFit.expand,
-        children: [
-          // Center(
-          //   child: CameraPreview(
-          //     controller!,
-          //     child: Container(
-          //       decoration: ShapeDecoration(
-          //         shape: OverlayShape(
-          //           borderWidth: 10,
-          //           borderRadius: 10,
-          //           cutOutHeight: 240,
-          //           cutOutWidth: 370,
-          //         ),
-          //       ),
-          //       // child: FutureBuilder(future: , builder: builder),
-          //     ),
-          //   ),
-          // ),
-          Positioned(
-            left: 10,
-            top: Get.mediaQuery.size.height * 0.05,
-            child: Container(
-              decoration: const BoxDecoration(
-                  shape: BoxShape.circle, color: Colors.white30),
-              child: IconButton(
-                  color: Colors.white,
-                  iconSize: 30,
-                  onPressed: () {
-                    Get.back();
-                  },
-                  icon: const Icon(Icons.arrow_back_ios_new_rounded)),
-            ),
-          ),
-          Positioned(
-            bottom: Get.mediaQuery.size.height * 0.05,
-            child: Container(
-              decoration: const BoxDecoration(
-                  shape: BoxShape.circle, color: Colors.white30),
-              child: IconButton(
-                  color: Colors.white,
-                  iconSize: 60,
-                  onPressed: _capture,
-                  icon: const Icon(Icons.camera)),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class Show_Image extends StatefulWidget {
-  final imagepath;
-
-  const Show_Image({super.key, this.imagepath});
-
-  @override
-  State<Show_Image> createState() => _Show_ImageState();
-}
-
-class _Show_ImageState extends State<Show_Image> {
-  String text = '';
-  List<String> data = [];
-  String? fname;
-  String? lname;
-  String? id_number;
-
-  Future<void> _sendID(XFile file) async {
-    try {
-      // await Future.delayed(Duration(milliseconds: loadingTime));
-
-      //call api Dio
-      var host = 'http://localhost:8080/OCR';
-      FormData formData = FormData.fromMap({
-        'file': await MultipartFile.fromFile(
-          file.path,
-          filename: file.name,
-        ),
-      });
-
-      Response response = await Dio().post(
-        host,
-        data: formData,
-        // options: Options(
-        //   headers: {'apikey': 'NmQF10gmOYyg8Sa1abNuiu6EEH0Yzlnr'},
-        // ),
-      );
-      log(response.data.toString());
-
-      if (response.statusCode == 200) {
-        ID_Card id_card = ID_Card.fromJson(response.data);
-        setState(() {
-          // fname = id_card.thFname;
-          // lname = id_card.thLname;
-          // id_number = id_card.idNumber;
-          text = response.data.toString();
-        });
-        // Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //       builder: (context) => ID_Form(
-        //         fname: id_card.thFname,
-        //         lname: id_card.thLname,
-        //         id_card: id_card.idNumber,
-        //       ),
-        //     ));
-        // Get.to(ID_Form(
-        //   fname: id_card.thFname,
-        //   lname: id_card.thLname,
-        //   id_card: id_card.idNumber,
-        // ));
-      } else {
-        print(response.statusCode);
-        ID_Card error = ID_Card.fromJson(response.data);
-        // Error error = Error.fromJson(convert.jsonDecode(responseBody));
-        dialogOnebutton_Subtitle(
-            title: 'Error',
-            subtitle: '${error.errorMessage}',
-            icon: Icons.warning,
-            colorIcon: Colors.orange,
-            textButton: 'OK',
-            press: () {
-              Get.back();
-            },
-            click: false,
-            backBtn: false,
-            willpop: false);
-      }
-    } on DioError catch (e) {
-      if (e.response != null) {
-        print('Error status code: ${e.response!.statusCode}');
-        print('Error response data: ${e.response!.data}');
-        ID_Card error = ID_Card.fromJson(e.response?.data);
-        dialogOnebutton_Subtitle(
-            title: 'Error',
-            subtitle: '${error.errorMessage}',
-            icon: Icons.check_circle,
-            colorIcon: Colors.green,
-            textButton: 'OK',
-            press: () {
-              Get.back();
-            },
-            click: false,
-            backBtn: false,
-            willpop: false);
-      } else {
-        dialogOnebutton_Subtitle(
-            title: 'Error',
-            subtitle: '${e}',
-            icon: Icons.warning,
-            colorIcon: Colors.orange,
-            textButton: 'OK',
-            press: () {
-              Get.back();
-            },
-            click: false,
-            backBtn: false,
-            willpop: false);
-        log('Request failed without a response.');
-      }
+    if (controller == null || !controller!.value.isInitialized) {
+      return Container();
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    XFile file = widget.imagepath;
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Stack(
-        alignment: Alignment.center,
-        children: [
-          // SizedBox(
-          // width: double.infinity,
-          // height: double.infinity,
-          // child:
-          Center(
-            child: AspectRatio(
-              aspectRatio: 1,
+    return Obx(
+      () => Scaffold(
+        backgroundColor: Colors.black,
+        body: Stack(
+          alignment: Alignment.center,
+          children: [
+            CameraPreview(
+              controller!,
               child: Container(
-                foregroundDecoration: ShapeDecoration(
+                decoration: ShapeDecoration(
                   shape: OverlayShape(
-                    borderColor: Colors.white,
                     borderWidth: 10,
                     borderRadius: 10,
                     cutOutHeight: 240,
                     cutOutWidth: 370,
                   ),
                 ),
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                  fit: BoxFit.fitWidth,
-                  alignment: FractionalOffset.center,
-                  image: FileImage(
-                    File(file.path),
-                  ),
-                )),
               ),
-              // )
             ),
-          ),
-
-          Positioned(
-            right: 10,
-            top: Get.mediaQuery.size.height * 0.05,
-            child: ElevatedButton(
-                onPressed: () {
-                  // _scantext();
-                  _sendID(file);
-                },
-                child: Icon(Icons.translate)),
-          ),
-          Container(
-            padding: EdgeInsets.all(20),
-            child: Text(
-              text,
-              style: TextStyle(fontSize: 20, color: Colors.white),
+            Positioned(
+              top: Get.mediaQuery.size.height * 0.06,
+              child: const Text(
+                'สแกนบัตรประชาชน',
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
             ),
-          ),
-          Positioned(
-            left: 10,
-            top: Get.mediaQuery.size.height * 0.05,
-            child: Container(
-              decoration: const BoxDecoration(
-                  shape: BoxShape.circle, color: Colors.white30),
-              child: IconButton(
-                  color: Colors.white,
-                  iconSize: 30,
-                  onPressed: () {
-                    Get.back();
-                  },
-                  icon: const Icon(Icons.arrow_back_ios_new_rounded)),
+            Positioned(
+              left: 10,
+              top: Get.mediaQuery.size.height * 0.05,
+              child: Container(
+                decoration: const BoxDecoration(
+                    shape: BoxShape.circle, color: Colors.white30),
+                child: IconButton(
+                    color: Colors.white,
+                    iconSize: 30,
+                    onPressed: () {
+                      Get.back();
+                    },
+                    icon: const Icon(Icons.arrow_back_ios_new_rounded)),
+              ),
             ),
-          ),
-          // ListView.builder(
-          //   primary: false,
-          //   shrinkWrap: true,
-          //   itemCount: data.length,
-          //   itemBuilder: (context, index) => Text(data[index]),
-          // )
-        ],
-      ),
-    );
-  }
-}
-
-class ID_Form extends StatefulWidget {
-  final fname;
-  final lname;
-  final id_card;
-  final textFull;
-  const ID_Form(
-      {super.key, this.fname, this.lname, this.id_card, this.textFull});
-
-  @override
-  State<ID_Form> createState() => _ID_FormState();
-}
-
-class _ID_FormState extends State<ID_Form> {
-  TextEditingController fname = TextEditingController();
-  TextEditingController lname = TextEditingController();
-  TextEditingController id_card = TextEditingController();
-  @override
-  void initState() {
-    super.initState();
-    fname.text = widget.fname;
-    lname.text = widget.lname;
-    id_card.text = widget.id_card;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Container(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          children: [
-            TextFormField(
-              controller: fname,
-              decoration: InputDecoration(hintText: fname.text),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Container(
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white30,
+                  ),
+                  child: IconButton(
+                    color: Colors.white,
+                    iconSize: 50,
+                    onPressed: () => scanIDCardController.capture(controller!),
+                    icon: const Icon(
+                      Icons.camera,
+                    ),
+                  ),
+                ),
+              ),
             ),
-            TextFormField(
-              controller: lname,
-              decoration: InputDecoration(hintText: lname.text),
-            ),
-            TextFormField(
-              controller: id_card,
-              decoration: InputDecoration(hintText: id_card.text),
-            ),
-            Text(widget.textFull),
+            scanIDCardController.loading.isTrue ? Loading() : Container(),
           ],
         ),
       ),
     );
   }
 }
+
+// Widget showImageScanner() {
+//   final ScanIDCardController scanIDCardController =
+//       Get.put(ScanIDCardController());
+//   return Obx(
+//     () => Scaffold(
+//       backgroundColor: Colors.black,
+//       body: Stack(
+//         alignment: Alignment.center,
+//         children: [
+//           Container(
+//             decoration: ShapeDecoration(
+//               image: DecorationImage(
+//                   image:
+//                       FileImage(File(scanIDCardController.image.value.path))),
+//               shape: OverlayShape(
+//                 borderWidth: 10,
+//                 borderRadius: 10,
+//                 cutOutHeight: 240,
+//                 cutOutWidth: 370,
+//               ),
+//             ),
+//           ),
+//           Positioned(
+//             left: 10,
+//             top: Get.mediaQuery.size.height * 0.05,
+//             child: Container(
+//               decoration: const BoxDecoration(
+//                   shape: BoxShape.circle, color: Colors.white30),
+//               child: IconButton(
+//                   color: Colors.white,
+//                   iconSize: 30,
+//                   onPressed: () {
+//                     Get.back();
+//                   },
+//                   icon: const Icon(Icons.arrow_back_ios_new_rounded)),
+//             ),
+//           ),
+//           Align(
+//             alignment: Alignment.bottomCenter,
+//             child: Padding(
+//               padding: const EdgeInsets.only(bottom: 10),
+//               child: Container(
+//                 decoration: const BoxDecoration(
+//                   shape: BoxShape.circle,
+//                   color: Colors.white30,
+//                 ),
+//                 child: IconButton(
+//                   color: Colors.white,
+//                   iconSize: 50,
+//                   onPressed: () => scanIDCardController.sendID(),
+//                   icon: const Icon(
+//                     Icons.send,
+//                     color: Colors.white,
+//                   ),
+//                 ),
+//               ),
+//             ),
+//           ),
+//           scanIDCardController.loading.isTrue ? Loading() : Container(),
+//         ],
+//       ),
+//     ),
+//   );
+// }

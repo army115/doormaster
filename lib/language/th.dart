@@ -54,6 +54,7 @@ const Map<String, String> th_TH = {
   'emergancy_call': 'ติดต่อฉุกเฉิน',
 
   //Register visitor
+  'title_name': 'คำนำหน้า',
   'visitor_info': 'ข้อมูลผู้มาติดต่อ',
   'create_visitor': 'ลงทะเบียนผู้มาติดต่อ',
   'visitor_name': 'ชื่อผู้มาติดต่อ',
@@ -73,7 +74,10 @@ const Map<String, String> th_TH = {
   'count': 'จำนวนครั้ง',
   'create_qrcode': 'สร้าง QRCode',
   'house_number': 'บ้านเลขที่',
-  'place_meet': 'สถานที่ต้องการพบ',
+  'place_meet': 'สถานที่ติดต่อพบ',
+  'no_item': 'ไม่มีรายการให้เลือก',
+  'vehicle_type': 'ประเภทรถ',
+  'list_vehicle_type': 'เลือกรายการประเภทรถ',
 
   //Security guard
   'checkIn': 'ตรวจจุด',
@@ -111,9 +115,13 @@ const Map<String, String> th_TH = {
   'normal': 'ปกติ',
   'abnormal': 'ไม่ปกติ',
   'description': 'รายละเอียดเพิ่มเติม',
+  'purpose': 'วัตถุประสงค์',
   'add_image': 'เพิ่มรูปภาพ',
+  'card_image': 'รูปภาพบัตร',
   'pictures': 'รูปภาพประกอบ',
   'view_pictures': 'ดูรูปภาพ',
+  'ocr_idcard': 'สแกนบัตร',
+  'cap_idcard': 'ถ่ายภาพบัตร',
   'no_regis': 'ยังไม่ลงทะเบียน',
   'registered': 'ลงทะเบียนแล้ว',
   'no_regis_checkpoint': 'ยังไม่ลงทะเบียนจุดตรวจนี้',
@@ -147,11 +155,28 @@ const Map<String, String> th_TH = {
   'type_complaint': 'ประเภทคำร้องเรียน',
   'resolved': '*หากปัญหาถูกแก้ไขแล้ว',
 
+  //List visitor
+  'list_visitor': 'รายการผุ้มาติดต่อ',
+
+  //E-Stamp
+  'parking_details': 'รายละเอียดการจอดรถ',
+  'start_time': 'เวลาที่เริ่มจอด',
+  'current_time': 'เวลาปัจจุบัน',
+  'license_plate': 'ป้ายทะเบียนรถ',
+  'parking_duration': 'ระยะเวลาที่จอด',
+  'hours': 'ชั่วโมง',
+  'minutes': 'นาที',
+  'discount': 'ส่วนลด',
+  'select_discount': 'เลือกส่วนลด',
+  'add_discount': 'เพิ่มส่วนลด',
+  'previous_discounts': 'ส่วนลดที่เคยได้',
+
   //Search
   'search': 'ค้นหา',
   'search_door': 'ค้นหาประตู',
   'search_round': 'ค้นหารอบเดิน',
   'search_checkpoint': 'ค้นหาจุดตรวจ',
+  'search_house': 'ค้นหาบ้านเลขที่',
 
   //Title appbar
   'news_feed': 'ข้อมูลข่าวสาร',
@@ -187,6 +212,7 @@ const Map<String, String> th_TH = {
   'today': 'วันนี้',
   'all': 'ทั้งหมด',
   'to': 'ถึง',
+  'next': 'ถัดไป',
 
   //Text action
   'login_success': 'เข้าสู่ระบบสำเร็จ',
@@ -199,11 +225,13 @@ const Map<String, String> th_TH = {
 
   'occur_error': 'เกิดข้อผิดพลาด',
   'connect_error': 'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง',
+  'process_error': 'ไม่สามารถทำรายการได้ กรุณาลองใหม่อีกครั้ง',
   'error_timeout': 'การเชื่อมต่อหมดเวลา',
   'connect_timeout': 'ไม่สามารถเชื่อมต่อได้ในเวลาที่กำหนด กรุณาลองใหม่อีกครั้ง',
   'invalid_data': 'ข้อมูลไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง',
   'connect_internet_pls': 'กรุณาเชื่อมต่ออินเตอร์เน็ต',
   'again_pls': 'กรุณาลองใหม่อีกครั้ง',
+  'manu_permission': "คุณไม่มีสิทธิ์ใช้งานเมนูนี้",
   'account_block': 'บัญชีนี้ถูกระงับการใช้งาน',
   'deactivate_confirm': 'หากคุณต้องการปิดการใช้งานบัญชีนี้ โปรดยืนยันคำสั่ง',
   'deactivation_success': 'ปิดการใช้งานสำเร็จ',
@@ -217,6 +245,10 @@ const Map<String, String> th_TH = {
   'add_fail': 'เพิ่มไม่สำเร็จ',
   'cannot_add': 'ไม่สามารถเพิ่มได้',
   'have_company': 'คุณมีบริษัทนี้อยู่แล้ว',
+
+  'share_success': 'แชร์สำเร็จ',
+  'share_fail': 'แชร์ไม่สำเร็จ',
+  'share_error': 'ไม่สามารถแชร์ QR Code ได้',
 
   'door_open_success': 'เปิดประตูสำเร็จ',
   'door_open_fail': 'เปิดประตูไม่สำเร็จ',
@@ -248,17 +280,24 @@ const Map<String, String> th_TH = {
   'create_qrcode_success': 'สร้าง QR Code สำเร็จ',
   'create_qrcode_fail': 'สร้าง QR Code ไม่สำเร็จ',
   'invalid_qrcode': 'QR Code ไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง',
+  'qrcode_not_found': 'ไม่พบ QR Code',
+  'no_read_qrcode': 'ไม่สามารถอ่าน QR Code ได้',
 
   'invalid_location': 'ตำแหน่งไม่ถูกต้อง',
   'location_checkpoint': 'ตำแหน่งปัจจุบันไม่ตรงจุดตรวจ กรุณาลองใหม่อีกครั้ง',
   'invalid_location_again': 'ตำแหน่งไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง',
   'password_success': 'เปลี่ยนรหัสผ่านสำเร็จ',
-  'wrong_password': 'รหัสผ่านปัจจุบันไม่ถูกต้อง',
+  'wrong_password': 'รหัสผ่านไม่ถูกต้อง',
   'capture_success': 'บันทึกภาพสำเร็จ',
   'capture_fail': 'บันทึกภาพไม่สำเร็จ',
   'capture_fail_again': 'บันทึกภาพไม่สำเร็จ กรุณาลองใหม่อีกครั้ง',
   'wrong_date': 'วันที่ไม่ถูกต้อง',
   'end_start': 'วันที่สิ้นสุด ต้องไม่น้อยกว่า วันที่เริ่มต้น',
+
+  "file_large": "ขนาดไฟล์ใหญ่เกินไป",
+  "idcard_not_found": "ไม่พบบัตรประชาชน",
+  "idcard_not_clear": "ไม่สามารถอ่านเลขบัตรประชาชนได้ชัดเจน",
+  "can_not_scan": "ไม่สามารถสแกนได้ในขณะนี้ ลองใหม่ในภายหลัง",
 
   //Error text form
   'enter_title': 'กรุณากรอกชื่อหัวข้อ',
@@ -273,6 +312,7 @@ const Map<String, String> th_TH = {
   'password_8char': 'รหัสผ่านอย่างน้อย 8 ตัว',
   'same_password': 'ซ้ำกับรหัสผ่านปัจจุบัน กรุณากรอกรหัสผ่านใหม่',
   'accept_terms_pls': 'กรุณายอมรับเงื่อนไขการใช้บริการ',
+  'enter_titlename_pls': 'กรุณาเพิ่มคำนำหน้าชื่อ',
   'enter_name_pls': 'กรุณากรอกชื่อ',
   'enter_lname_pls': 'กรุณากรอกนามสกุล',
   'enter_email_pls': 'กรุณากรอกอีเมล',
@@ -281,6 +321,8 @@ const Map<String, String> th_TH = {
 
   'enter_name_visitor': 'กรุณากรอกชื่อผู้มาติดต่อ',
   'enter_name_contacts': 'กรุณากรอกชื่อผู้ที่ติดต่อพบ',
+  'enter_idcard': 'กรุณากรอกหมายเลขบัตรประชาชน',
+  'idcard_13char': 'กรุณากรอกหมายเลขบัตรประชาชนให้ครบ 13 หลัก',
   'enter_phone': 'กรุณากรอกเบอร์โทร',
   'phone_10char': 'กรุณากรอกเบอร์โทรให้ครบ 10 ตัว',
   'select_type': 'กรุณาเลือกประเภท',
@@ -293,6 +335,9 @@ const Map<String, String> th_TH = {
   'select_event_pls': 'กรุณาเลือกเหตุการณ์',
   'ab_enter_description': 'เหตุการณ์ไม่ปกติ กรุณาเพิ่มรายละเอียด',
   'enter_description': 'กรุณาเพิ่มรายละเอียด',
+  'enter_purpose': 'กรุณาบอกวัตถุประสงค์',
+  'enter_plate': 'กรุณาเพิ่มป้ายทะเบียน',
+  'select_vehicle_type': 'กรุณาเลือกประเภทของรถ',
 
   //Complaint staus
   '1cp': 'รอการรับเรื่อง',

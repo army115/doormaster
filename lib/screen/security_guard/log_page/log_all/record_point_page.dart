@@ -2,17 +2,20 @@
 
 import 'dart:developer';
 import 'package:dio/dio.dart';
-import 'package:doormster/components/actions/disconnected_dialog.dart';
-import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
-import 'package:doormster/components/button/button_text_icon.dart';
-import 'package:doormster/components/image/dialog_images.dart';
-import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
-import 'package:doormster/components/map/map_dialog.dart';
-import 'package:doormster/components/map/map_page.dart';
-import 'package:doormster/components/searchbar/search_from.dart';
-import 'package:doormster/components/text/text_double_colors.dart';
-import 'package:doormster/components/text/text_icon.dart';
-import 'package:doormster/controller/security_controller/logs_controller.dart';
+import 'package:doormster/controller/security_controller/logs_all_controller.dart';
+import 'package:doormster/utils/date_time_utils.dart';
+import 'package:doormster/widgets/actions/disconnected_dialog.dart';
+import 'package:doormster/widgets/alertDialog/alert_dialog_onebutton_subtext.dart';
+import 'package:doormster/widgets/button/button_text_icon.dart';
+import 'package:doormster/widgets/image/dialog_images.dart';
+import 'package:doormster/widgets/list_null_opacity/logo_opacity.dart';
+import 'package:doormster/widgets/loading/circle_loading.dart';
+import 'package:doormster/widgets/map/map_dialog.dart';
+import 'package:doormster/widgets/map/map_page.dart';
+import 'package:doormster/widgets/searchbar/search_from.dart';
+import 'package:doormster/widgets/text/text_double_colors.dart';
+import 'package:doormster/widgets/text/text_icon.dart';
+import 'package:doormster/controller/security_controller/logs_today_controller.dart';
 import 'package:doormster/models/secarity_models/get_log_all.dart';
 import 'package:doormster/models/secarity_models/get_logs_img.dart';
 import 'package:doormster/service/connected/connect_api.dart';
@@ -21,7 +24,6 @@ import 'package:flutter_swiper_plus/flutter_swiper_plus.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert' as convert;
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Record_Point extends StatefulWidget {
   final logs;
@@ -42,9 +44,13 @@ class Record_Point extends StatefulWidget {
 }
 
 class _Record_PointState extends State<Record_Point> {
+  final LogsTodayController logsController = Get.put(LogsTodayController());
   List<Logs> listlogs1 = [];
   List<Logs> listlogs2 = [];
   TextEditingController fieldText = TextEditingController();
+  ScrollController scrollController = ScrollController();
+  int count = 10;
+  bool _hasMore = false;
 
   void _searchData(String text) {
     setState(() {
@@ -61,19 +67,29 @@ class _Record_PointState extends State<Record_Point> {
 
   @override
   void initState() {
+    scrollController.addListener(
+      () async {
+        if (scrollController.position.pixels ==
+                scrollController.position.maxScrollExtent &&
+            !_hasMore) {
+          if (mounted) {
+            setState(() {
+              _hasMore = true;
+            });
+          }
+          await Future.delayed(const Duration(milliseconds: 500));
+          if (mounted) {
+            setState(() {
+              count = count + 5;
+              _hasMore = false;
+            });
+          }
+        }
+      },
+    );
     listlogs1 = widget.logs;
     listlogs2 = listlogs1;
     super.initState();
-  }
-
-  String createformat(String fullDate, String type) {
-    if (type == 'D') {
-      DateFormat formatDate = DateFormat('dd-MM-y');
-      return formatDate.format(DateTime.parse(fullDate));
-    } else {
-      DateFormat formatTime = DateFormat('HH:mm');
-      return formatTime.format(DateTime.parse(fullDate));
-    }
   }
 
   @override
@@ -84,7 +100,7 @@ class _Record_PointState extends State<Record_Point> {
         children: [
           Container(
             width: double.infinity,
-            margin: const EdgeInsets.fromLTRB(20, 15, 20, 10),
+            margin: const EdgeInsets.fromLTRB(15, 15, 15, 10),
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
             decoration: BoxDecoration(
                 border: Border.all(
@@ -122,7 +138,7 @@ class _Record_PointState extends State<Record_Point> {
           ),
           listlogs2.length > 10
               ? Container(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+                  padding: const EdgeInsets.fromLTRB(15, 0, 15, 10),
                   child: Search_From(
                     title: 'search'.tr,
                     searchText: fieldText,
@@ -142,9 +158,23 @@ class _Record_PointState extends State<Record_Point> {
             child: listlogs1.isEmpty
                 ? Logo_Opacity(title: 'no_data'.tr)
                 : ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
-                    itemCount: listlogs1.length,
+                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 10),
+                    controller: scrollController,
+                    itemCount: count < listlogs1.length
+                        ? count + (_hasMore ? 1 : 0)
+                        : listlogs1.length,
                     itemBuilder: (context, index) {
+                      if (index >= count) {
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 20),
+                          child: CircleLoading(),
+                        );
+                      }
+                      final date = DateTimeUtils.format(
+                          listlogs1[index].createDate!, 'D');
+                      final time = DateTimeUtils.format(
+                          listlogs1[index].createDate!, 'T');
+
                       final listcheck = listlogs1[index].checkpointList;
                       return Card(
                         margin: const EdgeInsets.symmetric(vertical: 5),
@@ -163,7 +193,7 @@ class _Record_PointState extends State<Record_Point> {
                                       .tr,
                                 ),
                                 Text(
-                                  '${'date'.tr} ${createformat(listlogs1[index].createDate!, 'D')} ${'time'.tr} ${createformat(listlogs1[index].createDate!, 'T')}',
+                                  '${'date'.tr} $date ${'time'.tr} $time',
                                 ),
                               ],
                             ),

@@ -3,14 +3,14 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import 'package:doormster/components/actions/disconnected_dialog.dart';
-import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
-import 'package:doormster/components/bottombar/bottombar.dart';
-import 'package:doormster/components/bottombar/navigation_ids.dart';
-import 'package:doormster/components/drawer/drawer.dart';
-import 'package:doormster/components/girdManu/grid_menu.dart';
-import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
-import 'package:doormster/controller/security_controller/round_controller.dart';
+import 'package:doormster/widgets/actions/disconnected_dialog.dart';
+import 'package:doormster/widgets/alertDialog/alert_dialog_onebutton_subtext.dart';
+import 'package:doormster/widgets/bottombar/bottombar.dart';
+import 'package:doormster/widgets/bottombar/navigation_ids.dart';
+import 'package:doormster/widgets/drawer/drawer.dart';
+import 'package:doormster/widgets/girdManu/grid_menu.dart';
+import 'package:doormster/widgets/list_null_opacity/logo_opacity.dart';
+import 'package:doormster/controller/security_controller/round_now_controller.dart';
 import 'package:doormster/models/secarity_models/get_round_now.dart';
 import 'package:doormster/screen/security_guard/extra_page/extra_round_page.dart';
 import 'package:doormster/screen/security_guard/log_page/report_logs_page.dart';
@@ -25,39 +25,35 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Security_Guard_Menu extends StatefulWidget {
-  Security_Guard_Menu({Key? key});
+  const Security_Guard_Menu({
+    super.key,
+  });
 
   @override
   State<Security_Guard_Menu> createState() => _Security_Guard_MenuState();
 }
 
 class _Security_Guard_MenuState extends State<Security_Guard_Menu> {
+  final RoundNowController roundController = Get.put(RoundNowController());
   bool loading = false;
   String? companyId;
-  List<roundNow> listdata = roundController.listRound_Now;
-  List<InspectDetail> inspectDetail = roundController.inspectDetail;
-  List<Logs> logs = roundController.logs;
 
   Future onGoBack() async {
     roundController.get_roundNow(loadingTime: 0);
   }
 
   @override
-  void initState() {
-    super.initState();
-    // WidgetsBinding.instance.addPostFrameCallback((_) async {
-    roundController.get_roundNow(loadingTime: 0);
-    // });
+  void dispose() {
+    Get.delete<RoundNowController>();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        onGoBack();
         return true;
       },
       child: Scaffold(
@@ -83,7 +79,7 @@ class _Security_Guard_MenuState extends State<Security_Guard_Menu> {
                     context,
                     () => permissionLocation(
                         context,
-                        () => listdata.isEmpty
+                        () => roundController.listRound.isEmpty
                             ? dialogOnebutton_Subtitle(
                                 title: 'occur_error'.tr,
                                 subtitle: 'check_later'.tr,
@@ -91,8 +87,7 @@ class _Security_Guard_MenuState extends State<Security_Guard_Menu> {
                                 colorIcon: Colors.orange,
                                 textButton: 'ok'.tr,
                                 press: () {
-                                  Navigator.of(context, rootNavigator: true)
-                                      .pop();
+                                  Get.back();
                                 },
                                 click: false,
                                 backBtn: false,
@@ -100,13 +95,17 @@ class _Security_Guard_MenuState extends State<Security_Guard_Menu> {
                             : checkInternet(
                                 page: ScanQR_Check(
                                   name: 'check',
-                                  roundName: listdata[0].inspectName,
-                                  roundId: listdata[0].inspectId,
-                                  roundStart: listdata[0].startDate,
-                                  roundEnd: listdata[0].endDate,
+                                  roundName:
+                                      roundController.listRound[0].inspectName,
+                                  roundId:
+                                      roundController.listRound[0].inspectId,
+                                  roundStart:
+                                      roundController.listRound[0].startDate,
+                                  roundEnd:
+                                      roundController.listRound[0].endDate,
                                   page: 'now',
-                                  inspectDetail: inspectDetail,
-                                  logs: logs,
+                                  inspectDetail: roundController.inspectDetail,
+                                  logs: roundController.logs,
                                 ),
                                 onGoBack: onGoBack)));
               },
@@ -161,7 +160,7 @@ class _Security_Guard_MenuState extends State<Security_Guard_Menu> {
                 icon: Icons.edit_calendar_rounded,
                 press: () {
                   checkInternet(
-                      page: Round_Check(logs: logs),
+                      page: Round_Check(logs: roundController.logs),
                       navigationId: NavigationIds.home,
                       onGoBack: onGoBack);
                 }),

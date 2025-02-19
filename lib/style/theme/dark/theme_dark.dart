@@ -27,6 +27,9 @@ ThemeData themeDark = ThemeData(
   dialogTheme: Dark_Dialog,
   bottomNavigationBarTheme: Dark_BottomBar,
   scaffoldBackgroundColor: Colors.grey[700],
+  floatingActionButtonTheme:
+      FloatingActionButtonThemeData(backgroundColor: Colors.grey[900]),
   appBarTheme: Dark_Appbar,
+  listTileTheme: ListTileThemeData(),
   fontFamily: 'Prompt',
 );

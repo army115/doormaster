@@ -73,6 +73,18 @@ showDialog(
     );
   }
 
+    void connectToWebSocket() async {
+    final WebSocket webSocket =
+        await WebSocket.connect('ws://192.168.8.99:3000');
+
+    webSocket.add('Hello from Flutter!');
+
+    webSocket.listen((data) {
+      log('Message received: $data');
+      _showNotification(data);
+    });
+  }
+
     void _updateSelectedItems(int index, String item, String? id, bool value) {
     setState(() {
       if (selectedItemsName.contains(item)) {
@@ -86,3 +98,34 @@ showDialog(
       }
     });
   }
+
+    void changeTheme() async {
+    final prefs = await SharedPreferences.getInstance();
+    isDarkMode.value = !isDarkMode.value;
+    if (!isDarkMode.value) {
+      Get.changeThemeMode(ThemeMode.light);
+      await SecureStorageUtils.write("theme", false);
+    } else {
+      Get.changeThemeMode(ThemeMode.dark);
+      await SecureStorageUtils.write("theme", true);
+    }
+  }
+
+  Widget button_theme(colorCard, colorIcon) => Card(
+      color: colorCard,
+      elevation: 3,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(7),
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Icon(
+            isDarkMode.value
+                ? Icons.light_mode_rounded
+                : Icons.dark_mode_rounded,
+            size: 30,
+            color: colorIcon,
+          ),
+        ),
+        onTap: changeTheme,
+      ));

@@ -1,10 +1,10 @@
 // ignore_for_file: use_key_in_widget_constructors, unused_import
 
-import 'package:doormster/components/bottombar/navigation_ids.dart';
+import 'package:doormster/widgets/bottombar/navigation_ids.dart';
 import 'package:doormster/screen/main_screen/news_page.dart';
 import 'package:doormster/screen/main_screen/notification_page.dart';
 import 'package:flutter/material.dart';
-import 'package:doormster/components/bottombar/bottombar.dart';
+import 'package:doormster/widgets/bottombar/bottombar.dart';
 
 class News_Menu extends StatefulWidget {
   const News_Menu({Key? key});
@@ -22,7 +22,7 @@ class _News_MenuState extends State<News_Menu> {
         WidgetBuilder builder;
         switch (routeSettings.name) {
           case '/':
-            builder = (BuildContext context) => News_Page();
+            builder = (BuildContext context) => const News_Page();
             break;
           default:
             throw Exception('Invalid route: ${routeSettings.name}');

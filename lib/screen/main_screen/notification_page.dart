@@ -1,20 +1,16 @@
 // ignore_for_file: prefer_const_declarations, unused_local_variable, prefer_const_constructors, unused_import
-
 import 'dart:convert';
 import 'dart:ffi';
-// import 'dart:html';
-import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
+import 'package:doormster/widgets/bottombar/bottom_controller.dart';
+import 'package:doormster/widgets/list_null_opacity/logo_opacity.dart';
 import 'package:doormster/main.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-// import 'package:http/http.dart' as http;
-import 'package:doormster/components/drawer/drawer.dart';
+import 'package:doormster/widgets/drawer/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Notification_Page extends StatefulWidget {
-  final title;
-  final body;
-  const Notification_Page({Key? key, this.title, this.body});
+  const Notification_Page({super.key});
 
   @override
   State<Notification_Page> createState() => _Notification_PageState();
@@ -27,44 +23,41 @@ class _Notification_PageState extends State<Notification_Page>
 
   @override
   Widget build(BuildContext context) {
-    final message = ModalRoute.of(context)!.settings.arguments;
     super.build(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('notification'.tr),
-        leading: IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            }),
-      ),
-      body: Center(
-        child: widget.body == null
-            ? Logo_Opacity(title: 'no_notification'.tr)
-            : Column(
-                children: [
-                  Card(
-                    shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                            width: 2, color: Theme.of(context).primaryColor),
-                        borderRadius: BorderRadius.circular(10)),
-                    elevation: 10,
-                    margin: EdgeInsets.all(13),
-                    child: ListTile(
-                      title: Text('${widget.title}'),
-                      subtitle: Text("${widget.body}"),
-                    ),
-                  ),
-
-                  // ElevatedButton(
-                  //   onPressed: () {
-                  //     // NotificationService().showNotification(context);
-                  //   },
-                  //   child: Text('Show Notification'),
-                  // ),
-                ],
-              ),
-      ),
-    );
+    return Obx(() {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('notification'.tr),
+          // leading: IconButton(
+          //     icon: Icon(Icons.menu),
+          //     onPressed: () {
+          //       Scaffold.of(context).openDrawer();
+          //     }),
+        ),
+        body: Center(
+          child: bottomController.notifications.isEmpty
+              ? Logo_Opacity(title: 'no_notification'.tr)
+              : ListView.builder(
+                  padding: const EdgeInsets.fromLTRB(15, 10, 15, 80),
+                  itemCount: bottomController.notifications.length,
+                  itemBuilder: (context, index) {
+                    return Card(
+                      shape: RoundedRectangleBorder(
+                          side: BorderSide(
+                              width: 2, color: Theme.of(context).primaryColor),
+                          borderRadius: BorderRadius.circular(10)),
+                      elevation: 10,
+                      margin: EdgeInsets.symmetric(vertical: 5),
+                      child: ListTile(
+                        title: Text('${bottomController.notifications[index]}'),
+                        onTap: () {
+                          // Get.toNamed()
+                        },
+                      ),
+                    );
+                  }),
+        ),
+      );
+    });
   }
 }

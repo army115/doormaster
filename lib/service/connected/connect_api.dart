@@ -3,17 +3,17 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart' as dio;
-import 'package:doormster/components/actions/disconnected_dialog.dart';
-import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
-import 'package:doormster/components/snackbar/snackbar.dart';
+import 'package:doormster/utils/secure_storage.dart';
+import 'package:doormster/widgets/actions/disconnected_dialog.dart';
+import 'package:doormster/widgets/alertDialog/alert_dialog_onebutton_subtext.dart';
+import 'package:doormster/widgets/snackbar/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-final ConnectApi connectApi = Get.put(ConnectApi());
+final ConnectApi connectApi = ConnectApi();
 
 class ConnectApi extends GetxController {
-  Rx<bool> loading = false.obs;
+  RxBool loading = false.obs;
   Future callApi_getData({
     required String ip,
     required String path,
@@ -29,8 +29,7 @@ class ConnectApi extends GetxController {
         loading.value = false;
       }
 
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? guardToken = prefs.getString('token');
+      String? token = await SecureStorageUtils.readString('token');
 
       await Future.delayed(Duration(milliseconds: loadingTime));
 
@@ -41,22 +40,23 @@ class ConnectApi extends GetxController {
                 headers: {
                   'Content-Type': 'application/json',
                   'Accept': 'application/json',
-                  'Authorization': 'Bearer $guardToken'
+                  'Authorization': 'Bearer $token'
                 },
               ),
               data: values)
           .timeout(
-            const Duration(seconds: 5),
+            const Duration(seconds: 7),
           );
       if (response.statusCode == 200 || response.statusCode == 201) {
-        print('Success');
+        debugPrint('Success');
         return response.data;
       }
     } on TimeoutException catch (e) {
-      print('Timeout : $e');
+      debugPrint('Timeout : $e');
       showTimeout();
+      return null;
     } on dio.DioError catch (error) {
-      print(" error: ${error.message}");
+      debugPrint("error: ${error.message}");
       showError();
       return null;
     } finally {
@@ -75,8 +75,7 @@ class ConnectApi extends GetxController {
   }) async {
     try {
       loading.value = true;
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? guardToken = prefs.getString('token');
+      String? token = await SecureStorageUtils.readString('token');
       await Future.delayed(Duration(milliseconds: loadingTime));
       var url = '$ip$path';
       var response = await dio.Dio()
@@ -84,21 +83,23 @@ class ConnectApi extends GetxController {
               options: dio.Options(headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-                'Authorization': 'Bearer $guardToken'
+                'Authorization': 'Bearer $token'
               }),
               data: values)
-          .timeout(const Duration(seconds: 10));
+          .timeout(const Duration(seconds: 7));
       if (response.statusCode == 200 || response.statusCode == 201) {
-        print('Success');
+        debugPrint('Success');
         showSuccess();
         return response.data;
       }
     } on TimeoutException catch (e) {
-      print('Timeout : $e');
+      debugPrint('Timeout : $e');
       showTimeout();
+      return e.message;
     } on dio.DioError catch (error) {
-      print(" error: ${error.message}");
+      debugPrint(" error: ${error.message}");
       showError();
+      return error.message;
     } finally {
       loading.value = false;
     }
@@ -115,8 +116,7 @@ class ConnectApi extends GetxController {
   }) async {
     try {
       loading.value = true;
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? guardToken = prefs.getString('token');
+      String? token = await SecureStorageUtils.readString('token');
       await Future.delayed(Duration(milliseconds: loadingTime));
       var url = '$ip$path';
       var formData = dio.FormData.fromMap(values);
@@ -125,20 +125,20 @@ class ConnectApi extends GetxController {
               options: dio.Options(headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-                'Authorization': 'Bearer $guardToken'
+                'Authorization': 'Bearer $token'
               }),
               data: formData)
-          .timeout(const Duration(seconds: 10));
+          .timeout(const Duration(seconds: 7));
       if (response.statusCode == 200 || response.statusCode == 201) {
-        print('Success');
+        debugPrint('Success');
         showSuccess();
         return response.data;
       }
     } on TimeoutException catch (e) {
-      print('Timeout : $e');
+      debugPrint('Timeout : $e');
       showTimeout();
     } on dio.DioError catch (error) {
-      print(" error: ${error.message}");
+      debugPrint(" error: ${error.message}");
       showError();
     } finally {
       loading.value = false;
@@ -148,13 +148,12 @@ class ConnectApi extends GetxController {
   Future callApi_Login({
     required String ip,
     required String path,
-    required Function showError,
     required Function showTimeout,
     Map<String, dynamic>? values,
   }) async {
     try {
-      await Future.delayed(const Duration(milliseconds: 600));
       loading.value = true;
+      await Future.delayed(const Duration(milliseconds: 600));
       var url = '$ip$path';
       var response = await dio.Dio()
           .post(url,
@@ -166,16 +165,16 @@ class ConnectApi extends GetxController {
               ),
               data: values)
           .timeout(
-            const Duration(seconds: 5),
+            const Duration(seconds: 10),
           );
       if (response.statusCode == 200 || response.statusCode == 201) {
-        snackbar(Get.theme.primaryColor, 'login_success'.tr,
+        snackbar(Colors.green, 'login_success'.tr,
             Icons.check_circle_outline_rounded);
-        print('login success');
+        debugPrint('login success');
         return response.data;
       }
     } on TimeoutException catch (e) {
-      print('Timeout : $e');
+      debugPrint('Timeout : $e');
       showTimeout();
     } on dio.DioError catch (error) {
       if (error.response?.statusCode == 401) {
@@ -195,8 +194,60 @@ class ConnectApi extends GetxController {
         error_Connected(() {
           Get.back();
         });
-        print(error.message);
+        debugPrint(error.message);
       }
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  Future callApi_Password({
+    required String ip,
+    required String path,
+    required Function showSuccess,
+    required Function showTimeout,
+    required Function showError,
+    Map<String, dynamic>? values,
+  }) async {
+    try {
+      loading.value = true;
+
+      String? token = await SecureStorageUtils.readString('token');
+
+      await Future.delayed(const Duration(milliseconds: 600));
+
+      var url = '$ip$path';
+      var response = await dio.Dio()
+          .post(url,
+              options: dio.Options(
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Accept': 'application/json',
+                  'Authorization': 'Bearer $token'
+                },
+              ),
+              data: values)
+          .timeout(
+            const Duration(seconds: 10),
+          );
+      if (response.statusCode == 200) {
+        showSuccess();
+        return response.data;
+      }
+    } on TimeoutException catch (e) {
+      debugPrint('Timeout : $e');
+      showTimeout();
+      return null;
+    } on dio.DioError catch (error) {
+      debugPrint("error: ${error.message}");
+      if (error.response!.statusCode == 500) {
+        showError();
+      } else {
+        error_Connected(() {
+          Get.back();
+        });
+      }
+      return error.response!.data;
     } finally {
       loading.value = false;
     }

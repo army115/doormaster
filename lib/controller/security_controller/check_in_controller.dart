@@ -1,11 +1,13 @@
 // ignore_for_file: non_constant_identifier_names, library_prefixes
 
 import 'dart:async';
-import 'package:doormster/components/actions/disconnected_dialog.dart';
-import 'package:doormster/components/alertDialog/alert_dialog_onebutton.dart';
-import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
-import 'package:doormster/components/bottombar/navigation_ids.dart';
+import 'package:doormster/service/connected/api_path.dart';
+import 'package:doormster/widgets/actions/disconnected_dialog.dart';
+import 'package:doormster/widgets/alertDialog/alert_dialog_onebutton.dart';
+import 'package:doormster/widgets/alertDialog/alert_dialog_onebutton_subtext.dart';
+import 'package:doormster/widgets/bottombar/navigation_ids.dart';
 import 'package:doormster/models/secarity_models/get_checkpoint.dart';
+import 'package:doormster/routes/paths/paths_routes.dart';
 import 'package:doormster/screen/security_guard/log_page/report_logs_page.dart';
 import 'package:doormster/service/connected/connect_api.dart';
 import 'package:doormster/service/connected/ip_address.dart';
@@ -23,20 +25,22 @@ class CheckInController extends GetxController {
 
   Future get_Checklist({required checkpointId, required loadingTime}) async {
     final values = await connectApi.callApi_getData(
-      ip: IP_Address.guard_IP_sever,
+      ip: IP_Address.guard_IP_server,
       values: {"checkpoint_id": checkpointId},
-      path: "get/checkpointdetail",
+      path: SecurityPath.CheckList,
       loadingTime: loadingTime,
       showError: () {
         error_Connected(() {
           Get.back();
-          Keys.home?.currentState?.popUntil(ModalRoute.withName('/security'));
+          Keys.home?.currentState
+              ?.popUntil(ModalRoute.withName(Routes.security));
         });
       },
       showTimeout: () {
         error_Timeout(() {
           Get.back();
-          Keys.home?.currentState?.popUntil(ModalRoute.withName('/security'));
+          Keys.home?.currentState
+              ?.popUntil(ModalRoute.withName(Routes.security));
         });
       },
     );
@@ -74,14 +78,14 @@ class CheckInController extends GetxController {
           click: false,
           backBtn: false,
           willpop: false);
-      CheckPoint.value = [];
+      CheckPoint.clear();
     }
   }
 
   Future guard_checkIn({required value, required logTab}) async {
     await connectApi.callApi_addformData(
-      ip: IP_Address.guard_IP_sever,
-      path: "Create_guard_check_logs",
+      ip: IP_Address.guard_IP_server,
+      path: SecurityPath.CheckIn,
       loadingTime: 100,
       values: value,
       showSuccess: () {

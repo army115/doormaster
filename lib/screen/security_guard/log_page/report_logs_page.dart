@@ -3,20 +3,19 @@
 import 'dart:developer';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:dio/dio.dart';
-import 'package:doormster/components/alertDialog/alert_dialog_onebutton_subtext.dart';
-import 'package:doormster/components/bottombar/bottombar.dart';
-import 'package:doormster/components/bottombar/navigation_ids.dart';
-import 'package:doormster/components/button/buttonback_appbar.dart';
-import 'package:doormster/components/list_null_opacity/logo_opacity.dart';
-import 'package:doormster/components/loading/loading.dart';
-import 'package:doormster/components/searchbar/search_calendar.dart';
+import 'package:doormster/widgets/alertDialog/alert_dialog_onebutton_subtext.dart';
+import 'package:doormster/widgets/bottombar/bottombar.dart';
+import 'package:doormster/widgets/bottombar/navigation_ids.dart';
+import 'package:doormster/widgets/button/buttonback_appbar.dart';
+import 'package:doormster/widgets/list_null_opacity/logo_opacity.dart';
+import 'package:doormster/widgets/loading/loading.dart';
+import 'package:doormster/widgets/searchbar/search_calendar.dart';
 import 'package:doormster/routes/paths/paths_routes.dart';
 import 'package:doormster/screen/security_guard/log_page/log_all/logs_all_page.dart';
 import 'package:doormster/screen/security_guard/log_page/logs_today/logs_today_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Report_Logs extends StatefulWidget {
   final tapIndex;
@@ -50,8 +49,8 @@ class _Report_LogsState extends State<Report_Logs>
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Keys.home?.currentState?.popUntil(ModalRoute.withName('/security'));
-        Navigator.popUntil(context, (route) => route.isFirst);
+        Keys.home?.currentState?.popUntil(ModalRoute.withName(Routes.security));
+        Get.until((route) => route.isFirst);
         return false;
       },
       child: Scaffold(

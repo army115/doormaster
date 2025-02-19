@@ -1,11 +1,11 @@
 // ignore_for_file: unused_field, use_build_context_synchronously, non_constant_identifier_names
 
-import 'package:doormster/components/button/button_theme.dart';
-import 'package:doormster/controller/setting_controller.dart';
+import 'package:doormster/controller/theme_controller.dart';
+import 'package:doormster/controller/main_controller/setting_controller.dart';
+import 'package:doormster/routes/paths/paths_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:doormster/style/textStyle.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 
 class Settings_Page extends StatefulWidget {
   const Settings_Page({super.key});
@@ -15,23 +15,9 @@ class Settings_Page extends StatefulWidget {
 }
 
 class _Settings_PageState extends State<Settings_Page> {
+  final SettingController settingController = Get.put(SettingController());
   List languageManu = ['ไทย', 'English'];
   List languageLocal = ['th', 'en'];
-  String? version = '';
-
-  Future getVersion() async {
-    final info = await PackageInfo.fromPlatform();
-    setState(() {
-      version = info.version;
-    });
-  }
-
-  @override
-  void initState() {
-    getVersion();
-    settingController.getValueShared();
-    super.initState();
-  }
 
   void _changeLanguage(BuildContext context) {
     showModalBottomSheet(
@@ -56,7 +42,7 @@ class _Settings_PageState extends State<Settings_Page> {
                     padding: const EdgeInsets.symmetric(vertical: 5),
                     child: Text(
                       'select_language'.tr,
-                      style: textStyle().Header18,
+                      style: textStyle.header18,
                     ),
                   ),
                   Divider(
@@ -123,7 +109,7 @@ class _Settings_PageState extends State<Settings_Page> {
                     padding: const EdgeInsets.symmetric(vertical: 5),
                     child: Text(
                       'select_theme'.tr,
-                      style: textStyle().Header18,
+                      style: textStyle.header18,
                     ),
                   ),
                   Divider(
@@ -150,7 +136,7 @@ class _Settings_PageState extends State<Settings_Page> {
                                 : Colors.black),
                       ),
                       onTap: () async {
-                        setThemeMode(themeMenu[index]);
+                        themeController.setThemeMode(themeMenu[index]);
                         settingController.getValueShared();
                         Get.back();
                       },
@@ -165,48 +151,53 @@ class _Settings_PageState extends State<Settings_Page> {
 
   @override
   Widget build(BuildContext context) {
-    final List<menuItem> menu = [
-      menuItem(Icons.lock, 'change_password'.tr, () {
-        Get.toNamed('/password');
-      }, Theme.of(context).dividerColor),
-      menuItem(Icons.translate_rounded, 'change_language'.tr, () {
-        _changeLanguage(context);
-      }, Theme.of(context).dividerColor),
-      menuItem(Icons.brightness_4, 'change_theme'.tr, () {
-        _changeTheme(context);
-      }, Theme.of(context).dividerColor),
-      menuItem(Icons.app_settings_alt_rounded, '${'version'.tr} ${version}',
-          () {}, Theme.of(context).dividerColor.withOpacity(0.5))
-    ].obs;
     return Scaffold(
         appBar:
             AppBar(automaticallyImplyLeading: true, title: Text('setting'.tr)),
-        body: Obx(() => ListView.separated(
-              physics: const ClampingScrollPhysics(),
-              itemCount: menu.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                    onTap: menu[index].ontap,
-                    leading: Icon(
-                      menu[index].icon,
-                      size: 30,
-                      color: Theme.of(context).dividerColor.withOpacity(0.7),
-                    ),
-                    title: Text(
-                      menu[index].title,
-                      style: TextStyle(
-                          letterSpacing: 0.5,
-                          color: menu[index].color,
-                          fontSize: 16),
-                    ));
-              },
-              separatorBuilder: (context, index) {
-                return Divider(
-                  color: Theme.of(context).dividerColor,
-                  height: 10,
-                );
-              },
-            )));
+        body: Obx(() {
+          final List<menuItem> menu = [
+            menuItem(Icons.lock, 'change_password'.tr, () {
+              Get.toNamed(Routes.password);
+            }, Theme.of(context).dividerColor),
+            menuItem(Icons.translate_rounded, 'change_language'.tr, () {
+              _changeLanguage(context);
+            }, Theme.of(context).dividerColor),
+            menuItem(Icons.brightness_4, 'change_theme'.tr, () {
+              _changeTheme(context);
+            }, Theme.of(context).dividerColor),
+            menuItem(
+                Icons.app_settings_alt_rounded,
+                '${'version'.tr} ${settingController.version.value}',
+                () {},
+                Theme.of(context).dividerColor.withOpacity(0.5))
+          ];
+          return ListView.separated(
+            physics: const ClampingScrollPhysics(),
+            itemCount: menu.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                  onTap: menu[index].ontap,
+                  leading: Icon(
+                    menu[index].icon,
+                    size: 30,
+                    color: Theme.of(context).dividerColor.withOpacity(0.7),
+                  ),
+                  title: Text(
+                    menu[index].title,
+                    style: TextStyle(
+                        letterSpacing: 0.5,
+                        color: menu[index].color,
+                        fontSize: 16),
+                  ));
+            },
+            separatorBuilder: (context, index) {
+              return Divider(
+                color: Theme.of(context).dividerColor,
+                height: 10,
+              );
+            },
+          );
+        }));
   }
 }
 

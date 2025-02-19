@@ -39,55 +39,48 @@ dependencies:
   cupertino_icons: ^1.0.5
   qr_flutter: ^4.1.0
   qr_code_scanner: ^1.0.1
-  shared_preferences: ^2.3.1
+  # shared_preferences: ^2.3.1
   url_launcher: ^6.3.0
-  share_files_and_screenshot_widgets: ^1.0.6
   image_gallery_saver: ^2.0.3
   connectivity_plus: ^6.0.4
-  flutter_launcher_icons: ^0.13.1
+  flutter_launcher_icons: ^0.14.1
   flutter_native_splash: ^2.4.1
   geolocator: ^12.0.0
-  flutter_phone_direct_caller: ^2.1.1
+  # flutter_phone_direct_caller: ^2.1.1
   permission_handler: ^11.3.1
   image_picker: ^1.1.2
   flutter_swiper_plus: ^2.0.4
   intl: ^0.19.0
   dio: ^5.5.0
   get: ^4.6.6
-  restart_app: ^1.2.1
   flutter_easyloading: ^3.0.5
   google_maps_flutter: ^2.9.0
-  easy_loading_button: ^0.3.2
   calendar_date_picker2: ^1.1.7
   animated_custom_dropdown: ^3.1.1
   flutter_local_notifications: ^17.2.1
   flutter_phoenix: ^1.1.1
   package_info_plus: ^8.0.1
-  dotted_line: ^3.2.2
+  # dotted_line: ^3.2.2
   local_auth: ^2.3.0
-  firebase_messaging: ^15.1.2
-  firebase_core: ^3.5.0
+  firebase_messaging: ^15.1.4
+  firebase_core: ^3.7.0
   camera: ^0.11.0+2
   slide_digital_clock: ^1.0.3
   image: ^4.2.0
-
-  
-  
-
-my_package:
-    path: android/app/libs/DoormasterSDKV2.3.3.jar
+  dropdown_button2: ^2.3.8
+  cached_network_image: ^3.4.1
+  share_plus: ^10.1.2
+  scan: ^1.6.0
+  imin_printer: ^0.6.8
+  cloud_firestore: ^5.6.0
+  firebase_auth: ^5.3.4
+  flutter_secure_storage: ^9.2.4
+  path_provider: ^2.0.8
   
 flutter_datetime_picker:
     git:
       url: https://github.com/AlexHartford/flutter_datetime_picker.git
       ref: master
-
-flutter_icons:
-    android: true
-    ios: true
-    remove_alpha_ios: true
-    image_path: "assets/images/HIP Smart Community Icon-03.png"
-    min_sdk_android: 21
 
 
 dev_dependencies:

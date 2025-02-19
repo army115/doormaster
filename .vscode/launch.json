@@ -34,16 +34,22 @@
             "deviceId": "a3971b4c1220"
         },
         {
+            "name": "pos",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "NMS212NG3349F0009"
+        },
+        {
             "name": "iPhone 15 Pro",
             "request": "launch",
             "type": "dart",
             "deviceId": "0E12EDEF-32AA-4179-ABA0-AE9B21CC3BDF"
         },
         {
-            "name": "iPhone 15 Pro Max",
+            "name": "iPhone 16 Pro Max",
             "request": "launch",
             "type": "dart",
-            "deviceId": "1E237B3A-339C-4A6D-BD2D-0AF73274A002"
+            "deviceId": "5A1385FD-EE00-4231-958A-9DCD8936230C"
         },
         {
             "name": "iPhone 7",
@@ -84,7 +90,7 @@
                 "redmi 9t",
                 "iPhone 7",
                 "iPhone 15 Pro",
-                "iPhone 15 Pro Max",
+                "iPhone 16 Pro Max",
             ],
         }
     ]
